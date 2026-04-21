@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import About from '../pages/About';
+import FacebookMarketingDocs from '../pages/Docs/FacebookMarketing';
 import NotFound from '../pages/NotFound';
 import DataMartsPage from '../pages/data-marts/list/DataMartsPage.tsx';
 import { DataMartDetailsPage } from '../pages/data-marts/edit';
@@ -65,6 +66,10 @@ const routes: RouteObject[] = [
         path: 'notifications',
         element: <ProjectNotificationsPage />,
         errorElement: <LayoutErrorBoundary />,
+      },
+      {
+        path: 'docs/facebook-marketing',
+        element: <FacebookMarketingDocs />,
       },
       {
         path: '*',

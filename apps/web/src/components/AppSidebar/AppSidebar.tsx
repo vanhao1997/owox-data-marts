@@ -21,6 +21,8 @@ interface AppSidebarProps {
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }
 
+import { LanguageSwitcher } from './LanguageSwitcher';
+
 export function AppSidebar({ variant = 'inset', collapsible = 'icon' }: AppSidebarProps) {
   const setupChecklistVisibility = useSetupChecklistVisibility();
   return (
@@ -51,6 +53,11 @@ export function AppSidebar({ variant = 'inset', collapsible = 'icon' }: AppSideb
 
       <SidebarFooter>
         <HelpMenu openSetupChecklist={setupChecklistVisibility.show} />
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <LanguageSwitcher />
+          </SidebarGroupContent>
+        </SidebarGroup>
         <Separator />
         <UserMenu />
       </SidebarFooter>

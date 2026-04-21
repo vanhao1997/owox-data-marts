@@ -1,0 +1,18 @@
+{
+    "sidebar": {
+        "community": "GitHub Community",
+        "upgrade": "Discover Upgrade Options",
+        "settings": "Project settings",
+        "credits": "Credits consumption",
+        "subscription": "Subscription",
+        "members": "Members",
+        "notifications": "Notification settings",
+        "feedback": "Leave Feedback",
+        "issues": "Issues",
+        "license": "License"
+    },
+    "docs": {
+        "title": "Documentation",
+        "facebookMarketing": "Facebook Marketing"
+    }
+}

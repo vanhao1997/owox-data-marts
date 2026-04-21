@@ -1,4 +1,5 @@
 import { useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useProject, useFlags } from '../../../app/store/hooks';
 import { projectMenuItems } from './items';
 import { checkVisible } from '../../../utils/check-visible';
@@ -7,7 +8,21 @@ import { useProjects } from '../../../features/idp/hooks/useProjects.ts';
 
 type MenuItemWithSeparator = ProjectMenuItem | { type: 'separator'; visible: boolean };
 
+const titleToKeyMap: Record<string, string> = {
+  'GitHub Community': 'community',
+  'Discover Upgrade Options': 'upgrade',
+  'Project settings': 'settings',
+  'Credits consumption': 'credits',
+  'Subscription': 'subscription',
+  'Members': 'members',
+  'Notification settings': 'notifications',
+  'Leave Feedback': 'feedback',
+  'Issues': 'issues',
+  'License': 'license',
+};
+
 export function useProjectMenu() {
+  const { t } = useTranslation();
   const { flags } = useFlags();
   const { loadProjects, projects } = useProjects();
   const { id } = useProject();
@@ -32,15 +47,21 @@ export function useProjectMenu() {
     });
 
     const mappedItems = filteredItems.map(item => {
-      if (item.group === 'project' && item.href && id) {
+      let finalItem = item;
+      const titleKey = titleToKeyMap[item.title];
+      if (titleKey) {
+        finalItem = { ...item, title: t(`sidebar.${titleKey}`) };
+      }
+
+      if (finalItem.group === 'project' && finalItem.href && id) {
         try {
-          const updatedHref = item.href.replace('/p/none/', `/p/${id}/`);
-          return { ...item, href: updatedHref } as ProjectMenuItem;
+          const updatedHref = finalItem.href.replace('/p/none/', `/p/${id}/`);
+          return { ...finalItem, href: updatedHref } as ProjectMenuItem;
         } catch {
-          return item;
+          return finalItem;
         }
       }
-      return item;
+      return finalItem;
     });
 
     const groups = new Map<string, ProjectMenuItem[]>();

@@ -15,6 +15,8 @@ import { Toaster as HotToaster } from '../shared/components/Toaster';
 import { AuthGuard } from '../features/idp';
 import { ProjectIdGuard } from '../features/idp/components/ProjectIdGuard';
 
+import { DocsWidget } from '../components/DocsWidget';
+
 // Constants
 const SIDEBAR_STATE_KEY = 'sidebar_state';
 
@@ -26,6 +28,7 @@ function MainLayoutContent() {
 
   return (
     <>
+      <DocsWidget />
       {/* New Sonner toaster for shared UI toasts */}
       <SonnerToaster position='bottom-right' closeButton />
       {/* Legacy react-hot-toast Toaster to keep previously configured toasts working */}

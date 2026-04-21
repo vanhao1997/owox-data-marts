@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { BookOpen, X, ChevronRight } from 'lucide-react';
-import { Button } from '../../shared';
+import { Button } from '@owox/ui/components/button';
 
 const DOCS_PAGES = [
     { id: 'index', title: 'Bắt đầu nhanh (Getting Started)' },

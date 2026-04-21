@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@owox/ui/components/card';
-import { Button } from '../../shared';
+import { Button } from '@owox/ui/components/button';
 
 export default function FacebookMarketingDocs() {
     return (

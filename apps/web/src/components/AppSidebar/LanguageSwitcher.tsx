@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../shared';
+import { Button } from '@owox/ui/components/button';
 
 export function LanguageSwitcher() {
     const { i18n } = useTranslation();

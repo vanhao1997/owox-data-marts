@@ -103,7 +103,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'menu-item',
-    title: 'OWOX BI',
+    title: 'P2P Digital BI',
     href: 'https://bi.owox.com/',
     icon: OWOXBIIcon,
     visible: { flagKey: 'MENU_OWOX_BI_VISIBLE', expectedValue: 'true' },

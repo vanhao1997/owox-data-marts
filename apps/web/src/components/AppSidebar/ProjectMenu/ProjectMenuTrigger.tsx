@@ -27,7 +27,7 @@ export function ProjectMenuTrigger({ isOpen }: ProjectMenuTriggerProps) {
         </div>
 
         <div className='grid flex-1 text-left text-sm leading-tight'>
-          <span className='truncate font-medium'>OWOX Data Marts</span>
+          <span className='truncate font-medium'>P2P Digital</span>
           <span className='text-muted-foreground truncate text-xs'>{title ?? 'Project'}</span>
         </div>
 

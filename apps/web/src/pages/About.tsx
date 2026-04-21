@@ -1,8 +1,8 @@
 function About() {
   return (
     <div className='app-container'>
-      <h1>About OWOX</h1>
-      <p>OWOX Data Marts — Free, Open-Source Connectors for Data Analysts</p>
+      <h1>About P2P Digital</h1>
+      <p>P2P Digital Data Marts — Free, Open-Source Connectors for Data Analysts</p>
     </div>
   );
 }

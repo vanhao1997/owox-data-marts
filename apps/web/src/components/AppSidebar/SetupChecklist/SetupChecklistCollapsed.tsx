@@ -27,7 +27,7 @@ export function SetupChecklistCollapsed({
           <CircularProgress percentage={percentage} size={20} />
         </button>
       </TooltipTrigger>
-      <TooltipContent side='right'>Get to know OWOX — {percentage}% completed</TooltipContent>
+      <TooltipContent side='right'>Làm quen với nền tảng — {percentage}% completed</TooltipContent>
     </Tooltip>
   );
 }

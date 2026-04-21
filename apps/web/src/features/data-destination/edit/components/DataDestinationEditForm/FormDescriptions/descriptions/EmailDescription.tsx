@@ -13,7 +13,7 @@ export default function EmailDescription() {
         </p>
         <p className='mb-2'>
           In the report settings, add a subject and message, and set the delivery conditions. The
-          generated report will be delivered by OWOX Data Marts to the selected addresses as
+          generated report will be delivered by P2P Digital to the selected addresses as
           formatted text.
         </p>
         <p className='mb-2'>
@@ -22,7 +22,7 @@ export default function EmailDescription() {
             className='underline'
             href='https://docs.owox.com/docs/destinations/supported-destinations/email/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-email'
           >
-            OWOX documentation
+            P2P documentation
           </ExternalAnchor>
           .
         </p>

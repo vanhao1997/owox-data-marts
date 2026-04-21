@@ -20,7 +20,7 @@ export default function LegacyGoogleBigQueryTitleDescription() {
               className='underline'
               href='https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832'
             >
-              OWOX extension
+              P2P extension
             </ExternalAnchor>
             for Google Sheets. Its title automatically matches the project ID.
           </p>

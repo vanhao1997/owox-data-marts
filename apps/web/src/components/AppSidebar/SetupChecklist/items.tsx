@@ -94,7 +94,7 @@ export const SETUP_STEPS: SetupStep[] = [
   {
     id: SetupStepId.INVITE_TEAMMATES,
     stepTitle: 'Invite teammates',
-    stepDescription: 'Invite your teammates to collaborate in OWOX.',
+    stepDescription: 'Invite your teammates to collaborate in P2P Digital.',
     successMessage: 'Teammates invited',
     action: {
       type: StepActionType.COMPONENT,
@@ -108,7 +108,7 @@ export const SETUP_GROUPS: SetupGroup[] = [
   {
     id: GroupId.STORAGE,
     title: 'Create first storage',
-    description: 'Connect your data warehouse to start working with OWOX.',
+    description: 'Connect your data warehouse to start working with P2P Digital.',
     stepIds: [SetupStepId.CREATE_STORAGE],
   },
   {
@@ -126,7 +126,7 @@ export const SETUP_GROUPS: SetupGroup[] = [
   {
     id: GroupId.INVITE_TEAMMATES,
     title: 'Invite teammates',
-    description: 'Invite your teammates to collaborate in OWOX.',
+    description: 'Invite your teammates to collaborate in P2P Digital.',
     stepIds: [SetupStepId.INVITE_TEAMMATES],
   },
 ];

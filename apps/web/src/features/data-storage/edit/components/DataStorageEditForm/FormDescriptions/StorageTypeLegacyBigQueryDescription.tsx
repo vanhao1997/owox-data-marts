@@ -18,7 +18,7 @@ export default function StorageTypeLegacyBigQueryDescription() {
               className='underline'
               href='https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832'
             >
-              OWOX extension
+              P2P extension
             </ExternalAnchor>{' '}
             for Google Sheets. It cannot be manually added or deleted.
           </p>

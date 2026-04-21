@@ -32,7 +32,7 @@ export function SetupChecklist({ progressResult, visibility }: SetupChecklistPro
         {/* Title */}
         <div className='flex items-start justify-between gap-2'>
           <div className='flex flex-col gap-0.5 py-2 pl-4'>
-            <span className='text-sidebar-foreground text-sm font-semibold'>Get to know OWOX</span>
+            <span className='text-sidebar-foreground text-sm font-semibold'>Làm quen với nền tảng</span>
             <span className='text-muted-foreground text-xs'>
               {isEmpty ? (
                 'Easy steps to set up and run'

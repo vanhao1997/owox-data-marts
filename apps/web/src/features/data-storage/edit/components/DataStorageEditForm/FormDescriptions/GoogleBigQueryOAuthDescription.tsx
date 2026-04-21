@@ -15,7 +15,7 @@ export default function GoogleBigQueryOAuthDescription() {
         <AccordionTrigger>What permissions will be requested?</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            When you connect with Google, OWOX will request the following permissions:
+            When you connect with Google, P2P Digital will request the following permissions:
           </p>
           <ul className='list-inside list-disc space-y-2 text-sm'>
             <li>
@@ -28,7 +28,7 @@ export default function GoogleBigQueryOAuthDescription() {
             </li>
           </ul>
           <p className='mt-2 text-sm'>
-            OWOX will only access BigQuery resources that you explicitly configure as storage. You
+            P2P Digital will only access BigQuery resources that you explicitly configure as storage. You
             can revoke access at any time from your{' '}
             <a
               href='https://myaccount.google.com/permissions'

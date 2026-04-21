@@ -18,7 +18,7 @@ export function helpMenuItems(
     { type: 'separator' },
     {
       type: 'menu-item',
-      title: 'Get to know OWOX',
+      title: 'Làm quen với nền tảng',
       icon: ListTodo,
       onClick: () => {
         openSetupChecklist();

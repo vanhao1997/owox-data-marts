@@ -15,7 +15,7 @@ export default function GoogleSheetsOAuthDescription() {
         <AccordionTrigger>What permissions will be requested?</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            When you connect with Google, OWOX will request the following permissions:
+            When you connect with Google, P2P Digital will request the following permissions:
           </p>
           <ul className='list-inside list-disc space-y-2 text-sm'>
             <li>
@@ -28,7 +28,7 @@ export default function GoogleSheetsOAuthDescription() {
             </li>
           </ul>
           <p className='mt-2 text-sm'>
-            OWOX will only access spreadsheets that you explicitly configure as destinations. You
+            P2P Digital will only access spreadsheets that you explicitly configure as destinations. You
             can revoke access at any time from your{' '}
             <a
               href='https://myaccount.google.com/permissions'

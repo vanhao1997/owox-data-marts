@@ -20,7 +20,7 @@ export default function LegacyGoogleBigQueryProjectIdDescription() {
               className='underline'
               href='https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832'
             >
-              OWOX extension
+              P2P extension
             </ExternalAnchor>
             for Google Sheets. Its project ID automatically matches the GCP project.
           </p>

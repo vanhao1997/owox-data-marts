@@ -36,7 +36,7 @@ export function PageNotificationLegacyStorageSetup() {
                     rel='noopener noreferrer'
                     className='text-foreground font-semibold underline'
                   >
-                    OWOX Reports
+                    P2P Reports
                   </a>{' '}
                   (Google Sheets extension) are listed below in{' '}
                   <span className='font-semibold'>Draft</span> status.
@@ -51,7 +51,7 @@ export function PageNotificationLegacyStorageSetup() {
                   </li>
                   <li>
                     <span className='font-semibold'>Grant access</span> to Google BigQuery (used in
-                    OWOX extension)
+                    P2P extension)
                   </li>
                   <li>
                     <span className='font-semibold'>Publish</span> your Data Marts

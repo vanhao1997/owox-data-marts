@@ -57,7 +57,7 @@ export const DataStorageTypeModel = {
     },
     [DataStorageType.LEGACY_GOOGLE_BIGQUERY]: {
       type: DataStorageType.LEGACY_GOOGLE_BIGQUERY,
-      displayName: 'Google BigQuery (used in OWOX extension)',
+      displayName: 'Google BigQuery (used in P2P extension)',
       icon: LegacyGoogleBigQueryIcon,
       status: DataStorageStatus.LEGACY,
     },

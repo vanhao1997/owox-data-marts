@@ -1,6 +1,6 @@
 # Pages Directory
 
-This directory contains React components that represent complete pages or views in the OWOX Data Marts application. Each
+This directory contains React components that represent complete pages or views in the P2P Digital application. Each
 file corresponds to a specific route defined in the application's routing configuration.
 
 ## Structure

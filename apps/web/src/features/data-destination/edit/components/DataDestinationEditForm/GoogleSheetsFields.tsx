@@ -158,7 +158,7 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
           {isOAuthAvailable && authMethod === 'oauth' && (
             <FormItem>
               <div className='mb-4 flex items-center justify-between'>
-                <FormLabel tooltip='Authorize OWOX to access your Google Sheets'>
+                <FormLabel tooltip='Authorize P2P Digital to access your Google Sheets'>
                   Connect with Google OAuth
                 </FormLabel>
               </div>

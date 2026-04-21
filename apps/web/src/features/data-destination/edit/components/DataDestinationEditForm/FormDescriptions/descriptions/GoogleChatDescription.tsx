@@ -14,7 +14,7 @@ export default function GoogleChatDescription() {
         </p>
         <p className='mb-2'>
           In the report settings, add a subject and message, and set the delivery conditions. The
-          generated report will be delivered by OWOX Data Marts to the connected space as chat
+          generated report will be delivered by P2P Digital to the connected space as chat
           messages.
         </p>
         <p className='mb-2'>
@@ -23,7 +23,7 @@ export default function GoogleChatDescription() {
             className='underline'
             href='https://docs.owox.com/docs/destinations/supported-destinations/google-chat/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-google-chat'
           >
-            OWOX documentation
+            P2P documentation
           </ExternalAnchor>
           .
         </p>

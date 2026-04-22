@@ -7,22 +7,17 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy package files first for better Docker layer caching
-COPY package.json package-lock.json .npmrc ./
-COPY apps/owox/package.json ./apps/owox/
-COPY apps/web/package.json ./apps/web/
-COPY packages/ ./packages/
-
-# Install all dependencies (bypass strict engine check)
-RUN echo "engine-strict=false" > .npmrc && \
-    npm install --legacy-peer-deps
-
-# Now copy all source code
+# Copy the entire workspace source first for proper npm workspace resolution
 COPY . .
 
+# Override engine-strict and install using lockfile for deterministic deps
+RUN echo "engine-strict=false" > .npmrc && \
+    npm ci --ignore-scripts || npm install
+
+# Run postinstall scripts after full install
+RUN npm rebuild 2>/dev/null || true
+
 # Build only the owox CLI and its runtime deps (web, backend, etc.)
-# This uses the prebuild script in apps/owox which selectively builds
-# each dependency without running full monorepo type-checks
 RUN cd apps/owox && npm run build:dep && npm run build
 
 # Clear caches

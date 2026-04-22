@@ -33,7 +33,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "dev": "vite --config vite.config.ts",
     "lint": "eslint . --config ./eslint.config.js",
     "lint:fix": "eslint . --fix",

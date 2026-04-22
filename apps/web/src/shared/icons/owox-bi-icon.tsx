@@ -6,7 +6,7 @@ interface OWOXBIIconProps {
 export const OWOXBIIcon = ({ className, size = 24 }: OWOXBIIconProps) => {
   return (
     <img
-      src='/favicon.svg'
+      src='/logo.png'
       width={size}
       height={size}
       className={className}

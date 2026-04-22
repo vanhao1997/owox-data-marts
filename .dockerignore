@@ -1,0 +1,16 @@
+node_modules
+.git
+.github
+.husky
+.changeset
+docs
+scripts
+tools
+*.md
+!README.md
+.env*
+.prettierignore*
+.markdownlint*
+.lintstagedrc*
+eslint.config.mjs
+prettier.config.mjs

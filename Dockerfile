@@ -7,20 +7,18 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy the entire workspace source first for proper npm workspace resolution
+# Copy all source code (.dockerignore excludes node_modules, .git etc.)
 COPY . .
 
-# Override engine-strict and install using lockfile for deterministic deps
+# Install dependencies (bypass engine-strict, allow legacy peer deps)
 RUN echo "engine-strict=false" > .npmrc && \
-    npm ci --ignore-scripts || npm install
-
-# Run postinstall scripts after full install
-RUN npm rebuild 2>/dev/null || true
+    npm install --legacy-peer-deps && \
+    npm install rxjs@7 --legacy-peer-deps --no-save
 
 # Build only the owox CLI and its runtime deps (web, backend, etc.)
 RUN cd apps/owox && npm run build:dep && npm run build
 
-# Clear caches
+# Clear caches to reduce image size
 RUN npm cache clean --force
 
 ENV NODE_OPTIONS="--no-deprecation"

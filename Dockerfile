@@ -9,7 +9,8 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 COPY . .
 
-RUN npm ci \
+RUN npm ci --ignore-scripts --no-audit --no-fund \
+  && npm rebuild better-sqlite3 --no-audit --no-fund \
   && npm run build -w owox \
   && npm prune --omit=dev --ignore-scripts \
   && npm cache clean --force

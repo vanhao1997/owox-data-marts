@@ -11,6 +11,7 @@ import { Code, Plug, Box, Table } from 'lucide-react';
 // Keys list and type
 export const DATA_MART_PRESETS = [
   'facebook',
+  'facebook-pages',
   'linkedin',
   'tiktok',
   'microsoft',
@@ -37,6 +38,13 @@ export const dataMartPresetsMap: Record<DataMartPresetKey, DataMartPreset> = {
     title: 'Facebook Ads',
     datamartTitle: 'Facebook Ads Data Mart',
     connectorSourceTitle: 'FacebookMarketing',
+    definitionType: DataMartDefinitionType.CONNECTOR,
+    icon: FacebookAdsIcon,
+  },
+  'facebook-pages': {
+    title: 'Facebook Fanpage',
+    datamartTitle: 'Facebook Fanpage Data Mart',
+    connectorSourceTitle: 'FacebookPages',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: FacebookAdsIcon,
   },

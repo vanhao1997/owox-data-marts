@@ -9,10 +9,14 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 COPY . .
 
-RUN npm ci --ignore-scripts --no-audit --no-fund \
-  && npm rebuild better-sqlite3 --no-audit --no-fund \
-  && npm run build -w owox \
-  && npm prune --omit=dev --ignore-scripts \
+RUN --mount=type=cache,target=/root/.npm \
+  npm ci --ignore-scripts --no-audit --no-fund
+
+RUN npm rebuild better-sqlite3 --no-audit --no-fund
+
+RUN npm run build -w owox
+
+RUN npm prune --omit=dev --ignore-scripts \
   && npm cache clean --force
 
 FROM node:22.22.3-slim

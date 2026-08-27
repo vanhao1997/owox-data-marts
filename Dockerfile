@@ -7,15 +7,9 @@ WORKDIR /app
 # The monorepo Nest build can exceed Node's default heap limit.
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# Native SQLite bindings need a compiler when no matching prebuild is available.
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates g++ make python3 \
-  && rm -rf /var/lib/apt/lists/*
-
 COPY . .
 
-RUN npm ci --ignore-scripts \
-  && npm rebuild better-sqlite3 \
+RUN npm ci \
   && npm run build -w owox \
   && npm prune --omit=dev --ignore-scripts \
   && npm cache clean --force

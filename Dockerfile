@@ -1,9 +1,30 @@
-# Pinned to a specific patch: the floating `node:22-slim` tag shipped Node 22.23.0,
-# whose http.Agent regression (https://github.com/nodejs/node/issues/63989) breaks node-fetch@2/gaxios@6 with
-# "Premature close", taking down C2C auth. Bump deliberately after verifying the fix.
+# Build the CLI from this checkout so source-only connectors are included in the
+# deployed artifact instead of being replaced by the published npm package.
+FROM node:22.22.3-slim AS build
+
+WORKDIR /app
+
+# The monorepo Nest build can exceed Node's default heap limit.
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Native SQLite bindings need a compiler when no matching prebuild is available.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates g++ make python3 \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+RUN npm ci --ignore-scripts \
+  && npm rebuild better-sqlite3 \
+  && npm run build -w owox \
+  && npm prune --omit=dev --ignore-scripts \
+  && npm cache clean --force
+
 FROM node:22.22.3-slim
-ARG version=latest
-RUN npm install -g owox@${version} && npm cache clean --force
+
+WORKDIR /app
+COPY --from=build /app /app
+
 ENV NODE_OPTIONS="--no-deprecation"
-ENTRYPOINT ["owox"]
+ENTRYPOINT ["node", "apps/owox/bin/run.js"]
 CMD ["serve"]

@@ -52,6 +52,11 @@ function migrateNestedConfigValuesToTopLevel(
   specs: ConnectorSpecificationResponseApiDto[]
 ): Record<string, unknown> {
   const nextConfig = { ...config };
+
+  // FacebookPages renamed its legacy single PageID to multi-Page PageIDs.
+  if (nextConfig.PageIDs === undefined && nextConfig.PageID !== undefined) {
+    nextConfig.PageIDs = nextConfig.PageID;
+  }
   const topLevelFields = specs.filter(isTopLevelMigrationTarget).map(spec => spec.name);
 
   for (const spec of specs) {

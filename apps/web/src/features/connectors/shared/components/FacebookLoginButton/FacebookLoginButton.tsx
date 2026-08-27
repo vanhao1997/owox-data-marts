@@ -4,6 +4,7 @@ import { Button } from '@owox/ui/components/button';
 interface FacebookLoginButtonProps {
   appId: string;
   scope: string;
+  version?: string;
   onSuccess: (response: FacebookLoginResponse) => void;
   onError?: (error: Error) => void;
   disabled?: boolean;
@@ -54,6 +55,7 @@ let globalAppId: string | null = null;
 export function FacebookLoginButton({
   appId,
   scope,
+  version = 'v25.0',
   onSuccess,
   onError,
   disabled = false,
@@ -98,7 +100,7 @@ export function FacebookLoginButton({
           appId: globalAppId,
           cookie: true,
           xfbml: true,
-          version: 'v25.0',
+          version,
         });
         setSdkReady(true);
       }
@@ -111,7 +113,7 @@ export function FacebookLoginButton({
     script.defer = true;
     script.crossOrigin = 'anonymous';
     document.body.appendChild(script);
-  }, [appId]);
+  }, [appId, version]);
 
   const handleLogin = () => {
     if (!window.FB || !sdkReady) {

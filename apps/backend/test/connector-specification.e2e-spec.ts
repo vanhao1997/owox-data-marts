@@ -93,10 +93,10 @@ describe('Connector Specification (e2e)', () => {
   });
 
   // ---------------------------------------------------------------------------
-  // CAPI-04: OAuth connectors (GoogleAds, FacebookMarketing)
+  // CAPI-04: OAuth connectors
   // ---------------------------------------------------------------------------
   describe('OAuth connectors (CAPI-04)', () => {
-    it.each(['GoogleAds', 'FacebookMarketing'])(
+    it.each(['GoogleAds', 'FacebookMarketing', 'FacebookPages'])(
       'GET /api/connectors/%s/specification - returns schema with OAUTH_FLOW attribute',
       async connectorName => {
         const res = await agent

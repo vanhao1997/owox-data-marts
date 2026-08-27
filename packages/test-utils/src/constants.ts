@@ -43,6 +43,7 @@ export const ALL_CONNECTORS = [
   'BankOfCanada',
   'CriteoAds',
   'FacebookMarketing',
+  'FacebookPages',
   'GitHub',
   'GoogleAds',
   'GoogleSheets',

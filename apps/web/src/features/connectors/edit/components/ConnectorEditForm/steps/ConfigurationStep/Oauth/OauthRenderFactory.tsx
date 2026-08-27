@@ -4,6 +4,7 @@ import type {
 } from '../../../../../../shared/api/types';
 import { useOAuth } from '../../../../../../shared/model/hooks/useOAuth';
 import { FacebookOauthRender } from './impl/FacebookOauthRender';
+import { FacebookPagesOauthRender } from './impl/FacebookPagesOauthRender';
 import { TikTokOauthRender } from './impl/TikTokOauthRender';
 import { MicrosoftOauthRender } from './impl/MicrosoftOauthRender';
 import { GoogleAdsOauthRender } from './impl/GoogleAdsOauthRender';
@@ -12,6 +13,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type {
   OAuthStatusResponseDto,
   OAuthSettingsResponseDto,
+  OAuthCallbackResponseDto,
 } from '../../../../../../shared/api/types/response/oauth.response.dto';
 import { Button } from '@owox/ui/components/button';
 import { NestedConfigurationField } from '../NestedConfigurationField';
@@ -37,7 +39,9 @@ export interface OauthRenderComponentProps {
   isLoading: boolean;
   status: OAuthStatusResponseDto | null;
   settings: OAuthSettingsResponseDto | null;
-  onOAuthSuccess: (credentials: Record<string, unknown>) => Promise<void>;
+  onOAuthSuccess: (
+    credentials: Record<string, unknown>
+  ) => Promise<OAuthCallbackResponseDto | null>;
 }
 
 export function OauthRenderFactory({
@@ -157,7 +161,9 @@ export function OauthRenderFactory({
 
   const { checkStatus, getSettings, exchangeCredentials } = useOAuth();
 
-  const handleOAuthSuccess = async (credentials: Record<string, unknown>) => {
+  const handleOAuthSuccess = async (
+    credentials: Record<string, unknown>
+  ): Promise<OAuthCallbackResponseDto | null> => {
     try {
       setIsLoading(true);
       setError(null);
@@ -178,10 +184,12 @@ export function OauthRenderFactory({
           [SOURCE_CREDENTIAL_KEY]: exchanged.credentialId,
         });
       }
+      return exchanged;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to exchange OAuth credentials';
       console.error('Failed to exchange OAuth credentials:', err);
       setError(message);
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -281,6 +289,17 @@ export function OauthRenderFactory({
             isLoading={isLoading}
             status={status}
             settings={settings}
+            onOAuthSuccess={handleOAuthSuccess}
+          />
+        );
+      case 'FacebookPages':
+        return (
+          <FacebookPagesOauthRender
+            isLoading={isLoading}
+            status={status}
+            settings={settings}
+            configuration={configuration}
+            onValueChange={onValueChange}
             onOAuthSuccess={handleOAuthSuccess}
           />
         );

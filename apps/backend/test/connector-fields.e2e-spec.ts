@@ -28,6 +28,7 @@ describe('Connector Fields (e2e)', () => {
       'GitHub',
       'GoogleAds',
       'FacebookMarketing',
+      'FacebookPages',
     ])(
       'GET /api/connectors/%s/fields - returns nodes with fields and uniqueKeys',
       async connectorName => {

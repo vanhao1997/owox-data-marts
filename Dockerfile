@@ -1,29 +1,12 @@
-# Build the CLI from this checkout so source-only connectors are included in the
-# deployed artifact instead of being replaced by the published npm package.
-FROM node:22.22.3-slim AS build
+# The source checkout is built and tested before release. Overlaying only the
+# generated runtime artifacts keeps Coolify's source deployment below its
+# hard-coded SSH timeout while retaining the official runtime dependencies.
+FROM ghcr.io/owox/owox-data-marts:latest
 
-WORKDIR /app
-
-# The monorepo Nest build can exceed Node's default heap limit.
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-
-COPY . .
-
-RUN --mount=type=cache,target=/root/.npm \
-  npm ci --ignore-scripts --no-audit --no-fund
-
-RUN npm rebuild better-sqlite3 --no-audit --no-fund
-
-RUN npm run build -w owox
-
-RUN npm prune --omit=dev --ignore-scripts \
-  && npm cache clean --force
-
-FROM node:22.22.3-slim
-
-WORKDIR /app
-COPY --from=build /app /app
-
-ENV NODE_OPTIONS="--no-deprecation"
-ENTRYPOINT ["node", "apps/owox/bin/run.js"]
-CMD ["serve"]
+COPY deploy/owox-runtime-artifacts.tar.gz /tmp/owox-runtime-artifacts.tar.gz
+RUN tar -xzf /tmp/owox-runtime-artifacts.tar.gz -C /tmp \
+  && cp -a /tmp/packages/connectors/dist/. /usr/local/lib/node_modules/owox/node_modules/@owox/connectors/dist/ \
+  && cp -a /tmp/apps/backend/dist/. /usr/local/lib/node_modules/owox/node_modules/@owox/backend/dist/ \
+  && cp -a /tmp/apps/web/dist/. /usr/local/lib/node_modules/owox/node_modules/@owox/web/dist/ \
+  && cp -a /tmp/apps/owox/dist/. /usr/local/lib/node_modules/owox/dist/ \
+  && rm -rf /tmp/packages /tmp/apps /tmp/owox-runtime-artifacts.tar.gz

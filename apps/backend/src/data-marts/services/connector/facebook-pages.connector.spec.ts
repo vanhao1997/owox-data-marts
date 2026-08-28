@@ -184,10 +184,13 @@ describe('FacebookPages connector', () => {
   it('supports manual Access Token auth fields', () => {
     const source = createSource();
     expect(source.config.AuthType.oneOf.map((option: { value: string }) => option.value)).toEqual([
-      'oauth2',
       'accessToken',
+      'oauth2',
     ]);
-    expect(source.config.AuthType.oneOf[1].items).toMatchObject({
+    const manualAuthVariant = source.config.AuthType.oneOf.find(
+      (option: { value: string }) => option.value === 'accessToken'
+    );
+    expect(manualAuthVariant?.items).toMatchObject({
       AccessToken: { isRequired: true },
       AppId: { isRequired: true },
       AppSecret: { isRequired: true },

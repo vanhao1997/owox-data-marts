@@ -17,6 +17,33 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
           isRequired: true,
           oneOf: [
             {
+              label: 'Access Token',
+              value: 'accessToken',
+              requiredType: 'object',
+              items: {
+                AccessToken: {
+                  isRequired: true,
+                  requiredType: 'string',
+                  label: 'Access Token',
+                  description: 'Facebook user or Page access token',
+                  attributes: [CONFIG_ATTRIBUTES.SECRET],
+                },
+                AppId: {
+                  isRequired: true,
+                  requiredType: 'string',
+                  label: 'App ID',
+                  description: 'Facebook App ID used for token validation',
+                },
+                AppSecret: {
+                  isRequired: true,
+                  requiredType: 'string',
+                  label: 'App Secret',
+                  description: 'Facebook App Secret used for token validation',
+                  attributes: [CONFIG_ATTRIBUTES.SECRET],
+                },
+              },
+            },
+            {
               label: 'OAuth2',
               value: 'oauth2',
               requiredType: 'object',
@@ -76,33 +103,6 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
                   requiredType: 'string',
                   label: 'App Secret',
                   description: 'Facebook App Secret used for token exchange',
-                  attributes: [CONFIG_ATTRIBUTES.SECRET],
-                },
-              },
-            },
-            {
-              label: 'Access Token',
-              value: 'accessToken',
-              requiredType: 'object',
-              items: {
-                AccessToken: {
-                  isRequired: true,
-                  requiredType: 'string',
-                  label: 'Access Token',
-                  description: 'Facebook user or Page access token',
-                  attributes: [CONFIG_ATTRIBUTES.SECRET],
-                },
-                AppId: {
-                  isRequired: true,
-                  requiredType: 'string',
-                  label: 'App ID',
-                  description: 'Facebook App ID used for token validation',
-                },
-                AppSecret: {
-                  isRequired: true,
-                  requiredType: 'string',
-                  label: 'App Secret',
-                  description: 'Facebook App Secret used for token validation',
                   attributes: [CONFIG_ATTRIBUTES.SECRET],
                 },
               },

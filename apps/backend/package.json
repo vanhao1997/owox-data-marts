@@ -101,7 +101,7 @@
     "jsonwebtoken": "^9.0.0",
     "juice": "^11.0.3",
     "luxon": "^3.6.1",
-    "mysql2": "^3.14.1",
+    "mysql2": "^3.14.3",
     "nestjs-cls": "^6.0.1",
     "reflect-metadata": "^0.2.2",
     "rehype-sanitize": "^6.0.0",
@@ -117,7 +117,7 @@
     "typeorm": "^0.3.31",
     "typeorm-transactional": "^0.5.0",
     "undici": "^6.27.0",
-    "zod": "^3.25.64",
+    "zod": "^3.25.67",
     "zod-to-json-schema": "^3.25.0"
   },
   "peerDependencies": {
@@ -142,7 +142,6 @@
     "@types/node": "^22.10.7",
     "@types/supertest": "^6.0.2",
     "jest": "^30.2.0",
-    "npm-run-all": "^4.1.5",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.4.6",
@@ -152,7 +151,11 @@
     "typeorm-ts-node-commonjs": "^0.3.20"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -180,7 +183,9 @@
       "<rootDir>/../../../node_modules/(?!(@owox)/)",
       "<rootDir>/../../../packages/(?!(idp-protocol|idp-better-auth|idp-owox-better-auth|internal-helpers)/)"
     ],
-    "collectCoverageFrom": ["**/*.(t|j)s"],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {

@@ -17,12 +17,12 @@
     "@oclif/plugin-help": "^6",
     "@owox/api-client": "*",
     "@owox/internal-helpers": "*",
-    "undici": "^6.26.0"
+    "undici": "^6.27.0"
   },
   "devDependencies": {
     "@owox/eslint-config": "*",
     "@owox/prettier-config": "*",
-    "@types/jest": "29.5.14",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
     "jest": "^30.2.0",
     "shx": "^0.4.0",

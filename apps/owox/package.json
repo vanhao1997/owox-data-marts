@@ -23,7 +23,7 @@
   "peerDependencies": {
     "@nestjs/platform-express": "^11",
     "express": "^5",
-    "zod": "^3.25"
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
@@ -33,7 +33,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5",
     "@types/mocha": "^10",
-    "@types/node": "^18",
+    "@types/node": "^22.10.7",
     "@types/supertest": "^6.0.2",
     "chai": "^4",
     "eslint-config-oclif": "6.0.146",
@@ -46,7 +46,12 @@
   "engines": {
     "node": ">=22.22.0"
   },
-  "files": ["./bin", "./dist/**/*.js", "./oclif.manifest.json", "./npm-shrinkwrap.json"],
+  "files": [
+    "./bin",
+    "./dist/**/*.js",
+    "./oclif.manifest.json",
+    "./npm-shrinkwrap.json"
+  ],
   "homepage": "https://github.com/OWOX/owox-data-marts",
   "keywords": [
     "data-marts",
@@ -67,7 +72,9 @@
     "bin": "owox",
     "dirname": "owox",
     "commands": "./dist/commands",
-    "plugins": ["@oclif/plugin-help"],
+    "plugins": [
+      "@oclif/plugin-help"
+    ],
     "topicSeparator": " "
   },
   "repository": {

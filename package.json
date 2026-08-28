@@ -20,8 +20,8 @@
     "node": ">=22.22.0"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "build:dep": "npm run build:dep --workspaces --if-present",
+    "build": "turbo run build",
+    "build:dep": "turbo run build:dep",
     "build:docs": "npm run build -w @owox/docs",
     "build:owox": "npm run build -w owox",
     "clean": "npx -y shx echo '☢️  Starting total cleanup...' && npx -y shx rm -rf node_modules apps/*/node_modules packages/*/node_modules apps/*/dist packages/*/dist + && npx -y shx echo '✅ Cleanup complete!'",
@@ -31,18 +31,18 @@
     "dev:docs": "npm run dev -w @owox/docs",
     "dev:connectors": "npm run dev -w @owox/connectors",
     "dev:owox": "npm run dev -w owox",
-    "dev": "npm-run-all --parallel dev:web dev:backend dev:connectors",
-    "format": "npm run format --workspaces --if-present",
-    "format:check": "npm run format:check --workspaces --if-present",
+    "dev": "turbo run dev --filter=@owox/web --filter=@owox/backend --filter=@owox/connectors",
+    "format": "turbo run format",
+    "format:check": "turbo run format:check",
     "format:root": "prettier --write \"**/*.{js,ts,mjs,yml,yaml,json}\" --ignore-path .prettierignore.root",
     "format:root:check": "prettier --check \"**/*.{js,ts,mjs,yml,yaml,json}\" --ignore-path .prettierignore.root",
     "format:packages": "node tools/format-package-info.mjs",
-    "lint": "npm run lint --workspaces --if-present",
-    "lint:fix": "npm run lint:fix --workspaces --if-present",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
     "lint:root": "eslint . --config ./eslint.config.mjs",
     "lint:root:fix": "eslint . --fix --config ./eslint.config.mjs",
-    "lint:md": "npm run lint:md --workspaces --if-present",
-    "lint:md:fix": "npm run lint:md:fix --workspaces --if-present",
+    "lint:md": "turbo run lint:md",
+    "lint:md:fix": "turbo run lint:md:fix",
     "lint:md:all": "markdownlint-cli2",
     "lint:md:all:fix": "markdownlint-cli2 --fix",
     "lint:md:root": "cross-env MDLINT_CONTEXT=root npx markdownlint-cli2",
@@ -57,8 +57,8 @@
     "pre-commit": "lint-staged",
     "prepare": "husky",
     "setup:husky": "node tools/setup-husky.mjs",
-    "test": "npm run test --workspaces --if-present",
-    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
     "test:clean": "npx -y shx rm -rf apps/web/playwright-report apps/web/test-results coverage apps/*/coverage packages/*/coverage"
   },
   "devDependencies": {
@@ -73,9 +73,9 @@
     "lint-staged": "^15.2.10",
     "markdownlint": "~0.40.0",
     "markdownlint-cli2": "~0.21.0",
-    "npm-run-all": "^4.1.5",
     "prettier": "~3.7.0",
     "shx": "^0.4.0",
+    "turbo": "^2.10.12",
     "typescript": "~5.9.0"
   },
   "overrides": {
@@ -120,5 +120,6 @@
     "@modelcontextprotocol/sdk": {
       "@hono/node-server": "^2.0.5"
     }
-  }
+  },
+  "packageManager": "npm@10.9.8"
 }

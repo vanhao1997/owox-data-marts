@@ -25,7 +25,7 @@
   },
   "peerDependencies": {
     "express": "^5",
-    "zod": "^3.25"
+    "zod": "^3.25.67"
   },
   "dependencies": {
     "@owox/idp-protocol": "*",
@@ -61,7 +61,9 @@
   "engines": {
     "node": ">=22.22.0"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",

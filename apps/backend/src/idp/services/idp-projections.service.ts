@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   ApproveMembershipRequestResult,
@@ -35,7 +35,8 @@ export class IdpProjectionsService {
     @InjectRepository(UserProjection)
     private readonly usersRepository: Repository<UserProjection>,
     private readonly idpProviderService: IdpProviderService,
-    private readonly projectMembershipReconciliationService: ProjectMembershipReconciliationService
+    @Optional()
+    private readonly projectMembershipReconciliationService?: ProjectMembershipReconciliationService
   ) {}
 
   public async getProjectProjection(projectId: string): Promise<ProjectProjection | null> {
@@ -255,7 +256,7 @@ export class IdpProjectionsService {
     };
     if (!provider.cancelInvitation) throw new Error('Invitation cancellation is not supported');
     await provider.cancelInvitation(projectId, invitationId, actorUserId);
-    await this.projectMembershipReconciliationService.removePendingScope(invitationId);
+    await this.projectMembershipReconciliationService?.removePendingScope(invitationId);
   }
 
   public async getUserProvisioningSettings(

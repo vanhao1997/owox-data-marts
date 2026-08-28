@@ -547,7 +547,7 @@ describe('TokenService', () => {
       expect(result).toEqual({ accessToken: 'encrypted-payload' });
     });
 
-    it('should omit roles when user has no role', async () => {
+    it('should return empty roles when user has no role', async () => {
       const sessionData = {
         user: { id: 'user-1', email: 'test@example.com', name: 'Test User' },
         session: { token: 'session-token-123' },
@@ -570,6 +570,7 @@ describe('TokenService', () => {
           projectId: '0',
           email: 'test@example.com',
           fullName: 'Test User',
+          roles: [],
         })
       );
     });
@@ -837,7 +838,7 @@ describe('TokenService', () => {
       expect(result!.roles).toEqual(['viewer']);
     });
 
-    it('should handle payload without roles through the round-trip', async () => {
+    it('should return an empty roles array when active project has no membership', async () => {
       let stored = '';
       cryptoService.encrypt.mockImplementation(async (data: string) => {
         stored = data;
@@ -862,7 +863,7 @@ describe('TokenService', () => {
       const result = await service.introspectToken(accessToken);
 
       expect(result!.userId).toBe('u1');
-      expect(result!.roles).toBeUndefined();
+      expect(result!.roles).toEqual([]);
     });
   });
 

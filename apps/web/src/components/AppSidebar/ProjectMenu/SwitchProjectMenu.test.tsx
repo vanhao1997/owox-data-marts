@@ -42,6 +42,10 @@ vi.mock('../../../features/idp/hooks/useProjects.ts', () => ({
   useProjects: () => projectsState.value,
 }));
 
+vi.mock('../../../app/store/hooks', () => ({
+  useFlags: () => ({ flags: { IDP_PROVIDER: 'better-auth' } }),
+}));
+
 vi.mock('@owox/ui/components/dropdown-menu', () => ({
   DropdownMenuSub: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   DropdownMenuSubTrigger: ({ children }: { children: ReactNode }) => (

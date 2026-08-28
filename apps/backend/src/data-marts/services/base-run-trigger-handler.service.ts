@@ -49,6 +49,31 @@ export abstract class BaseRunTriggerHandlerService<T extends Trigger>
    */
   protected abstract getTriggerRunIdField(): string;
 
+  /**
+   * Archive enforcement happens in the generic scheduler before handleTrigger
+   * runs. Cancel the linked run there so it cannot remain PENDING indefinitely.
+   */
+  async cancelRunForArchivedProject(trigger: T): Promise<void> {
+    const dataMartRunId = this.getTriggerDataMartRunId(trigger);
+    if (!dataMartRunId) return;
+
+    await this.dataMartRunRepository.update(
+      {
+        id: dataMartRunId,
+        status: In([
+          DataMartRunStatus.PENDING,
+          DataMartRunStatus.RUNNING,
+          DataMartRunStatus.INTERRUPTED,
+        ]),
+      },
+      {
+        status: DataMartRunStatus.CANCELLED,
+        errors: ['Project is archived and read-only; scheduled run was skipped.'],
+        finishedAt: new Date(),
+      }
+    );
+  }
+
   protected async failOrphanedRun(run: DataMartRun): Promise<void> {
     run.status = DataMartRunStatus.FAILED;
     run.errors = [

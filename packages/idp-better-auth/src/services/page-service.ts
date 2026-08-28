@@ -129,8 +129,23 @@ export class PageService {
       }
 
       let role: string;
+      let projectId = '0';
+      let invitationId: string | undefined;
       try {
-        role = await this.cryptoService.decrypt(encryptedRole);
+        const decoded = await this.cryptoService.decrypt(encryptedRole);
+        try {
+          const invitation = JSON.parse(decoded) as {
+            role?: string;
+            projectId?: string;
+            invitationId?: string;
+          };
+          role = invitation.role || decoded;
+          projectId = invitation.projectId || '0';
+          invitationId = invitation.invitationId;
+        } catch {
+          // Backward compatibility with role-only links created by older builds.
+          role = decoded;
+        }
       } catch (error) {
         logger.error('Failed to decrypt role', {}, error as Error);
         res.redirect('/auth/sign-in?error=Invalid magic link');
@@ -145,7 +160,39 @@ export class PageService {
               await this.userManagementService.updateUserName(session.user.id, generatedName);
             }
 
-            await this.userManagementService.addMemberToOrganization(req, role as Role);
+            const targetOrganizationId =
+              projectId === '0' ? 'owox_data_marts_organization' : projectId;
+            if (invitationId) {
+              const accepted = await this.userManagementService.acceptInvitation(
+                invitationId,
+                session.user.id,
+                session.user.email
+              );
+              await this.authenticationService.setActiveOrganization(
+                req,
+                accepted.organizationId,
+                res
+              );
+            } else {
+              if (projectId === '0') {
+                // Preserve legacy role-only links generated before invitations
+                // carried a project context.
+                await this.userManagementService.addMemberToOrganization(req, role as Role);
+              } else {
+                await this.userManagementService.ensureUserInOrganization(
+                  session.user.id,
+                  role as Role,
+                  targetOrganizationId
+                );
+              }
+              const authWithOrganization = this.authenticationService as AuthenticationService & {
+                setActiveOrganization?: (
+                  request: ExpressRequest,
+                  organizationId: string
+                ) => Promise<void>;
+              };
+              await authWithOrganization.setActiveOrganization?.(req, targetOrganizationId);
+            }
           }
         } catch (error) {
           logger.error(

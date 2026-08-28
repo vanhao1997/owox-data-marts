@@ -1,4 +1,11 @@
-import type { AdminUserDetailsView, AdminUserView, Role } from '../types/index.js';
+import type {
+  AdminUserDetailsView,
+  AdminUserView,
+  Role,
+  DatabaseMember,
+  DatabaseOrganization,
+  DatabaseInvitation,
+} from '../types/index.js';
 import { DatabaseOperationResult, DatabaseUser } from '../types/index.js';
 
 export interface DatabaseStore {
@@ -51,6 +58,26 @@ export interface DatabaseStore {
   ): Promise<void>;
   addUserToOrganization(orgId: string, userId: string, role: Role): Promise<void>;
   getUserRole(orgId: string, userId: string): Promise<string | null>;
+  listOrganizationsForUser(userId: string): Promise<DatabaseOrganization[]>;
+  getOrganization(orgId: string): Promise<DatabaseOrganization | null>;
+  createOrganization(org: DatabaseOrganization, userId: string, role: Role): Promise<void>;
+  updateOrganization(orgId: string, name: string, metadata?: string | null): Promise<void>;
+  listOrganizationMembers(orgId: string): Promise<DatabaseMember[]>;
+  removeUserFromOrganization(orgId: string, userId: string): Promise<void>;
+  countOrganizationsForUser(userId: string): Promise<number>;
+  createInvitation(invitation: DatabaseInvitation): Promise<void>;
+  getInvitation(invitationId: string): Promise<DatabaseInvitation | null>;
+  updateInvitation(
+    invitationId: string,
+    values: Partial<Pick<DatabaseInvitation, 'status' | 'expiresAt'>>
+  ): Promise<void>;
+  /** Atomically consume a pending, unexpired invitation. */
+  acceptPendingInvitation(
+    invitationId: string,
+    userId: string,
+    now: string
+  ): Promise<DatabaseInvitation | null>;
+  listInvitations(orgId: string): Promise<DatabaseInvitation[]>;
 
   // Admin views
   getUsersForAdmin(): Promise<AdminUserView[]>;

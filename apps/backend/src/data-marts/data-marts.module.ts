@@ -447,6 +447,7 @@ import { TypeResolver } from '../common/resolver/type-resolver';
 import { DataStorageType } from './data-storage-types/enums/data-storage-type.enum';
 import { PLUGIN_ENTITY_AUTHORIZATION_FACADE } from './facades/plugin-entity-authorization.facade';
 import { PluginEntityAuthorizationFacadeImpl } from './facades/plugin-entity-authorization.facade.impl';
+import { PendingMemberInvitationScope } from './entities/pending-member-invitation-scope.entity';
 
 @Module({
   imports: [
@@ -504,6 +505,7 @@ import { PluginEntityAuthorizationFacadeImpl } from './facades/plugin-entity-aut
       MemberRoleContext,
       UserProvisioningContextSettings,
       UserProvisioningContextSettingsContext,
+      PendingMemberInvitationScope,
     ]),
     CommonModule,
     IdpModule,

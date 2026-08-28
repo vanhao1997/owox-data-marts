@@ -163,6 +163,42 @@ export async function getProjectsApi(token: string): Promise<Projects> {
   return response.data;
 }
 
+export async function createProjectApi(name: string): Promise<import('../types').Project> {
+  const response = await authClient.post<import('../types').Project>(
+    '/auth/api/project-management/projects',
+    { name }
+  );
+  return response.data;
+}
+export async function renameProjectApi(
+  projectId: string,
+  name: string
+): Promise<import('../types').Project> {
+  const response = await authClient.patch<import('../types').Project>(
+    `/auth/api/project-management/projects/${encodeURIComponent(projectId)}`,
+    { name }
+  );
+  return response.data;
+}
+export async function archiveProjectApi(projectId: string): Promise<import('../types').Project> {
+  const response = await authClient.post<import('../types').Project>(
+    `/auth/api/project-management/projects/${encodeURIComponent(projectId)}/archive`
+  );
+  return response.data;
+}
+export async function unarchiveProjectApi(projectId: string): Promise<import('../types').Project> {
+  const response = await authClient.post<import('../types').Project>(
+    `/auth/api/project-management/projects/${encodeURIComponent(projectId)}/unarchive`
+  );
+  return response.data;
+}
+export async function selectProjectApi(projectId: string): Promise<import('../types').Project> {
+  const response = await authClient.post<import('../types').Project>(
+    `/auth/api/project-management/projects/${encodeURIComponent(projectId)}/select`
+  );
+  return response.data;
+}
+
 /**
  * Authentication API service object for backward compatibility
  */
@@ -172,6 +208,11 @@ export const AuthApiService = {
   refreshAccessToken,
   getUserApi,
   getProjectsApi,
+  createProjectApi,
+  renameProjectApi,
+  archiveProjectApi,
+  unarchiveProjectApi,
+  selectProjectApi,
 };
 
 // Export as default for convenience

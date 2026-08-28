@@ -203,6 +203,15 @@ export class TokenService {
     return typeof value === 'string' && value.trim().length > 0;
   }
 
+  private async getUserRoleForOrganization(
+    userId: string,
+    organizationId: string
+  ): Promise<string | null> {
+    return organizationId === 'owox_data_marts_organization'
+      ? this.userManagementService.getUserRole(userId)
+      : this.userManagementService.getUserRole(userId, organizationId);
+  }
+
   async refreshToken(refreshToken: string): Promise<AuthResult> {
     try {
       const betterAuthTokenPrefix = this.auth.options.advanced?.cookies?.session_token?.attributes
@@ -219,14 +228,39 @@ export class TokenService {
         throw new Error('Invalid refresh token');
       }
 
-      const userRole = await this.userManagementService.getUserRole(session.user.id);
+      const activeOrganizationId = (session.session as { activeOrganizationId?: string })
+        .activeOrganizationId;
+      const organizationId = this.userManagementService.resolveActiveOrganizationId
+        ? await this.userManagementService.resolveActiveOrganizationId(
+            session.user.id,
+            activeOrganizationId
+          )
+        : activeOrganizationId || 'owox_data_marts_organization';
+      const userRole = organizationId
+        ? await this.getUserRoleForOrganization(session.user.id, organizationId)
+        : null;
+      const service = this.userManagementService as UserManagementService & {
+        getOrganizationTitle?: (id: string) => Promise<string | null>;
+      };
+      const projectTitle = organizationId
+        ? ((await service.getOrganizationTitle?.(organizationId)) ?? null)
+        : null;
 
       const payload = {
         userId: session.user.id,
-        projectId: TokenService.DEFAULT_ORGANIZATION_ID,
+        projectId:
+          organizationId === 'owox_data_marts_organization'
+            ? TokenService.DEFAULT_ORGANIZATION_ID
+            : (organizationId ?? ''),
         email: session.user.email,
         fullName: session.user.name || session.user.email,
-        ...(userRole ? { roles: [userRole] } : {}),
+        ...(projectTitle ? { projectTitle } : {}),
+        roles: userRole ? [userRole] : [],
+        ...(organizationId &&
+        this.userManagementService.isOrganizationArchived &&
+        (await this.userManagementService.isOrganizationArchived(organizationId))
+          ? { projectArchived: true, viewOnly: true }
+          : {}),
       };
 
       const encryptedToken = await this.cryptoService.encrypt(JSON.stringify(payload));

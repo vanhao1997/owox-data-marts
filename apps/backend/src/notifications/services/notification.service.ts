@@ -18,7 +18,10 @@ export class NotificationService {
     private readonly webhookService: NotificationWebhookService
   ) {}
 
-  async processQueue(getProjectMembers: (projectId: string) => Promise<UserInfo[]>): Promise<void> {
+  async processQueue(
+    getProjectMembers: (projectId: string) => Promise<UserInfo[]>,
+    shouldSkipProject?: (projectId: string) => Promise<boolean>
+  ): Promise<void> {
     this.logger.debug('Processing pending notifications');
     const grouped = await this.queueService.getGroupedByProjectAndType();
     this.logger.debug(`Grouped notifications: ${grouped.size}`);
@@ -28,6 +31,14 @@ export class NotificationService {
     }
     this.logger.log(`Processing notifications for ${grouped.size} projects`);
     for (const [projectId, typeMap] of grouped) {
+      if (shouldSkipProject && (await shouldSkipProject(projectId))) {
+        const queuedItems = [...typeMap.values()].flat();
+        await this.queueService.deleteProcessed(queuedItems);
+        this.logger.warn(
+          `Skipping ${queuedItems.length} queued notifications for archived project ${projectId}`
+        );
+        continue;
+      }
       for (const [notificationType, queueItems] of typeMap) {
         await this.processNotificationGroup(
           projectId,

@@ -1,7 +1,8 @@
 import { DropdownMenuTrigger } from '@owox/ui/components/dropdown-menu';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, LockKeyhole } from 'lucide-react';
 import { Logo } from '../../Logo';
 import { useProject } from '../../../app/store/hooks';
+import { useUser, useProjects } from '../../../features/idp/hooks';
 
 interface ProjectMenuTriggerProps {
   isOpen: boolean;
@@ -9,6 +10,9 @@ interface ProjectMenuTriggerProps {
 
 export function ProjectMenuTrigger({ isOpen }: ProjectMenuTriggerProps) {
   const { title } = useProject();
+  const user = useUser();
+  const { projects } = useProjects();
+  const isArchived = projects.some(project => project.id === user?.projectId && project.archived);
   return (
     <DropdownMenuTrigger asChild>
       <button
@@ -28,7 +32,15 @@ export function ProjectMenuTrigger({ isOpen }: ProjectMenuTriggerProps) {
 
         <div className='grid flex-1 text-left text-sm leading-tight'>
           <span className='truncate font-medium'>OWOX Data Marts</span>
-          <span className='text-muted-foreground truncate text-xs'>{title ?? 'Project'}</span>
+          <span className='text-muted-foreground flex items-center gap-1 truncate text-xs'>
+            <span className='truncate'>{title ?? 'Project'}</span>
+            {isArchived && (
+              <span className='inline-flex shrink-0 items-center gap-0.5' title='Read-only project'>
+                <LockKeyhole className='size-3' aria-hidden='true' />
+                <span className='sr-only'>Read-only</span>
+              </span>
+            )}
+          </span>
         </div>
 
         <ChevronDown

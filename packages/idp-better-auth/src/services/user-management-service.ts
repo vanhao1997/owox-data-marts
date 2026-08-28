@@ -6,6 +6,7 @@ import type { Role } from '../types/index.js';
 import type { Request as ExpressRequest } from 'express';
 import type { DatabaseStore } from '../store/DatabaseStore.js';
 import { logger } from '../logger.js';
+import crypto from 'node:crypto';
 
 export class UserManagementService {
   private static readonly DEFAULT_ORGANIZATION_ID = 'owox_data_marts_organization';
@@ -58,13 +59,49 @@ export class UserManagementService {
    */
   async inviteAndCreateStub(
     email: string,
-    role: Role
-  ): Promise<{ userId: string; magicLink: string }> {
+    role: Role,
+    projectId = UserManagementService.DEFAULT_ORGANIZATION_ID,
+    actorUserId = 'system'
+  ): Promise<{
+    userId: string;
+    magicLink: string;
+    invitationId?: string;
+    expiresAt?: string;
+  }> {
     try {
-      const { userId } = await this.store.createUserStub(email);
-      await this.ensureUserInDefaultOrganization(userId, role);
-      const magicLink = await this.magicLinkService.generateMagicLink(email, role);
-      return { userId, magicLink };
+      const normalizedEmail = email.trim().toLowerCase();
+      if (!normalizedEmail || !normalizedEmail.includes('@')) {
+        throw new Error('Invalid invitation email');
+      }
+      const { userId } = await this.store.createUserStub(normalizedEmail);
+      // Keep compatibility with test doubles and older providers while all
+      // shipped Better Auth stores use the invitation table.
+      if (!this.store.createInvitation) {
+        await this.ensureUserInOrganization(userId, role, projectId);
+        return {
+          userId,
+          magicLink: await this.magicLinkService.generateMagicLink(normalizedEmail, role),
+        };
+      }
+      const invitationId = crypto.randomUUID();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      await this.store.createInvitation({
+        id: invitationId,
+        organizationId: projectId,
+        email: normalizedEmail,
+        role,
+        status: 'pending',
+        inviterId: actorUserId,
+        expiresAt,
+        createdAt: new Date().toISOString(),
+      });
+      const magicLink = await this.magicLinkService.generateMagicLink(
+        normalizedEmail,
+        role,
+        projectId === UserManagementService.DEFAULT_ORGANIZATION_ID ? '0' : projectId,
+        invitationId
+      );
+      return { userId, magicLink, invitationId, expiresAt };
     } catch (error) {
       logger.error('Error pre-provisioning invitation', { email, role }, error as Error);
       throw new Error(
@@ -172,13 +209,23 @@ export class UserManagementService {
     }
   }
 
-  async generateMagicLinkForUser(email: string, role: Role): Promise<string> {
+  async generateMagicLinkForUser(
+    email: string,
+    role: Role,
+    projectId = '0',
+    invitationId?: string
+  ): Promise<string> {
     try {
       if (!this.cryptoService) {
         throw new Error('CryptoService not available for magic link generation');
       }
 
-      const magicLink = await this.magicLinkService.generateMagicLink(email, role);
+      const magicLink = await this.magicLinkService.generateMagicLink(
+        email,
+        role,
+        projectId,
+        invitationId
+      );
       return magicLink;
     } catch (error) {
       logger.error('Error generating magic link for user', { email, role }, error as Error);
@@ -195,9 +242,12 @@ export class UserManagementService {
     }
   }
 
-  async getUserRole(userId: string): Promise<string | null> {
+  async getUserRole(
+    userId: string,
+    organizationId = UserManagementService.DEFAULT_ORGANIZATION_ID
+  ): Promise<string | null> {
     try {
-      return await this.store.getUserRole(UserManagementService.DEFAULT_ORGANIZATION_ID, userId);
+      return await this.store.getUserRole(organizationId, userId);
     } catch (error) {
       logger.error('Failed to get user role', { userId }, error as Error);
       throw new Error('Failed to get user role');
@@ -314,14 +364,32 @@ export class UserManagementService {
    * Creates organization if it doesn't exist
    */
   async ensureUserInDefaultOrganization(userId: string, role: Role): Promise<void> {
+    return this.ensureUserInOrganization(
+      userId,
+      role,
+      UserManagementService.DEFAULT_ORGANIZATION_ID
+    );
+  }
+
+  async ensureUserInOrganization(
+    userId: string,
+    role: Role,
+    organizationId: string
+  ): Promise<void> {
     try {
       const defaultOrg = {
-        id: UserManagementService.DEFAULT_ORGANIZATION_ID,
+        id: organizationId,
         name: UserManagementService.DEFAULT_ORGANIZATION_NAME,
         slug: UserManagementService.DEFAULT_ORGANIZATION_SLUG,
       } as const;
 
-      if (!(await this.store.defaultOrganizationExists(defaultOrg.slug))) {
+      const storeWithOrganization = this.store as Omit<DatabaseStore, 'getOrganization'> & {
+        getOrganization?: DatabaseStore['getOrganization'];
+      };
+      const exists = storeWithOrganization.getOrganization
+        ? Boolean(await storeWithOrganization.getOrganization(organizationId))
+        : await this.store.defaultOrganizationExists(defaultOrg.slug);
+      if (!exists) {
         await this.store.createDefaultOrganizationForUser(defaultOrg, userId, role);
       } else {
         await this.store.addUserToOrganization(defaultOrg.id, userId, role);
@@ -332,5 +400,97 @@ export class UserManagementService {
         `Failed to add user to organization: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
+  }
+
+  async acceptInvitation(
+    invitationId: string,
+    userId: string,
+    email: string
+  ): Promise<{ role: Role; organizationId: string }> {
+    const invitation = await this.store.getInvitation(invitationId);
+    if (
+      !invitation ||
+      invitation.status !== 'pending' ||
+      new Date(invitation.expiresAt) < new Date()
+    ) {
+      throw new Error('Invitation is invalid or expired');
+    }
+    if (invitation.email.toLowerCase() !== email.toLowerCase()) {
+      throw new Error('Invitation email does not match signed-in email');
+    }
+    if (
+      this.store.getOrganization &&
+      !(await this.store.getOrganization(invitation.organizationId))
+    ) {
+      throw new Error('Invitation project no longer exists');
+    }
+    if (await this.isOrganizationArchived(invitation.organizationId)) {
+      throw new Error('Invitation project is archived');
+    }
+    const accepted = this.store.acceptPendingInvitation
+      ? await this.store.acceptPendingInvitation(invitationId, userId, new Date().toISOString())
+      : (await this.store.updateInvitation(invitationId, { status: 'accepted' }), invitation);
+    if (!accepted) throw new Error('Invitation is invalid or expired');
+    return { role: accepted.role, organizationId: accepted.organizationId };
+  }
+
+  async isOrganizationArchived(organizationId: string): Promise<boolean> {
+    const storeWithOrganization = this.store as Omit<DatabaseStore, 'getOrganization'> & {
+      getOrganization?: DatabaseStore['getOrganization'];
+    };
+    if (!storeWithOrganization.getOrganization) return false;
+    const organization = await storeWithOrganization.getOrganization(organizationId);
+    if (!organization?.metadata) return false;
+    try {
+      return Boolean((JSON.parse(organization.metadata) as { archived?: boolean }).archived);
+    } catch {
+      return false;
+    }
+  }
+
+  /** Resolve a session's active organization. An explicitly selected archived
+   * project remains selected so its data can be read in view-only mode. */
+  async resolveActiveOrganizationId(
+    userId: string,
+    requestedOrganizationId?: string
+  ): Promise<string | null> {
+    const normalizedRequestedId =
+      requestedOrganizationId === '0'
+        ? UserManagementService.DEFAULT_ORGANIZATION_ID
+        : requestedOrganizationId;
+    const organizations = this.store.listOrganizationsForUser
+      ? await this.store.listOrganizationsForUser(userId)
+      : [];
+    if (organizations.length === 0) {
+      const fallback = normalizedRequestedId ?? UserManagementService.DEFAULT_ORGANIZATION_ID;
+      return (await this.store.getUserRole(fallback, userId)) ? fallback : null;
+    }
+
+    const requested = normalizedRequestedId
+      ? organizations.find(org => org.id === normalizedRequestedId)
+      : undefined;
+    if (requested) return requested.id;
+
+    for (const organization of organizations) {
+      if (!(await this.isOrganizationArchived(organization.id))) return organization.id;
+    }
+    return null;
+  }
+
+  /** Return the first non-archived organization for fallback after archiving. */
+  async resolveFirstActiveOrganizationId(userId: string): Promise<string | null> {
+    const organizations = this.store.listOrganizationsForUser
+      ? await this.store.listOrganizationsForUser(userId)
+      : [];
+    for (const organization of organizations) {
+      if (!(await this.isOrganizationArchived(organization.id))) return organization.id;
+    }
+    return null;
+  }
+
+  async getOrganizationTitle(organizationId: string): Promise<string | null> {
+    if (!this.store.getOrganization) return null;
+    const organization = await this.store.getOrganization(organizationId);
+    return organization?.name ?? null;
   }
 }

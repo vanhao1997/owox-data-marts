@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router';
 import { cn } from '@owox/ui/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@owox/ui/components/alert';
 import { AlertCircle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { useIsAdmin } from '../../features/idp/hooks/useRole';
 import { useFlags } from '../../app/store/hooks';
 import { checkVisible } from '../../utils/check-visible';
@@ -15,6 +16,7 @@ import { AddContextSheet } from '../../features/contexts/components/AddContextSh
 import { MembersSettingsProvider } from '../../features/project-settings/members/model/MembersSettingsProvider';
 import { MembershipRequestSheet } from '../../features/project-settings/members/components/MembershipRequestSheet/MembershipRequestSheet';
 import { useTombstonedCollection } from '../../features/project-settings/members/model/useTombstonedCollection';
+import type { PendingProjectInvitation } from '../../features/project-members/services/project-members.service';
 
 interface TabLink {
   name: string;
@@ -47,6 +49,7 @@ export function ProjectSettingsPage() {
   const [pendingRequests, setPendingRequests] = useState<MembershipRequestDto[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [requestSheetTarget, setRequestSheetTarget] = useState<MembershipRequestDto | null>(null);
+  const [pendingInvitations, setPendingInvitations] = useState<PendingProjectInvitation[]>([]);
 
   const memberIdOf = useCallback((m: MemberWithScopeDto) => m.userId, []);
   const requestIdOf = useCallback((r: MembershipRequestDto) => r.requestId, []);
@@ -73,6 +76,11 @@ export function ProjectSettingsPage() {
       setContexts(ctxs);
       setMembers(memberTombstones.reconcile(mems));
       setPendingRequests(requestTombstones.reconcile(reqs));
+      if (isAdmin) {
+        setPendingInvitations(
+          await projectMembersService.getInvitations().catch(() => [] as PendingProjectInvitation[])
+        );
+      }
     } catch (err) {
       // Without a catch the page renders empty arrays + loading=false, which
       // is indistinguishable from "this project really has no members /
@@ -112,6 +120,39 @@ export function ProjectSettingsPage() {
 
   const openMembershipRequestSheet = useCallback((request: MembershipRequestDto) => {
     setRequestSheetTarget(request);
+  }, []);
+
+  const handleResendInvitation = useCallback(
+    async (invitation: PendingProjectInvitation) => {
+      try {
+        const refreshed = await projectMembersService.resendInvitation(
+          invitation.invitationId ?? ''
+        );
+        setPendingInvitations(previous =>
+          previous.map(item =>
+            item.invitationId === refreshed.invitationId ? { ...item, ...refreshed } : item
+          )
+        );
+        if (refreshed.magicLink) {
+          await navigator.clipboard.writeText(refreshed.magicLink);
+          toast.success('New invitation link copied to clipboard');
+        }
+        await loadData();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Failed to resend invitation');
+      }
+    },
+    [loadData]
+  );
+
+  const handleCopyInvitation = useCallback(async (invitation: PendingProjectInvitation) => {
+    if (!invitation.magicLink) return;
+    try {
+      await navigator.clipboard.writeText(invitation.magicLink);
+      toast.success('Invitation link copied to clipboard');
+    } catch {
+      toast.error('Failed to copy invitation link');
+    }
   }, []);
 
   const navigation: TabLink[] = [
@@ -204,6 +245,50 @@ export function ProjectSettingsPage() {
         )}
 
         <div className='pt-4'>
+          {isAdmin && pendingInvitations.length > 0 && (
+            <div className='mb-4 rounded-md border p-3 text-sm'>
+              <div className='mb-2 font-medium'>Pending invitations</div>
+              {pendingInvitations.map(invitation => (
+                <div
+                  key={invitation.invitationId ?? invitation.email}
+                  className='flex items-center justify-between border-t py-2'
+                >
+                  <span>
+                    {invitation.email} · {invitation.role} · expires{' '}
+                    {invitation.expiresAt
+                      ? new Date(invitation.expiresAt).toLocaleDateString()
+                      : 'soon'}
+                  </span>
+                  <div className='flex gap-2'>
+                    <button
+                      className='text-primary underline'
+                      onClick={() => void handleResendInvitation(invitation)}
+                    >
+                      Resend
+                    </button>
+                    {invitation.magicLink && (
+                      <button
+                        className='text-primary underline'
+                        onClick={() => void handleCopyInvitation(invitation)}
+                      >
+                        Copy link
+                      </button>
+                    )}
+                    <button
+                      className='text-destructive underline'
+                      onClick={() =>
+                        void projectMembersService
+                          .revokeInvitation(invitation.invitationId ?? '')
+                          .then(() => loadData())
+                      }
+                    >
+                      Revoke
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           <Outlet />
         </div>
 

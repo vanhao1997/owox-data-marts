@@ -39,6 +39,14 @@ describe('ProjectRoleGuard', () => {
     expect(screen.getByTestId('location')).toHaveTextContent('/ui/project-1/data-storages');
   });
 
+  it('redirects users without any project membership to project management', () => {
+    authUser.value = user([], '');
+
+    renderGuard('/ui/project-1/data-marts');
+
+    expect(screen.getByTestId('location')).toHaveTextContent('/projects');
+  });
+
   it('renders children for users with roles outside request access page', () => {
     authUser.value = user(['admin']);
 
@@ -73,12 +81,12 @@ function LocationDisplay() {
   );
 }
 
-function user(roles: User['roles']): User {
+function user(roles: User['roles'], projectId = 'project-1'): User {
   return {
     id: 'user-1',
     email: 'user@example.com',
     roles,
-    projectId: 'project-1',
+    projectId,
     projectTitle: 'Project 1',
   };
 }

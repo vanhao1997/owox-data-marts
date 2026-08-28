@@ -34,6 +34,7 @@ export type InviteMemberResponse =
       magicLink: string;
       userId?: string;
       expiresAt?: string;
+      invitationId?: string;
       message?: string;
     };
 
@@ -57,6 +58,16 @@ export interface InviteMemberPayload {
   role: Role;
   roleScope?: RoleScope;
   contextIds?: string[];
+}
+
+export interface PendingProjectInvitation {
+  projectId: string;
+  email: string;
+  role: Role;
+  kind: 'magic-link';
+  magicLink?: string;
+  invitationId?: string;
+  expiresAt?: string;
 }
 
 class ProjectMembersApiService extends ApiService {
@@ -103,6 +114,21 @@ class ProjectMembersApiService extends ApiService {
     payload: UpdateUserProvisioningSettingsPayload
   ): Promise<UserProvisioningSettingsResponse> {
     return this.put<UserProvisioningSettingsResponse>('/user-provisioning-settings', payload);
+  }
+
+  async getInvitations(): Promise<PendingProjectInvitation[]> {
+    return this.get<PendingProjectInvitation[]>('/invitations');
+  }
+
+  async resendInvitation(invitationId: string): Promise<PendingProjectInvitation> {
+    return this.post<PendingProjectInvitation>(
+      `/invitations/${encodeURIComponent(invitationId)}/resend`,
+      {}
+    );
+  }
+
+  async revokeInvitation(invitationId: string): Promise<void> {
+    return this.delete(`/invitations/${encodeURIComponent(invitationId)}`);
   }
 }
 

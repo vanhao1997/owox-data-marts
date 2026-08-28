@@ -5,6 +5,9 @@ import type {
   Role,
   DatabaseOperationResult,
   DatabaseUser,
+  DatabaseMember,
+  DatabaseOrganization,
+  DatabaseInvitation,
 } from '../types/index.js';
 import type { DatabaseStore } from './DatabaseStore.js';
 import { logger } from '../logger.js';
@@ -108,9 +111,9 @@ export class SqliteDatabaseStore implements DatabaseStore {
   async getUserByEmail(email: string): Promise<DatabaseUser | null> {
     await this.connect();
     const stmt = this.getDb().prepare(
-      'SELECT id, email, name, createdAt FROM user WHERE email = ?'
+      'SELECT id, email, name, createdAt FROM user WHERE LOWER(email) = LOWER(?) LIMIT 1'
     );
-    const row = stmt.get(email) as DatabaseUser | undefined;
+    const row = stmt.get(email.trim()) as DatabaseUser | undefined;
     return row ?? null;
   }
 
@@ -119,10 +122,11 @@ export class SqliteDatabaseStore implements DatabaseStore {
     name?: string
   ): Promise<{ userId: string; created: boolean }> {
     await this.connect();
+    const normalizedEmail = email.trim().toLowerCase();
 
-    const existing = this.getDb().prepare('SELECT id FROM user WHERE email = ?').get(email) as
-      | { id: string }
-      | undefined;
+    const existing = this.getDb()
+      .prepare('SELECT id FROM user WHERE LOWER(email) = LOWER(?) LIMIT 1')
+      .get(normalizedEmail) as { id: string } | undefined;
     if (existing) {
       return { userId: existing.id, created: false };
     }
@@ -133,7 +137,7 @@ export class SqliteDatabaseStore implements DatabaseStore {
       .prepare(
         'INSERT INTO user (id, email, emailVerified, name, createdAt, updatedAt) VALUES (?, ?, 0, ?, ?, ?)'
       )
-      .run(userId, email, name ?? '', now, now);
+      .run(userId, normalizedEmail, name ?? '', now, now);
     return { userId, created: true };
   }
 
@@ -295,6 +299,199 @@ export class SqliteDatabaseStore implements DatabaseStore {
       .prepare('SELECT role FROM member WHERE userId = ? AND organizationId = ?')
       .get(userId, orgId) as { role: string } | undefined;
     return row?.role ?? null;
+  }
+
+  async listOrganizationsForUser(userId: string): Promise<DatabaseOrganization[]> {
+    await this.connect();
+    const rows = this.getDb()
+      .prepare(
+        `SELECT o.id, o.name, o.slug, o.metadata, o.createdAt
+       FROM organization o INNER JOIN member m ON m.organizationId = o.id
+       WHERE m.userId = ? ORDER BY o.createdAt ASC`
+      )
+      .all(userId) as DatabaseOrganization[];
+    return rows;
+  }
+
+  async getOrganization(orgId: string): Promise<DatabaseOrganization | null> {
+    await this.connect();
+    const row = this.getDb()
+      .prepare('SELECT id, name, slug, metadata, createdAt FROM organization WHERE id = ?')
+      .get(orgId) as DatabaseOrganization | undefined;
+    return row ?? null;
+  }
+
+  async createOrganization(org: DatabaseOrganization, userId: string, role: Role): Promise<void> {
+    await this.connect();
+    const db = this.getDb();
+    const now = new Date().toISOString();
+    db.prepare('BEGIN IMMEDIATE').run();
+    try {
+      const count = db
+        .prepare('SELECT COUNT(*) as count FROM member WHERE userId = ?')
+        .get(userId) as { count?: number };
+      if (Number(count?.count ?? 0) >= 20) {
+        throw new Error('Project limit reached');
+      }
+      db.prepare(
+        'INSERT INTO organization (id, name, slug, metadata, createdAt) VALUES (?, ?, ?, ?, ?)'
+      ).run(org.id, org.name, org.slug, org.metadata ?? null, org.createdAt ?? now);
+      db.prepare(
+        'INSERT INTO member (id, organizationId, userId, role, createdAt) VALUES (?, ?, ?, ?, ?)'
+      ).run(this.generateId(), org.id, userId, role, now);
+      db.prepare('COMMIT').run();
+    } catch (error) {
+      try {
+        db.prepare('ROLLBACK').run();
+      } catch {
+        // Preserve the original storage error.
+      }
+      throw error;
+    }
+  }
+
+  async updateOrganization(orgId: string, name: string, metadata?: string | null): Promise<void> {
+    await this.connect();
+    const result = this.getDb()
+      .prepare('UPDATE organization SET name = ?, metadata = COALESCE(?, metadata) WHERE id = ?')
+      .run(name, metadata ?? null, orgId);
+    if (!result.changes) throw new Error(`Organization ${orgId} not found`);
+  }
+
+  async listOrganizationMembers(orgId: string): Promise<DatabaseMember[]> {
+    await this.connect();
+    const rows = this.getDb()
+      .prepare(
+        `SELECT m.id, m.organizationId, m.userId, m.role, m.createdAt,
+              u.id as user_id, u.email as user_email, u.name as user_name
+       FROM member m INNER JOIN user u ON u.id = m.userId
+       WHERE m.organizationId = ? ORDER BY m.createdAt ASC`
+      )
+      .all(orgId) as Record<string, unknown>[];
+    return rows.map((row: Record<string, unknown>) => ({
+      id: row.id,
+      organizationId: row.organizationId,
+      userId: row.userId,
+      role: row.role,
+      createdAt: row.createdAt,
+      user: {
+        id: String(row.user_id),
+        email: String(row.user_email),
+        name: row.user_name == null ? undefined : String(row.user_name),
+      },
+    })) as DatabaseMember[];
+  }
+
+  async removeUserFromOrganization(orgId: string, userId: string): Promise<void> {
+    await this.connect();
+    this.getDb()
+      .prepare('DELETE FROM member WHERE organizationId = ? AND userId = ?')
+      .run(orgId, userId);
+  }
+
+  async countOrganizationsForUser(userId: string): Promise<number> {
+    await this.connect();
+    const row = this.getDb()
+      .prepare('SELECT COUNT(*) as count FROM member WHERE userId = ?')
+      .get(userId) as { count: number };
+    return Number(row?.count ?? 0);
+  }
+
+  async createInvitation(invitation: DatabaseInvitation): Promise<void> {
+    await this.connect();
+    this.getDb()
+      .prepare(
+        'INSERT INTO invitation (id, organizationId, email, role, status, inviterId, expiresAt, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+      )
+      .run(
+        invitation.id,
+        invitation.organizationId,
+        invitation.email.toLowerCase(),
+        invitation.role,
+        invitation.status,
+        invitation.inviterId,
+        invitation.expiresAt,
+        invitation.createdAt
+      );
+  }
+
+  async getInvitation(invitationId: string): Promise<DatabaseInvitation | null> {
+    await this.connect();
+    const row = this.getDb()
+      .prepare(
+        'SELECT id, organizationId, email, role, status, inviterId, expiresAt, createdAt FROM invitation WHERE id = ?'
+      )
+      .get(invitationId) as DatabaseInvitation | undefined;
+    return row ?? null;
+  }
+
+  async updateInvitation(
+    invitationId: string,
+    values: Partial<Pick<DatabaseInvitation, 'status' | 'expiresAt'>>
+  ): Promise<void> {
+    await this.connect();
+    if (values.status)
+      this.getDb()
+        .prepare("UPDATE invitation SET status = ? WHERE id = ? AND status = 'pending'")
+        .run(values.status, invitationId);
+    if (values.expiresAt)
+      this.getDb()
+        .prepare("UPDATE invitation SET expiresAt = ? WHERE id = ? AND status = 'pending'")
+        .run(values.expiresAt, invitationId);
+  }
+
+  async acceptPendingInvitation(
+    invitationId: string,
+    userId: string,
+    now: string
+  ): Promise<DatabaseInvitation | null> {
+    await this.connect();
+    const db = this.getDb();
+    db.prepare('BEGIN IMMEDIATE').run();
+    try {
+      const result = db
+        .prepare(
+          "UPDATE invitation SET status = 'accepted' WHERE id = ? AND status = 'pending' AND datetime(expiresAt) > datetime(?)"
+        )
+        .run(invitationId, now);
+      if (Number(result.changes ?? 0) !== 1) {
+        db.prepare('ROLLBACK').run();
+        return null;
+      }
+      const invitation = db
+        .prepare(
+          'SELECT id, organizationId, email, role, status, inviterId, expiresAt, createdAt FROM invitation WHERE id = ?'
+        )
+        .get(invitationId) as DatabaseInvitation;
+      const existing = db
+        .prepare('SELECT id FROM member WHERE organizationId = ? AND userId = ?')
+        .get(invitation.organizationId, userId) as { id: string } | undefined;
+      if (existing) {
+        db.prepare('UPDATE member SET role = ? WHERE id = ?').run(invitation.role, existing.id);
+      } else {
+        db.prepare(
+          'INSERT INTO member (id, organizationId, userId, role, createdAt) VALUES (?, ?, ?, ?, ?)'
+        ).run(this.generateId(), invitation.organizationId, userId, invitation.role, now);
+      }
+      db.prepare('COMMIT').run();
+      return invitation;
+    } catch (error) {
+      try {
+        db.prepare('ROLLBACK').run();
+      } catch {
+        // Preserve original database error.
+      }
+      throw error;
+    }
+  }
+
+  async listInvitations(orgId: string): Promise<DatabaseInvitation[]> {
+    await this.connect();
+    return this.getDb()
+      .prepare(
+        'SELECT id, organizationId, email, role, status, inviterId, expiresAt, createdAt FROM invitation WHERE organizationId = ? ORDER BY createdAt DESC'
+      )
+      .all(orgId) as DatabaseInvitation[];
   }
 
   async getUsersForAdmin(): Promise<AdminUserView[]> {

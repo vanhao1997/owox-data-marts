@@ -3,6 +3,7 @@ import { TriggerHandler } from '../../shared/trigger-handler.interface';
 import { SystemTimeService } from '../system-time.service';
 import { AbstractTriggerRunnerService } from './abstract-trigger-runner.service';
 import { GracefulShutdownService } from '../graceful-shutdown.service';
+import type { ProjectLifecycleChecker } from '../../shared/project-lifecycle-checker';
 
 /**
  * Service that runs triggers directly in the current process.
@@ -24,9 +25,10 @@ export class DirectTriggerRunnerService<T extends Trigger> extends AbstractTrigg
   constructor(
     handler: TriggerHandler<T>,
     systemClock: SystemTimeService,
-    shutdownService: GracefulShutdownService
+    shutdownService: GracefulShutdownService,
+    projectLifecycleChecker?: ProjectLifecycleChecker
   ) {
-    super(handler, systemClock, shutdownService);
+    super(handler, systemClock, shutdownService, projectLifecycleChecker);
   }
 
   /**

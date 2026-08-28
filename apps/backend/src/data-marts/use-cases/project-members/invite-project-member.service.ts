@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import type { ProjectMemberInvitation } from '@owox/idp-protocol';
 import { IdpProjectionsFacade } from '../../../idp/facades/idp-projections.facade';
 import { InviteProjectMemberCommand } from '../../dto/domain/invite-project-member.command';
@@ -10,6 +10,7 @@ import {
   resolveEffectiveScope,
   validateContextIdsIfAny,
 } from './util/member-scope-saga.util';
+import { ProjectMembershipReconciliationService } from '../../../idp/services/project-membership-reconciliation.service';
 
 @Injectable()
 export class InviteProjectMemberService {
@@ -18,7 +19,8 @@ export class InviteProjectMemberService {
   constructor(
     private readonly idpProjectionsFacade: IdpProjectionsFacade,
     private readonly contextAccessService: ContextAccessService,
-    private readonly contextService: ContextService
+    private readonly contextService: ContextService,
+    @Optional() private readonly pendingScopeService?: ProjectMembershipReconciliationService
   ) {}
 
   async run(command: InviteProjectMemberCommand): Promise<ProjectMemberInvitation> {
@@ -35,7 +37,10 @@ export class InviteProjectMemberService {
       actorUserId
     );
 
-    if (invitation.userId) {
+    // Better Auth invitations return an invitation id and must not receive
+    // local context access until the magic link is accepted. Legacy providers
+    // without invitation lifecycle still preserve their existing behavior.
+    if (invitation.userId && !invitation.invitationId) {
       await applyLocalMemberScope({
         contextAccessService: this.contextAccessService,
         logger: this.logger,
@@ -46,6 +51,34 @@ export class InviteProjectMemberService {
         contextIds,
         failureLabel: `Invite accepted by IDP for ${email} in project ${projectId}`,
       });
+    } else if (invitation.invitationId && this.pendingScopeService) {
+      try {
+        await this.pendingScopeService.savePendingScope({
+          invitation,
+          projectId,
+          email,
+          role,
+          roleScope: effectiveScope,
+          contextIds,
+        });
+      } catch (error) {
+        // Avoid leaving an invitation that can never restore its local scope.
+        try {
+          await this.idpProjectionsFacade.cancelInvitation(
+            projectId,
+            invitation.invitationId,
+            actorUserId
+          );
+        } catch (cancelError) {
+          this.logger.error(
+            'Failed to cancel invitation after scope persistence failure',
+            cancelError
+          );
+        }
+        throw error;
+      }
+    } else if (invitation.invitationId) {
+      this.logger.warn('Invitation scope persistence is unavailable; invitation remains pending');
     }
 
     return invitation;

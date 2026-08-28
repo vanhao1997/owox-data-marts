@@ -157,7 +157,17 @@ export class NullIdpProvider implements IdpProvider {
   }
 
   async getProjects(_accessToken: string): Promise<Projects> {
-    return [];
+    // Keep the single-project provider compatible with the project manager UI;
+    // it has no mutable project-management capabilities, but still exposes
+    // the existing logical Project 0.
+    return [
+      {
+        id: '0',
+        title: 'OWOX Data Marts',
+        status: 'active',
+        roles: ['admin'],
+      },
+    ];
   }
 
   async getProjectForUser(_userId: string, projectId: string): Promise<Project> {

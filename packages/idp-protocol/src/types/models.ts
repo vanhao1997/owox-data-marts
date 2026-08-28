@@ -40,6 +40,8 @@ export const PayloadSchema = z
      * Providers should normalize provider-specific claims into this field.
      */
     viewOnly: z.boolean().optional(),
+    /** True when the selected project is archived and read-only. */
+    projectArchived: z.boolean().optional(),
   })
   .passthrough();
 
@@ -52,6 +54,7 @@ export const ProjectSchema = z
     status: ProjectStatusEnum.optional(),
     roles: z.array(RoleEnum).optional(),
     createdAt: z.string().optional(),
+    archived: z.boolean().optional(),
   })
   .passthrough();
 
@@ -100,6 +103,8 @@ export type ProjectMemberInvitation =
       role: Role;
       kind: 'email-sent';
       userId?: string;
+      invitationId?: string;
+      expiresAt?: string;
       message?: string;
     }
   | {
@@ -109,6 +114,7 @@ export type ProjectMemberInvitation =
       kind: 'magic-link';
       magicLink: string;
       userId?: string;
+      invitationId?: string;
       expiresAt?: string;
       message?: string;
     };

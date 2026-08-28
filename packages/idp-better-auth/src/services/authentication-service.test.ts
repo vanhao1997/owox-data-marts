@@ -136,7 +136,7 @@ describe('AuthenticationService', () => {
       );
     });
 
-    it('should omit roles when user has no role', async () => {
+    it('should return an empty roles array when user has no project membership', async () => {
       const sessionData = {
         user: { id: 'user-1', email: 'test@example.com', name: 'Test User' },
         session: { id: 's1', userId: 'user-1', token: 'session-token', expiresAt: new Date() },
@@ -152,7 +152,7 @@ describe('AuthenticationService', () => {
       await service.generateAccessToken(req);
 
       const encryptedData = JSON.parse((cryptoService.encrypt.mock.calls[0] as [string])[0]);
-      expect(encryptedData.roles).toBeUndefined();
+      expect(encryptedData.roles).toEqual([]);
     });
 
     it('should use email as fullName when name is empty', async () => {

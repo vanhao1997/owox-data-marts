@@ -39,6 +39,7 @@ import { ApproveMembershipRequestService } from '../use-cases/project-members/ap
 import { DeclineMembershipRequestService } from '../use-cases/project-members/decline-membership-request.service';
 import { GetUserProvisioningSettingsService } from '../use-cases/project-members/get-user-provisioning-settings.service';
 import { UpdateUserProvisioningSettingsService } from '../use-cases/project-members/update-user-provisioning-settings.service';
+import { IdpProjectionsFacade } from '../../idp/facades/idp-projections.facade';
 import {
   ApproveMembershipRequestSpec,
   DeclineMembershipRequestSpec,
@@ -72,7 +73,8 @@ export class ProjectMembersController {
     private readonly declineMembershipRequest: DeclineMembershipRequestService,
     private readonly getUserProvisioningSettings: GetUserProvisioningSettingsService,
     private readonly updateUserProvisioningSettings: UpdateUserProvisioningSettingsService,
-    private readonly projectMembersMapper: ProjectMembersMapper
+    private readonly projectMembersMapper: ProjectMembersMapper,
+    private readonly idpProjectionsFacade: IdpProjectionsFacade
   ) {}
 
   @Auth(Role.viewer(Strategy.PARSE))
@@ -115,6 +117,7 @@ export class ProjectMembersController {
         kind: 'magic-link',
         magicLink: invitation.magicLink,
         expiresAt: invitation.expiresAt,
+        invitationId: invitation.invitationId,
       };
     }
 
@@ -237,6 +240,39 @@ export class ProjectMembersController {
   ): Promise<void> {
     await this.declineMembershipRequest.run(
       new DeclineMembershipRequestCommand(context.projectId, context.userId, requestId)
+    );
+  }
+
+  @Auth(Role.admin(Strategy.INTROSPECT))
+  @Get('invitations')
+  async listInvitations(@AuthContext() context: AuthorizationContext) {
+    return this.idpProjectionsFacade.listPendingInvitations(context.projectId, context.userId);
+  }
+
+  @Auth(Role.admin(Strategy.INTROSPECT))
+  @Post('invitations/:invitationId/resend')
+  async resendInvitation(
+    @AuthContext() context: AuthorizationContext,
+    @Param('invitationId') invitationId: string
+  ) {
+    return this.idpProjectionsFacade.resendInvitation(
+      context.projectId,
+      invitationId,
+      context.userId
+    );
+  }
+
+  @Auth(Role.admin(Strategy.INTROSPECT))
+  @Delete('invitations/:invitationId')
+  @HttpCode(204)
+  async cancelInvitation(
+    @AuthContext() context: AuthorizationContext,
+    @Param('invitationId') invitationId: string
+  ): Promise<void> {
+    await this.idpProjectionsFacade.cancelInvitation(
+      context.projectId,
+      invitationId,
+      context.userId
     );
   }
 }

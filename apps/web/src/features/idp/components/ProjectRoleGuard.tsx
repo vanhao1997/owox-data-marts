@@ -22,6 +22,10 @@ export function ProjectRoleGuard({ children }: { children: ReactNode }): ReactEl
   const isRequestAccessPath = isProjectRequestAccessPath(location.pathname, user.projectId);
   const currentUrl = `${location.pathname}${location.search}${location.hash}`;
 
+  if (hasEmptyProjectRoles && !user.projectId) {
+    return <Navigate to='/projects' replace />;
+  }
+
   if (hasEmptyProjectRoles && !isRequestAccessPath) {
     return <Navigate to={buildProjectRequestAccessPath(user.projectId, currentUrl)} replace />;
   }

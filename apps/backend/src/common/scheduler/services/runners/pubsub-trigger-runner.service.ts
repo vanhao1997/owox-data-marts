@@ -6,6 +6,7 @@ import { SystemTimeService } from '../system-time.service';
 import { AbstractTriggerRunnerService } from './abstract-trigger-runner.service';
 import { GracefulShutdownService } from '../graceful-shutdown.service';
 import { FindOneOptions } from 'typeorm';
+import type { ProjectLifecycleChecker } from '../../shared/project-lifecycle-checker';
 
 /**
  * Service that runs triggers using Google Cloud Pub/Sub.
@@ -38,9 +39,10 @@ export class PubsubTriggerRunnerService<T extends Trigger> extends AbstractTrigg
     handler: TriggerHandler<T>,
     systemClock: SystemTimeService,
     private readonly googleCloudProject: string,
-    shutdownService: GracefulShutdownService
+    shutdownService: GracefulShutdownService,
+    projectLifecycleChecker?: ProjectLifecycleChecker
   ) {
-    super(handler, systemClock, shutdownService);
+    super(handler, systemClock, shutdownService, projectLifecycleChecker);
     this.topicName = this.generateTopicName();
     this.subscriptionName = this.generateSubscriptionName();
     this.pubSubClient = this.createPubSubClient();

@@ -42,6 +42,25 @@ export interface DatabaseMember {
   user?: DatabaseUser;
 }
 
+export interface DatabaseOrganization {
+  id: string;
+  name: string;
+  slug: string;
+  metadata?: string | null;
+  createdAt?: string;
+}
+
+export interface DatabaseInvitation {
+  id: string;
+  organizationId: string;
+  email: string;
+  role: 'admin' | 'editor' | 'viewer';
+  status: 'pending' | 'accepted' | 'rejected' | 'canceled';
+  inviterId: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
 /**
  * Organization list members response
  */

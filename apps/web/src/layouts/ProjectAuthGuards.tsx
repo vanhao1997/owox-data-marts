@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { AuthGuard } from '../features/idp';
 import { ProjectIdGuard } from '../features/idp/components/ProjectIdGuard';
 import { ProjectRoleGuard } from '../features/idp/components/ProjectRoleGuard';
-import { ProjectsProvider } from '../features/idp/context/ProjectsContext';
 
 /**
  * The auth/project guard chain shared by every authenticated `/ui/:projectId/...` layout:
@@ -15,9 +14,7 @@ export function ProjectAuthGuards({ children }: { children: ReactNode }) {
   return (
     <AuthGuard>
       <ProjectIdGuard>
-        <ProjectRoleGuard>
-          <ProjectsProvider>{children}</ProjectsProvider>
-        </ProjectRoleGuard>
+        <ProjectRoleGuard>{children}</ProjectRoleGuard>
       </ProjectIdGuard>
     </AuthGuard>
   );

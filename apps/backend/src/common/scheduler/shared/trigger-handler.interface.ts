@@ -12,6 +12,13 @@ import { Trigger } from './entities/trigger.entity';
  */
 export interface TriggerHandler<T extends Trigger> {
   /**
+   * Cancels any DataMartRun linked to a trigger before an archived-project
+   * trigger is skipped. Run handlers may implement this hook; generic
+   * scheduler handlers do not need to.
+   */
+  cancelRunForArchivedProject?(trigger: T): Promise<void>;
+
+  /**
    * Returns the repository for the trigger type handled by this handler.
    *
    * @returns The TypeORM repository for the trigger entity

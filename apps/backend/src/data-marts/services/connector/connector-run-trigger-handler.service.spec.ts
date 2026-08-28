@@ -19,6 +19,7 @@ describe('ConnectorRunTriggerHandlerService', () => {
 
     const dataMartRunRepository = {
       save: jest.fn().mockImplementation(data => Promise.resolve(data)),
+      update: jest.fn().mockResolvedValue({ affected: 1 }),
     } as unknown as Repository<DataMartRun>;
 
     const schedulerFacade = {
@@ -105,6 +106,21 @@ describe('ConnectorRunTriggerHandlerService', () => {
   } as unknown as ConnectorRunTrigger;
 
   describe('handleTrigger', () => {
+    it('cancels the linked run when an archived project trigger is skipped', async () => {
+      const { service, dataMartRunRepository } = createService();
+
+      await service.cancelRunForArchivedProject(mockTrigger);
+
+      expect(dataMartRunRepository.update).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 'run-1', status: expect.any(Object) }),
+        expect.objectContaining({
+          status: DataMartRunStatus.CANCELLED,
+          errors: ['Project is archived and read-only; scheduled run was skipped.'],
+          finishedAt: expect.any(Date),
+        })
+      );
+    });
+
     it('executes the run on happy path', async () => {
       const { service, dataMartService, connectorExecutionService, mockManager } = createService();
 

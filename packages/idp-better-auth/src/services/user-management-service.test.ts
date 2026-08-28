@@ -127,6 +127,19 @@ describe('UserManagementService — inviteAndCreateStub', () => {
     );
   });
 
+  it('normalizes invitation email before provisioning', async () => {
+    store.createUserStub.mockResolvedValue({ userId: 'normalized-id', created: true });
+    store.defaultOrganizationExists.mockResolvedValue(true);
+    store.addUserToOrganization.mockResolvedValue(undefined);
+    magicLinkService.generateMagicLink.mockResolvedValue('https://app/magic/normalized');
+
+    const service = build();
+    await service.inviteAndCreateStub('  User@Example.COM  ', 'viewer');
+
+    expect(store.createUserStub).toHaveBeenCalledWith('user@example.com');
+    expect(magicLinkService.generateMagicLink).toHaveBeenCalledWith('user@example.com', 'viewer');
+  });
+
   it('wraps unexpected errors with a stable message', async () => {
     store.createUserStub.mockRejectedValue(new Error('unique constraint'));
 

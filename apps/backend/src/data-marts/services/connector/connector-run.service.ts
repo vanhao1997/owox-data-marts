@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
@@ -13,6 +13,10 @@ import { ConnectorExecutionError } from '../../errors/connector-execution.error'
 import { RunType } from '../../../common/scheduler/shared/types';
 import { ConnectorRunTriggerService } from './connector-run-trigger.service';
 import { ConnectorExecutorService } from './connector-executor.service';
+import {
+  PROJECT_LIFECYCLE_CHECKER,
+  ProjectLifecycleChecker,
+} from '../../../common/scheduler/shared/project-lifecycle-checker';
 
 @Injectable()
 export class ConnectorRunService {
@@ -22,7 +26,10 @@ export class ConnectorRunService {
     @InjectRepository(DataMartRun)
     private readonly dataMartRunRepository: Repository<DataMartRun>,
     private readonly connectorRunTriggerService: ConnectorRunTriggerService,
-    private readonly connectorExecutorService: ConnectorExecutorService
+    private readonly connectorExecutorService: ConnectorExecutorService,
+    @Optional()
+    @Inject(PROJECT_LIFECYCLE_CHECKER)
+    private readonly projectLifecycleChecker?: ProjectLifecycleChecker
   ) {}
 
   @Transactional()
@@ -32,6 +39,16 @@ export class ConnectorRunService {
     runType: RunType,
     payload?: Record<string, unknown>
   ): Promise<string> {
+    if (
+      this.projectLifecycleChecker &&
+      (await this.projectLifecycleChecker.isArchivedForTrigger({
+        projectId: dataMart.projectId,
+        createdById,
+      }))
+    ) {
+      throw new BusinessViolationException('Project is archived and read-only');
+    }
+
     this.validateDataMartForConnector(dataMart);
     const isRunning = await this.checkDataMartIsRunning(dataMart);
     if (isRunning) {
@@ -83,6 +100,29 @@ export class ConnectorRunService {
 
     for (const run of interruptedRuns) {
       try {
+        if (
+          this.projectLifecycleChecker &&
+          (await this.projectLifecycleChecker.isArchivedForTrigger({
+            projectId: run.dataMart.projectId,
+            createdById: run.createdById,
+          }))
+        ) {
+          await this.dataMartRunRepository.update(
+            { id: run.id, status: DataMartRunStatus.INTERRUPTED },
+            {
+              status: DataMartRunStatus.CANCELLED,
+              errors: ['Project is archived and read-only; interrupted run was not resumed.'],
+              finishedAt: new Date(),
+            }
+          );
+          this.logger.warn(`Cancelled interrupted run ${run.id}: project is archived`, {
+            dataMartId: run.dataMartId,
+            projectId: run.dataMart.projectId,
+            runId: run.id,
+          });
+          continue;
+        }
+
         const claimed = await this.dataMartRunRepository.update(
           { id: run.id, status: DataMartRunStatus.INTERRUPTED },
           { status: DataMartRunStatus.PENDING }

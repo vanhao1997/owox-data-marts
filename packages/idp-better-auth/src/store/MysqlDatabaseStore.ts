@@ -6,17 +6,27 @@ import type {
   AdminUserDetailsView,
   AdminUserView,
   Role,
+  DatabaseMember,
+  DatabaseOrganization,
+  DatabaseInvitation,
 } from '../types/index.js';
 import type { DatabaseStore } from './DatabaseStore.js';
 
 type MysqlExecResult = { affectedRows?: number };
+type MysqlRows = [Array<Record<string, unknown>>, unknown];
 type MysqlPool = {
   query: (sql: string, params?: unknown[]) => Promise<[Array<Record<string, unknown>>, unknown]>;
   execute: (
     sql: string,
     params?: unknown[]
   ) => Promise<[Array<Record<string, unknown>> | MysqlExecResult, unknown]>;
+  getConnection?: () => Promise<MysqlConnection>;
   end?: () => Promise<void>;
+};
+
+type MysqlConnection = {
+  execute: MysqlPool['execute'];
+  release: () => void;
 };
 
 export interface MysqlConnectionConfig {
@@ -134,8 +144,8 @@ export class MysqlDatabaseStore implements DatabaseStore {
   async getUserByEmail(email: string): Promise<DatabaseUser | null> {
     const pool = await this.getPool();
     const [rows] = (await pool.execute(
-      'SELECT id, email, name, createdAt FROM user WHERE email = ? LIMIT 1',
-      [email]
+      'SELECT id, email, name, createdAt FROM user WHERE LOWER(email) = LOWER(?) LIMIT 1',
+      [email.trim()]
     )) as [Array<Record<string, unknown>>, unknown];
     const r = (rows as Array<Record<string, unknown>>)[0];
     if (!r) return null;
@@ -152,10 +162,12 @@ export class MysqlDatabaseStore implements DatabaseStore {
     name?: string
   ): Promise<{ userId: string; created: boolean }> {
     const pool = await this.getPool();
+    const normalizedEmail = email.trim().toLowerCase();
 
-    const [existingRows] = (await pool.execute('SELECT id FROM user WHERE email = ? LIMIT 1', [
-      email,
-    ])) as [Array<Record<string, unknown>>, unknown];
+    const [existingRows] = (await pool.execute(
+      'SELECT id FROM user WHERE LOWER(email) = LOWER(?) LIMIT 1',
+      [normalizedEmail]
+    )) as MysqlRows;
     const existing = (existingRows as Array<Record<string, unknown>>)[0];
     if (existing) {
       return { userId: String(existing.id), created: false };
@@ -165,7 +177,7 @@ export class MysqlDatabaseStore implements DatabaseStore {
     const now = new Date();
     await pool.execute(
       'INSERT INTO user (id, email, emailVerified, name, createdAt, updatedAt) VALUES (?, ?, 0, ?, ?, ?)',
-      [userId, email, name ?? '', now, now]
+      [userId, normalizedEmail, name ?? '', now, now]
     );
     return { userId, created: true };
   }
@@ -327,6 +339,303 @@ export class MysqlDatabaseStore implements DatabaseStore {
     if (list.length === 0) return null;
     const first = list[0] as Record<string, unknown>;
     return String(first.role);
+  }
+
+  async listOrganizationsForUser(userId: string): Promise<DatabaseOrganization[]> {
+    const pool = await this.getPool();
+    const [rows] = (await pool.execute(
+      `SELECT o.id, o.name, o.slug, o.metadata, o.createdAt
+       FROM organization o INNER JOIN member m ON m.organizationId = o.id
+       WHERE m.userId = ? ORDER BY o.createdAt ASC`,
+      [userId]
+    )) as [Array<Record<string, unknown>>, unknown];
+    return rows.map(r => ({
+      id: String(r.id),
+      name: String(r.name),
+      slug: String(r.slug),
+      metadata: r.metadata == null ? null : String(r.metadata),
+      createdAt: this.toIso(r.createdAt) ?? undefined,
+    }));
+  }
+
+  async getOrganization(orgId: string): Promise<DatabaseOrganization | null> {
+    const pool = await this.getPool();
+    const [rows] = (await pool.execute(
+      'SELECT id, name, slug, metadata, createdAt FROM organization WHERE id = ? LIMIT 1',
+      [orgId]
+    )) as [Array<Record<string, unknown>>, unknown];
+    const r = rows[0];
+    if (!r) return null;
+    return {
+      id: String(r.id),
+      name: String(r.name),
+      slug: String(r.slug),
+      metadata: r.metadata == null ? null : String(r.metadata),
+      createdAt: this.toIso(r.createdAt) ?? undefined,
+    };
+  }
+
+  async createOrganization(org: DatabaseOrganization, userId: string, role: Role): Promise<void> {
+    const pool = await this.getPool();
+    const now = new Date();
+    if (!pool.getConnection) {
+      const [rows] = (await pool.execute('SELECT COUNT(*) as count FROM member WHERE userId = ?', [
+        userId,
+      ])) as [Array<Record<string, unknown>>, unknown];
+      if (Number(rows[0]?.count ?? 0) >= 20) throw new Error('Project limit reached');
+      await pool.execute(
+        'INSERT INTO organization (id, name, slug, metadata, createdAt) VALUES (?, ?, ?, ?, ?)',
+        [
+          org.id,
+          org.name,
+          org.slug,
+          org.metadata ?? null,
+          org.createdAt ? new Date(org.createdAt) : now,
+        ]
+      );
+      await pool.execute(
+        'INSERT INTO member (id, organizationId, userId, role, createdAt) VALUES (?, ?, ?, ?, ?)',
+        [this.generateId(), org.id, userId, role, now]
+      );
+      return;
+    }
+    const connection = await pool.getConnection();
+    await connection.execute('START TRANSACTION');
+    try {
+      // Serialize project creation for this user so concurrent requests cannot
+      // pass the 20-project limit check together.
+      await connection.execute('SELECT id FROM user WHERE id = ? FOR UPDATE', [userId]);
+      const [rows] = (await connection.execute(
+        'SELECT COUNT(*) as count FROM member WHERE userId = ?',
+        [userId]
+      )) as [Array<Record<string, unknown>>, unknown];
+      if (Number(rows[0]?.count ?? 0) >= 20) throw new Error('Project limit reached');
+      await connection.execute(
+        'INSERT INTO organization (id, name, slug, metadata, createdAt) VALUES (?, ?, ?, ?, ?)',
+        [
+          org.id,
+          org.name,
+          org.slug,
+          org.metadata ?? null,
+          org.createdAt ? new Date(org.createdAt) : now,
+        ]
+      );
+      await connection.execute(
+        'INSERT INTO member (id, organizationId, userId, role, createdAt) VALUES (?, ?, ?, ?, ?)',
+        [this.generateId(), org.id, userId, role, now]
+      );
+      await connection.execute('COMMIT');
+    } catch (error) {
+      try {
+        await connection.execute('ROLLBACK');
+      } catch {
+        // Preserve the original storage error.
+      }
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+
+  async updateOrganization(orgId: string, name: string, metadata?: string | null): Promise<void> {
+    const pool = await this.getPool();
+    const [result] = (await pool.execute(
+      'UPDATE organization SET name = ?, metadata = COALESCE(?, metadata) WHERE id = ?',
+      [name, metadata ?? null, orgId]
+    )) as [MysqlExecResult, unknown];
+    if (!result.affectedRows) throw new Error(`Organization ${orgId} not found`);
+  }
+
+  async listOrganizationMembers(orgId: string): Promise<DatabaseMember[]> {
+    const pool = await this.getPool();
+    const [rows] = (await pool.execute(
+      `SELECT m.id, m.organizationId, m.userId, m.role, m.createdAt,
+              u.id as user_id, u.email as user_email, u.name as user_name
+       FROM member m INNER JOIN user u ON u.id = m.userId
+       WHERE m.organizationId = ? ORDER BY m.createdAt ASC`,
+      [orgId]
+    )) as [Array<Record<string, unknown>>, unknown];
+    return rows.map(row => ({
+      id: String(row.id),
+      organizationId: String(row.organizationId),
+      userId: String(row.userId),
+      role: String(row.role),
+      createdAt: this.toIso(row.createdAt) ?? undefined,
+      user: {
+        id: String(row.user_id),
+        email: String(row.user_email),
+        name: row.user_name == null ? undefined : String(row.user_name),
+      },
+    }));
+  }
+
+  async removeUserFromOrganization(orgId: string, userId: string): Promise<void> {
+    const pool = await this.getPool();
+    await pool.execute('DELETE FROM member WHERE organizationId = ? AND userId = ?', [
+      orgId,
+      userId,
+    ]);
+  }
+
+  async countOrganizationsForUser(userId: string): Promise<number> {
+    const pool = await this.getPool();
+    const [rows] = (await pool.execute('SELECT COUNT(*) as count FROM member WHERE userId = ?', [
+      userId,
+    ])) as [Array<Record<string, unknown>>, unknown];
+    return Number(rows[0]?.count ?? 0);
+  }
+
+  async createInvitation(invitation: DatabaseInvitation): Promise<void> {
+    const pool = await this.getPool();
+    await pool.execute(
+      'INSERT INTO invitation (id, organizationId, email, role, status, inviterId, expiresAt, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        invitation.id,
+        invitation.organizationId,
+        invitation.email.toLowerCase(),
+        invitation.role,
+        invitation.status,
+        invitation.inviterId,
+        new Date(invitation.expiresAt),
+        new Date(invitation.createdAt),
+      ]
+    );
+  }
+
+  async getInvitation(invitationId: string): Promise<DatabaseInvitation | null> {
+    const pool = await this.getPool();
+    const [rows] = (await pool.execute(
+      'SELECT id, organizationId, email, role, status, inviterId, expiresAt, createdAt FROM invitation WHERE id = ? LIMIT 1',
+      [invitationId]
+    )) as [Array<Record<string, unknown>>, unknown];
+    const r = rows[0];
+    if (!r) return null;
+    return {
+      id: String(r.id),
+      organizationId: String(r.organizationId),
+      email: String(r.email),
+      role: String(r.role) as Role,
+      status: String(r.status) as DatabaseInvitation['status'],
+      inviterId: String(r.inviterId),
+      expiresAt: this.toIso(r.expiresAt) ?? '',
+      createdAt: this.toIso(r.createdAt) ?? '',
+    };
+  }
+
+  async updateInvitation(
+    invitationId: string,
+    values: Partial<Pick<DatabaseInvitation, 'status' | 'expiresAt'>>
+  ): Promise<void> {
+    const pool = await this.getPool();
+    if (values.status)
+      await pool.execute("UPDATE invitation SET status = ? WHERE id = ? AND status = 'pending'", [
+        values.status,
+        invitationId,
+      ]);
+    if (values.expiresAt)
+      await pool.execute(
+        "UPDATE invitation SET expiresAt = ? WHERE id = ? AND status = 'pending'",
+        [new Date(values.expiresAt), invitationId]
+      );
+  }
+
+  async acceptPendingInvitation(
+    invitationId: string,
+    userId: string,
+    now: string
+  ): Promise<DatabaseInvitation | null> {
+    const pool = await this.getPool();
+    if (!pool.getConnection) {
+      const [result] = (await pool.execute(
+        "UPDATE invitation SET status = 'accepted' WHERE id = ? AND status = 'pending' AND expiresAt > ?",
+        [invitationId, new Date(now)]
+      )) as [MysqlExecResult, unknown];
+      if (Number(result.affectedRows ?? 0) !== 1) return null;
+      const invitation = await this.getInvitation(invitationId);
+      if (!invitation) return null;
+      await this.addUserToOrganization(invitation.organizationId, userId, invitation.role);
+      return invitation;
+    }
+    const connection = await pool.getConnection();
+    await connection.execute('START TRANSACTION');
+    try {
+      const [result] = (await connection.execute(
+        "UPDATE invitation SET status = 'accepted' WHERE id = ? AND status = 'pending' AND expiresAt > ?",
+        [invitationId, new Date(now)]
+      )) as [MysqlExecResult, unknown];
+      if (Number(result.affectedRows ?? 0) !== 1) {
+        await connection.execute('ROLLBACK');
+        connection.release();
+        return null;
+      }
+      const [rows] = (await connection.execute(
+        'SELECT id, organizationId, email, role, status, inviterId, expiresAt, createdAt FROM invitation WHERE id = ? LIMIT 1',
+        [invitationId]
+      )) as [Array<Record<string, unknown>>, unknown];
+      const row = rows[0];
+      const invitation = row
+        ? {
+            id: String(row.id),
+            organizationId: String(row.organizationId),
+            email: String(row.email),
+            role: String(row.role) as Role,
+            status: String(row.status) as DatabaseInvitation['status'],
+            inviterId: String(row.inviterId),
+            expiresAt: this.toIso(row.expiresAt) ?? '',
+            createdAt: this.toIso(row.createdAt) ?? '',
+          }
+        : null;
+      if (!invitation) {
+        await connection.execute('ROLLBACK');
+        connection.release();
+        return null;
+      }
+      const [members] = (await connection.execute(
+        'SELECT id FROM member WHERE organizationId = ? AND userId = ? LIMIT 1',
+        [invitation.organizationId, userId]
+      )) as [Array<Record<string, unknown>>, unknown];
+      const existingMember = members[0];
+      if (existingMember) {
+        await connection.execute('UPDATE member SET role = ? WHERE id = ?', [
+          invitation.role,
+          String(existingMember.id),
+        ]);
+      } else {
+        await connection.execute(
+          'INSERT INTO member (id, organizationId, userId, role, createdAt) VALUES (?, ?, ?, ?, ?)',
+          [this.generateId(), invitation.organizationId, userId, invitation.role, new Date(now)]
+        );
+      }
+      await connection.execute('COMMIT');
+      connection.release();
+      return invitation;
+    } catch (error) {
+      try {
+        await connection.execute('ROLLBACK');
+      } catch {
+        // Preserve original database error.
+      }
+      connection.release();
+      throw error;
+    }
+  }
+
+  async listInvitations(orgId: string): Promise<DatabaseInvitation[]> {
+    const pool = await this.getPool();
+    const [rows] = (await pool.execute(
+      'SELECT id, organizationId, email, role, status, inviterId, expiresAt, createdAt FROM invitation WHERE organizationId = ? ORDER BY createdAt DESC',
+      [orgId]
+    )) as [Array<Record<string, unknown>>, unknown];
+    return rows.map(r => ({
+      id: String(r.id),
+      organizationId: String(r.organizationId),
+      email: String(r.email),
+      role: String(r.role) as Role,
+      status: String(r.status) as DatabaseInvitation['status'],
+      inviterId: String(r.inviterId),
+      expiresAt: this.toIso(r.expiresAt) ?? '',
+      createdAt: this.toIso(r.createdAt) ?? '',
+    }));
   }
 
   async getUsersForAdmin(): Promise<AdminUserView[]> {

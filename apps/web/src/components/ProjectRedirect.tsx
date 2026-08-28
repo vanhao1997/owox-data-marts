@@ -21,6 +21,9 @@ export function ProjectRedirect({ to = '/data-marts' }: { to?: string }) {
   }
 
   if (Array.isArray(user.roles) && user.roles.length === 0) {
+    if (!user.projectId) {
+      return <Navigate to='/projects' replace />;
+    }
     const redirectTo = buildProjectPath(user.projectId, to);
     return <Navigate to={buildProjectRequestAccessPath(user.projectId, redirectTo)} replace />;
   }

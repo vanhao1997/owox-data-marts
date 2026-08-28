@@ -37,6 +37,31 @@ export interface GetProjectMembersOptions {
   forceFresh?: boolean;
 }
 
+/** Optional self-hosted project and invitation lifecycle capabilities. */
+export interface ProjectManagementProvider {
+  createProject(userId: string, title: string): Promise<Project>;
+  updateProject(userId: string, projectId: string, title: string): Promise<Project>;
+  archiveProject(userId: string, projectId: string): Promise<Project>;
+  unarchiveProject(userId: string, projectId: string): Promise<Project>;
+  selectProject(userId: string, projectId: string): Promise<void>;
+  listPendingInvitations(
+    projectId: string,
+    actorUserId: string
+  ): Promise<ProjectMemberInvitation[]>;
+  resendInvitation(
+    projectId: string,
+    invitationId: string,
+    actorUserId: string
+  ): Promise<ProjectMemberInvitation>;
+  cancelInvitation(projectId: string, invitationId: string, actorUserId: string): Promise<void>;
+  /**
+   * Reports whether an invitation was atomically accepted for the target
+   * project and invitee. Used by backend scope reconciliation so a pre-existing
+   * membership cannot activate pending invitation permissions early.
+   */
+  isInvitationAccepted(invitationId: string, projectId: string, email: string): Promise<boolean>;
+}
+
 /**
  * Simplified IDP Provider interface.
  */

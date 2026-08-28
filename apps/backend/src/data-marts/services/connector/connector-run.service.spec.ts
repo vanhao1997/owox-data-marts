@@ -14,6 +14,7 @@ import { DataMartDefinitionType } from '../../enums/data-mart-definition-type.en
 import { DataMartStatus } from '../../enums/data-mart-status.enum';
 import { DataMartRunType } from '../../enums/data-mart-run-type.enum';
 import { RunType } from '../../../common/scheduler/shared/types';
+import type { ProjectLifecycleChecker } from '../../../common/scheduler/shared/project-lifecycle-checker';
 
 describe('ConnectorRunService', () => {
   const createService = () => {
@@ -33,10 +34,15 @@ describe('ConnectorRunService', () => {
       executeInBackground: jest.fn().mockResolvedValue(undefined),
     } as unknown as ConnectorExecutorService;
 
+    const projectLifecycleChecker = {
+      isArchivedForTrigger: jest.fn().mockResolvedValue(false),
+    } as unknown as ProjectLifecycleChecker;
+
     const service = new ConnectorRunService(
       dataMartRunRepository,
       connectorRunTriggerService,
-      connectorExecutorService
+      connectorExecutorService,
+      projectLifecycleChecker
     );
 
     return {
@@ -44,6 +50,7 @@ describe('ConnectorRunService', () => {
       dataMartRunRepository,
       connectorRunTriggerService,
       connectorExecutorService,
+      projectLifecycleChecker,
     };
   };
 
@@ -56,6 +63,22 @@ describe('ConnectorRunService', () => {
   } as unknown as DataMart;
 
   describe('run', () => {
+    it('rejects connector runs for archived projects before creating a run or trigger', async () => {
+      const {
+        service,
+        dataMartRunRepository,
+        connectorRunTriggerService,
+        projectLifecycleChecker,
+      } = createService();
+      (projectLifecycleChecker.isArchivedForTrigger as jest.Mock).mockResolvedValue(true);
+
+      await expect(
+        service.run(publishedConnectorDataMart, 'user-1', RunType.manual)
+      ).rejects.toThrow('Project is archived and read-only');
+      expect(dataMartRunRepository.save).not.toHaveBeenCalled();
+      expect(connectorRunTriggerService.createTrigger).not.toHaveBeenCalled();
+    });
+
     it('creates run and trigger successfully', async () => {
       const { service, dataMartRunRepository, connectorRunTriggerService } = createService();
       (dataMartRunRepository.findOne as jest.Mock).mockResolvedValue(null); // not running
@@ -168,6 +191,38 @@ describe('ConnectorRunService', () => {
 
       await service.executeInterruptedRuns();
 
+      expect(connectorRunTriggerService.createTrigger).not.toHaveBeenCalled();
+    });
+
+    it('cancels interrupted runs when project is archived without creating a trigger', async () => {
+      const {
+        service,
+        dataMartRunRepository,
+        connectorRunTriggerService,
+        projectLifecycleChecker,
+      } = createService();
+      (dataMartRunRepository.find as jest.Mock).mockResolvedValue([
+        {
+          id: 'run-archived',
+          dataMartId: 'dm-1',
+          type: DataMartRunType.CONNECTOR,
+          dataMart: { projectId: 'archived-project' },
+          createdById: 'user-1',
+          runType: RunType.manual,
+          additionalParams: null,
+        },
+      ]);
+      (projectLifecycleChecker.isArchivedForTrigger as jest.Mock).mockResolvedValue(true);
+
+      await service.executeInterruptedRuns();
+
+      expect(dataMartRunRepository.update).toHaveBeenCalledWith(
+        { id: 'run-archived', status: DataMartRunStatus.INTERRUPTED },
+        expect.objectContaining({
+          status: DataMartRunStatus.CANCELLED,
+          errors: ['Project is archived and read-only; interrupted run was not resumed.'],
+        })
+      );
       expect(connectorRunTriggerService.createTrigger).not.toHaveBeenCalled();
     });
   });

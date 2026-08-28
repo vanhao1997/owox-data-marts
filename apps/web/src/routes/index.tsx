@@ -27,8 +27,19 @@ import { ConnectFlowLayout } from '../layouts/ConnectFlowLayout';
 import { ConnectGoogleSheetsPage } from '../pages/connect/ConnectGoogleSheetsPage';
 import { ConnectGoogleSheetsDonePage } from '../pages/connect/ConnectGoogleSheetsDonePage';
 import { pluginsRoutes } from './plugins/routes';
+import { ProjectsPage } from '../pages/projects/ProjectsPage';
+import { AuthGuard } from '../features/idp/components/AuthGuard';
 
 const routes: RouteObject[] = [
+  {
+    path: '/projects',
+    element: (
+      <AuthGuard>
+        <ProjectsPage />
+      </AuthGuard>
+    ),
+    errorElement: <RootErrorBoundary />,
+  },
   {
     index: true,
     path: '/',

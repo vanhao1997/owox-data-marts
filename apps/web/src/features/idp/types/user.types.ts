@@ -27,6 +27,7 @@ export interface User {
    * UI controls may stay enabled — blocked actions fail after the request.
    */
   viewOnly?: boolean;
+  projectArchived?: boolean;
 }
 
 /**

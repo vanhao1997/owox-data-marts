@@ -11,7 +11,9 @@ export class MagicLinkService {
 
   async generateMagicLink(
     email: string,
-    role: 'admin' | 'editor' | 'viewer' = 'admin'
+    role: 'admin' | 'editor' | 'viewer' = 'admin',
+    projectId = '0',
+    invitationId?: string
   ): Promise<string> {
     // Clear previous magic link
     delete (global as unknown as { lastMagicLink?: string }).lastMagicLink;
@@ -22,7 +24,9 @@ export class MagicLinkService {
       typeof baseUrlConfig === 'string'
         ? baseUrlConfig
         : (baseUrlConfig as { fallback?: string } | undefined)?.fallback || 'http://localhost:3000';
-    const encodedRole = await this.cryptoService.encrypt(role);
+    const encodedRole = await this.cryptoService.encrypt(
+      projectId === '0' && !invitationId ? role : JSON.stringify({ role, projectId, invitationId })
+    );
 
     const callbackURL = `${baseURL}${MagicLinkService.DEFAULT_CALLBACK_URL}/${encodeURIComponent(
       encodedRole

@@ -80,6 +80,12 @@ function RegularProjectMenuContent({ onClose }: { onClose: () => void }) {
         );
       })}
       {canSwitchProject && <SwitchProjectMenu key='switch-project' />}
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link to='/projects' className='flex items-center gap-2'>
+          Manage projects
+        </Link>
+      </DropdownMenuItem>
     </DropdownMenuContent>
   );
 }

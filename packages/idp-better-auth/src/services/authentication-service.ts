@@ -38,6 +38,8 @@ export class AuthenticationService {
           userId: session.session.userId,
           token: session.session.token,
           expiresAt: session.session.expiresAt,
+          activeOrganizationId: (session.session as { activeOrganizationId?: string })
+            .activeOrganizationId,
         },
       };
     } catch (error) {
@@ -82,6 +84,36 @@ export class AuthenticationService {
     }
   }
 
+  async setActiveOrganization(
+    req: Request,
+    organizationId: string | null,
+    response?: Response
+  ): Promise<void> {
+    const api = this.auth.api as unknown as {
+      setActiveOrganization?: (input: unknown) => Promise<unknown>;
+    };
+    if (!api.setActiveOrganization) return;
+    const result = (await api.setActiveOrganization({
+      headers: req.headers as unknown as Headers,
+      body: { organizationId },
+      returnHeaders: true,
+    })) as { headers?: Headers } | undefined;
+    this.copyResponseHeaders(response, result?.headers);
+  }
+
+  /** Forward Better Auth's rotated active-organization cookie to Express. */
+  private copyResponseHeaders(response: Response | undefined, headers?: Headers): void {
+    if (!response || !headers) return;
+    const getSetCookie = (headers as Headers & { getSetCookie?: () => string[] }).getSetCookie;
+    if (typeof getSetCookie === 'function') {
+      const cookies = getSetCookie.call(headers);
+      if (cookies.length > 0) response.setHeader('set-cookie', cookies);
+    } else {
+      const cookie = headers.get('set-cookie');
+      if (cookie) response.setHeader('set-cookie', cookie);
+    }
+  }
+
   async generateAccessToken(req: Request): Promise<string> {
     try {
       const session = await this.getSession(req);
@@ -90,16 +122,34 @@ export class AuthenticationService {
         throw new Error('No session found');
       }
 
+      const organizationId = this.userManagementService?.resolveActiveOrganizationId
+        ? await this.userManagementService.resolveActiveOrganizationId(
+            session.user.id,
+            session.session.activeOrganizationId
+          )
+        : session.session.activeOrganizationId || 'owox_data_marts_organization';
+      const projectId = organizationId || '';
       const userRole = this.userManagementService
-        ? await this.userManagementService.getUserRole(session.user.id)
+        ? organizationId
+          ? await this.getUserRoleForOrganization(session.user.id, organizationId)
+          : null
         : null;
 
       const payload = {
         userId: session.user.id,
-        projectId: '0',
+        projectId: projectId === 'owox_data_marts_organization' ? '0' : projectId,
         email: session.user.email,
         fullName: session.user.name || session.user.email,
-        ...(userRole ? { roles: [userRole] } : {}),
+        ...(organizationId && this.userManagementService
+          ? await this.projectTitleClaim(organizationId)
+          : {}),
+        ...(this.userManagementService ? { roles: userRole ? [userRole] : [] } : {}),
+        ...(this.userManagementService &&
+        organizationId &&
+        this.userManagementService.isOrganizationArchived &&
+        (await this.userManagementService.isOrganizationArchived(organizationId))
+          ? { projectArchived: true, viewOnly: true }
+          : {}),
       };
 
       return await this.cryptoService.encrypt(JSON.stringify(payload));
@@ -107,6 +157,25 @@ export class AuthenticationService {
       logger.error('Failed to generate access token', {}, error as Error);
       throw new Error('Failed to generate access token');
     }
+  }
+
+  private async projectTitleClaim(organizationId: string): Promise<{ projectTitle?: string }> {
+    const service = this.userManagementService as
+      | (UserManagementService & {
+          getOrganizationTitle?: (id: string) => Promise<string | null>;
+        })
+      | undefined;
+    const title = await service?.getOrganizationTitle?.(organizationId);
+    return title ? { projectTitle: title } : {};
+  }
+
+  private async getUserRoleForOrganization(
+    userId: string,
+    organizationId: string
+  ): Promise<string | null> {
+    return organizationId === 'owox_data_marts_organization'
+      ? this.userManagementService!.getUserRole(userId)
+      : this.userManagementService!.getUserRole(userId, organizationId);
   }
 
   async validateSession(req: Request): Promise<SessionValidationResult> {

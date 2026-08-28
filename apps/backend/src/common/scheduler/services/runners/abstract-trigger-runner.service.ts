@@ -6,6 +6,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { SystemTimeService } from '../system-time.service';
 import { TriggerRunnerService } from './trigger-runner.interface';
 import { GracefulShutdownService } from '../graceful-shutdown.service';
+import type { ProjectLifecycleChecker } from '../../shared/project-lifecycle-checker';
 
 /**
  * Abstract base class for trigger runner services.
@@ -33,7 +34,8 @@ export abstract class AbstractTriggerRunnerService<
   protected constructor(
     protected readonly handler: TriggerHandler<T>,
     protected readonly systemClock: SystemTimeService,
-    protected readonly shutdownService: GracefulShutdownService
+    protected readonly shutdownService: GracefulShutdownService,
+    protected readonly projectLifecycleChecker?: ProjectLifecycleChecker
   ) {
     this.handlerName = this.handler.constructor.name;
   }
@@ -107,6 +109,30 @@ export abstract class AbstractTriggerRunnerService<
     }
 
     try {
+      if (
+        this.projectLifecycleChecker &&
+        (await this.projectLifecycleChecker.isArchivedForTrigger(
+          trigger as unknown as {
+            projectId?: unknown;
+            createdById?: unknown;
+            userId?: unknown;
+            dataMart?: { projectId?: unknown };
+          }
+        ))
+      ) {
+        // Keep the linked run terminal as well as the trigger. Otherwise an
+        // archived scheduled run remains PENDING forever after its trigger is
+        // cancelled and can block a later manual run.
+        await this.handler.cancelRunForArchivedProject?.(trigger);
+        trigger.status = TriggerStatus.CANCELLED;
+        trigger.isActive = false;
+        await repository.save(trigger);
+        this.logger.warn(
+          `[${this.handlerName}] Trigger ${trigger.id} cancelled: project is archived and read-only.`
+        );
+        return;
+      }
+
       // Register this trigger processing as an active process
       processId = this.shutdownService.registerActiveProcess(
         `${this.handlerName}-trigger-${trigger.id}`

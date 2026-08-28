@@ -156,6 +156,29 @@ export class IdpProjectionsFacade {
     await this.idpProjectionsService.declineMembershipRequest(projectId, requestId, actorUserId);
   }
 
+  public async listPendingInvitations(
+    projectId: string,
+    actorUserId: string
+  ): Promise<ProjectMemberInvitation[]> {
+    return this.idpProjectionsService.listPendingInvitations(projectId, actorUserId);
+  }
+
+  public async resendInvitation(
+    projectId: string,
+    invitationId: string,
+    actorUserId: string
+  ): Promise<ProjectMemberInvitation> {
+    return this.idpProjectionsService.resendInvitation(projectId, invitationId, actorUserId);
+  }
+
+  public async cancelInvitation(
+    projectId: string,
+    invitationId: string,
+    actorUserId: string
+  ): Promise<void> {
+    return this.idpProjectionsService.cancelInvitation(projectId, invitationId, actorUserId);
+  }
+
   public async getUserProvisioningSettings(
     projectId: string,
     actorUserId: string

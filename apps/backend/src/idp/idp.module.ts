@@ -17,9 +17,24 @@ import { AuthContextController } from './controllers/auth-context.controller';
 import { IssueIntercomJwtService } from './use-cases/issue-intercom-jwt.service';
 import { IntercomMapper } from './mappers/intercom.mapper';
 import { OAuthModule } from './oauth/oauth.module';
+import { ProjectLifecycleService } from './services/project-lifecycle.service';
+import { ProjectMembershipReconciliationService } from './services/project-membership-reconciliation.service';
+import { PendingMemberInvitationScope } from '../data-marts/entities/pending-member-invitation-scope.entity';
+import { MemberRoleScope } from '../data-marts/entities/member-role-scope.entity';
+import { MemberRoleContext } from '../data-marts/entities/member-role-context.entity';
+import { PROJECT_LIFECYCLE_CHECKER } from '../common/scheduler/shared/project-lifecycle-checker';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserProjection, ProjectProjection]), OAuthModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      UserProjection,
+      ProjectProjection,
+      PendingMemberInvitationScope,
+      MemberRoleScope,
+      MemberRoleContext,
+    ]),
+    OAuthModule,
+  ],
   controllers: [IntercomController, AuthContextController],
   providers: [
     IdpProviderService,
@@ -28,6 +43,9 @@ import { OAuthModule } from './oauth/oauth.module';
     IssueIntercomJwtService,
     IntercomMapper,
     TenantGuardService,
+    ProjectLifecycleService,
+    ProjectMembershipReconciliationService,
+    { provide: PROJECT_LIFECYCLE_CHECKER, useExisting: ProjectLifecycleService },
     {
       provide: APP_FILTER,
       useClass: IdpExceptionFilter,
@@ -46,6 +64,9 @@ import { OAuthModule } from './oauth/oauth.module';
     IdpProjectionsFacade,
     MCP_PROJECT_CONTEXT_FACADE,
     TenantGuardService,
+    ProjectLifecycleService,
+    ProjectMembershipReconciliationService,
+    PROJECT_LIFECYCLE_CHECKER,
     OAuthModule,
   ],
 })

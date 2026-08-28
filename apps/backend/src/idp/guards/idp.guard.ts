@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Optional,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Request } from 'express';
 import {
   AuthenticationError,
@@ -22,6 +28,8 @@ import {
   PLUGIN_RUNTIME_AUTHORIZER,
   PluginRuntimeAuthorizerPort,
 } from '../ports/plugin-runtime-authorizer.port';
+import { ProjectLifecycleService } from '../services/project-lifecycle.service';
+import { ProjectMembershipReconciliationService } from '../services/project-membership-reconciliation.service';
 
 export interface AuthenticatedRequest extends Request {
   idpContext: {
@@ -41,6 +49,7 @@ export interface AuthenticatedRequest extends Request {
     installationId?: string;
     /** True when the session is in view-only mode. */
     viewOnly?: boolean;
+    projectArchived?: boolean;
   };
 }
 
@@ -55,7 +64,10 @@ export class IdpGuard implements CanActivate {
     private idpProviderService: IdpProviderService,
     private readonly cls: ClsService,
     private readonly idpProjectionsService: IdpProjectionsService,
-    private readonly moduleRef: ModuleRef
+    private readonly moduleRef: ModuleRef,
+    @Optional() private readonly projectLifecycleService?: ProjectLifecycleService,
+    @Optional()
+    private readonly projectMembershipReconciliationService?: ProjectMembershipReconciliationService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -95,6 +107,12 @@ export class IdpGuard implements CanActivate {
 
     try {
       const tokenPayload = await this.authenticateUser(request, roleConfig.strategy);
+      if (tokenPayload.projectId && this.projectMembershipReconciliationService) {
+        await this.projectMembershipReconciliationService.reconcile(
+          tokenPayload.userId,
+          tokenPayload.email
+        );
+      }
       this.checkApiKeyUsageRestrictions(tokenPayload, Boolean(rejectApiKeyAuth));
       this.checkApiKeyHeaderBinding(request, tokenPayload);
       await this.checkPluginRuntimeAuthorization(
@@ -120,6 +138,7 @@ export class IdpGuard implements CanActivate {
         pluginId: tokenPayload.pluginId,
         installationId: tokenPayload.installationId,
         viewOnly,
+        projectArchived: tokenPayload.projectArchived,
       };
 
       this.cls.set(AUTH_CONTEXT, {
@@ -131,12 +150,19 @@ export class IdpGuard implements CanActivate {
         pluginId: tokenPayload.pluginId,
         installationId: tokenPayload.installationId,
         viewOnly,
+        projectArchived: tokenPayload.projectArchived,
       });
 
       // Strategy.PARSE reads viewOnly only from the locally verified JWT. If
       // Identity flips a session to view-only without revoking/re-issuing access
       // tokens, write access remains until the token expires.
       if (request && STATE_CHANGING_METHODS.includes(request.method)) {
+        if (this.projectLifecycleService?.assertWritable) {
+          await this.projectLifecycleService.assertWritable(
+            tokenPayload.userId,
+            tokenPayload.projectId
+          );
+        }
         // Update IDP projections in the background
         void this.idpProjectionsService.updateProjectionsFromIdpPayload(tokenPayload);
       }

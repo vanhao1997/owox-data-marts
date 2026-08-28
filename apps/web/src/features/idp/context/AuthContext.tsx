@@ -210,6 +210,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const currentUrl = window.location.pathname + window.location.search + window.location.hash;
 
         if (hasEmptyProjectRoles(user)) {
+          if (!user.projectId) {
+            if (currentPath !== '/projects') window.location.replace('/projects');
+            return;
+          }
           const isRequestAccessPath =
             currentPath === LEGACY_REQUEST_ACCESS_PATH ||
             isProjectRequestAccessPath(currentPath, user.projectId);

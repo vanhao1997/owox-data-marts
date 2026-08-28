@@ -1,4 +1,5 @@
 import { Injectable, Logger, Type } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { TimeBasedTrigger } from '../../shared/entities/time-based-trigger.entity';
 import { Trigger } from '../../shared/entities/trigger.entity';
@@ -8,6 +9,10 @@ import { TriggerRunnerService } from './trigger-runner.interface';
 import { DirectTriggerRunnerService } from './direct-trigger-runner.service';
 import { PubsubTriggerRunnerService } from './pubsub-trigger-runner.service';
 import { GracefulShutdownService } from '../graceful-shutdown.service';
+import {
+  PROJECT_LIFECYCLE_CHECKER,
+  ProjectLifecycleChecker,
+} from '../../shared/project-lifecycle-checker';
 
 /**
  * Enum representing the available trigger runner types.
@@ -35,7 +40,8 @@ export class TriggerRunnerFactory {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly shutdownService: GracefulShutdownService
+    private readonly shutdownService: GracefulShutdownService,
+    private readonly moduleRef: ModuleRef
   ) {
     this.registerDefaultRunnerTypes();
   }
@@ -114,12 +120,23 @@ export class TriggerRunnerFactory {
 
     const runnerConfig = this.runnerTypes.get(runnerType);
 
+    let projectLifecycleChecker: ProjectLifecycleChecker | undefined;
+    try {
+      projectLifecycleChecker = this.moduleRef.get<ProjectLifecycleChecker>(
+        PROJECT_LIFECYCLE_CHECKER,
+        { strict: false }
+      );
+    } catch {
+      // Scheduler remains compatible with deployments that omit IDP module.
+    }
+
     if (!runnerConfig) {
       this.logger.warn(`Unknown runner type: ${runnerType}, falling back to direct runner`);
       return new DirectTriggerRunnerService(
         triggerHandler,
         systemTimeService,
-        this.shutdownService
+        this.shutdownService,
+        projectLifecycleChecker
       );
     }
 
@@ -132,7 +149,8 @@ export class TriggerRunnerFactory {
       triggerHandler,
       systemTimeService,
       config,
-      this.shutdownService
+      this.shutdownService,
+      projectLifecycleChecker
     );
 
     this.logger.log(`Created ${runnerType} trigger runner`);
@@ -154,20 +172,27 @@ export class TriggerRunnerFactory {
     triggerHandler: TriggerHandler<T>,
     systemTimeService: SystemTimeService,
     config: Record<string, unknown>,
-    shutdownService: GracefulShutdownService
+    shutdownService: GracefulShutdownService,
+    projectLifecycleChecker?: ProjectLifecycleChecker
   ): Promise<TriggerRunnerService<T>> {
     if (RunnerClass === PubsubTriggerRunnerService) {
       const pubSubRunner = new PubsubTriggerRunnerService(
         triggerHandler,
         systemTimeService,
         config.projectId as string,
-        shutdownService
+        shutdownService,
+        projectLifecycleChecker
       );
       await pubSubRunner.initialize();
       return pubSubRunner;
     }
 
     // For DirectTriggerRunnerService or any other runner that only needs handler and systemTimeService
-    return new DirectTriggerRunnerService(triggerHandler, systemTimeService, shutdownService);
+    return new DirectTriggerRunnerService(
+      triggerHandler,
+      systemTimeService,
+      shutdownService,
+      projectLifecycleChecker
+    );
   }
 }

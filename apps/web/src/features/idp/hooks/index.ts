@@ -4,3 +4,4 @@ export * from './useAuth.js';
 export * from './useAuthState.js';
 
 export * from './useRole.js';
+export * from './useProjects.js';

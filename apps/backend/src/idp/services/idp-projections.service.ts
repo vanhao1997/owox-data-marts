@@ -13,12 +13,14 @@ import {
   CreateNewProjectResult,
   UserProvisioningSettings,
   UserProvisioningSettingsUpdate,
+  IdpProvider,
 } from '@owox/idp-protocol';
 import { In, Repository } from 'typeorm';
 import { ProjectProjection } from '../entities/project-projection.entity';
 import { UserProjection } from '../entities/user-projection.entity';
 import { IdpProviderService } from './idp-provider.service';
 import { ProjectMemberDto } from '../dto/domain/project-member.dto';
+import { ProjectMembershipReconciliationService } from './project-membership-reconciliation.service';
 
 /**
  * Service for updating projections in the database based on authorization payload.
@@ -32,7 +34,8 @@ export class IdpProjectionsService {
     private readonly projectsRepository: Repository<ProjectProjection>,
     @InjectRepository(UserProjection)
     private readonly usersRepository: Repository<UserProjection>,
-    private readonly idpProviderService: IdpProviderService
+    private readonly idpProviderService: IdpProviderService,
+    private readonly projectMembershipReconciliationService: ProjectMembershipReconciliationService
   ) {}
 
   public async getProjectProjection(projectId: string): Promise<ProjectProjection | null> {
@@ -205,6 +208,54 @@ export class IdpProjectionsService {
   ): Promise<void> {
     const provider = this.idpProviderService.getProviderFromApp();
     await provider.declineMembershipRequest(projectId, requestId, actorUserId);
+  }
+
+  public async listPendingInvitations(
+    projectId: string,
+    actorUserId: string
+  ): Promise<ProjectMemberInvitation[]> {
+    const provider = this.idpProviderService.getProviderFromApp() as IdpProvider & {
+      listPendingInvitations?: (
+        projectId: string,
+        actorUserId: string
+      ) => Promise<ProjectMemberInvitation[]>;
+    };
+    return provider.listPendingInvitations
+      ? provider.listPendingInvitations(projectId, actorUserId)
+      : [];
+  }
+
+  public async resendInvitation(
+    projectId: string,
+    invitationId: string,
+    actorUserId: string
+  ): Promise<ProjectMemberInvitation> {
+    const provider = this.idpProviderService.getProviderFromApp() as IdpProvider & {
+      resendInvitation?: (
+        projectId: string,
+        invitationId: string,
+        actorUserId: string
+      ) => Promise<ProjectMemberInvitation>;
+    };
+    if (!provider.resendInvitation) throw new Error('Invitation resend is not supported');
+    return provider.resendInvitation(projectId, invitationId, actorUserId);
+  }
+
+  public async cancelInvitation(
+    projectId: string,
+    invitationId: string,
+    actorUserId: string
+  ): Promise<void> {
+    const provider = this.idpProviderService.getProviderFromApp() as IdpProvider & {
+      cancelInvitation?: (
+        projectId: string,
+        invitationId: string,
+        actorUserId: string
+      ) => Promise<void>;
+    };
+    if (!provider.cancelInvitation) throw new Error('Invitation cancellation is not supported');
+    await provider.cancelInvitation(projectId, invitationId, actorUserId);
+    await this.projectMembershipReconciliationService.removePendingScope(invitationId);
   }
 
   public async getUserProvisioningSettings(

@@ -6,7 +6,7 @@ import { UserManagementService } from './user-management-service.js';
 import { logger } from '../logger.js';
 
 export class MiddlewareService {
-  private static readonly DEFAULT_ORGANIZATION_ID = '0';
+  private static readonly DEFAULT_ORGANIZATION_ID = 'owox_data_marts_organization';
 
   constructor(
     private readonly authenticationService: AuthenticationService,
@@ -50,17 +50,40 @@ export class MiddlewareService {
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      const role = await this.userManagementService.getUserRole(validation.session.user.id);
-      if (!role) {
-        return res.status(403).json({ error: 'Forbidden' });
-      }
+      const organizationId = this.userManagementService.resolveActiveOrganizationId
+        ? await this.userManagementService.resolveActiveOrganizationId(
+            validation.session.user.id,
+            validation.session.session.activeOrganizationId
+          )
+        : validation.session.session.activeOrganizationId ||
+          MiddlewareService.DEFAULT_ORGANIZATION_ID;
+      const role = organizationId
+        ? await this.userManagementService.getUserRole(validation.session.user.id, organizationId)
+        : null;
+      const service = this.userManagementService as UserManagementService & {
+        isOrganizationArchived?: (id: string) => Promise<boolean>;
+        getOrganizationTitle?: (id: string) => Promise<string | null>;
+      };
+      const projectArchived = organizationId
+        ? (await service.isOrganizationArchived?.(organizationId)) === true
+        : false;
+      const projectTitle = organizationId
+        ? ((await service.getOrganizationTitle?.(organizationId)) ?? null)
+        : null;
 
       const payload: Payload = {
         userId: validation.session.user.id,
-        projectId: MiddlewareService.DEFAULT_ORGANIZATION_ID,
+        projectId:
+          role && organizationId
+            ? organizationId === MiddlewareService.DEFAULT_ORGANIZATION_ID
+              ? '0'
+              : organizationId
+            : '',
         email: validation.session.user.email,
         fullName: validation.session.user.name || validation.session.user.email,
-        roles: [role as 'admin' | 'editor' | 'viewer'],
+        roles: role ? [role as 'admin' | 'editor' | 'viewer'] : [],
+        ...(projectTitle ? { projectTitle } : {}),
+        ...(projectArchived ? { projectArchived: true, viewOnly: true } : {}),
       };
 
       return res.json(payload);

@@ -21,12 +21,6 @@ vi.mock('../features/idp/components/ProjectRoleGuard', () => ({
   ),
 }));
 
-vi.mock('../features/idp/context/ProjectsContext', () => ({
-  ProjectsProvider: ({ children }: { children: ReactNode }) => (
-    <div data-testid='projects-provider'>{children}</div>
-  ),
-}));
-
 describe('ProjectAuthGuards', () => {
   it('renders children through the full guard chain, in order', () => {
     render(
@@ -38,12 +32,10 @@ describe('ProjectAuthGuards', () => {
     const authGuard = screen.getByTestId('auth-guard');
     const projectIdGuard = screen.getByTestId('project-id-guard');
     const projectRoleGuard = screen.getByTestId('project-role-guard');
-    const projectsProvider = screen.getByTestId('projects-provider');
     const content = screen.getByTestId('content');
 
     expect(authGuard).toContainElement(projectIdGuard);
     expect(projectIdGuard).toContainElement(projectRoleGuard);
-    expect(projectRoleGuard).toContainElement(projectsProvider);
-    expect(projectsProvider).toContainElement(content);
+    expect(projectRoleGuard).toContainElement(content);
   });
 });

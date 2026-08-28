@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { useAuthState, useUser } from '../hooks';
-import { signIn } from '../services';
+import { useAuthState, useUser, useProjects } from '../hooks';
+import { useNavigate } from 'react-router';
 import { normalizeProjectId } from '../utils/project-id';
 import { FullScreenLoader } from '@owox/ui/components/common/loading-spinner';
+import { RequestStatus } from '../../../shared/types/request-status';
+import { useFlags } from '../../../app/store/hooks';
+import { checkVisible } from '../../../utils/check-visible';
+import { signIn } from '../services';
 
 /**
  * A React component that acts as a guard to ensure the user is accessing the correct project ID,
@@ -20,18 +24,50 @@ export function ProjectIdGuard({ children }: { children: React.ReactNode }): Rea
   const { projectId: urlProjectId } = useParams<{ projectId?: string }>();
 
   const userProjectId = user?.projectId;
+  const { projects, selectProject, callState } = useProjects();
+  const { flags } = useFlags();
+  const navigate = useNavigate();
   const safeUrlProjectId = normalizeProjectId(urlProjectId);
+  const usesLocalProjectManagement = checkVisible('IDP_PROVIDER', 'better-auth', flags);
 
   const hasMismatch =
     !isLoading && !!safeUrlProjectId && !!userProjectId && userProjectId !== safeUrlProjectId;
+  const projectsLoaded = callState === RequestStatus.LOADED || callState === RequestStatus.ERROR;
 
   useEffect(() => {
-    if (hasMismatch) {
+    if (!hasMismatch) return;
+    // The managed OWOX provider still owns project selection in its sign-in
+    // flow. Only self-hosted Better Auth exposes the local selection endpoint.
+    if (!usesLocalProjectManagement) {
       signIn({ projectId: safeUrlProjectId });
+      return;
     }
-  }, [hasMismatch, safeUrlProjectId]);
+    if (!projectsLoaded) return;
+    const project = projects.find(item => item.id === safeUrlProjectId);
+    if (!project) {
+      void navigate('/projects', { replace: true });
+      return;
+    }
+    void selectProject(safeUrlProjectId)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(() => {
+        void navigate('/projects', { replace: true });
+      });
+  }, [
+    hasMismatch,
+    projectsLoaded,
+    safeUrlProjectId,
+    projects,
+    selectProject,
+    navigate,
+    usesLocalProjectManagement,
+  ]);
 
-  if (isLoading || hasMismatch) return <FullScreenLoader />;
+  if (isLoading || (hasMismatch && !projectsLoaded) || (hasMismatch && projectsLoaded)) {
+    return <FullScreenLoader />;
+  }
 
   return <>{children}</>;
 }

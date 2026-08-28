@@ -12,6 +12,7 @@ export interface AuthSession {
     userId: string;
     token: string;
     expiresAt: Date;
+    activeOrganizationId?: string;
   };
 }
 

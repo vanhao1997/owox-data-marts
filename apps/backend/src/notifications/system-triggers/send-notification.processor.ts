@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { SystemTrigger } from '../../common/scheduler/shared/entities/system-trigger.entity';
 import { BaseSystemTaskProcessor } from '../../common/scheduler/system-tasks/base-system-task.processor';
 import { SystemTriggerType } from '../../common/scheduler/system-tasks/system-trigger-type';
@@ -7,6 +7,10 @@ import { NotificationQueueService } from '../services/notification-queue.service
 import { IdpProjectionsFacade } from '../../idp/facades/idp-projections.facade';
 import { UserInfo } from '../services/notification-email.service';
 import { ConfigService } from '@nestjs/config';
+import {
+  PROJECT_LIFECYCLE_CHECKER,
+  ProjectLifecycleChecker,
+} from '../../common/scheduler/shared/project-lifecycle-checker';
 
 @Injectable()
 export class SendNotificationProcessor extends BaseSystemTaskProcessor {
@@ -18,7 +22,10 @@ export class SendNotificationProcessor extends BaseSystemTaskProcessor {
     private readonly notificationService: NotificationService,
     private readonly queueService: NotificationQueueService,
     private readonly idpProjectionsFacade: IdpProjectionsFacade,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    @Optional()
+    @Inject(PROJECT_LIFECYCLE_CHECKER)
+    private readonly projectLifecycleChecker?: ProjectLifecycleChecker
   ) {
     super();
   }
@@ -50,8 +57,13 @@ export class SendNotificationProcessor extends BaseSystemTaskProcessor {
 
     // getProjectMembers() already calls IDP and updates local UserProjection cache
     // for each project that has pending queue items — no separate bulk refresh needed.
-    await this.notificationService.processQueue(async (projectId: string) =>
-      this.getProjectMembers(projectId)
+    await this.notificationService.processQueue(
+      async (projectId: string) => this.getProjectMembers(projectId),
+      async (projectId: string) =>
+        Boolean(
+          this.projectLifecycleChecker &&
+          (await this.projectLifecycleChecker.isArchivedForTrigger({ projectId }))
+        )
     );
 
     this.logger.debug('Send notification processor completed');

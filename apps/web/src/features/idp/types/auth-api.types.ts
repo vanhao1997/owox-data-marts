@@ -25,6 +25,7 @@ export interface CurrentUserResponse {
   mcpServerUrl?: string;
   /** True when the session is in view-only mode. */
   viewOnly?: boolean;
+  projectArchived?: boolean;
 }
 
 /**

@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import routes from './routes';
 import './styles/App.css';
 import { AuthProvider } from './features/idp';
+import { ProjectsProvider } from './features/idp/context/ProjectsContext';
 import { GoogleTagManager as GTM } from '../src/app/gtm/GoogleTagManager.tsx';
 import { IntercomChat } from './app/intercom/IntercomChat';
 import { AppStoreProvider, AppBootstrap } from './app/store';
@@ -44,14 +45,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppStoreProvider>
-          <AppBootstrap>
-            <GTM />
-            <IntercomChat />
-            <ContentPopovers />
-            <RouterProvider router={router} />
-          </AppBootstrap>
-        </AppStoreProvider>
+        <ProjectsProvider>
+          <AppStoreProvider>
+            <AppBootstrap>
+              <GTM />
+              <IntercomChat />
+              <ContentPopovers />
+              <RouterProvider router={router} />
+            </AppBootstrap>
+          </AppStoreProvider>
+        </ProjectsProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

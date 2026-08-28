@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { ArrowRightLeft, Check, Loader2 } from 'lucide-react';
+import { ArrowRightLeft, Check, Loader2, LockKeyhole } from 'lucide-react';
 import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
@@ -14,6 +14,9 @@ import { useAuth } from '../../../features/idp';
 import { useProjects } from '../../../features/idp/hooks/useProjects.ts';
 import { RequestStatus } from '../../../shared/types/request-status.ts';
 import { buildProjectPath } from '../../../utils/path.ts';
+import type { ProjectsContextType } from '../../../features/idp/context/ProjectContext.types.ts';
+import { useFlags } from '../../../app/store/hooks';
+import { checkVisible } from '../../../utils/check-visible';
 
 interface SwitchProjectMenuProps {
   autoLoad?: boolean;
@@ -28,12 +31,17 @@ function SwitchProjectMenuInner({
   excludeCurrentProject = false,
   showSeparator = true,
 }: SwitchProjectMenuProps) {
-  const { projects, loadProjects, callState, error, isLoading } = useProjects();
+  const projectsContext = useProjects();
+  const { projects, loadProjects, callState, error, isLoading } = projectsContext;
+  // Older embedded callers may not expose selection yet; navigation still works there.
+  const selectProject = (projectsContext as Partial<ProjectsContextType>).selectProject;
   const { user } = useAuth();
+  const { flags } = useFlags();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const usesLocalProjectManagement = checkVisible('IDP_PROVIDER', 'better-auth', flags);
 
   const visibleProjects = useMemo(() => {
     return excludeCurrentProject
@@ -58,6 +66,21 @@ function SwitchProjectMenuInner({
     const query = searchQuery.toLowerCase().trim();
     return visibleProjects.filter(project => project.title.toLowerCase().includes(query));
   }, [visibleProjects, searchQuery, showSearch]);
+
+  const navigateToProject = useCallback(
+    (projectId: string) => {
+      const path = buildProjectPath(encodeURIComponent(projectId), '/');
+      if (usesLocalProjectManagement && typeof selectProject === 'function') {
+        void selectProject(projectId)
+          .then(() => navigate(path))
+          .catch(() => undefined);
+      } else {
+        // Keep compatibility with legacy callers that do not expose project selection.
+        void navigate(path);
+      }
+    },
+    [navigate, selectProject, usesLocalProjectManagement]
+  );
 
   // Reset active index when filtered list changes
   useEffect(() => {
@@ -93,10 +116,10 @@ function SwitchProjectMenuInner({
       } else if (e.key === 'Enter') {
         const targetIndex = activeIndex >= 0 ? activeIndex : 0;
         const project = filteredProjects[targetIndex];
-        void navigate(buildProjectPath(encodeURIComponent(project.id), '/'));
+        navigateToProject(project.id);
       }
     },
-    [filteredProjects, activeIndex, navigate]
+    [filteredProjects, activeIndex, navigateToProject]
   );
 
   const handleOpenChange = useCallback((open: boolean) => {
@@ -214,6 +237,10 @@ function SwitchProjectMenuInner({
                   >
                     <NavLink
                       to={buildProjectPath(encodeURIComponent(project.id), '/')}
+                      onClick={event => {
+                        event.preventDefault();
+                        navigateToProject(project.id);
+                      }}
                       className='flex w-full min-w-0 items-center gap-2'
                       title={project.title}
                     >
@@ -223,6 +250,12 @@ function SwitchProjectMenuInner({
                         <span className='h-4 w-4 shrink-0' />
                       )}
                       <span className='truncate'>{project.title}</span>
+                      {project.archived && (
+                        <span className='text-muted-foreground ml-auto inline-flex items-center gap-1 text-xs'>
+                          <LockKeyhole className='size-3' aria-hidden='true' />
+                          <span className='sr-only'>Read-only</span>
+                        </span>
+                      )}
                     </NavLink>
                   </DropdownMenuItem>
                 );

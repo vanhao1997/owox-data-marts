@@ -236,6 +236,9 @@ export class InviteMemberResponseApiDto {
   expiresAt?: string;
 
   @ApiPropertyOptional()
+  invitationId?: string;
+
+  @ApiPropertyOptional()
   message?: string;
 
   @ApiPropertyOptional({

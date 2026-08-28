@@ -145,7 +145,7 @@ describe('MiddlewareService', () => {
       expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized' });
     });
 
-    it('should return 403 when user has no role', async () => {
+    it('returns an empty project context when user has no membership', async () => {
       authService.validateSession.mockResolvedValue({
         isValid: true,
         session: {
@@ -161,8 +161,14 @@ describe('MiddlewareService', () => {
 
       await service.userApiMiddleware(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(403);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Forbidden' });
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith({
+        userId: 'user-1',
+        projectId: '',
+        email: 'test@example.com',
+        fullName: 'Test User',
+        roles: [],
+      });
     });
 
     it('should return 401 when validateSession throws', async () => {

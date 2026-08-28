@@ -16,6 +16,7 @@ export function currentUserResponseToUser(payload: CurrentUserResponse): User {
     onboarding: payload.onboarding,
     // Only surface when true so normal sessions stay free of the flag.
     viewOnly: payload.viewOnly === true ? true : undefined,
+    projectArchived: payload.projectArchived === true ? true : undefined,
   };
 }
 

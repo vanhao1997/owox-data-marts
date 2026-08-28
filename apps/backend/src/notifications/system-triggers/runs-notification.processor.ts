@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CronJob } from 'cron';
@@ -12,6 +12,10 @@ import { ProjectNotificationSettingsService } from '../services/project-notifica
 import { IdpProjectionsFacade } from '../../idp/facades/idp-projections.facade';
 import { NOTIFICATION_DEFINITIONS } from '../definitions';
 import { ConfigService } from '@nestjs/config';
+import {
+  PROJECT_LIFECYCLE_CHECKER,
+  ProjectLifecycleChecker,
+} from '../../common/scheduler/shared/project-lifecycle-checker';
 
 @Injectable()
 export class RunsNotificationProcessor extends BaseSystemTaskProcessor {
@@ -23,7 +27,10 @@ export class RunsNotificationProcessor extends BaseSystemTaskProcessor {
     private readonly queueService: NotificationQueueService,
     private readonly settingsService: ProjectNotificationSettingsService,
     private readonly idpProjectionsFacade: IdpProjectionsFacade,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    @Optional()
+    @Inject(PROJECT_LIFECYCLE_CHECKER)
+    private readonly projectLifecycleChecker?: ProjectLifecycleChecker
   ) {
     super();
   }
@@ -73,6 +80,18 @@ export class RunsNotificationProcessor extends BaseSystemTaskProcessor {
       if (options?.signal?.aborted) {
         this.logger.debug('Runs notification processor aborted during processing');
         return;
+      }
+
+      if (
+        this.projectLifecycleChecker &&
+        (await this.projectLifecycleChecker.isArchivedForTrigger({
+          projectId: setting.projectId,
+        }))
+      ) {
+        this.logger.warn(
+          `Skipping run notifications for project ${setting.projectId}: project is archived`
+        );
+        continue;
       }
 
       await this.processSetting(setting, now, projectTitleMap);

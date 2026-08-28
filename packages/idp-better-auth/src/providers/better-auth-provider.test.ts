@@ -81,6 +81,7 @@ jest.unstable_mockModule('../services/authentication-service.js', () => ({
   AuthenticationService: jest.fn().mockImplementation(() => ({
     setUserManagementService: jest.fn(),
     signInMiddleware: jest.fn(),
+    getSession: jest.fn().mockResolvedValue(null),
   })),
 }));
 
@@ -103,6 +104,7 @@ jest.unstable_mockModule('../services/user-management-service.js', () => ({
     removeUser: jest.fn(),
     getUserRole: jest.fn(),
     inviteAndCreateStub: jest.fn(),
+    isOrganizationArchived: jest.fn().mockResolvedValue(false),
   })),
 }));
 
@@ -161,6 +163,7 @@ function createStoreMock(): jest.Mocked<DatabaseStore> {
     getUserRole: jest.fn<DatabaseStore['getUserRole']>().mockResolvedValue(null),
     getUsersForAdmin: jest.fn<DatabaseStore['getUsersForAdmin']>().mockResolvedValue([]),
     getUserDetails: jest.fn<DatabaseStore['getUserDetails']>().mockResolvedValue(null),
+    getInvitation: jest.fn<DatabaseStore['getInvitation']>().mockResolvedValue(null),
   } as unknown as jest.Mocked<DatabaseStore>;
 }
 
@@ -235,7 +238,7 @@ describe('BetterAuthProvider', () => {
       });
       expect(tokenService.introspectToken).toHaveBeenCalledWith('Bearer api-key-token');
       expect(store.getUserById).toHaveBeenCalledWith('user-1');
-      expect(userMgmt.getUserRole).toHaveBeenCalledWith('user-1');
+      expect(userMgmt.getUserRole).toHaveBeenCalledWith('user-1', 'project-1');
     });
 
     it('returns null for API-key tokens when current membership is gone', async () => {
@@ -521,7 +524,7 @@ describe('BetterAuthProvider', () => {
   });
 
   describe('projectsApiMiddleware', () => {
-    it('should always return empty array', async () => {
+    it('returns an empty array when the session has no project memberships', async () => {
       const provider = await createProvider(undefined);
 
       const res = {
@@ -573,6 +576,7 @@ describe('BetterAuthProvider', () => {
     it('returns magic-link invitation with userId from inviteAndCreateStub', async () => {
       const provider = await createProvider();
       const userMgmt = getUserManagementServiceFromProvider(provider);
+      userMgmt.getUserRole.mockResolvedValue('admin');
       (
         userMgmt.inviteAndCreateStub as jest.Mock<typeof userMgmt.inviteAndCreateStub>
       ).mockResolvedValue({
@@ -582,7 +586,12 @@ describe('BetterAuthProvider', () => {
 
       const result = await provider.inviteMember('proj-1', 'new@x.io', 'editor', 'admin-1');
 
-      expect(userMgmt.inviteAndCreateStub).toHaveBeenCalledWith('new@x.io', 'editor');
+      expect(userMgmt.inviteAndCreateStub).toHaveBeenCalledWith(
+        'new@x.io',
+        'editor',
+        'proj-1',
+        'admin-1'
+      );
       expect(result).toEqual({
         projectId: 'proj-1',
         email: 'new@x.io',
@@ -596,6 +605,7 @@ describe('BetterAuthProvider', () => {
     it('propagates errors from the service layer', async () => {
       const provider = await createProvider();
       const userMgmt = getUserManagementServiceFromProvider(provider);
+      userMgmt.getUserRole.mockResolvedValue('admin');
       (
         userMgmt.inviteAndCreateStub as jest.Mock<typeof userMgmt.inviteAndCreateStub>
       ).mockRejectedValue(new Error('db down'));
@@ -603,6 +613,50 @@ describe('BetterAuthProvider', () => {
       await expect(
         provider.inviteMember('proj-1', 'bad@x.io', 'viewer', 'admin-1')
       ).rejects.toThrow('db down');
+    });
+  });
+
+  describe('isInvitationAccepted', () => {
+    it('requires accepted status, project match, and invitee email match', async () => {
+      store.getInvitation.mockResolvedValue({
+        id: 'inv-1',
+        organizationId: 'project-1',
+        email: 'Invitee@Example.com',
+        role: 'viewer',
+        status: 'accepted',
+        inviterId: 'admin-1',
+        expiresAt: new Date(Date.now() + 1000).toISOString(),
+        createdAt: new Date().toISOString(),
+      });
+      const provider = await createProvider();
+
+      await expect(
+        provider.isInvitationAccepted('inv-1', 'project-1', 'invitee@example.com')
+      ).resolves.toBe(true);
+      await expect(
+        provider.isInvitationAccepted('inv-1', 'other-project', 'invitee@example.com')
+      ).resolves.toBe(false);
+      await expect(
+        provider.isInvitationAccepted('inv-1', 'project-1', 'other@example.com')
+      ).resolves.toBe(false);
+    });
+
+    it('does not treat a pending invitation as accepted', async () => {
+      store.getInvitation.mockResolvedValue({
+        id: 'inv-1',
+        organizationId: 'project-1',
+        email: 'invitee@example.com',
+        role: 'viewer',
+        status: 'pending',
+        inviterId: 'admin-1',
+        expiresAt: new Date(Date.now() + 1000).toISOString(),
+        createdAt: new Date().toISOString(),
+      });
+      const provider = await createProvider();
+
+      await expect(
+        provider.isInvitationAccepted('inv-1', 'project-1', 'invitee@example.com')
+      ).resolves.toBe(false);
     });
   });
 
@@ -630,7 +684,7 @@ describe('BetterAuthProvider', () => {
       );
 
       expect(store.getUserById).toHaveBeenCalledWith('user-1');
-      expect(userMgmt.getUserRole).toHaveBeenCalledWith('user-1');
+      expect(userMgmt.getUserRole).toHaveBeenCalledWith('user-1', 'project-1');
       expect(tokenService.issueProjectMemberApiKeyAccessToken).toHaveBeenCalledWith({
         userId: 'user-1',
         projectId: 'project-1',

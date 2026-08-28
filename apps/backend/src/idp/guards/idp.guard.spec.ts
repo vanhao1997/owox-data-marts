@@ -94,7 +94,8 @@ describe('IdpGuard', () => {
       { getProvider: jest.fn(() => idpProvider) } as unknown as IdpProviderService,
       clsService as unknown as ClsService,
       idpProjectionsService as unknown as IdpProjectionsService,
-      moduleRef as unknown as ModuleRef
+      moduleRef as unknown as ModuleRef,
+      { reconcile: jest.fn() } as never
     );
   });
 

@@ -21,7 +21,7 @@ export function UserMenu() {
   const initials = generateInitials(fullName, email);
 
   const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
+    void i18n.changeLanguage(lng);
   };
 
   return (

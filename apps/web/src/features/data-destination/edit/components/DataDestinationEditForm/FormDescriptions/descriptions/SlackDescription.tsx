@@ -22,7 +22,7 @@ export default function SlackDescription() {
             className='underline'
             href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/slack/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-slack'
           >
-            OWOX documentation
+            P2PDigital documentation
           </ExternalAnchor>
           .
         </p>

@@ -11,7 +11,7 @@ export default function ExcelDescription() {
         </p>
         <p className='mb-2'>
           Unlike other destinations, it stores no credentials: the add-in reads your data using your
-          own OWOX access, and writes it into the worksheet you opened it from.
+          own P2PDigital access, and writes it into the worksheet you opened it from.
         </p>
       </AccordionContent>
     </AccordionItem>

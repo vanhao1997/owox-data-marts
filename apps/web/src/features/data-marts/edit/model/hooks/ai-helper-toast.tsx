@@ -24,7 +24,7 @@ export function humanizeAiHelperError(raw: string): HumanizedAiHelperError {
   if (permissionMatch) {
     const [, permission, project] = permissionMatch;
     return {
-      message: `OWOX can't access BigQuery project "${project}": the connected user lacks the ${permission} permission. Ask a BigQuery admin to grant it, then try again.`,
+      message: `P2PDigital can't access BigQuery project "${project}": the connected user lacks the ${permission} permission. Ask a BigQuery admin to grant it, then try again.`,
       details: raw,
     };
   }
@@ -32,7 +32,7 @@ export function humanizeAiHelperError(raw: string): HumanizedAiHelperError {
   const accessDeniedMatch = BIGQUERY_ACCESS_DENIED_RE.exec(raw);
   if (accessDeniedMatch) {
     return {
-      message: `OWOX can't access BigQuery project "${accessDeniedMatch[1]}" with the connected credentials. Check the storage permissions, then try again.`,
+      message: `P2PDigital can't access BigQuery project "${accessDeniedMatch[1]}" with the connected credentials. Check the storage permissions, then try again.`,
       details: raw,
     };
   }

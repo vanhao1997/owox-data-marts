@@ -293,7 +293,7 @@ export function FieldsSelectionStep({
                   <span className='text-foreground font-medium'>{selectedDataLevel}</span>.
                 </p>
                 <p>
-                  OWOX keeps{' '}
+                  P2PDigital keeps{' '}
                   <span className='text-foreground font-medium'>{uniqueKeys.join(', ')}</span>{' '}
                   selected so rows merge correctly.
                 </p>

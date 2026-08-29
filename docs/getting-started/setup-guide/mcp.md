@@ -625,13 +625,13 @@ Project selection is fixed at authorization time. See [Switch projects or discon
 
 ### A `query_data_mart` call fails
 
-A failed query costs nothing — OWOX bills a call only after it succeeds. This covers queries that time out, queries you cancel, and queries the credit limit blocks.
+A failed query costs nothing — P2PDigital bills a call only after it succeeds. This covers queries that time out, queries you cancel, and queries the credit limit blocks.
 
 If the assistant reports that the project is out of credits, `query_data_mart` has hit its credit limit — upgrade the plan to keep querying (the read-only tools keep working). If it says a field wasn't found, it likely guessed a field name; ask it to check the data mart's fields first with `get_data_mart_details_by_id`, then re-run the query.
 
 ### A Google Sheets destination created through `add_destination` is missing
 
-For Google Sheets, `add_destination` only returns a setup link; the destination appears after the user opens the link and completes Google OAuth. Make sure the user signed in to OWOX with the same account that connected MCP, completed the browser flow, and has access to the project. Then call `list_destinations` and match the destination by `connectedGoogleAccount`. Do not pick the newest destination by `createdAt`.
+For Google Sheets, `add_destination` only returns a setup link; the destination appears after the user opens the link and completes Google OAuth. Make sure the user signed in to P2PDigital with the same account that connected MCP, completed the browser flow, and has access to the project. Then call `list_destinations` and match the destination by `connectedGoogleAccount`. Do not pick the newest destination by `createdAt`.
 
 ### A `run_report` call fails
 

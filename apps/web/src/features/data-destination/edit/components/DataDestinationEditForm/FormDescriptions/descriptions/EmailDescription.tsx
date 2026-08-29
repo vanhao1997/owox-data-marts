@@ -22,7 +22,7 @@ export default function EmailDescription() {
             className='underline'
             href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/email/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-email'
           >
-            OWOX documentation
+            P2PDigital documentation
           </ExternalAnchor>
           .
         </p>

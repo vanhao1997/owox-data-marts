@@ -30,7 +30,7 @@ export default function ConnectorStateDescription() {
               className='underline'
               href='https://docs.p2pdigital.vn/?utm_source=owox_data_marts&utm_medium=manual_run_sheet&utm_campaign=tooltip_connector_state'
             >
-              OWOX documentation
+              P2PDigital documentation
             </ExternalAnchor>
             .
           </p>

@@ -140,7 +140,7 @@ export default function PluginRuntimePage() {
     return (
       <PluginRuntimeMessage
         title='This plugin could not be opened'
-        description='It did not complete the handshake with OWOX. Reload the page to try again, and tell the publisher if it keeps happening.'
+        description='It did not complete the handshake with P2PDigital. Reload the page to try again, and tell the publisher if it keeps happening.'
         backHref={scope('/plugins')}
       />
     );

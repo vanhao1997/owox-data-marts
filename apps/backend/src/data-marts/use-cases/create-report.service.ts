@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OwoxEventDispatcher } from '../../common/event-dispatcher/owox-event-dispatcher';
 import { Report } from '../entities/report.entity';
@@ -18,11 +18,11 @@ import { UserProjectionsFetcherService } from '../services/user-projections-fetc
 import { resolveOwnerUsers } from '../utils/resolve-owner-users';
 import { syncOwners } from '../utils/sync-owners';
 import { IdpProjectionsFacade } from '../../idp/facades/idp-projections.facade';
-import { ForbiddenException } from '@nestjs/common';
 import { AccessDecisionService, EntityType, Action } from '../services/access-decision';
 import { OutputControlsValidatorService } from '../services/output-controls-validator.service';
 import { ReportAccessService } from '../services/report-access.service';
 import { foldEmptyUniqueCountConfig } from '../dto/schemas/unique-count-sources';
+import { isUniqueConstraintViolation } from '../../common/typeorm/query-error.utils';
 
 @Injectable()
 export class CreateReportService {
@@ -130,7 +130,15 @@ export class CreateReportService {
       uniqueCountConfig: foldEmptyUniqueCountConfig(command.uniqueCountConfig),
     });
 
-    const newReport = await this.reportRepository.save(report);
+    let newReport: Report;
+    try {
+      newReport = await this.reportRepository.save(report);
+    } catch (error) {
+      if (isUniqueConstraintViolation(error)) {
+        throw new ConflictException('A report for this Data Mart and destination already exists');
+      }
+      throw error;
+    }
 
     const ownerIdsToSave = command.ownerIds ?? [command.userId];
     await syncOwners(

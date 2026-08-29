@@ -23,7 +23,7 @@ export default function GoogleChatDescription() {
             className='underline'
             href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-chat/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-google-chat'
           >
-            OWOX documentation
+            P2PDigital documentation
           </ExternalAnchor>
           .
         </p>

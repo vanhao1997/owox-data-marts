@@ -23,7 +23,8 @@ jest.mock('../utils/resolve-owner-users', () => ({
   resolveOwnerUsers: jest.fn().mockReturnValue([]),
 }));
 
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
+import { QueryFailedError } from 'typeorm';
 import { CreateReportService } from './create-report.service';
 import { CreateReportCommand } from '../dto/domain/create-report.command';
 import { DataMartStatus } from '../enums/data-mart-status.enum';
@@ -149,6 +150,22 @@ describe('CreateReportService', () => {
       expect.anything(),
       expect.any(Function)
     );
+  });
+
+  it('should translate a duplicate report constraint into a conflict', async () => {
+    const duplicateError = new QueryFailedError(
+      'INSERT INTO report',
+      [],
+      new Error('SQLITE_CONSTRAINT: UNIQUE constraint failed: report.id')
+    );
+    const { service, reportRepository } = createService();
+    reportRepository.save.mockRejectedValue(duplicateError);
+    const command = new CreateReportCommand('proj-1', 'user-0', 'Test', 'dm-1', 'dest-1', {
+      type: 'looker-studio-config',
+      cacheLifetime: 3600,
+    } as never);
+
+    await expect(service.run(command)).rejects.toBeInstanceOf(ConflictException);
   });
 
   it('should call syncOwners with provided ownerIds', async () => {

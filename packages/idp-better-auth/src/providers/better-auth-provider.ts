@@ -243,7 +243,7 @@ export class BetterAuthProvider
 
       if (!existingUser) {
         logger.warn(`Primary admin not found. Creating admin user with email: ${email}`);
-        const result = await this.userManagementService.addUserViaMagicLink(email);
+        await this.userManagementService.addUserViaMagicLink(email);
 
         const user = await this.store.getUserByEmail(email);
         if (user) {
@@ -265,7 +265,7 @@ export class BetterAuthProvider
         logger.warn(
           `Primary admin exists but has no password. Generating new magic link with email: ${email}`
         );
-        const result = await this.userManagementService.addUserViaMagicLink(email);
+        await this.userManagementService.addUserViaMagicLink(email);
         // The URL is a bearer credential and must not be persisted in logs.
         logger.warn('New magic link generated for primary admin', { email });
         return;

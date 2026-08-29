@@ -6,7 +6,7 @@ import vi from './locales/vi.json';
 
 const LANGUAGE_STORAGE_KEY = 'p2p_language';
 
-i18n
+void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({

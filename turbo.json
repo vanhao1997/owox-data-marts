@@ -12,7 +12,8 @@
         "package.json"
       ],
       "outputs": [
-        "dist/**"
+        "dist/**",
+        "dist-cjs/**"
       ],
       "outputLogs": "new-only"
     },

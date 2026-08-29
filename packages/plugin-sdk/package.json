@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "prebuild": "npm run build:dep",
+    "prebuild": "node ../../tools/run-workspace-build-deps.mjs",
     "build:dep": "npm run build -w @owox/api-client --prefix ../..",
     "clean": "shx rm -rf dist",
     "test": "vitest run",

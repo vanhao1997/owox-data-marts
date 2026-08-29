@@ -101,7 +101,7 @@
     "migrations:status": "node ./bin/run.js migrations status -e ../../.env",
     "format": "prettier --write \"**/*.{ts,js,json}\" --ignore-path ../../.prettierignore",
     "format:check": "prettier --check \"**/*.{ts,js,json}\" --ignore-path ../../.prettierignore",
-    "prebuild": "npm run build:clean && npm run build:dep",
+    "prebuild": "npm run build:clean && node ../../tools/run-workspace-build-deps.mjs",
     "prepack": "oclif manifest",
     "prepublishOnly": "npm run lint",
     "pretest": "oclif manifest",

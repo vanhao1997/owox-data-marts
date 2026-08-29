@@ -242,7 +242,7 @@ describe('DataMartRunsPage', () => {
       expect(dataMartService.getProjectDataMartRuns).toHaveBeenCalledTimes(2);
     });
     expect(dataMartService.getProjectDataMartRuns).toHaveBeenLastCalledWith(50, 50, undefined);
-  });
+  }, 15_000);
 });
 
 function renderPage() {

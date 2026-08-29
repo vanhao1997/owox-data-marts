@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { helpMenuItems } from './items';
 
-const mockT = ((key: string) => key) as any;
+const mockT = ((key: string) => key) as import('i18next').TFunction;
 
 describe('helpMenuItems', () => {
   it('does not offer a Slack Community link', () => {

@@ -275,12 +275,10 @@ describe('Cross-Cutting Error Handling (e2e)', () => {
       const res2 = await agent.post('/api/reports').set(AUTH_HEADER).send(payload);
 
       // LOOKER_STUDIO reports use deterministic UUID v5 from @BeforeInsert hook.
-      // Same (dataMartId + dataDestinationId) = same UUID.
-      // KNOWN BUG: Should return 409 Conflict, currently returns 500
-      // (SQLITE_CONSTRAINT_PRIMARYKEY) because no upsert logic exists for
-      // duplicate reports with deterministic IDs.
-      // TODO: Fix backend to return 409, then change this assertion.
-      expect([409, 500]).toContain(res2.status);
+      // Same (dataMartId + dataDestinationId) = same UUID, so the second create
+      // is a client-visible conflict rather than an internal server error.
+      expect(res2.status).toBe(409);
+      expect(res2.body.statusCode).toBe(409);
     });
 
     it('duplicate ScheduledTrigger creation succeeds with different IDs', async () => {

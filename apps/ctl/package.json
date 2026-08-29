@@ -68,10 +68,10 @@
     "format:check": "prettier --check \"**/*.{ts,js,json}\" --ignore-path ../../.prettierignore",
     "lint": "eslint . --config ./eslint.config.js",
     "lint:fix": "eslint . --fix --config ./eslint.config.js",
-    "prebuild": "npm run build:clean && npm run build:dep",
+    "prebuild": "npm run build:clean && node ../../tools/run-workspace-build-deps.mjs",
     "prepack": "oclif manifest",
     "prepublishOnly": "npm run lint && npm run typecheck",
-    "pretest": "npm run build:dep",
+    "pretest": "node ../../tools/run-workspace-build-deps.mjs",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },

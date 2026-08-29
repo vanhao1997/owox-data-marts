@@ -30,7 +30,7 @@ describe('CreateProjectMemberApiKeyService', () => {
     } as unknown as jest.Mocked<ProjectMemberApiKeyService>;
     const codecService = new ProjectMemberApiKeyCodecService();
     const publicOriginService = {
-      getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+      getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
     } as unknown as jest.Mocked<PublicOriginService>;
     const service = new CreateProjectMemberApiKeyService(
       apiKeyService,
@@ -62,7 +62,7 @@ describe('CreateProjectMemberApiKeyService', () => {
     expect(result).not.toHaveProperty('apiKeySecret');
 
     expect(decodeProjectMemberApiKey(result.apiKey)).toEqual({
-      apiOrigin: 'https://app.owox.com',
+      apiOrigin: 'https://app.p2pdigital.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       apiKeySecret: 'secret-value',
     });

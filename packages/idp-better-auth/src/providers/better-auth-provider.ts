@@ -787,7 +787,7 @@ export class BetterAuthProvider
   }
 
   private getProjectTitle(projectId: string): string {
-    return projectId === '0' ? 'OWOX Data Marts' : projectId;
+    return projectId === '0' ? 'P2PDigital Data Marts' : projectId;
   }
 
   private async getUserRoleForProject(userId: string, projectId: string): Promise<string | null> {

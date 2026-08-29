@@ -65,7 +65,7 @@ describe('User provisioning request access use cases', () => {
     );
   });
 
-  it('creates a separate project through OWOX Data Marts integration', async () => {
+  it('creates a separate project through P2PDigital Data Marts integration', async () => {
     const result = { projectId: 'created-project', projectTitle: 'Created Project' };
     idpProjectionsFacade.createNewProject.mockResolvedValue(result);
 

@@ -1,4 +1,4 @@
-# OWOX Data Marts
+# P2PDigital Data Marts
 
 ## Open-Source Self-Service Analytics Platform
 
@@ -6,9 +6,9 @@ Power self-service analytics from your infrastructure – with reusable Data Mar
 
 ## Learn More
 
-- [OWOX Data Marts Documentation](https://docs.owox.com/)
-- [Community Discussions](https://github.com/OWOX/owox-data-marts/discussions)
-- [Project Repository](https://github.com/OWOX/owox-data-marts)
+- [P2PDigital Data Marts Documentation](https://docs.p2pdigital.vn/)
+- [Community Discussions](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)
+- [Project Repository](https://github.com/vanhao1997/p2pdigital-data-marts)
 
 ---
 

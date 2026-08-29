@@ -33,9 +33,9 @@ interface ServeFlags {
 }
 
 /**
- * Command class for starting the OWOX Data Marts application server.
+ * Command class for starting the P2PDigital Data Marts application server.
  *
- * This command bootstraps and runs the main OWOX Data Marts application with support for:
+ * This command bootstraps and runs the main P2PDigital Data Marts application with support for:
  * - Configurable port and logging format
  * - Optional web interface
  * - Identity provider (IDP) integration
@@ -56,7 +56,7 @@ interface ServeFlags {
  * ```
  */
 export default class Serve extends BaseCommand {
-  static override description = 'Start the OWOX Data Marts application';
+  static override description = 'Start the P2PDigital Data Marts application';
   static override examples = [
     '<%= config.bin %> serve',
     '<%= config.bin %> serve --port 8080',
@@ -96,7 +96,7 @@ export default class Serve extends BaseCommand {
     this.loadEnvironment(flags);
 
     const packageInfo = getPackageInfo();
-    this.log(`Starting OWOX Data Marts (v${packageInfo.version})...`);
+    this.log(`Starting P2PDigital Data Marts (v${packageInfo.version})...`);
 
     this.setupGracefulShutdown();
 
@@ -175,7 +175,7 @@ export default class Serve extends BaseCommand {
   }
 
   /**
-   * Starts the OWOX Data Marts application server.
+   * Starts the P2PDigital Data Marts application server.
    *
    * This method:
    * 1. Configures Express server with trust proxy

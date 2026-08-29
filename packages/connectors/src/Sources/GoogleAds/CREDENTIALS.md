@@ -1,6 +1,6 @@
 # How to Obtain the Access Token for the Google Ads Source
 
-To connect to the **Google Ads API** and start importing data with OWOX Data Marts, follow the steps below.
+To connect to the **Google Ads API** and start importing data with P2PDigital Data Marts, follow the steps below.
 
 **Prerequisites**:
 
@@ -41,8 +41,8 @@ In the Basic Access application form:
    Example:  
    _“We leverage Google Ads to execute targeted campaigns that increase customer acquisition and brand awareness.”_  
 3. Attach a document or PDF with a sample of your planned report design.  
-4. For the question _“Do you plan to use your Google Ads API token with a tool developed by someone else?”_, select **Yes** and include the OWOX Data Marts URL:  
-   [https://github.com/OWOX/owox-data-marts](https://github.com/OWOX/owox-data-marts)  
+4. For the question _“Do you plan to use your Google Ads API token with a tool developed by someone else?”_, select **Yes** and include the P2PDigital Data Marts URL:  
+   [https://github.com/vanhao1997/p2pdigital-data-marts](https://github.com/vanhao1997/p2pdigital-data-marts)  
 5. For the question _“Do you plan to use your token for App Conversion Tracking and Remarketing API?”_, select **No**.  
 6. Under _“Which of the following Google Ads capabilities does your tool provide?”_, check at least **Campaign Management** and **Reporting**.  
 7. Submit the application.
@@ -57,7 +57,7 @@ If approved, you’ll see your access level updated in the API Center:
 ## Next Step: Choose Your Authentication Method
 
 Now that your Developer Token is approved (or if you already have one), you can proceed with authentication.  
-OWOX Data Marts supports two ways to connect to the Google Ads API:
+P2PDigital Data Marts supports two ways to connect to the Google Ads API:
 
 - **[OAuth2 Authentication](#option-1-oauth2-authentication)**  
 - **[Service Account Authentication](#option-2-service-account-authentication)**
@@ -195,4 +195,4 @@ At this point, you should have the following credentials:
 | **Login Customer ID** | At the top-right corner of your **Manager (MCC)** account |
 
 ✅ **You’re all set!**  
-You can now use your credentials to access and import data from Google Ads via OWOX Data Marts.
+You can now use your credentials to access and import data from Google Ads via P2PDigital Data Marts.

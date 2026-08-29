@@ -163,7 +163,7 @@ export class NullIdpProvider implements IdpProvider {
     return [
       {
         id: '0',
-        title: 'OWOX Data Marts',
+        title: 'P2PDigital Data Marts',
         status: 'active',
         roles: ['admin'],
       },

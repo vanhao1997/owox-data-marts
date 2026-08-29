@@ -1,10 +1,10 @@
 # Contributing & Advanced Usage
 
-> This document is intended for contributors and advanced users who want to work on the OWOX Data Marts CLI locally, customize its behavior, or understand its internal structure.
+> This document is intended for contributors and advanced users who want to work on the P2PDigital Data Marts CLI locally, customize its behavior, or understand its internal structure.
 >
 > If you're just looking to **get started quickly**, please refer to the [Quick Start guide](../../docs/getting-started/quick-start.md).
 
-A command-line interface for running OWOX Data Marts application. This CLI provides a simple way to start the pre-built OWOX Data Marts server with frontend and backend components.
+A command-line interface for running P2PDigital Data Marts application. This CLI provides a simple way to start the pre-built P2PDigital Data Marts server with frontend and backend components.
 
 <!-- toc -->
 
@@ -21,7 +21,7 @@ A command-line interface for running OWOX Data Marts application. This CLI provi
 ```bash
 $ npm install -g owox
 $ owox serve
-Starting OWOX Data Marts...
+Starting P2PDigital Data Marts...
 Starting in production mode...
 Starting server on port 3000...
 $ owox --help
@@ -72,7 +72,7 @@ This will remove the global link, and `owox` will no longer be accessible global
 
 ### `owox serve`
 
-Start the OWOX Data Marts application in production mode
+Start the P2PDigital Data Marts application in production mode
 
 ```bash
 USAGE
@@ -86,7 +86,7 @@ FLAGS
       --[no-]web-enabled        Enable web interface
 
 DESCRIPTION
-  Start the OWOX Data Marts application
+  Start the P2PDigital Data Marts application
 
 EXAMPLES
   $ owox serve
@@ -97,7 +97,7 @@ EXAMPLES
 
 ### `owox migrations`
 
-Manage database migrations for OWOX Data Marts
+Manage database migrations for P2PDigital Data Marts
 
 ```bash
 USAGE
@@ -109,7 +109,7 @@ FLAGS
                                 <options: pretty|json>
 
 DESCRIPTION
-  Manage database migrations for OWOX Data Marts
+  Manage database migrations for P2PDigital Data Marts
 
 EXAMPLES
   $ owox migrations up

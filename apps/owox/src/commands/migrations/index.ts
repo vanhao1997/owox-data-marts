@@ -1,14 +1,14 @@
 import { BaseCommand } from '../base.js';
 
 /**
- * Migration management commands for OWOX Data Marts.
+ * Migration management commands for P2PDigital Data Marts.
  *
  * This is the main entry point for all migration-related operations.
  * Use specific subcommands (up, down, status) to perform migration tasks.
  * When called without subcommands, displays usage information.
  */
 export default class Migrations extends BaseCommand {
-  static override description = 'Manage database migrations for OWOX Data Marts';
+  static override description = 'Manage database migrations for P2PDigital Data Marts';
   static override examples = [
     '<%= config.bin %> migrations up',
     '<%= config.bin %> migrations down',

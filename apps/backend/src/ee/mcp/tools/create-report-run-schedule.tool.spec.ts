@@ -14,7 +14,7 @@ describe('CreateReportRunScheduleTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   const facadeResult = {
@@ -35,7 +35,7 @@ describe('CreateReportRunScheduleTool', () => {
     const expected = {
       trigger_id: 'trigger-1',
       report_id: 'report-1',
-      schedules_url: 'https://app.owox.com/ui/project-1/data-marts/schedules',
+      schedules_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/schedules',
       cron_expression: '0 9 * * 1',
       time_zone: 'UTC',
       is_active: true,

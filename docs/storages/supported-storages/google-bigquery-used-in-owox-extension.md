@@ -1,8 +1,8 @@
 # Google BigQuery (used in OWOX extension)
 
-**Google BigQuery (used in OWOX extension)** is a system storage that appears automatically in OWOX Data Marts if you have created Data Marts using **[OWOX Reports (Google Sheets extension)](https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832)**.
+**Google BigQuery (used in OWOX extension)** is a system storage that appears automatically in P2PDigital Data Marts if you have created Data Marts using **[OWOX Reports (Google Sheets extension)](https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832)**.
 
-This storage connects your existing Data Marts from the extension to the OWOX Data Marts web interface. It allows you to complete a one-time setup, publish your Data Marts, and manage them using additional capabilities available in OWOX Data Marts.
+This storage connects your existing Data Marts from the extension to the P2PDigital Data Marts web interface. It allows you to complete a one-time setup, publish your Data Marts, and manage them using additional capabilities available in P2PDigital Data Marts.
 
 > ☝️ You cannot manually add or delete this storage.
 
@@ -10,7 +10,7 @@ This storage connects your existing Data Marts from the extension to the OWOX Da
 
 If you see your extension Data Marts listed with the **Draft** status, this is expected.
 
-They remain in Draft because OWOX Data Marts requires a one-time BigQuery access configuration. After you complete the storage setup, you can publish your Data Marts and start using them in the web interface.
+They remain in Draft because P2PDigital Data Marts requires a one-time BigQuery access configuration. After you complete the storage setup, you can publish your Data Marts and start using them in the web interface.
 
 Follow the steps below to finish the setup.
 
@@ -18,7 +18,7 @@ Follow the steps below to finish the setup.
 
 ### Step 1. Review the Storage Settings
 
-In the OWOX Data Marts web application, navigate to **Storages**.  
+In the P2PDigital Data Marts web application, navigate to **Storages**.  
 In the list, find all storages with the type **Google BigQuery (used in OWOX extension)** and open each one to review and complete its settings.
 
 You will see the following fields:
@@ -27,7 +27,7 @@ You will see the following fields:
 - **Storage Type** – Google BigQuery (used in OWOX extension).  
 - **Project ID** – The project ID is fixed and cannot be changed.
 
-A separate system storage is created for each GCP project used with the OWOX extension. These fields are locked to ensure stable integration between the extension and OWOX Data Marts.
+A separate system storage is created for each GCP project used with the OWOX extension. These fields are locked to ensure stable integration between the extension and P2PDigital Data Marts.
 
 If you need to work with a different GCP project, create a new storage.
 
@@ -52,7 +52,7 @@ To enable access to your BigQuery project, you must provide a Service Account JS
 5. Open the **Keys** tab.
 6. Click **Add key → Create new key**.
 7. Choose **JSON** format and click **Create**.
-8. Open the downloaded file, copy its entire content, and paste it into the Service Account field in OWOX Data Marts.
+8. Open the downloaded file, copy its entire content, and paste it into the Service Account field in P2PDigital Data Marts.
 
 Save the storage settings.
 
@@ -60,11 +60,11 @@ Save the storage settings.
 
 After completing the storage setup, your extension Data Marts connected to this storage can be published. You can publish them individually or manage multiple Data Marts using batch actions.
 
-Once published, your Data Marts become fully operational in OWOX Data Marts.
+Once published, your Data Marts become fully operational in P2PDigital Data Marts.
 
 ## What You Can Do with Extension Data Marts
 
-After connecting your storage, you can manage your extension Data Marts using additional features available in OWOX Data Marts:
+After connecting your storage, you can manage your extension Data Marts using additional features available in P2PDigital Data Marts:
 
 - Export Data Mart results not only to Google Sheets, but also to Data Studio, Slack, Email, and other supported destinations.
 - Run Data Marts on a schedule.
@@ -79,7 +79,7 @@ After connecting your storage, you can manage your extension Data Marts using ad
 
 This system storage appears automatically if you use OWOX Reports (Google Sheets extension) and have created Data Marts there.
 
-It connects your existing extension Data Marts to OWOX Data Marts.
+It connects your existing extension Data Marts to P2PDigital Data Marts.
 
 ### Can I create new Data Marts using this storage?
 
@@ -87,21 +87,21 @@ No.
 
 The **Google BigQuery (used in OWOX extension)** storage is available only for Data Marts created in the extension.
 
-When creating new Data Marts in OWOX Data Marts, this storage cannot be selected.
+When creating new Data Marts in P2PDigital Data Marts, this storage cannot be selected.
 
-### If I delete a Data Mart in OWOX Data Marts, will it also be deleted in the extension?
+### If I delete a Data Mart in P2PDigital Data Marts, will it also be deleted in the extension?
 
 Yes.
 
-Data Marts created in the extension and managed in OWOX Data Marts are synchronized. If you delete such a Data Mart in the web interface, it will also be removed from the extension.
+Data Marts created in the extension and managed in P2PDigital Data Marts are synchronized. If you delete such a Data Mart in the web interface, it will also be removed from the extension.
 
 You can use batch actions to manage and delete multiple extension Data Marts at once.
 
-### If I create a new Data Mart in OWOX Data Marts, will it appear in the extension?
+### If I create a new Data Mart in P2PDigital Data Marts, will it appear in the extension?
 
 No.
 
-New Data Marts created in OWOX Data Marts are not synced back to the extension.
+New Data Marts created in P2PDigital Data Marts are not synced back to the extension.
 
 ### Can I edit or delete this storage?
 
@@ -116,7 +116,7 @@ A separate system storage is created for each GCP project used with the extensio
 - The title automatically matches the project ID.
 - The project ID cannot be changed.
 
-This ensures stable integration between the extension and OWOX Data Marts.
+This ensures stable integration between the extension and P2PDigital Data Marts.
 
 If you need storage for another GCP project, contact support.
 

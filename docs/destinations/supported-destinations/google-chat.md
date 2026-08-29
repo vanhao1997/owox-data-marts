@@ -1,6 +1,6 @@
 # Google Chat
 
-Configure **Google Chat** as a Destination in OWOX Data Marts to deliver Insights to a Chat space after each Data Mart run. New destinations default to direct, formatted delivery through an incoming webhook, while channel-email delivery remains available for backward compatibility.
+Configure **Google Chat** as a Destination in P2PDigital Data Marts to deliver Insights to a Chat space after each Data Mart run. New destinations default to direct, formatted delivery through an incoming webhook, while channel-email delivery remains available for backward compatibility.
 
 For example, you may want to notify a stakeholder in a Google Chat room every time a scheduled run produces updated data (such as new results from the Facebook Ads connector). You can also choose to receive a message only when the run result is empty.
 
@@ -14,7 +14,7 @@ Follow the steps below to configure your **Google Chat** destination.
 
 #### 1.1. Open the Destinations page
 
-In the OWOX Data Marts web application, open **Destinations** in the main menu and click **+ New Destination**.
+In the P2PDigital Data Marts web application, open **Destinations** in the main menu and click **+ New Destination**.
 
 #### 1.2. Select the Destination type
 
@@ -98,4 +98,4 @@ Select this report and specify the schedule for automatic execution.
 
 ---
 
-Have questions? Join the [OWOX Community](https://github.com/OWOX/owox-data-marts/discussions).
+Have questions? Join the [OWOX Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

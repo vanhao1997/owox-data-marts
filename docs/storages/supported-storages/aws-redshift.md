@@ -1,15 +1,15 @@
 # AWS Redshift
 
-Use this guide to configure **AWS Redshift as a storage** in **OWOX Data Marts**. The steps below walk you through creating a storage record, completing authentication, and finishing validation.
+Use this guide to configure **AWS Redshift as a storage** in **P2PDigital Data Marts**. The steps below walk you through creating a storage record, completing authentication, and finishing validation.
 
 ## 1. Go to the Storages Page and choose Storage Type
 
-In the OWOX Data Marts web application, navigate to **Storages** from the main navigation pane and click **+ New Storage**. Click **AWS Redshift** to create a new **Storage** configuration.
+In the P2PDigital Data Marts web application, navigate to **Storages** from the main navigation pane and click **+ New Storage**. Click **AWS Redshift** to create a new **Storage** configuration.
 > Upon selecting the **+ New Storage** button and specifying the desired storage type, a Storage entry is created.
 > You can create **Data Mart** entities and model a data structure for your project prior to configuring the **Storage**.
 > Note that **Data Mart** cannot be validated or published until the associated **Storage** is fully configured.
 
-![OWOX Data Marts interface showing the Storages menu option highlighted with a red arrow in the left sidebar, and the New Storage dialog displaying available storage types including Google BigQuery, AWS Athena, Snowflake, AWS Redshift, and Databricks, with AWS Redshift circled in red and a New Storage button indicated by a red arrow in the top right](../../res/screens/redshift_storage.png)
+![P2PDigital Data Marts interface showing the Storages menu option highlighted with a red arrow in the left sidebar, and the New Storage dialog displaying available storage types including Google BigQuery, AWS Athena, Snowflake, AWS Redshift, and Databricks, with AWS Redshift circled in red and a New Storage button indicated by a red arrow in the top right](../../res/screens/redshift_storage.png)
 
 ## 2. Add title and AWS region
 
@@ -22,7 +22,7 @@ Choose the AWS region where your Redshift cluster or workgroup is located:
 
 ![AWS Redshift Serverless dashboard showing the region selector dropdown menu open in the top right corner. The dropdown displays available regions organized by geographic location including Europe (Stockholm, Frankfurt, Ireland, London, Paris), Asia Pacific (Sydney, Tokyo, ap-southeast-2, ap-northeast-1), Canada (Central, ca-central-1), and South America (São Paulo, sa-east-1) with Europe (Stockholm) currently selected and highlighted with a red circle and arrow indicating the region selection location.](../../res/screens/redshift_region.png)
 
-![OWOX Data Marts Configure Storage Provider dialog showing General and Connection Settings sections. The General section contains fields for Title (AWS Redshift Dev Database) and Storage Type (AWS Redshift). The Connection Settings section displays a Region field with eu-north-1 entered. Red arrows point to the Title field and Region field. The dialog includes an info link asking What is AWS Redshift and What is the AWS region. A blue Save button and Cancel button are visible at the bottom of the dialog against a dark background.](../../res/screens/redshift_configure.png)
+![P2PDigital Data Marts Configure Storage Provider dialog showing General and Connection Settings sections. The General section contains fields for Title (AWS Redshift Dev Database) and Storage Type (AWS Redshift). The Connection Settings section displays a Region field with eu-north-1 entered. Red arrows point to the Title field and Region field. The dialog includes an info link asking What is AWS Redshift and What is the AWS region. A blue Save button and Cancel button are visible at the bottom of the dialog against a dark background.](../../res/screens/redshift_configure.png)
 
 ### Choose Connection Type
 
@@ -58,7 +58,7 @@ AWS Redshift supports two deployment types (one is required). It's based on your
 
 ### Authentication
 
-OWOX Data Marts uses AWS IAM credentials to authenticate with Redshift Data API.
+P2PDigital Data Marts uses AWS IAM credentials to authenticate with Redshift Data API.
 
 #### Access Key ID and Secret Access Key
 
@@ -146,9 +146,9 @@ GRANT CREATE ON DATABASE dev TO "IAM:<USERNAME_IN_IAM>";
 
 Review your entries and click **Save** to add the **Storage configuration**, or **Cancel** to exit without saving.
 
-Once saved, OWOX Data Marts will validate the connection to ensure all credentials are correct.
+Once saved, P2PDigital Data Marts will validate the connection to ensure all credentials are correct.
 
-![OWOX Data Marts Configure Storage Provider dialog displaying the final configuration form. The form shows the region field set to eu-north-1, Workgroup Name field containing owox with Serverless and Provisioned tabs, Database field showing dev, and Authentication section with Access Key ID and Secret Access Key fields. A prominent blue Save button with a red arrow pointing to it is centered at the bottom of the dialog, alongside a Cancel button. The dialog has a dark background with professional layout and informational help icons throughout.](../../res/screens/redshift_saveconfig.png)
+![P2PDigital Data Marts Configure Storage Provider dialog displaying the final configuration form. The form shows the region field set to eu-north-1, Workgroup Name field containing owox with Serverless and Provisioned tabs, Database field showing dev, and Authentication section with Access Key ID and Secret Access Key fields. A prominent blue Save button with a red arrow pointing to it is centered at the bottom of the dialog, alongside a Cancel button. The dialog has a dark background with professional layout and informational help icons throughout.](../../res/screens/redshift_saveconfig.png)
 
 ## Next Steps
 
@@ -210,7 +210,7 @@ GRANT ALL ON DATABASE dev TO "IAM:<USERNAME_IN_IAM>";
 
 ### Filter values and `standard_conforming_strings`
 
-OWOX Data Marts safely escapes report filter values for Redshift by relying on the
+P2PDigital Data Marts safely escapes report filter values for Redshift by relying on the
 default `standard_conforming_strings = on` setting (a backslash is treated as an
 ordinary character). This is the default for both Redshift Serverless and provisioned
 clusters. Do not set `standard_conforming_strings = off` for the database OWOX connects to.

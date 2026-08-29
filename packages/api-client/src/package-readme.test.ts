@@ -12,15 +12,15 @@ describe('package README', () => {
 
     expect(readme).toContain('# @owox/api-client');
     expect(readme).toContain('npm install @owox/api-client');
-    expect(readme).toContain('https://docs.owox.com/docs/api/api-client/');
-    expect(readme).toContain('https://docs.owox.com/docs/api/api-keys/');
-    expect(readme).toContain('https://docs.owox.com/docs/api/openapi/');
+    expect(readme).toContain('https://docs.p2pdigital.vn/docs/api/api-client/');
+    expect(readme).toContain('https://docs.p2pdigital.vn/docs/api/api-keys/');
+    expect(readme).toContain('https://docs.p2pdigital.vn/docs/api/openapi/');
     expect(readme).toContain('patchJson');
     expect(readme).toContain('deleteJson');
     expect(readme).toContain('does not validate the response at runtime');
     expect(readme).toContain('new OWOXApiClient');
     expect(readme).toContain('apiKey: process.env.OWOX_API_KEY!');
-    expect(readme).not.toContain('github.com/OWOX/owox-data-marts/blob/main/docs');
+    expect(readme).not.toContain('github.com/vanhao1997/p2pdigital-data-marts/blob/main/docs');
     expect(readme).not.toContain('apiOrigin:');
     expect(readme).not.toContain('apiKeyId:');
     expect(readme).not.toContain('apiKeySecret:');

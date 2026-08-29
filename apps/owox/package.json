@@ -1,6 +1,6 @@
 {
   "name": "owox",
-  "description": "OWOX Data Marts CLI: Simple command-line interface to start the OWOX Data Marts application with backend and frontend components.",
+  "description": "P2PDigital Data Marts CLI: Simple command-line interface to start the P2PDigital Data Marts application with backend and frontend components.",
   "version": "0.32.0",
   "publishConfig": {
     "access": "public"
@@ -8,7 +8,7 @@
   "bin": {
     "owox": "./bin/run.js"
   },
-  "bugs": "https://github.com/OWOX/owox-data-marts/issues",
+  "bugs": "https://github.com/vanhao1997/p2pdigital-data-marts/issues",
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
@@ -52,7 +52,7 @@
     "./oclif.manifest.json",
     "./npm-shrinkwrap.json"
   ],
-  "homepage": "https://github.com/OWOX/owox-data-marts",
+  "homepage": "https://github.com/vanhao1997/p2pdigital-data-marts",
   "keywords": [
     "data-marts",
     "cli",
@@ -79,7 +79,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git"
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git"
   },
   "scripts": {
     "build": "tsc",

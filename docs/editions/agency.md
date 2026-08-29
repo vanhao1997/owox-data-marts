@@ -13,7 +13,7 @@ Self-managed open source analytics solution designed for agencies managing multi
 - Customizable extraction and reporting logic by client / role / report
 
 📘 [Quick Start Guide](../getting-started/quick-start.md) |
- 🌐 [Website](https://www.owox.com/?utm_source=github&utm_medium=referral&utm_campaign=readme&utm_content=agency) | 💬 [Join Community](https://github.com/OWOX/owox-data-marts/discussions) | 🆘 [Create an Issue](https://github.com/OWOX/owox-data-marts/issues)
+ 🌐 [Website](https://www.p2pdigital.vn/?utm_source=github&utm_medium=referral&utm_campaign=readme&utm_content=agency) | 💬 [Join Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions) | 🆘 [Create an Issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
 
 ## Why We Built This
 
@@ -28,7 +28,7 @@ In addition, agencies often face the following challenges:
 - Data blending challenges – one extra column needed means three more tasks to handle.
 - Analytics bandwidth is a bottleneck – reporting slows down when key people are out.
 
-OWOX Data Marts Community Edition already gets you mostly covered. But the **Agency Edition** is designed specifically for reporting to multiple clients with:
+P2PDigital Data Marts Community Edition already gets you mostly covered. But the **Agency Edition** is designed specifically for reporting to multiple clients with:
 
 - multiple projects
 - advanced access control
@@ -37,9 +37,9 @@ OWOX Data Marts Community Edition already gets you mostly covered. But the **Age
 
 It empowers agencies to automate all client analytics & reports delivery without reinventing the wheel.
 
-⭐ **Like this project?** [Star the repo to support future development!](https://github.com/OWOX/owox-data-marts)
+⭐ **Like this project?** [Star the repo to support future development!](https://github.com/vanhao1997/p2pdigital-data-marts)
 
-## What You Can Do with OWOX Data Marts – Agency Edition
+## What You Can Do with P2PDigital Data Marts – Agency Edition
 
 ### Power Your Clients' Data Marts
 
@@ -87,14 +87,14 @@ Here’s how to get started locally on your machine:
    npm install -g owox
    ```
 
-3. **Start OWOX Data Marts** locally
+3. **Start P2PDigital Data Marts** locally
 
    ```bash
    owox serve
    ```
 
    (You should see something like:
-   🚀 Starting OWOX Data Marts...
+   🚀 Starting P2PDigital Data Marts...
    📦 Starting server on port 3000...)
 
 4. Go to **<http://localhost:3000>** and enjoy! 🎉
@@ -103,13 +103,13 @@ Note: Check out [this guide](../../apps/owox/CONTRIBUTING.md) for advanced setup
 
 ## Build New Connectors
 
-Agencies often need **niche connectors** not available in off-the-shelf tools. With OWOX Data Marts, you can:
+Agencies often need **niche connectors** not available in off-the-shelf tools. With P2PDigital Data Marts, you can:
 
 - Build new connectors to your unique APIs using our framework;
 - Maintain **full transparency** of data extraction;
 - Share contributions with the community (optional) to grow the ecosystem.
 
-📌 [Check Open Requests](https://github.com/OWOX/owox-data-marts/issues)
-📘 [Read the Contributor Guide](https://github.com/OWOX/owox-data-marts/CONTRIBUTING.md)  
+📌 [Check Open Requests](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+📘 [Read the Contributor Guide](https://github.com/vanhao1997/p2pdigital-data-marts/CONTRIBUTING.md)  
 
-⭐ **Liked this project?** [Star the repo to support future development!](https://github.com/OWOX/owox-data-marts)
+⭐ **Liked this project?** [Star the repo to support future development!](https://github.com/vanhao1997/p2pdigital-data-marts)

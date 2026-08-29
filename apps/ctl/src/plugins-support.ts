@@ -68,7 +68,7 @@ export function unpublishPlugin(
 }
 
 /**
- * A repository OWOX Data Marts cannot read is the one failure a publisher can actually
+ * A repository P2PDigital Data Marts cannot read is the one failure a publisher can actually
  * fix, and the fix is a URL the server hands back. Everything else stays machine-readable JSON
  * on stdout, so this hint goes to stderr.
  */
@@ -82,5 +82,5 @@ export function installationHint(error: unknown): string | null {
     return null;
   }
 
-  return `OWOX Data Marts cannot read that repository. Install the OWOX Data Marts GitHub App at ${details.installationUrl} and run the same command again.`;
+  return `P2PDigital Data Marts cannot read that repository. Install the P2PDigital Data Marts GitHub App at ${details.installationUrl} and run the same command again.`;
 }

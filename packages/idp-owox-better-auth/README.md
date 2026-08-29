@@ -1,6 +1,6 @@
 # @owox/idp-owox-better-auth
 
-Better Auth IDP provider for OWOX Data Marts authentication.
+Better Auth IDP provider for P2PDigital Data Marts authentication.
 
 ## Setup
 
@@ -45,7 +45,7 @@ IDP_BETTER_AUTH_PROVIDERS=google,email,microsoft
 # Email delivery (SendGrid)
 SENDGRID_API_KEY=your-sendgrid-api-key
 IDP_OWOX_SENDGRID_VERIFIED_SENDER_EMAIL=verified-sender@example.com
-IDP_OWOX_SENDGRID_VERIFIED_SENDER_NAME=OWOX Data Marts
+IDP_OWOX_SENDGRID_VERIFIED_SENDER_NAME=P2PDigital Data Marts
 
 # Social login (Google)
 # IDP_BETTER_AUTH_GOOGLE_CLIENT_ID=xx

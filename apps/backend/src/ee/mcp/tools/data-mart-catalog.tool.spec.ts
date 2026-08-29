@@ -17,7 +17,7 @@ describe('ListDataMartsTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
   const projectContext = {
     getProjectContext: jest.fn().mockResolvedValue({
@@ -49,7 +49,7 @@ describe('ListDataMartsTool', () => {
             id: 'dm_1',
             title: 'Orders',
             description: '',
-            url: 'https://app.owox.com/ui/project-1/data-marts/dm_1/data-setup',
+            url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup',
             status: DataMartStatus.PUBLISHED,
             updated_at: '2026-06-10T10:00:00.000Z',
           },
@@ -66,7 +66,7 @@ describe('ListDataMartsTool', () => {
                   id: 'dm_1',
                   title: 'Orders',
                   description: '',
-                  url: 'https://app.owox.com/ui/project-1/data-marts/dm_1/data-setup',
+                  url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup',
                   status: DataMartStatus.PUBLISHED,
                   updated_at: '2026-06-10T10:00:00.000Z',
                 },
@@ -117,7 +117,7 @@ describe('ListDataMartsTool', () => {
           id: 'dm_draft',
           title: 'Draft Orders',
           description: 'Unpublished changes',
-          url: 'https://app.owox.com/ui/project-1/data-marts/dm_draft/data-setup',
+          url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_draft/data-setup',
           status: 'DRAFT',
           updated_at: '2026-06-11T10:00:00.000Z',
         },

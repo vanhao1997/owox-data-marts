@@ -562,7 +562,7 @@ var TikTokAdsSource = class TikTokAdsSource extends AbstractSource {
           break;
 
         default:
-          throw new Error(`Endpoint for ${nodeName} is not implemented yet. Feel free to add idea here: https://github.com/OWOX/owox-data-marts/discussions/categories/ideas`);
+          throw new Error(`Endpoint for ${nodeName} is not implemented yet. Feel free to add idea here: https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/ideas`);
       }
 
       // Cast fields to the correct data types using the provider's castFields method

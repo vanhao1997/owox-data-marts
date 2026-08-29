@@ -21,7 +21,7 @@ Joinable Data Marts work on three levels:
 2. **Data Mart level.** All target fields are exposed by default. For each relationship, you can override their **output alias**, **visibility**, and **aggregate function** — or hide the ones you don't need.
 3. **Report level.** The Report Columns picker lists native fields plus all joined fields as available options. Existing reports do not change until you actively pick a joined field. As soon as you pick at least one, the report runs on a generated `JOIN` query; otherwise the native fast path runs unchanged.
 
-> 💡 Internally, OWOX Data Marts builds the SQL bottom-up: the deepest joined Data Marts are pre-aggregated by their join key first, then merged into their parent, and finally `LEFT JOIN`-ed into the source Data Mart. This guarantees the result row count never exceeds the source Data Mart's row count.
+> 💡 Internally, P2PDigital Data Marts builds the SQL bottom-up: the deepest joined Data Marts are pre-aggregated by their join key first, then merged into their parent, and finally `LEFT JOIN`-ed into the source Data Mart. This guarantees the result row count never exceeds the source Data Mart's row count.
 
 ## Prerequisites
 
@@ -126,11 +126,11 @@ The badge in the section header (e.g., `9/29`) shows how many of the available f
 
 Pick any combination of native and joined fields.
 
-As soon as the report includes at least one joined field, OWOX Data Marts runs it through the joined SQL pipeline; otherwise the native fast path runs unchanged.
+As soon as the report includes at least one joined field, P2PDigital Data Marts runs it through the joined SQL pipeline; otherwise the native fast path runs unchanged.
 
 ## View Generated SQL
 
-There are two ways to inspect the SQL OWOX Data Marts builds for a joined report:
+There are two ways to inspect the SQL P2PDigital Data Marts builds for a joined report:
 
 - **From the reports list.** Hover over a report row in the source Data Mart's reports table and click the SQL icon — a read-only modal opens with the exact query that will run on the next execution.
 - **From Run History.** Open the Data Mart's **Run History** tab and click any report run to see the SQL that was sent to your storage for that run.
@@ -145,7 +145,7 @@ The SQL contains the pre-aggregation CTEs, `LEFT JOIN`s, and output column alias
 
 If a joined report becomes a recurring asset, promote it to its own Data Mart in one click.
 
-Click **Copy as Data Mart**. OWOX Data Marts creates a new SQL-based Data Mart on the same storage, using the generated joined SQL as its definition. The new Data Mart:
+Click **Copy as Data Mart**. P2PDigital Data Marts creates a new SQL-based Data Mart on the same storage, using the generated joined SQL as its definition. The new Data Mart:
 
 - Has its own Output Schema, triggers, destinations, and Insights.
 - Can be joined to other Data Marts itself.
@@ -171,7 +171,7 @@ Two paths to the same target Data Mart are also supported. If both **Campaigns �
 
 ### Loops
 
-If a chain folds back on a Data Mart that already appears earlier in the same branch (e.g., `A → B → A`), OWOX Data Marts stops descending at that point and renders a collapsed **Loop** badge in the relationship list and the canvas. The loop branch contributes no fields to the column picker — this is expected behavior, not an error.
+If a chain folds back on a Data Mart that already appears earlier in the same branch (e.g., `A → B → A`), P2PDigital Data Marts stops descending at that point and renders a collapsed **Loop** badge in the relationship list and the canvas. The loop branch contributes no fields to the column picker — this is expected behavior, not an error.
 
 ## Limitations and Considerations
 

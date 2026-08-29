@@ -1,6 +1,6 @@
 # Publishing
 
-This guide explains the automated publishing process for the OWOX Data Marts CLI package to npm.
+This guide explains the automated publishing process for the P2PDigital Data Marts CLI package to npm.
 
 The `owox` CLI package is published automatically through GitHub Actions. For detailed information about the release strategy, versioning, installation commands, security guidelines, and troubleshooting, see the [Release & Versioning Strategy](../../docs/contributing/repository/release-strategy.md).
 

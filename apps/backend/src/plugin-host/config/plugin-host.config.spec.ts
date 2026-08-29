@@ -153,14 +153,14 @@ describe('PluginHostConfigService', () => {
    */
   describe('publicOrigin', () => {
     it('is the deployment public origin', () => {
-      expect(config({ PUBLIC_ORIGIN: 'https://app.owox.com' }).publicOrigin).toBe(
-        'https://app.owox.com'
+      expect(config({ PUBLIC_ORIGIN: 'https://app.p2pdigital.vn' }).publicOrigin).toBe(
+        'https://app.p2pdigital.vn'
       );
     });
 
     it('normalizes to a bare origin', () => {
-      expect(config({ PUBLIC_ORIGIN: 'https://app.owox.com/some/path' }).publicOrigin).toBe(
-        'https://app.owox.com'
+      expect(config({ PUBLIC_ORIGIN: 'https://app.p2pdigital.vn/some/path' }).publicOrigin).toBe(
+        'https://app.p2pdigital.vn'
       );
     });
 

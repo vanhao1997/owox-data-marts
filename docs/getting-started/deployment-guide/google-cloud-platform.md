@@ -1,6 +1,6 @@
 # Google Cloud Platform
 
-Deploying OWOX Data Marts on Google Cloud Platform (GCP) relies on two managed services:
+Deploying P2PDigital Data Marts on Google Cloud Platform (GCP) relies on two managed services:
 
 - **Cloud SQL for MySQL** – hosts the application database with minimal operational overhead.
 - **Cloud Run** – provides a serverless runtime for the application container.
@@ -48,9 +48,9 @@ The sections below walk through provisioning these services, configuring applica
 3. **Service name**: choose a descriptive name, e.g. `owox-data-marts`
 4. **Region**: select the same region as the Cloud SQL instance.
 5. Copy the generated **Endpoint URL** and store it; it becomes your `PUBLIC_ORIGIN`.
-6. **Authentication**: select `Allow public access`. OWOX Data Marts provides built-in authentication.
+6. **Authentication**: select `Allow public access`. P2PDigital Data Marts provides built-in authentication.
 7. **Billing**: choose `Instance-based`.
-8. **Service scaling**: set to `Manual scaling` and keep **Number of instances** at `1`. OWOX Data Marts requires at least one instance running continuously to enable scheduled scenarios.
+8. **Service scaling**: set to `Manual scaling` and keep **Number of instances** at `1`. P2PDigital Data Marts requires at least one instance running continuously to enable scheduled scenarios.
 9. **Ingress**: set to `All`.
 
 ### Configure Container Settings
@@ -112,15 +112,15 @@ LOG_FORMAT=gcp-cloud-logging
 3. Search for log entries containing `Primary admin created`
 4. Open the matching log line and copy the magic link from `jsonPayload.message`.
 5. Follow the link to set a password for the email specified in `IDP_BETTER_AUTH_PRIMARY_ADMIN_EMAIL`.
-6. Sign in to OWOX Data Marts with that email and password.
+6. Sign in to P2PDigital Data Marts with that email and password.
 
 <https://github.com/user-attachments/assets/0c2538d2-930b-48d9-8c99-482c6d0dc38a>
 
 ## 4. Rollout Updates
 
-When a new OWOX Data Marts release is available, or you need to adjust the application configuration:
+When a new P2PDigital Data Marts release is available, or you need to adjust the application configuration:
 
 1. Open the Cloud Run service.
 2. Click **Edit & deploy new revision**.
-3. Update the container image to the desired OWOX Data Marts tag (the `latest` tag documented above already tracks the newest release) and adjust settings or variables if required.
+3. Update the container image to the desired P2PDigital Data Marts tag (the `latest` tag documented above already tracks the newest release) and adjust settings or variables if required.
 4. Click **Deploy** to roll out the update.

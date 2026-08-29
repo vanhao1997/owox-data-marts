@@ -24,7 +24,7 @@ describe('AddDestinationTool', () => {
       createDestination: jest.fn(),
     };
     publicOriginService = {
-      getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+      getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
     } as unknown as jest.Mocked<PublicOriginService>;
 
     tool = new AddDestinationTool(destinationsFacade, publicOriginService);
@@ -91,7 +91,7 @@ describe('AddDestinationTool', () => {
 
     const structured = result.structuredContent as any;
     expect(structured.authorization_url).toBe(
-      'https://app.owox.com/ui/project-1/connect/google-sheets'
+      'https://app.p2pdigital.vn/ui/project-1/connect/google-sheets'
     );
     expect(structured.instructions).toContain('signed in to OWOX');
     expect(structured.instructions).toContain('member of');
@@ -183,7 +183,7 @@ describe('AddDestinationTool', () => {
     expect(structured.instructions).toContain(
       'Data Studio Destination "Looker Studio MCP Destination" has been successfully enabled'
     );
-    expect(structured.instructions).toContain('Data Destinations in OWOX Data Marts');
+    expect(structured.instructions).toContain('Data Destinations in P2PDigital Data Marts');
     expect(JSON.stringify(structured)).not.toContain('destinationSecretKey');
     expect(JSON.stringify(structured)).not.toContain('lookerStudioCredentials');
   });

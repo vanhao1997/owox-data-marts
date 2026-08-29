@@ -1,6 +1,6 @@
 # Core Concepts
 
-Welcome to **OWOX Data Marts** – a structured, controlled, and reliable way to control, organize, and share business-ready data from data teams to business users.
+Welcome to **P2PDigital Data Marts** – a structured, controlled, and reliable way to control, organize, and share business-ready data from data teams to business users.
 The OWOX team, with over 20 years of experience developing data products, stays on 3 core beliefs:
 
 - **Control** over reporting for data analysts
@@ -13,7 +13,7 @@ This guide will help you better understand our beliefs, values & save time durin
 
 ## Entities
 
-OWOX Data Marts has a lot of terms inside, but here are the basic ones:
+P2PDigital Data Marts has a lot of terms inside, but here are the basic ones:
 
 - [**Data Mart**](#data-mart) is a set of meaningful data controlled by data analyst and used by business users for reporting (directly or indirectly).
 - [**Source**](#source) is a platform like Meta Ads or TikTok Ads, Reddit Ads, from which raw data is collected via connectors.
@@ -28,7 +28,7 @@ OWOX Data Marts has a lot of terms inside, but here are the basic ones:
 
 ![Data Marts](../res/screens/data-marts-table.png)
 
-An OWOX Data Mart is the foundational entity in OWOX Data Marts. It's a controlled, ready-to-share artifact designed for analytics and reporting.
+An OWOX Data Mart is the foundational entity in P2PDigital Data Marts. It's a controlled, ready-to-share artifact designed for analytics and reporting.
 
 It’s crafted by data analysts and can be defined using:
 
@@ -61,7 +61,7 @@ All other types of Data Marts query data directly from the **Storage**.
 
 ### Source
 
-**Source** is a service that holds data you want to manipulate—for example, Facebook Ads, TikTok Ads, Google Analytics, Salesforce, Google Sheets, etc. You can find [the available connectors here](https://docs.owox.com/#data-sources).
+**Source** is a service that holds data you want to manipulate—for example, Facebook Ads, TikTok Ads, Google Analytics, Salesforce, Google Sheets, etc. You can find [the available connectors here](https://docs.p2pdigital.vn/#data-sources).
 
 > ☝️ By managing a Data Mart’s **Sources**, a Data Analyst controls the origin of the data.
 
@@ -112,7 +112,7 @@ Each Report has **Owners** — the team members responsible for its configuratio
 
 ### Trigger
 
-**Triggers** automate data movement on a schedule. There are 2 types of triggers in OWOX Data Marts:
+**Triggers** automate data movement on a schedule. There are 2 types of triggers in P2PDigital Data Marts:
 
 - [Report Triggers](setup-guide/report-triggers.md)
 - [Connector Triggers](setup-guide/connector-triggers.md)

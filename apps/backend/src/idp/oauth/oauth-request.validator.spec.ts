@@ -12,7 +12,7 @@ function makeServices(): {
   const configService = new ConfigService({
     MCP_PUBLIC_BASE_URL: 'https://mcp.owox.com',
     MCP_OAUTH_RESOURCE: 'https://mcp.owox.com/mcp',
-    OWOX_AUTH_PUBLIC_BASE_URL: 'https://app.owox.com',
+    OWOX_AUTH_PUBLIC_BASE_URL: 'https://app.p2pdigital.vn',
   });
 
   return {

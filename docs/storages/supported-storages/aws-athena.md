@@ -1,7 +1,7 @@
 # AWS Athena
 
 AWS Athena is an interactive query service that enables SQL-based analysis of data stored in Amazon S3.  
-This page details how to configure AWS Athena as a Storage in OWOX Data Marts, allowing you to incorporate it seamlessly into your self-service analytics environment.
+This page details how to configure AWS Athena as a Storage in P2PDigital Data Marts, allowing you to incorporate it seamlessly into your self-service analytics environment.
 
 ---
 
@@ -47,7 +47,7 @@ Athena requires an S3 bucket to store query results.
    - Enter a unique **Bucket name** (e.g., "athena-query-results-123")
    - Choose a **Region** (e.g., "us-east-1"). Note this region for later use
    - Keep default settings unless specific adjustments are needed, then click **Create bucket**
-4. Record the bucket name and region, as you’ll need them for both Athena setup and OWOX Data Marts configuration.
+4. Record the bucket name and region, as you’ll need them for both Athena setup and P2PDigital Data Marts configuration.
 
 #### III. Enable the Athena API
 
@@ -60,11 +60,11 @@ Ensure the Athena API is enabled in your AWS account.
 
 ---
 
-### OWOX Data Marts
+### P2PDigital Data Marts
 
 #### 1. Access the Storages Page
 
-In the OWOX Data Marts web application, navigate to **Storages** from the main navigation pane and click **+ New Storage**.
+In the P2PDigital Data Marts web application, navigate to **Storages** from the main navigation pane and click **+ New Storage**.
 
 #### 2. Choose Storage Type
 

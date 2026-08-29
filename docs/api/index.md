@@ -1,8 +1,8 @@
 # API
 
-Use the OWOX Data Marts API to connect external tools, scripts, AI agents, and custom applications to your OWOX Data Marts project.
+Use the P2PDigital Data Marts API to connect external tools, scripts, AI agents, and custom applications to your P2PDigital Data Marts project.
 
-API access is an integration and automation layer on top of OWOX Data Marts concepts such as Data Marts, Storages, and Destinations. Use it when you need JSON terminal commands, scripted automation, TypeScript or JavaScript integrations, or direct HTTP API inspection.
+API access is an integration and automation layer on top of P2PDigital Data Marts concepts such as Data Marts, Storages, and Destinations. Use it when you need JSON terminal commands, scripted automation, TypeScript or JavaScript integrations, or direct HTTP API inspection.
 
 ## Choose an API access path
 
@@ -17,7 +17,7 @@ API access is an integration and automation layer on top of OWOX Data Marts conc
 
 API Keys authenticate external tools and integrations without an interactive browser session. Create an API key before using other API access options.
 
-[owox-ctl](./owox-ctl/) is the OWOX Data Marts Control CLI for terminal, CI, and AI agent usage. It reads credentials from environment variables or `--env-file` and emits JSON.
+[owox-ctl](./owox-ctl/) is the P2PDigital Data Marts Control CLI for terminal, CI, and AI agent usage. It reads credentials from environment variables or `--env-file` and emits JSON.
 
 [@owox/api-client](./api-client/) is the TypeScript/JavaScript API Client for custom applications, scripts, and internal tools.
 

@@ -75,15 +75,15 @@ It works especially well when **joined with a GA4 Sessions Data Mart** to power 
 
 ---
 
-## How to Use It with OWOX Data Marts
+## How to Use It with P2PDigital Data Marts
 
-1. Create a new **SQL Data Mart** in [OWOX Data Marts](https://www.owox.com/app-signup)  
+1. Create a new **SQL Data Mart** in [P2PDigital Data Marts](https://www.p2pdigital.vn/app-signup)  
 2. Paste the SQL from this file  
 3. Document fields with business-friendly aliases and descriptions  
 4. Publish once and reuse everywhere  
 5. Schedule automated delivery to Sheets or BI tools  
 
-> 💡 **Tip:** Store this logic in OWOX Data Marts to avoid copy-pasting SQL across dashboards and tools.
+> 💡 **Tip:** Store this logic in P2PDigital Data Marts to avoid copy-pasting SQL across dashboards and tools.
 
 ---
 

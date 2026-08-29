@@ -1,6 +1,6 @@
 # Connect Facebook Ads Credentials
 
-Use this guide to connect OWOX Data Marts to the Facebook Ads API.
+Use this guide to connect P2PDigital Data Marts to the Facebook Ads API.
 
 You can connect in two ways:
 
@@ -49,7 +49,7 @@ Use this method when you need manual credentials. You will create a Meta app and
 2. Log in with your Facebook account.
 3. Go to **My Apps**.
 4. Click **Create App**.
-5. Enter an **App Name**, for example `OWOX Data Marts App`.
+5. Enter an **App Name**, for example `P2PDigital Data Marts App`.
 
 ![Meta for Developers My Apps page with the Create App button](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/007cab5d-de72-4e9c-c444-f7064be3e800/public)
 
@@ -200,6 +200,6 @@ For errors after credentials are saved, see [Troubleshooting Facebook Ads import
 If you run into other issues:
 
 1. Check [Troubleshooting Facebook Ads imports](TROUBLESHOOTING.md) for Data Mart run, permission, and account access errors.
-2. Search [Q&A](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a).
-3. Open an [issue](https://github.com/OWOX/owox-data-marts/issues) to report a bug.
-4. Join the [discussion forum](https://github.com/OWOX/owox-data-marts/discussions).
+2. Search [Q&A](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a).
+3. Open an [issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues) to report a bug.
+4. Join the [discussion forum](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

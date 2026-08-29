@@ -2,7 +2,7 @@
 
 Database migrations are version-controlled scripts that manage changes to your database schema and data over time. They ensure that all environments (development, staging, production) maintain consistent database structure and allow for safe, repeatable deployments.
 
-In OWOX Data Marts, migrations handle:
+In P2PDigital Data Marts, migrations handle:
 
 - Creating, altering, or dropping database tables and columns
 - Modifying indexes and constraints
@@ -118,7 +118,7 @@ await queryRunner.query("UPDATE table_name SET status = 'run' WHERE status = 'ac
 
 ## Database Compatibility
 
-OWOX Data Marts supports both MySQL and SQLite. When writing migrations:
+P2PDigital Data Marts supports both MySQL and SQLite. When writing migrations:
 
 ### Supported Column Types
 

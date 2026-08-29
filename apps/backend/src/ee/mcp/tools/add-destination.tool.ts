@@ -95,7 +95,7 @@ export class AddDestinationTool implements McpToolDefinition<AddDestinationInput
     'for looker_studio (pull-based connector), creates the destination directly and returns ' +
     'destination_id immediately — no OAuth, no emails needed; the connector credentials ' +
     '(including the Destination Secret Key/Token) are never sent through MCP/chat — the ' +
-    'user must open the destination in the OWOX Data Marts UI to copy them.';
+    'user must open the destination in the P2PDigital Data Marts UI to copy them.';
   readonly zodSchema = inputSchema.shape;
   readonly outputSchema = {
     authorization_url: z.string().optional(),
@@ -183,9 +183,9 @@ export class AddDestinationTool implements McpToolDefinition<AddDestinationInput
 
       // The Destination Secret Key (Token) must never be sent through MCP/chat, even for a
       // destination just created in this same call — it's a live credential, not a display
-      // value, so the user retrieves it themselves from the OWOX Data Marts UI.
+      // value, so the user retrieves it themselves from the P2PDigital Data Marts UI.
       const instructions = `Data Studio Destination "${created.name}" has been successfully enabled!
-Open Data Destinations in OWOX Data Marts and edit "${created.name}" to copy its connector credentials (Deployment URL, Destination ID, and Destination Secret Key) into the OWOX Data Marts Data Studio connector interface.
+Open Data Destinations in P2PDigital Data Marts and edit "${created.name}" to copy its connector credentials (Deployment URL, Destination ID, and Destination Secret Key) into the P2PDigital Data Marts Data Studio connector interface.
 Share the setup guide with the user — it walks through every step: ${LOOKER_STUDIO_DESTINATION_GUIDE_URL}`;
 
       return jsonToolResult({

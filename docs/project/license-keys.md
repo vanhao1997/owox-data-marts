@@ -1,10 +1,10 @@
 # License Keys
 
-License keys connect self-managed OWOX Data Marts deployments to an OWOX Data Marts Cloud project. A key authorizes Report Runs from one deployment origin and charges their consumption to the Cloud project that issued it.
+License keys connect self-managed P2PDigital Data Marts deployments to an P2PDigital Data Marts Cloud project. A key authorizes Report Runs from one deployment origin and charges their consumption to the Cloud project that issued it.
 
 Open **Project Settings → License keys** to view and manage the keys issued by the current project.
 
-> The License keys page is available in OWOX Data Marts Cloud. A self-managed deployment uses a key created there; it does not issue keys itself.
+> The License keys page is available in P2PDigital Data Marts Cloud. A self-managed deployment uses a key created there; it does not issue keys itself.
 
 ## Permissions
 

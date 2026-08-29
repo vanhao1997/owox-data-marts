@@ -1,6 +1,6 @@
 # @owox/idp-better-auth
 
-Better Auth IDP provider for OWOX Data Marts authentication.
+Better Auth IDP provider for P2PDigital Data Marts authentication.
 
 ## Setup
 

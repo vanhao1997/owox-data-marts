@@ -1,7 +1,7 @@
 {
   "title": "Google Sheets",
   "logo": "logo.svg",
-  "docUrl": "https://docs.owox.com/packages/connectors/src/sources/google-sheets/readme/",
+  "docUrl": "https://docs.p2pdigital.vn/packages/connectors/src/sources/google-sheets/readme/",
   "capabilities": {
     "singleConfiguration": true,
     "copySecretsByValue": true

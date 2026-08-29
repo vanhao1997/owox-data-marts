@@ -26,7 +26,7 @@ function escapeLinkText(value: string): string {
 
 const OKF_FOOTER =
   '\n\n---\n\n_Generated with [P2PDigital Data Marts](https://www.p2pdigital.vn/) · ' +
-  '[open source](https://github.com/OWOX/owox-data-marts)_\n';
+  '[open source](https://github.com/vanhao1997/p2pdigital-data-marts)_\n';
 
 export interface OkfBundle {
   files: Record<string, string>;

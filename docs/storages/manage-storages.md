@@ -2,7 +2,7 @@
 
 Storages are specialized Data Sources that provide an SQL interface for querying and caching data.  
 
-_IMPORTANT: OWOX Data Marts does not retain your data, ensuring that data ownership, storage, and processing control remain under the control of the Data Analyst._
+_IMPORTANT: P2PDigital Data Marts does not retain your data, ensuring that data ownership, storage, and processing control remain under the control of the Data Analyst._
 
 Each project requires at least one **Storage** to be configured to manage and process your data.
 
@@ -36,7 +36,7 @@ To configure a new **Storage**:
 To remove an existing **Storage** configuration:
 
 1. Ensure all associated **Data Marts** linked to this **Storage** are deleted first. To do this:
-   - Navigate to the **Data Marts** page in the OWOX Data Marts web application.
+   - Navigate to the **Data Marts** page in the P2PDigital Data Marts web application.
    - Identify and select all Data Marts associated with the Storage you intend to remove.
    - Click the **Delete** button above the Data Marts table and confirm the deletion.
 2. Go to the **Storages** page via the main navigation pane.
@@ -65,4 +65,4 @@ Each Storage has an **Owners** list — the team members responsible for its con
 ## Key Considerations
 
 - Each **Data Mart** requires a single **Storage** association. Verify your selection during **Data Mart** setup.
-- For additional guidance or troubleshooting, explore the supported **Storage** configuration pages or join the [OWOX Community](https://github.com/OWOX/owox-data-marts/discussions).
+- For additional guidance or troubleshooting, explore the supported **Storage** configuration pages or join the [OWOX Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

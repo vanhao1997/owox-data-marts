@@ -6,11 +6,11 @@ import { OAuthMetadataController } from './oauth-metadata.controller';
 describe('OAuthMetadataController', () => {
   function createController() {
     const config = {
-      issuer: 'https://app.owox.com',
-      authorizationEndpoint: 'https://app.owox.com/oauth/authorize',
-      tokenEndpoint: 'https://app.owox.com/oauth/token',
-      registrationEndpoint: 'https://app.owox.com/oauth/register',
-      jwksEndpoint: 'https://app.owox.com/oauth/jwks',
+      issuer: 'https://app.p2pdigital.vn',
+      authorizationEndpoint: 'https://app.p2pdigital.vn/oauth/authorize',
+      tokenEndpoint: 'https://app.p2pdigital.vn/oauth/token',
+      registrationEndpoint: 'https://app.p2pdigital.vn/oauth/register',
+      jwksEndpoint: 'https://app.p2pdigital.vn/oauth/jwks',
       scopes: ['mcp:read', 'mcp:write'],
     } as OAuthConfigService;
     const resolver = new McpResourceResolverService(
@@ -28,13 +28,13 @@ describe('OAuthMetadataController', () => {
   it('returns authorization-server metadata from config', () => {
     const controller = createController();
     expect(
-      controller.getAuthorizationServerMetadata({ headers: { host: 'app.owox.com' } } as never)
+      controller.getAuthorizationServerMetadata({ headers: { host: 'app.p2pdigital.vn' } } as never)
     ).toEqual({
-      issuer: 'https://app.owox.com',
-      authorization_endpoint: 'https://app.owox.com/oauth/authorize',
-      token_endpoint: 'https://app.owox.com/oauth/token',
-      registration_endpoint: 'https://app.owox.com/oauth/register',
-      jwks_uri: 'https://app.owox.com/oauth/jwks',
+      issuer: 'https://app.p2pdigital.vn',
+      authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
+      token_endpoint: 'https://app.p2pdigital.vn/oauth/token',
+      registration_endpoint: 'https://app.p2pdigital.vn/oauth/register',
+      jwks_uri: 'https://app.p2pdigital.vn/oauth/jwks',
       response_types_supported: ['code'],
       grant_types_supported: ['authorization_code', 'refresh_token'],
       code_challenge_methods_supported: ['S256'],
@@ -47,13 +47,13 @@ describe('OAuthMetadataController', () => {
     const controller = createController();
 
     expect(
-      controller.getOpenIdConfigurationMetadata({ headers: { host: 'app.owox.com' } } as never)
+      controller.getOpenIdConfigurationMetadata({ headers: { host: 'app.p2pdigital.vn' } } as never)
     ).toEqual({
-      issuer: 'https://app.owox.com',
-      authorization_endpoint: 'https://app.owox.com/oauth/authorize',
-      token_endpoint: 'https://app.owox.com/oauth/token',
-      registration_endpoint: 'https://app.owox.com/oauth/register',
-      jwks_uri: 'https://app.owox.com/oauth/jwks',
+      issuer: 'https://app.p2pdigital.vn',
+      authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
+      token_endpoint: 'https://app.p2pdigital.vn/oauth/token',
+      registration_endpoint: 'https://app.p2pdigital.vn/oauth/register',
+      jwks_uri: 'https://app.p2pdigital.vn/oauth/jwks',
       response_types_supported: ['code'],
       grant_types_supported: ['authorization_code', 'refresh_token'],
       code_challenge_methods_supported: ['S256'],
@@ -76,7 +76,7 @@ describe('OAuthMetadataController', () => {
       } as never)
     ).toMatchObject({
       issuer: `https://${projectId}.mcp.owox.com`,
-      authorization_endpoint: 'https://app.owox.com/oauth/authorize',
+      authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
       token_endpoint: `https://${projectId}.mcp.owox.com/oauth/token`,
       registration_endpoint: `https://${projectId}.mcp.owox.com/oauth/register`,
     });
@@ -93,7 +93,7 @@ describe('OAuthMetadataController', () => {
       } as never)
     ).toMatchObject({
       issuer: 'https://mcp.owox.com',
-      authorization_endpoint: 'https://app.owox.com/oauth/authorize',
+      authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
       token_endpoint: 'https://mcp.owox.com/oauth/token',
       registration_endpoint: 'https://mcp.owox.com/oauth/register',
       jwks_uri: 'https://mcp.owox.com/oauth/jwks',

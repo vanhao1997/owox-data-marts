@@ -265,7 +265,7 @@ function parsePage(response: unknown): DataMartsPage {
     (response.nextOffset !== null &&
       (!Number.isInteger(response.nextOffset) || (response.nextOffset as number) < 0))
   ) {
-    throw new OWOXApiError('OWOX Data Marts API returned an unexpected response shape', {
+    throw new OWOXApiError('P2PDigital Data Marts API returned an unexpected response shape', {
       details: response,
     });
   }
@@ -326,7 +326,7 @@ export class DataMartsApi {
     while (true) {
       const offsetKey = String(offset ?? 0);
       if (requestedOffsets.has(offsetKey)) {
-        throw new OWOXApiError(`OWOX Data Marts API returned repeated nextOffset ${offsetKey}`, {
+        throw new OWOXApiError(`P2PDigital Data Marts API returned repeated nextOffset ${offsetKey}`, {
           details: { offset },
         });
       }

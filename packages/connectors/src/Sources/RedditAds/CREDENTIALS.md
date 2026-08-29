@@ -13,8 +13,8 @@ To connect to the Reddit Ads API and start importing data, follow the steps belo
    - **App Name**  
    - **Description**  
      Example:  
-     _"This app will extract advertising metrics and store them in my data warehouse. The data will be processed via OWOX Data Marts to support daily marketing reporting and optimization efforts."_  
-   - **About URL**: `https://docs.owox.com/packages/connectors/src/sources/reddit-ads/readme/`  
+     _"This app will extract advertising metrics and store them in my data warehouse. The data will be processed via P2PDigital Data Marts to support daily marketing reporting and optimization efforts."_  
+   - **About URL**: `https://docs.p2pdigital.vn/packages/connectors/src/sources/reddit-ads/readme/`  
    - **Redirect URI**: `https://www.reddit.com/prefs/apps`  
 
 2. Click **Create App**.  

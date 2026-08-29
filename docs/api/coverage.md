@@ -1,6 +1,6 @@
 # Support Matrix
 
-This page tracks externally supported OWOX Data Marts business endpoints that
+This page tracks externally supported P2PDigital Data Marts business endpoints that
 accept authentication derived from an OWOX API key.
 
 The inventory excludes endpoints that reject API-key authentication, internal
@@ -34,7 +34,7 @@ as API-client coverage.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/auth/context` | [Covered](https://app.owox.com/api/swagger-ui#/Authentication/AuthContextController_getContext) · 2026-07-22 | [Covered](./api-client/#get-auth-context) · 2026-07-22 |
+| `GET /api/auth/context` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Authentication/AuthContextController_getContext) · 2026-07-22 | [Covered](./api-client/#get-auth-context) · 2026-07-22 |
 
 ## Connectors
 
@@ -89,7 +89,7 @@ as API-client coverage.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/data-marts` | [Covered](https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_list) · 2026-07-23 | [Covered](./api-client/#list-data-marts) · 2026-07-23 |
+| `GET /api/data-marts` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_list) · 2026-07-23 | [Covered](./api-client/#list-data-marts) · 2026-07-23 |
 | `POST /api/data-marts` | Unassessed | Unassessed |
 | `GET /api/data-marts/ai-helper/availability` | Unassessed | Unassessed |
 | `GET /api/data-marts/by-connector/{connectorName}` | Unassessed | Unassessed |
@@ -115,12 +115,12 @@ as API-client coverage.
 | `PUT /api/data-marts/{id}/contexts` | Unassessed | Unassessed |
 | `PUT /api/data-marts/{id}/definition` | Unassessed | Unassessed |
 | `PUT /api/data-marts/{id}/description` | Unassessed | Unassessed |
-| `POST /api/data-marts/{id}/manual-run` | [Covered](https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_manualRun) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
+| `POST /api/data-marts/{id}/manual-run` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_manualRun) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
 | `PUT /api/data-marts/{id}/owners` | Unassessed | Unassessed |
 | `PUT /api/data-marts/{id}/publish` | Unassessed | Unassessed |
-| `GET /api/data-marts/{id}/runs` | [Covered](https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_getRunHistory) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
-| `GET /api/data-marts/{id}/runs/{runId}` | [Covered](https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_getRunById) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
-| `POST /api/data-marts/{id}/runs/{runId}/cancel` | [Covered](https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_cancelRun) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
+| `GET /api/data-marts/{id}/runs` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_getRunHistory) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
+| `GET /api/data-marts/{id}/runs/{runId}` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_getRunById) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
+| `POST /api/data-marts/{id}/runs/{runId}/cancel` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_cancelRun) · 2026-08-07 | [Covered](./api-client/#manage-data-mart-runs) · 2026-08-07 |
 | `PUT /api/data-marts/{id}/schema` | Unassessed | Unassessed |
 | `PUT /api/data-marts/{id}/title` | Unassessed | Unassessed |
 | `POST /api/data-marts/{id}/validate-definition` | Unassessed | Unassessed |
@@ -147,7 +147,7 @@ as API-client coverage.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/external/http-data/data-marts/{dataMartId}.ndjson` | [Covered](https://app.owox.com/api/swagger-ui#/HTTP%20Data/HttpDataController_stream) · 2026-07-23 | [Covered](./api-client/#stream-data-mart-rows) · 2026-07-23 |
+| `GET /api/external/http-data/data-marts/{dataMartId}.ndjson` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/HTTP%20Data/HttpDataController_stream) · 2026-07-23 | [Covered](./api-client/#stream-data-mart-rows) · 2026-07-23 |
 
 ## Insights
 
@@ -156,7 +156,7 @@ whose UI is reachable only through direct links is excluded.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/data-marts/insight-templates` | [Covered](https://app.owox.com/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-21 | [Covered](./api-client/#list-project-insight-templates) · 2026-07-21 |
+| `GET /api/data-marts/insight-templates` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-21 | [Covered](./api-client/#list-project-insight-templates) · 2026-07-21 |
 | `GET /api/data-marts/{dataMartId}/ai-assistant/run-triggers` | Unassessed | Unassessed |
 | `DELETE /api/data-marts/{dataMartId}/ai-assistant/run-triggers/{triggerId}` | Unassessed | Unassessed |
 | `GET /api/data-marts/{dataMartId}/ai-assistant/run-triggers/{triggerId}` | Unassessed | Unassessed |
@@ -198,8 +198,8 @@ whose UI is reachable only through direct links is excluded.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/model-canvas/data-marts` | [Covered](https://app.owox.com/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-21 | [Covered](./api-client/#read-the-models-canvas) · 2026-07-21 |
-| `GET /api/model-canvas/edges` | [Covered](https://app.owox.com/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getEdges) · 2026-07-21 | [Covered](./api-client/#read-the-models-canvas) · 2026-07-21 |
+| `GET /api/model-canvas/data-marts` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-21 | [Covered](./api-client/#read-the-models-canvas) · 2026-07-21 |
+| `GET /api/model-canvas/edges` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getEdges) · 2026-07-21 | [Covered](./api-client/#read-the-models-canvas) · 2026-07-21 |
 
 ## Project notification settings
 
@@ -214,8 +214,8 @@ whose UI is reachable only through direct links is excluded.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/projects/settings` | [Covered](https://app.owox.com/api/swagger-ui#/ProjectSettings/ProjectSettingsController_getSettings) · 2026-07-21 | [Covered](./api-client/#manage-project-settings) · 2026-07-21 |
-| `PUT /api/projects/settings/description` | [Covered](https://app.owox.com/api/swagger-ui#/ProjectSettings/ProjectSettingsController_updateDescription) · 2026-07-21 | [Covered](./api-client/#manage-project-settings) · 2026-07-21 |
+| `GET /api/projects/settings` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_getSettings) · 2026-07-21 | [Covered](./api-client/#manage-project-settings) · 2026-07-21 |
+| `PUT /api/projects/settings/description` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_updateDescription) · 2026-07-21 | [Covered](./api-client/#manage-project-settings) · 2026-07-21 |
 
 ## Reports
 
@@ -236,7 +236,7 @@ whose UI is reachable only through direct links is excluded.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/data-marts/runs` | [Covered](https://app.owox.com/api/swagger-ui#/Run%20History/ProjectDataMartRunsController_list) · 2026-07-23 | [Covered](./api-client/#read-project-run-history) · 2026-07-23 |
+| `GET /api/data-marts/runs` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Run%20History/ProjectDataMartRunsController_list) · 2026-07-23 | [Covered](./api-client/#read-project-run-history) · 2026-07-23 |
 
 ## Scheduled triggers
 
@@ -253,16 +253,16 @@ whose UI is reachable only through direct links is excluded.
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/search` | [Covered](https://app.owox.com/api/swagger-ui#/Search/SearchController_search) · 2026-07-23 | [Covered](./api-client/#search-project-entities) · 2026-07-23 |
+| `GET /api/search` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Search/SearchController_search) · 2026-07-23 | [Covered](./api-client/#search-project-entities) · 2026-07-23 |
 
 ## Project setup progress
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `GET /api/project-setup-progress` | [Covered](https://app.owox.com/api/swagger-ui#/project-setup-progress/ProjectSetupProgressController_getProgress) · 2026-07-21 | [Covered](./api-client/#check-project-setup-progress) · 2026-07-21 |
+| `GET /api/project-setup-progress` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/project-setup-progress/ProjectSetupProgressController_getProgress) · 2026-07-21 | [Covered](./api-client/#check-project-setup-progress) · 2026-07-21 |
 
 ## Utilities
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| `POST /api/markdown/parse-to-html` | [Covered](https://app.owox.com/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml) · 2026-07-22 | [Covered](./api-client/#convert-markdown-to-html) · 2026-07-22 |
+| `POST /api/markdown/parse-to-html` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml) · 2026-07-22 | [Covered](./api-client/#convert-markdown-to-html) · 2026-07-22 |

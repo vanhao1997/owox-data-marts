@@ -15,7 +15,7 @@ describe('SearchDataMartsTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
   const projectContext = {
     getProjectContext: jest.fn().mockResolvedValue({
@@ -47,7 +47,7 @@ describe('SearchDataMartsTool', () => {
             id: 'dm_1',
             title: 'Orders',
             description: '',
-            url: 'https://app.owox.com/ui/project-1/data-marts/dm_1/data-setup',
+            url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup',
             relevance_score: 91,
           },
         ],
@@ -63,7 +63,7 @@ describe('SearchDataMartsTool', () => {
                   id: 'dm_1',
                   title: 'Orders',
                   description: '',
-                  url: 'https://app.owox.com/ui/project-1/data-marts/dm_1/data-setup',
+                  url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup',
                   relevance_score: 91,
                 },
               ],

@@ -8,7 +8,7 @@ const runCommand = `node ./bin/run.js`;
 describe('serve', () => {
   it('shows help for serve command', async () => {
     const { stdout } = await execAsync(`${runCommand} serve --help`);
-    expect(stdout).to.contain('Start the OWOX Data Marts application');
+    expect(stdout).to.contain('Start the P2PDigital Data Marts application');
   });
 
   it('accepts port flag', async () => {

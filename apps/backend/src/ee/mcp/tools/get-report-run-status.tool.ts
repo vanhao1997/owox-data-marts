@@ -175,7 +175,7 @@ export class GetReportRunStatusTool implements McpToolDefinition<GetReportRunSta
     return {
       shouldPoll: false,
       stopReason,
-      message: `${detail} Stop polling for now: give the user the report_id and run_id, say that the run may still execute, and suggest checking the report's Run History in OWOX Data Marts before starting another run.`,
+      message: `${detail} Stop polling for now: give the user the report_id and run_id, say that the run may still execute, and suggest checking the report's Run History in P2PDigital Data Marts before starting another run.`,
     };
   }
 

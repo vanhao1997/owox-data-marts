@@ -1,12 +1,12 @@
 # MCP Server
 
-OWOX Data Marts exposes a Model Context Protocol (MCP) server. It lets AI assistants and MCP-compatible clients connect to your project data using standard OAuth authorization.
+P2PDigital Data Marts exposes a Model Context Protocol (MCP) server. It lets AI assistants and MCP-compatible clients connect to your project data using standard OAuth authorization.
 
 Use the MCP server to explore your [data marts](../core-concepts.md) in plain language with an AI assistant like Claude or ChatGPT. You never have to leave the assistant. The assistant can summarize the available catalog and inspect data mart fields. It can run bounded queries, list destinations and reports, and set up report delivery. It can also manage report schedules and start report runs for supported push destinations. See [Available tools](#available-tools) for exactly what it can and cannot do.
 
 ## Prerequisites
 
-- An active OWOX Data Marts project with at least one data mart. New to Data Marts? See how to create a [connector-based](./connector-data-mart.md) or [SQL-based](./sql-data-mart.md) Data Mart.
+- An active P2PDigital Data Marts project with at least one data mart. New to Data Marts? See how to create a [connector-based](./connector-data-mart.md) or [SQL-based](./sql-data-mart.md) Data Mart.
 - One of the supported clients: Claude Desktop or Claude web (claude.ai) — the recommended way to connect — or ChatGPT. Any other client that supports the MCP Streamable HTTP transport with OAuth 2.0 will also work.
 - A client plan that allows MCP connectors. Adding an MCP server like OWOX may require a paid plan in Claude or ChatGPT. Check your client's current plan requirements.
 
@@ -23,41 +23,41 @@ Set up whichever assistant you use — you only need one. We recommend Claude De
 
    ![Claude Desktop Connectors settings with an arrow pointing from the Connectors sidebar item to Browse connectors in the Add menu](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/b0f101ff-724e-4210-7c29-37682c40de00/public)
 
-3. Find **OWOX Data Marts** and click **Connect**.
+3. Find **P2PDigital Data Marts** and click **Connect**.
 
-   ![OWOX Data Marts connector page in Claude's connector directory, with an arrow pointing to the Connect button](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/e940efd9-6548-47dd-bd76-82326dde1b00/public)
+   ![P2PDigital Data Marts connector page in Claude's connector directory, with an arrow pointing to the Connect button](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/e940efd9-6548-47dd-bd76-82326dde1b00/public)
 
 4. Claude opens a browser window to complete authorization. Follow the steps in [Step 2](#step-2-authorize-access).
 
-To confirm your MCP server is configured correctly, open the Connectors section and check that OWOX Data Marts is enabled.
+To confirm your MCP server is configured correctly, open the Connectors section and check that P2PDigital Data Marts is enabled.
 
-![Claude's Connectors menu showing the OWOX Data Marts toggle switched on](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/3e4b21ca-11b2-44ef-af3a-407014e17f00/public)
+![Claude's Connectors menu showing the P2PDigital Data Marts toggle switched on](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/3e4b21ca-11b2-44ef-af3a-407014e17f00/public)
 
 ### Claude web (claude.ai)
 
 1. Open [claude.ai](https://claude.ai) and go to **Settings → Connectors**.
 2. Click **Add → Browse connectors**.
-3. Find **OWOX Data Marts** and click **Connect**.
+3. Find **P2PDigital Data Marts** and click **Connect**.
 4. Claude opens an authorization flow in the same browser. Follow the steps in [Step 2](#step-2-authorize-access).
 
 ### ChatGPT
 
 1. Open ChatGPT and go to **Plugins**.
-2. Find **OWOX Data Marts** in the list of plugins and click **Install plugin**.
-3. Click **Sign in with OWOX Data Marts**. ChatGPT opens an authorization window. Follow the steps in [Step 2](#step-2-authorize-access).
-4. You will see **OWOX Data Marts is installed**, indicating the integration is connected.
+2. Find **P2PDigital Data Marts** in the list of plugins and click **Install plugin**.
+3. Click **Sign in with P2PDigital Data Marts**. ChatGPT opens an authorization window. Follow the steps in [Step 2](#step-2-authorize-access).
+4. You will see **P2PDigital Data Marts is installed**, indicating the integration is connected.
 5. Click **Try in chat**.
 6. In a new chat, select or enable the OWOX plugin if ChatGPT does not use it automatically.
 
-![ChatGPT Plugins settings showing the OWOX Data Marts plugin ready to connect](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/df3ecfbb-1c59-423c-06ad-bf16261e9500/public)
+![ChatGPT Plugins settings showing the P2PDigital Data Marts plugin ready to connect](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/df3ecfbb-1c59-423c-06ad-bf16261e9500/public)
 
-![ChatGPT authorization screen with the Sign in with OWOX Data Marts button](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/bf383601-ad2b-4870-3703-b78dd49fdf00/public)
+![ChatGPT authorization screen with the Sign in with P2PDigital Data Marts button](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/bf383601-ad2b-4870-3703-b78dd49fdf00/public)
 
-![ChatGPT chat composer with the OWOX Data Marts plugin available for a new chat](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/55bbd278-3784-40b0-fe98-4a16d1006c00/public)
+![ChatGPT chat composer with the P2PDigital Data Marts plugin available for a new chat](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/55bbd278-3784-40b0-fe98-4a16d1006c00/public)
 
 ### Use a project-specific URL
 
-The steps above connect the shared MCP server and let you pick a project during authorization. If OWOX UI or API already gave you a project's URL — `https://{projectId}.mcp.owox.com/mcp` — you can connect that instead: add it as a custom connector rather than picking OWOX Data Marts from the client's connector directory (in Claude, use **Add → Add custom connector**). The `projectId` is already in MD5 format; it is only a stable URL identifier and does not grant access by itself.
+The steps above connect the shared MCP server and let you pick a project during authorization. If OWOX UI or API already gave you a project's URL — `https://{projectId}.mcp.owox.com/mcp` — you can connect that instead: add it as a custom connector rather than picking P2PDigital Data Marts from the client's connector directory (in Claude, use **Add → Add custom connector**). The `projectId` is already in MD5 format; it is only a stable URL identifier and does not grant access by itself.
 
 A project-specific URL uses the same OAuth flow and the same MCP tools as the shared one, but it skips the project selection screen in [Step 2](#step-2-authorize-access) — authorization still succeeds only if the signed-in user is an active member of that project.
 
@@ -156,7 +156,7 @@ Lists data marts visible to you in the current project. By default, it returns p
 | `id`          | Data mart identifier                                                                                                     |
 | `title`       | Data mart name                                                                                                           |
 | `description` | Data mart description                                                                                                    |
-| `url`         | Link to open the data mart in OWOX Data Marts                                                                            |
+| `url`         | Link to open the data mart in P2PDigital Data Marts                                                                            |
 | `status`      | Current status: `PUBLISHED` or `DRAFT`. Response values are uppercase and differ from the lowercase input filter values. |
 | `updated_at`  | Last update timestamp                                                                                                    |
 
@@ -184,7 +184,7 @@ Finds the data marts most relevant to a natural-language question, ranked by rel
 | `id`              | Data mart identifier                            |
 | `title`           | Data mart name                                  |
 | `description`     | Data mart description                           |
-| `url`             | Link to open the data mart in OWOX Data Marts   |
+| `url`             | Link to open the data mart in P2PDigital Data Marts   |
 | `relevance_score` | How closely the data mart matches your question |
 
 The response also includes `project.id` and `project.title`.
@@ -208,7 +208,7 @@ Returns field-level metadata for one data mart visible to you in the current pro
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `id`                     | Data mart identifier                                                                                                                                                       |
 | `name`                   | Data mart name                                                                                                                                                             |
-| `url`                    | Link to open the data mart in OWOX Data Marts                                                                                                                              |
+| `url`                    | Link to open the data mart in P2PDigital Data Marts                                                                                                                              |
 | `description`            | Data mart description                                                                                                                                                      |
 | `fields`                 | The data mart's own (native) output fields with query `name`, presentation `displayName`, types, descriptions, and business names when available                           |
 | `joined_fields_included` | Whether joined fields were requested and evaluated. When `false`, `joined_fields` was intentionally omitted rather than evaluated as empty.                                |
@@ -316,7 +316,7 @@ Starts or completes setup for a report-delivery destination. The exact flow depe
 
 For `google_sheets`, this tool does not create the destination immediately. It returns a project-scoped setup link; the user opens it, signs in to OWOX if needed, clicks **Connect with Google**, and approves Google access. After the user confirms setup is complete, call `list_destinations` and match the new Google Sheets destination by `connectedGoogleAccount`. The created destination is usable by the person who connected it, but it starts unshared for other project members until someone shares it in the UI.
 
-For `email`, `slack`, `teams`, and `google_chat`, the tool creates the destination directly and returns `destination_id`. For `looker_studio`, the tool also creates the destination directly, but it never sends connector credentials or secret keys through MCP/chat; the user opens the destination in OWOX Data Marts to copy those credentials, and the returned `instructions` include a link to the [Data Studio destination](../../destinations/supported-destinations/data-studio.md) guide with the full walkthrough.
+For `email`, `slack`, `teams`, and `google_chat`, the tool creates the destination directly and returns `destination_id`. For `looker_studio`, the tool also creates the destination directly, but it never sends connector credentials or secret keys through MCP/chat; the user opens the destination in P2PDigital Data Marts to copy those credentials, and the returned `instructions` include a link to the [Data Studio destination](../../destinations/supported-destinations/data-studio.md) guide with the full walkthrough.
 
 ### `get_data_mart_reports`
 
@@ -467,7 +467,7 @@ Creates a report that exports a data mart to an existing destination (see `list_
 
 - **Google Sheets**: a new Google Sheet is created automatically and linked to the report, then the initial run writes data into it by default. Unlike every other tool, this path reaches outside OWOX: it creates a file in Google Drive and attempts to share it with you. See [Google Sheets destination](../../destinations/supported-destinations/google-sheets.md) for how to set the destination up.
 - **Looker Studio**: the report is created with default settings (data cache lifetime of 5 minutes) — the tool accepts no Looker-Studio-specific parameters, and no `name` (Looker Studio reports carry no name). Each data mart + destination pair can have exactly one Looker Studio report; creating a second one returns an error instead of a duplicate. Creating the report only makes the data mart available to the destination: data appears in a dashboard after you connect Looker Studio to OWOX with the destination's JSON Config (it contains a secret key, so it is never sent through the assistant). The response includes `instructions` and a `setup_guide_url` so the assistant can walk you through it; the full guide is [Data Studio destination](../../destinations/supported-destinations/data-studio.md). If the project has no Looker Studio destination yet, the assistant can create one with `add_destination` first.
-- **Email, Slack, Microsoft Teams, Google Chat**: the report carries the message subject and body; the recipients or channels are configured on the destination itself, not on the report. The default initial run sends the rendered message immediately. The send condition is always the default ("Send always") — change it in the OWOX Data Marts UI if you need a conditional report.
+- **Email, Slack, Microsoft Teams, Google Chat**: the report carries the message subject and body; the recipients or channels are configured on the destination itself, not on the report. The default initial run sends the rendered message immediately. The send condition is always the default ("Send always") — change it in the P2PDigital Data Marts UI if you need a conditional report.
 
 **Input:**
 
@@ -494,7 +494,7 @@ Creates a report that exports a data mart to an existing destination (see `list_
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `report_id`               | Report identifier                                                                                                                 |
 | `destination_type`        | Type of the destination the report was created for                                                                                |
-| `report_url`              | Link to the report in OWOX Data Marts                                                                                             |
+| `report_url`              | Link to the report in P2PDigital Data Marts                                                                                             |
 | `sheet_url`               | Google Sheets only. Link to the created Google Sheet                                                                              |
 | `owner`                   | The user who created the report                                                                                                   |
 | `status`                  | `created`                                                                                                                         |
@@ -635,7 +635,7 @@ For Google Sheets, `add_destination` only returns a setup link; the destination 
 
 ### A `run_report` call fails
 
-If the report uses a pull-based destination such as Looker Studio, it cannot be started through `run_report`. If the error says the report is already running or pending, use `get_report_run_status` for the existing `run_id` if you have it, or check Run History in OWOX Data Marts before starting another run.
+If the report uses a pull-based destination such as Looker Studio, it cannot be started through `run_report`. If the error says the report is already running or pending, use `get_report_run_status` for the existing `run_id` if you have it, or check Run History in P2PDigital Data Marts before starting another run.
 
 ### `add_report` returns `initial_run.status: failed_to_queue`
 

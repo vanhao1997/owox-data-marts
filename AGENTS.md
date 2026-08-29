@@ -3,7 +3,7 @@
 Preserve unrelated work and use the repository's declared npm workspaces and
 commands. Before reviewing or changing code, resolve the affected surface:
 
-- `apps/web`: `app.owox.com` web UI and feature-scoped browser behavior;
+- `apps/web`: `app.p2pdigital.vn` web UI and feature-scoped browser behavior;
 - `apps/backend`: NestJS app backend and local persistence;
 - `packages/idp-protocol`: identity-provider contracts;
 - `packages/idp-owox-better-auth`: OWOX Better Auth implementation and IB C2C

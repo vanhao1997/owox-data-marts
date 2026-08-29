@@ -1,24 +1,24 @@
 # Snowflake
 
-Use this guide to configure **Snowflake as a storage** in **OWOX Data Marts**. The steps below walk you through creating a storage record, completing authentication, and finishing validation.
+Use this guide to configure **Snowflake as a storage** in **P2PDigital Data Marts**. The steps below walk you through creating a storage record, completing authentication, and finishing validation.
 
 ## Before you begin
 
-Ensure you have a Snowflake account with the right permissions and access. To set up Snowflake storage in OWOX Data Marts, your account should:
+Ensure you have a Snowflake account with the right permissions and access. To set up Snowflake storage in P2PDigital Data Marts, your account should:
 
-- **Have write access** to the warehouse and database where OWOX Data Marts will store data.
+- **Have write access** to the warehouse and database where P2PDigital Data Marts will store data.
 - **Be assigned roles and permissions** that allow you to create or use warehouses, schemas, and tables (detailed steps are provided below).
 - **Follow your organization’s security policies** for account access and management.
 
 If you’re unsure about your permissions, contact your Snowflake administrator before proceeding.
 
-> ☝️ Use a dedicated service account (e.g., `OWOX_SERVICE_USER`) for the OWOX Data Marts integration. This improves security by isolating the integration's access, ensures stability when employees change roles, and simplifies auditing activity in Snowflake logs.
+> ☝️ Use a dedicated service account (e.g., `OWOX_SERVICE_USER`) for the P2PDigital Data Marts integration. This improves security by isolating the integration's access, ensures stability when employees change roles, and simplifies auditing activity in Snowflake logs.
 >
 > You *can* use a personal account if policies allow, but it's not recommended for production.
 
 ## 1. Set up Snowflake Storage
 
-In OWOX Data Marts, open **Storages** from the main navigation pane, and click **+ New Storage**. Select **Snowflake**. Give the storage a clear **title** (e.g., `Snowflake Production`).
+In P2PDigital Data Marts, open **Storages** from the main navigation pane, and click **+ New Storage**. Select **Snowflake**. Give the storage a clear **title** (e.g., `Snowflake Production`).
 
 > **Note:** The storage record is created immediately, but a Data Mart cannot be validated or published until the storage is fully configured.
 
@@ -48,7 +48,7 @@ Snowflake supports two authentication methods:
 
 ##### Step 1. Generate a Programmatic Access Token (PAT)
 
-1. Log in to your Snowflake account, ensuring you’re using the dedicated user or service account intended for the OWOX Data Marts integration.
+1. Log in to your Snowflake account, ensuring you’re using the dedicated user or service account intended for the P2PDigital Data Marts integration.
 2. From the user menu, go to **Settings → Authentication**.
 3. Scroll to **Programmatic access tokens** and click **Generate new token**.
 4. Enter a **Token name** (e.g., `OWOX_TOKEN`) and choose an expiration (up to **1 year** by default).
@@ -78,15 +78,15 @@ ALTER USER <your_user>
 - `<policy_name>` with a descriptive name (for example, `owox_network_policy`)
 - `<your_user>` with the dedicated account login name (e.g., `OWOX_SERVICE_USER`)
 
-The external IP address `34.38.103.182` is the **official and permanent address** used by OWOX Data Marts to connect to your Snowflake account. You can safely use this exact IP in your network policy configuration. Do not modify or replace it with a different address.
+The external IP address `34.38.103.182` is the **official and permanent address** used by P2PDigital Data Marts to connect to your Snowflake account. You can safely use this exact IP in your network policy configuration. Do not modify or replace it with a different address.
 
 > ⚠️ **Important:** Once the network policy is applied, PAT-based access is restricted to the allowed IPs only. Connections from unlisted IPs (including your workstation) will be blocked. If you use a personal account and need direct access, ask your admin to add your IP to the policy.
 
-##### Step 3. Configure PAT Authentication in OWOX Data Marts
+##### Step 3. Configure PAT Authentication in P2PDigital Data Marts
 
 Once the network policy is active:
 
-1. Return to the **OWOX Data Marts** interface and verify you are on the new storage configuration screen.
+1. Return to the **P2PDigital Data Marts** interface and verify you are on the new storage configuration screen.
 2. Select **Username & PAT** as the authentication method.
 3. Enter the required credentials:
    - In the **Username** field, enter the Snowflake login name for your dedicated user (e.g., `OWOX_SERVICE_USER`).
@@ -155,7 +155,7 @@ This step enables key pair authentication for your user account.
 > If you encounter the error `SQL access control error: Insufficient privileges to operate on user '<your_username>'.`, it means your Snowflake user does not have the necessary permissions.  
 > Please ask your Snowflake administrator to run the required command or grant you the appropriate privileges.
 
-##### Step 4. Configure Key Pair Authentication in OWOX Data Marts
+##### Step 4. Configure Key Pair Authentication in P2PDigital Data Marts
 
 1. Choose **Key Pair** as the authentication method.
 
@@ -175,7 +175,7 @@ This step enables key pair authentication for your user account.
    - In the **Private Key** field, paste the **private key**.
    - In the **Username** field, enter the Snowflake login name for your dedicated user (e.g., `OWOX_SERVICE_USER`).
 
-![OWOX Data Marts web interface showing the Private Key input field in the Snowflake storage configuration screen. The field is highlighted, prompting the user to paste the contents of their private key file. The interface is clean and businesslike, with sidebar navigation and a main content area focused on authentication setup.](../../res/screens/snowflake_privatekey.png)
+![P2PDigital Data Marts web interface showing the Private Key input field in the Snowflake storage configuration screen. The field is highlighted, prompting the user to paste the contents of their private key file. The interface is clean and businesslike, with sidebar navigation and a main content area focused on authentication setup.](../../res/screens/snowflake_privatekey.png)
 
 **(Optional) Private Key Passphrase:**
 
@@ -230,7 +230,7 @@ This step enables key pair authentication for your user account.
 - Use an existing warehouse or create a new one
 - Copy the warehouse name (e.g., `OWOX_DATA_MARTS`)
 
-> **Best Practice:** Use a dedicated warehouse for OWOX Data Marts to better control costs and performance.
+> **Best Practice:** Use a dedicated warehouse for P2PDigital Data Marts to better control costs and performance.
 
 ![Snowflake web UI showing Warehouse Activity with blue bars over recent dates; red circles highlight the warehouse name OWOX_DATA_MARTS in the header and the Compute → Warehouses menu path on the left.](../../res/screens/snowflake_copytitle.png)
 
@@ -241,7 +241,7 @@ Enter the **warehouse name** in the storage form (use the exact name).
 1. Review all entered values.
 2. Click **Save** to add the Snowflake storage configuration.
 
-OWOX Data Marts will automatically validate the connection.
+P2PDigital Data Marts will automatically validate the connection.
 
 ## Next Steps
 
@@ -255,7 +255,7 @@ After the Snowflake storage is configured:
 
 ## Troubleshooting
 
-### ❌ Network policy error in the OWOX Data Marts interface
+### ❌ Network policy error in the P2PDigital Data Marts interface
 
 ``` text
 Access validation failed. Snowflake access error:
@@ -271,7 +271,7 @@ After that, try adding the storage once more.
 
 ---
 
-### ❌ MFA authentication error in the OWOX Data Marts interface
+### ❌ MFA authentication error in the P2PDigital Data Marts interface
 
 ``` text
 Access validation failed. Snowflake access error:
@@ -309,10 +309,10 @@ Contact your account administrator. For more information about this error, click
 ```
 
 **Cause:**  
-Your network policy does not include the IP address from which you are trying to access Snowflake. By default, the policy may only allow connections from the official OWOX Data Marts IP (`34.38.103.182`). If you attempt to connect from your own workstation or any other unlisted IP, access will be denied.
+Your network policy does not include the IP address from which you are trying to access Snowflake. By default, the policy may only allow connections from the official P2PDigital Data Marts IP (`34.38.103.182`). If you attempt to connect from your own workstation or any other unlisted IP, access will be denied.
 
 **Solution:**  
-Using a dedicated service account limits access to requests originating only from OWOX Data Marts. However, if you need to log in to the Snowflake interface using this dedicated account (for example, to verify settings), you must ask your Snowflake administrator to temporarily update the network policy to include your current workstation’s IP address alongside the OWOX Data Marts IP.
+Using a dedicated service account limits access to requests originating only from P2PDigital Data Marts. However, if you need to log in to the Snowflake interface using this dedicated account (for example, to verify settings), you must ask your Snowflake administrator to temporarily update the network policy to include your current workstation’s IP address alongside the P2PDigital Data Marts IP.
 Refer to [Step 2: Configure Network Policy (Admin Action Required)](#step-2-configure-network-policy-admin-action-required) for instructions on modifying the allowed IP list.  
 After the policy is updated, retry the connection.
 

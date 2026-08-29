@@ -18,7 +18,7 @@ const HTTP_METHODS = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'
 
 export function buildSwaggerConfig() {
   return new DocumentBuilder()
-    .setTitle('OWOX Data Marts API')
+    .setTitle('P2PDigital Data Marts API')
     .setDescription('REST API used by frontend clients and service integrations.')
     .setVersion('1.0')
     .addApiKey(

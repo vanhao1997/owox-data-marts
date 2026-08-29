@@ -447,7 +447,7 @@ describe('RunReportService', () => {
       expect(report.lastRunStatus).toBe(ReportRunStatus.RESTRICTED);
       expect(reportRun.getDataMartRun().status).toBe(DataMartRunStatus.RESTRICTED);
       expect(reportRun.getDataMartRun().errors).toEqual([
-        expect.stringContaining('https://app.owox.com'),
+        expect.stringContaining('https://app.p2pdigital.vn'),
       ]);
       expect(reportRunService.finish).toHaveBeenCalled();
     }

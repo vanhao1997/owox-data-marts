@@ -1,6 +1,6 @@
 # @owox/ctl
 
-OWOX Data Marts Control CLI for scripts, CI jobs, and AI agents.
+P2PDigital Data Marts Control CLI for scripts, CI jobs, and AI agents.
 
 ## Install
 
@@ -25,4 +25,4 @@ All command output is JSON. The API origin is encoded inside `OWOX_API_KEY`.
 
 ## Documentation
 
-[owox-ctl API documentation](https://docs.owox.com/docs/api/owox-ctl/).
+[owox-ctl API documentation](https://docs.p2pdigital.vn/docs/api/owox-ctl/).

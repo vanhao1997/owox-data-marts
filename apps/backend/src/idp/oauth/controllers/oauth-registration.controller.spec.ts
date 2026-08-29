@@ -9,7 +9,7 @@ import { OAuthRegistrationController } from './oauth-registration.controller';
 
 function makeConfig(overrides: Partial<OAuthConfigService> = {}): OAuthConfigService {
   return {
-    issuer: 'https://app.owox.com',
+    issuer: 'https://app.p2pdigital.vn',
     resource: 'https://mcp.owox.com/mcp',
     isDynamicClientRegistrationEnabled: true,
     scopes: ['mcp:read', 'mcp:write'],
@@ -111,7 +111,7 @@ describe('OAuthRegistrationController', () => {
         redirect_uris: ['http://127.0.0.1:5555/callback'],
         token_endpoint_auth_method: 'none',
       },
-      makeRequest('app.owox.com')
+      makeRequest('app.p2pdigital.vn')
     );
 
     expect(registerSpy).toHaveBeenCalledWith(

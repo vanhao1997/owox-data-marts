@@ -33,7 +33,7 @@ const LEGACY_ENTERPRISE_EDITION = 'ENTERPRISE';
 
 const LEGACY_LICENSE_MESSAGE =
   'Legacy ENTERPRISE license keys are no longer supported. Create a managed license key in ' +
-  'OWOX Data Marts Cloud Project Settings and set it as LICENSE_KEY to restore Report Run execution.';
+  'P2PDigital Data Marts Cloud Project Settings and set it as LICENSE_KEY to restore Report Run execution.';
 
 /**
  * The `AppEditionConfig` class is responsible for managing the application edition

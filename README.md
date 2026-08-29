@@ -1,11 +1,11 @@
-# OWOX Data Marts
+# P2PDigital Data Marts
 
 ## Your AI Reporting Data Analyst — Open Source
 
 Stop shipping reports. Hire a reporting data analyst for each of the team members.
-OWOX Data Marts automates what reporting data analysts do — governed by data teams, consumed by business users with NO AI Hallycinations.
+P2PDigital Data Marts automates what reporting data analysts do — governed by data teams, consumed by business users with NO AI Hallycinations.
 
-[**📘 Quick Start Guide**](./docs/getting-started/quick-start.md) · [**📚 Docs**](https://docs.owox.com?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🌐 Website**](https://www.owox.com?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🆘 Issues**](https://github.com/OWOX/owox-data-marts/issues)
+[**📘 Quick Start Guide**](./docs/getting-started/quick-start.md) · [**📚 Docs**](https://docs.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🌐 Website**](https://www.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🆘 Issues**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
 
 ## ✨ Why We Built This
 
@@ -13,20 +13,20 @@ Data analysts’ work means nothing unless business users can play with the data
 
 However, most **self-service analytics** initiatives fail because they compromise either the data analysts’ control or the business users’ freedom.
 
-At OWOX, we value both:
+At P2PDigital, we value both:
 
 - Data analysts **orchestrate data marts** defined either by [SQL](./docs/getting-started/setup-guide/sql-data-mart.md) or by [connectors](./docs/getting-started/setup-guide/connector-data-mart.md) to sources like Facebook Ads, TikTok Ads, and LinkedIn Ads.
 - Business users **enjoy trusted reports** right [where they want them](./docs/destinations/manage-destinations.md) — in spreadsheets or dashboards.
 
-At OWOX, we believe data analysts shouldn’t have to waste time on CSV files and one-off dashboards. Business users shouldn’t have to be forced to use complex BI tools either.
+At P2PDigital, we believe data analysts shouldn’t have to waste time on CSV files and one-off dashboards. Business users shouldn’t have to be forced to use complex BI tools either.
 
 <https://github.com/user-attachments/assets/d2d9d913-a6fc-4949-a8e8-d697abd1631a>
 
-## The Reporting Skills OWOX Automates
+## The Reporting Skills P2PDigital Automates
 
-We analyzed **1,438 job postings** for reporting data analysts at US ecommerce SMBs. Here's what companies pay $70–120k/yr for — and what OWOX handles out of the box:
+We analyzed **1,438 job postings** for reporting data analysts at US ecommerce SMBs. Here's what companies pay $70–120k/yr for — and what P2PDigital handles out of the box:
 
-| Skill | % of Job Listings | How OWOX Handles It |
+| Skill | % of Job Listings | How P2PDigital handles It |
 |-------|:-----------------:|---------------------|
 | Writing & maintaining SQL queries | ~95% | Create data marts from SQL, tables, views, or patterns — version-controlled and reusable |
 | Integrating data from multiple sources | ~85% | Open-source connectors (Facebook Ads, Google Ads, TikTok, Shopify, etc.) with zero data engineering |
@@ -44,7 +44,7 @@ We analyzed **1,438 job postings** for reporting data analysts at US ecommerce S
 > *"Even one hallucination is too many in this line of work."*
 > — u/Cynot88, r/dataengineering
 
-Most "AI analytics" tools generate numbers from LLM guesses. OWOX AI Insights run **pre-approved SQL your analyst manages**. AI helps with narrative prose, not the numbers. Every value is the result of a deterministic SQL query — not a prediction. Backed by [patented technology](https://www.owox.com?utm_source=github&utm_medium=referral&utm_campaign=readme).
+Most "AI analytics" tools generate numbers from LLM guesses. P2PDigital AI Insights run **pre-approved SQL your analyst manages**. AI helps with narrative prose, not the numbers. Every value is the result of a deterministic SQL query — not a prediction. Backed by [patented technology](https://www.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=readme).
 
 **Why it matters:**
 
@@ -93,12 +93,12 @@ Your data never leaves your infrastructure. Once normalized into your warehouse,
 
 ## 🛠 Quick Start
 
-**OWOX Data Marts** can be run just about anywhere in minutes.  
+**P2PDigital Data Marts** can be run just about anywhere in minutes.  
 Here’s how to get started locally on your machine:
 
 (1) **Install Node.js** 22.22.0+ [download](https://nodejs.org)
 
-(2) **Install OWOX Data Marts**
+(2) **Install P2PDigital Data Marts**
 
 ```bash
 npm install -g owox
@@ -119,7 +119,7 @@ For **Docker** and **cloud deployment options**, see the [Quick Start Guide](./d
 
 > *"Connected BigQuery, set up 37 data marts, built a data model and had live reports in Sheets in under 15 minutes.
 My team thought I was joking when I showed them how they can now get live reports right in their sheets."*
-> *"We migrated 200+ reports from Looker to OWOX Data Marts. Our team now self-serves without filing a single Jira ticket.
+> *"We migrated 200+ reports from Looker to P2PDigital Data Marts. Our team now self-serves without filing a single Jira ticket.
 Easily the best infrastructure decision we made this year."*
 > *"75% of CDAOs who fail to demonstrate AI's positive impact will be reassigned or removed from the C-suite by 2027."*
 > — Gartner, via TechRadar, November 2025
@@ -146,8 +146,8 @@ Open-source data connectors that pull from any API — zero external tools, no c
 | Shopify                         | 🟢 Public        | [Get started](packages/connectors/src/Sources/Shopify/GETTING_STARTED.md)           |
 | TikTok Ads                      | 🟢 Public        | [Get started](packages/connectors/src/Sources/TikTokAds/GETTING_STARTED.md)         |
 | X Ads (former Twitter Ads)      | 🟢 Public        | [Get started](packages/connectors/src/Sources/XAds/GETTING_STARTED.md)              |
-| Hotline                         | ⚪️ In Discussion | [Discussion](https://github.com/OWOX/owox-data-marts/discussions/55)                |
-| Google Business Profile         | ⚪️ In Discussion | [Discussion](https://github.com/OWOX/owox-data-marts/discussions/61)                |
+| Hotline                         | ⚪️ In Discussion | [Discussion](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/55)                |
+| Google Business Profile         | ⚪️ In Discussion | [Discussion](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/61)                |
 
 ### Data Warehouses
 
@@ -159,12 +159,12 @@ Open-source data connectors that pull from any API — zero external tools, no c
 | Snowflake       | 🟢 Public | [Readme](docs/storages/supported-storages/snowflake.md)             |
 | Databricks      | 🟢 Public | [Readme](docs/storages/supported-storages/databricks.md)            |
 
-If you find an integration missing, you can share your use case and request it in the [discussions](https://github.com/OWOX/owox-data-marts/discussions) or [build your own](packages/connectors/CONTRIBUTING.md).
+If you find an integration missing, you can share your use case and request it in the [discussions](https://github.com/vanhao1997/p2pdigital-data-marts/discussions) or [build your own](packages/connectors/CONTRIBUTING.md).
 
 ## How it works
 
 1. **Analysts define** data marts using SQL, existing tables/views, or connectors
-2. **OWOX governs** — ownership, descriptions, aliases, join keys, access controls, and scheduling
+2. **P2PDigital governs** — ownership, descriptions, aliases, join keys, access controls, and scheduling
 3. **Business users consume** — browse the data mart library in Google Sheets, pick columns, apply filters, get live data
 4. **AI Insights narrate** — pre-approved SQL generates numbers; AI writes the prose; delivered to Slack, Teams, email
 
@@ -173,21 +173,21 @@ If you find an integration missing, you can share your use case and request it i
 We're building this **with the community**, not just for it.
 
 - Read the [Contributor Guide](packages/connectors/CONTRIBUTING.md)
-- Check [open Issues](https://github.com/OWOX/owox-data-marts/issues)
-- Join [Discussions](https://github.com/OWOX/owox-data-marts/discussions)
+- Check [open Issues](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+- Join [Discussions](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)
 
 Whether you're adding a new connector, improving docs, or fixing a bug — we'll support and spotlight you.
 
 ## 📌 License
 
-OWOX Data Marts is free for internal or client use, not for resale in a competing product. Dual-license model:
+P2PDigital Data Marts is free for internal or client use, not for resale in a competing product. Dual-license model:
 
 - **Connectors** (`packages/connectors`) — [MIT License](licenses/MIT.md)
 - **Platform** (all other files) — [ELv2 License](licenses/Elasticv2.md)
 - **Enterprise features** — [Enterprise License](licenses/ee.md) (files in `apps/backend/src/data-marts/data-destination-types/ee` or containing `.ee.` in the filename)
 
-Enterprise pricing: [owox.com/pricing](https://www.owox.com/pricing?utm_source=github&utm_medium=referral&utm_campaign=readme)
+Enterprise pricing: [p2pdigital.vn/pricing](https://www.p2pdigital.vn/pricing?utm_source=github&utm_medium=referral&utm_campaign=readme)
 
 ---
 
-[**Star this repo**](https://github.com/OWOX/owox-data-marts) if OWOX saves your team from the reporting backlog.
+[**Star this repo**](https://github.com/vanhao1997/p2pdigital-data-marts) if P2PDigital saves your team from the reporting backlog.

@@ -1,6 +1,6 @@
 # Self-Managed Editions
 
-The tables below outline available features, security, and terms in **Self-Managed editions** of OWOX Data Marts.
+The tables below outline available features, security, and terms in **Self-Managed editions** of P2PDigital Data Marts.
 
 Legend:
 
@@ -22,7 +22,7 @@ Legend:
 | **Data Marts Management** [^4]                                              | ✅                                                                                                                                      | ✅                                                                                                                                                          | ✅                                                                                                                                     |
 | **AI Insights** [^5]                                                            | ❌                                                                                                                                      | ❌                                                                                                                                                          | ✅                                                                                                                                     |
 | **Conversational AI** [^6]                                                       | ❌                                                                                                                                      | ❌                                                                                                                                                          | ✅                                                                                                                                     |
-| **How to start**                                                            | [Install on your desktop](../getting-started/quick-start.md)                                                                            | [Upgrade Community Edition](https://www.owox.com/pricing)                                                                                                   | [Contact our team](https://www.owox.com/pricing)                                                                                       |
+| **How to start**                                                            | [Install on your desktop](../getting-started/quick-start.md)                                                                            | [Upgrade Community Edition](https://www.p2pdigital.vn/pricing)                                                                                                   | [Contact our team](https://www.p2pdigital.vn/pricing)                                                                                       |
 
 ## Security & Control
 
@@ -36,7 +36,7 @@ Legend:
 | **Multiple Projects** [^12]         | ❌                                                           | ⏳                                                        | ✅                                               |
 | **Monitoring & Logging** [^13]      | ❌                                                           | ❌                                                        | ✅                                               |
 | **Telemetry** [^14]                 | ⏳                                                         | ⏳                                                      | ✅                                               |
-| **How to start**                    | [Install on your desktop](../getting-started/quick-start.md) | [Upgrade Community Edition](https://www.owox.com/pricing) | [Contact our team](https://www.owox.com/pricing) |
+| **How to start**                    | [Install on your desktop](../getting-started/quick-start.md) | [Upgrade Community Edition](https://www.p2pdigital.vn/pricing) | [Contact our team](https://www.p2pdigital.vn/pricing) |
 
 ## Terms of Service
 
@@ -47,7 +47,7 @@ Legend:
 | **Pricing**                                                                                  | _Free to use_                                                | _Paid subscription for a limited-feature version_         | _Paid subscription for full-featured version_    |
 | **SLA**                                                                                      | ❌                                                           | ✅                                                        | ✅                                               |
 | [**Support Level**](https://support.owox.com/hc/en-us/articles/115000216754-Support-Options) | _Community_                                                  | _Agency_                                                  | _Enterprise_                                     |
-| **How to start**                                                                             | [Install on your desktop](../getting-started/quick-start.md) | [Upgrade Community Edition](https://www.owox.com/pricing) | [Contact our team](https://www.owox.com/pricing) |
+| **How to start**                                                                             | [Install on your desktop](../getting-started/quick-start.md) | [Upgrade Community Edition](https://www.p2pdigital.vn/pricing) | [Contact our team](https://www.p2pdigital.vn/pricing) |
 
 ## Anonymous Usage Analytics
 
@@ -56,7 +56,7 @@ Legend:
 > analytics that OWOX collects to understand CLI usage.
 
 When you run `owox serve` or an `owox-ctl` command, the CLI sends a single anonymous event so we
-can understand how many people use OWOX Data Marts. This helps us prioritize what to build.
+can understand how many people use P2PDigital Data Marts. This helps us prioritize what to build.
 
 **What is collected** (anonymous, no personal data):
 
@@ -94,7 +94,7 @@ _This page will be updated regularly as we develop more features and refine edit
 [^3]: **Data Enablement** — Amplify analytics team by giving business users direct, self-service access to governed data.
 
     - **Google Sheets Extension** _(available in Cloud edition)_ — Empower business users with self-service access to trusted Data Marts. They can filter, schedule, and refresh data directly within the Google Sheets interface, gaining independence while analysts maintain full governance.
-    - **Google Sheets Export** — Automate data delivery by pushing Data Mart results to spreadsheets via flexible triggers. Designed for analysts, this feature provides granular control over data flow and schedules directly from the OWOX Data Marts interface.
+    - **Google Sheets Export** — Automate data delivery by pushing Data Mart results to spreadsheets via flexible triggers. Designed for analysts, this feature provides granular control over data flow and schedules directly from the P2PDigital Data Marts interface.
     - **Data Studio Connector** — Connect Data Marts to Data Studio so teams can build dashboards on trusted, reusable data — without rewriting logic.
     - **Open Data Protocol (OData)** _(coming soon)_ — Seamlessly connect your preferred tools to trusted data using OData protocol, empowering business users with flexible, secure access.
 

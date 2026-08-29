@@ -13,13 +13,13 @@ Here's everything you need to know about the LinkedIn Pages Connector:
 - [**Getting Started**](GETTING_STARTED.md) – quick setup instructions.
 - [**README**](README.md) – general overview and usage.
 - [**Credentials Guide**](CREDENTIALS.md) – how to obtain and configure required access tokens.
-- [**Q&A Section**](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) – answers to common questions and issues.
+- [**Q&A Section**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) – answers to common questions and issues.
 
 ## Support & Feedback
 
-- Having issues? Check the [**Q&A Section**](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) first.
-- Found a bug? [**Open an issue**](https://github.com/OWOX/owox-data-marts/issues)
-- Want to suggest a feature or a new integration? [**Submit a request**](https://github.com/OWOX/owox-data-marts/discussions)
+- Having issues? Check the [**Q&A Section**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) first.
+- Found a bug? [**Open an issue**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+- Want to suggest a feature or a new integration? [**Submit a request**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)
 
 ## Other Data Sources
 
@@ -27,4 +27,4 @@ Looking for other data sources? Check out our [full list of data sources](../../
 
 ## License
 
-This source is part of the OWOX Data Marts project and is distributed under the [MIT license](../../../../../licenses/MIT.md).
+This source is part of the P2PDigital Data Marts project and is distributed under the [MIT license](../../../../../licenses/MIT.md).

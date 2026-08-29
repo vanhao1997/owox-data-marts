@@ -29,7 +29,7 @@ export interface PluginUi {
   openExternal(url: string): Promise<void>;
 
   /**
-   * Goes to a page inside OWOX Data Marts, in place of this plugin.
+   * Goes to a page inside P2PDigital Data Marts, in place of this plugin.
    *
    * `path` is absolute within the app, e.g. `/ui/${ctx.projectId}/data-marts/${id}`. The
    * host refuses anything that resolves off its own origin, so this cannot become a way

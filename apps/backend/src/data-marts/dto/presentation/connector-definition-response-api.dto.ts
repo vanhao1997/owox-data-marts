@@ -14,7 +14,7 @@ export class ConnectorDefinitionResponseApiDto {
   logo: string | null;
 
   @ApiProperty({
-    example: 'https://docs.owox.com/packages/connectors/src/sources/tik-tok-ads/readme/',
+    example: 'https://docs.p2pdigital.vn/packages/connectors/src/sources/tik-tok-ads/readme/',
     nullable: true,
   })
   docUrl: string | null;

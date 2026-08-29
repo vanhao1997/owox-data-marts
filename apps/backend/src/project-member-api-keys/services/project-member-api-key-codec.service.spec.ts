@@ -6,7 +6,7 @@ describe('ProjectMemberApiKeyCodecService', () => {
 
   it('encodes the API origin, key id, and secret as an unpadded base64url API key', () => {
     const apiKey = service.encode({
-      apiOrigin: 'https://app.owox.com',
+      apiOrigin: 'https://app.p2pdigital.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       secret: 'secret-value',
     });
@@ -15,7 +15,7 @@ describe('ProjectMemberApiKeyCodecService', () => {
     expect(apiKey).not.toContain('=');
 
     expect(decodeProjectMemberApiKey(apiKey)).toEqual({
-      apiOrigin: 'https://app.owox.com',
+      apiOrigin: 'https://app.p2pdigital.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       apiKeySecret: 'secret-value',
     });

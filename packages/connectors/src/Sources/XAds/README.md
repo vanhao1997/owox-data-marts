@@ -23,7 +23,7 @@ Before setting up this connector, make sure you have:
 
 - An active X Ads account with at least one advertising campaign
 - Standard Ads API access approved by X (requires a separate request — see [Credentials Guide](CREDENTIALS.md))
-- An OWOX Data Marts account with at least one storage configured
+- An P2PDigital Data Marts account with at least one storage configured
 
 ## Getting Started
 
@@ -33,9 +33,9 @@ To obtain your API credentials, see the [**Credentials Guide**](CREDENTIALS.md).
 
 ## Support
 
-- Check the [**Q&A section**](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) for answers to common questions
-- Found a bug? [**Open an issue**](https://github.com/OWOX/owox-data-marts/issues)
-- Have a feature request or new integration idea? [**Start a discussion**](https://github.com/OWOX/owox-data-marts/discussions)
+- Check the [**Q&A section**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) for answers to common questions
+- Found a bug? [**Open an issue**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+- Have a feature request or new integration idea? [**Start a discussion**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)
 
 ## Other Data Sources
 
@@ -43,4 +43,4 @@ Looking for other data sources? See the [full list of data sources](../../../../
 
 ## License
 
-This source is part of the OWOX Data Marts project and is distributed under the [MIT license](../../../../../licenses/MIT.md).
+This source is part of the P2PDigital Data Marts project and is distributed under the [MIT license](../../../../../licenses/MIT.md).

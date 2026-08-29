@@ -1,6 +1,6 @@
 # Render
 
-> **Render.com** is a cloud hosting platform that provides an easy way to run web applications without complex infrastructure setup. With Render, you can quickly deploy and start using **OWOX Data Marts** from a pre-built container image, without managing servers manually.
+> **Render.com** is a cloud hosting platform that provides an easy way to run web applications without complex infrastructure setup. With Render, you can quickly deploy and start using **P2PDigital Data Marts** from a pre-built container image, without managing servers manually.
 
 ## Create a Web Service
 
@@ -76,4 +76,4 @@ Go **Environment** section in menu and set:
 
 ## Next Steps
 
-- Join the community on [GitHub Discussions](https://github.com/OWOX/owox-data-marts/discussions)
+- Join the community on [GitHub Discussions](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)

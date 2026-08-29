@@ -40,7 +40,7 @@ const LOOKER_STUDIO_REPORT_INSTRUCTIONS =
   'connected in Looker Studio. If that is already done, the new report is ready to use ' +
   'as a data source. Otherwise the user must do it themselves (the JSON Config contains ' +
   'a secret key that is never sent through MCP/chat): open the destination in the OWOX ' +
-  'Data Marts UI, copy its JSON Config, and paste it into the OWOX Data Marts connector ' +
+  'Data Marts UI, copy its JSON Config, and paste it into the P2PDigital Data Marts connector ' +
   'in Looker Studio. Share the setup_guide_url with the user — it walks through every step.';
 
 const initialRunOutputSchema = z.discriminatedUnion('status', [

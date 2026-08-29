@@ -21,7 +21,7 @@ The invited user will receive a one-time magic link to set their password and ac
 
 Better Auth supports three role levels with different permissions:
 
-| Role | Permissions in Better Auth | Permissions in OWOX Data Marts |
+| Role | Permissions in Better Auth | Permissions in P2PDigital Data Marts |
 |------|-------------|-------------|
 | **Admin** | Full access: can manage all users, invite any role, reset passwords, and delete users | Full access: can create, edit, delete any data mart, storage, destination, report, trigger, run |
 | **Technical User** | Can invite Technical Users and Business Users | Can create, edit, delete self-created data mart, storage, destination, report, trigger, run |

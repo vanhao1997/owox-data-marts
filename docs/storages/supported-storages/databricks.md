@@ -1,10 +1,10 @@
 # Databricks Storage
 
-OWOX Data Marts supports Databricks as a storage destination for your data marts. This guide will help you connect your Databricks workspace to OWOX.
+P2PDigital Data Marts supports Databricks as a storage destination for your data marts. This guide will help you connect your Databricks workspace to OWOX.
 
 ## Overview
 
-Databricks is a unified data analytics platform built on Apache Spark that provides a lakehouse architecture combining the best features of data lakes and data warehouses. With OWOX Data Marts, you can:
+Databricks is a unified data analytics platform built on Apache Spark that provides a lakehouse architecture combining the best features of data lakes and data warehouses. With P2PDigital Data Marts, you can:
 
 - Create and manage data marts in your Databricks workspace
 - Use SQL warehouses for fast query execution
@@ -65,7 +65,7 @@ Personal Access Tokens (PAT) provide secure authentication to Databricks.
 4. Go to the **Developer** tab
 5. Next to **Access tokens**, click **Manage**
 6. Click **Generate new token**
-7. (Optional) Enter a comment describing the token's purpose (e.g., "OWOX Data Marts")
+7. (Optional) Enter a comment describing the token's purpose (e.g., "P2PDigital Data Marts")
 8. (Optional) Set a lifetime for the token
 9. Click **Generate**
 10. **Important:** Copy and save the token immediately - you won't be able to see it again!
@@ -240,6 +240,6 @@ If Unity Catalog is not enabled, you can use the default `hive_metastore` catalo
 
 If you encounter issues not covered in this guide:
 
-1. Check the [OWOX Documentation](https://docs.owox.com)
+1. Check the [OWOX Documentation](https://docs.p2pdigital.vn)
 2. Contact OWOX Support
 3. Review Databricks documentation for platform-specific issues

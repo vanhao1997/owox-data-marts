@@ -58,7 +58,7 @@ In the report's **Columns** picker, each eligible field shows a Σ (aggregation)
 
 > `revenue` with `SUM` → output column **`revenue | SUM`**
 
-![Google Sheets report with the OWOX Data Marts side panel open. The AGGREGATIONS list shows one entry — order_id aggregated by Max — and the order_id column row carries a Σ icon. An arrow points to the resulting "order_id | MAX" output column header in the sheet.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/4969dedd-fb39-4b3a-cb3d-7f489423aa00/public)
+![Google Sheets report with the P2PDigital Data Marts side panel open. The AGGREGATIONS list shows one entry — order_id aggregated by Max — and the order_id column row carries a Σ icon. An arrow points to the resulting "order_id | MAX" output column header in the sheet.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/4969dedd-fb39-4b3a-cb3d-7f489423aa00/public)
 
 ### Aggregate Function Reference
 
@@ -81,7 +81,7 @@ Which functions appear depends on the field type and the Data Mart's **allowed a
 
 You can apply several functions to one column — for example `SUM` and `AVG` of `amount`. Each function produces its own output column (`amount | SUM`, `amount | AVG`), so you can compare them side by side in a single report.
 
-![Google Sheets report with the OWOX Data Marts side panel open. The AGGREGATIONS list shows four entries for the revenue field — aggregated by Sum, Average, Min, and Max. The sheet shows corresponding output columns revenue | SUM, revenue | AVG, revenue | MIN, and revenue | MAX with matching values in each row.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/d6c5e5e2-e570-4501-9f6d-8ee1f9903e00/public)
+![Google Sheets report with the P2PDigital Data Marts side panel open. The AGGREGATIONS list shows four entries for the revenue field — aggregated by Sum, Average, Min, and Max. The sheet shows corresponding output columns revenue | SUM, revenue | AVG, revenue | MIN, and revenue | MAX with matching values in each row.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/d6c5e5e2-e570-4501-9f6d-8ee1f9903e00/public)
 
 ## Group By (Dimensions)
 

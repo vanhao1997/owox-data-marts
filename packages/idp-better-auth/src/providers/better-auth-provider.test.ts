@@ -552,7 +552,7 @@ describe('BetterAuthProvider', () => {
       expect(userMgmt.getUserRole).toHaveBeenCalledWith('user-1');
       expect(project).toEqual({
         id: '0',
-        title: 'OWOX Data Marts',
+        title: 'P2PDigital Data Marts',
         status: 'active',
         roles: ['editor'],
       });

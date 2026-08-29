@@ -1,6 +1,6 @@
 # OWOX Cloud Editions
 
-The tables below outline available features, security, and terms in **OWOX Cloud Editions** of OWOX Data Marts.
+The tables below outline available features, security, and terms in **OWOX Cloud Editions** of P2PDigital Data Marts.
 
 Legend:
 
@@ -22,7 +22,7 @@ Legend:
 | **Data Marts Management** [^4]    | ✅ | ✅ | ✅ |
 | **Insights** [^5]              | ❌ | ✅ _OWOX AI_ | ✅ _OWOX AI or Your AI_ |
 | **Conversational AI** [^6]        | ❌ | ❌ | ✅ _OWOX AI or Your AI_ |
-| **How to start**                  | [Get started free](https://www.owox.com/app-signup) | [Contact our team](https://www.owox.com/pricing) | [Contact our team](https://www.owox.com/pricing) |
+| **How to start**                  | [Get started free](https://www.p2pdigital.vn/app-signup) | [Contact our team](https://www.p2pdigital.vn/pricing) | [Contact our team](https://www.p2pdigital.vn/pricing) |
 
 ## Security & Control
 
@@ -35,7 +35,7 @@ Legend:
 | **Multiple Projects** [^11]         | ❌ | ✅ | ✅ |
 | **Monitoring & Logging** [^12]      | ❌ | ❌ | ✅ |
 | **Telemetry** [^13]                 | ⏳ | ⏳ | ✅ |
-| **How to start**                    | [Get started free](https://www.owox.com/app-signup) | [Contact our team](https://www.owox.com/pricing) | [Contact our team](https://www.owox.com/pricing) |
+| **How to start**                    | [Get started free](https://www.p2pdigital.vn/app-signup) | [Contact our team](https://www.p2pdigital.vn/pricing) | [Contact our team](https://www.p2pdigital.vn/pricing) |
 
 ## Terms of Service
 
@@ -45,7 +45,7 @@ Legend:
 | **Support**                                                                                      | ![Doc](../res/doc.svg) ![Chat](../res/chat.svg)                                                           | ![Doc](../res/doc.svg) ![Chat](../res/chat.svg) ![Email](../res/mail.svg)                                                        |   ![Doc](../res/doc.svg) ![Chat](../res/chat.svg) ![Email](../res/mail.svg) ![Phone](../res/phone_in_talk.svg)                                           |
 | [**Support Details**](https://support.owox.com/hc/en-us/articles/115000216754-Support-Options) | _Cloud Starter_                                                  | _Cloud Team_                                                  | _Enterprise_                                     |
 | **Pricing**                                                                             | Starts at 30 USD / mo  | Starts at 875 USD / mo | Custom contract  |
-| **How to start**                                                                             | [Get started free](https://www.owox.com/app-signup) | [Contact our team](https://www.owox.com/pricing) | [Contact our team](https://www.owox.com/pricing)  |
+| **How to start**                                                                             | [Get started free](https://www.p2pdigital.vn/app-signup) | [Contact our team](https://www.p2pdigital.vn/pricing) | [Contact our team](https://www.p2pdigital.vn/pricing)  |
 
 _This page will be updated regularly as we develop more features and refine editions._
 
@@ -58,7 +58,7 @@ _This page will be updated regularly as we develop more features and refine edit
 [^3]: **Data Enablement** — Amplify analytics team by giving business users direct, self-service access to governed data.
 
     - **Google Sheets Extension** — Empower business users with self-service access to trusted Data Marts. They can filter, schedule, and refresh data directly within the Google Sheets interface, gaining independence while analysts maintain full governance.
-    - **Google Sheets Export** — Automate data delivery by pushing Data Mart results to spreadsheets via flexible triggers. Designed for analysts, this feature provides granular control over data flow and schedules directly from the OWOX Data Marts interface.
+    - **Google Sheets Export** — Automate data delivery by pushing Data Mart results to spreadsheets via flexible triggers. Designed for analysts, this feature provides granular control over data flow and schedules directly from the P2PDigital Data Marts interface.
     - **Data Studio Connector** — Connect Data Marts to Data Studio so teams can build dashboards on trusted, reusable data — without rewriting logic.
     - **Open Data Protocol (OData)** _(coming soon)_ — Seamlessly connect your preferred tools to trusted data using OData protocol, empowering business users with flexible, secure access.
 

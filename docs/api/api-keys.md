@@ -1,6 +1,6 @@
 # API Keys
 
-API keys let external tools authenticate with OWOX Data Marts without an interactive browser session.
+API keys let external tools authenticate with P2PDigital Data Marts without an interactive browser session.
 
 Use API keys with:
 
@@ -26,7 +26,7 @@ creating API keys. The origin is included in the API key, so keys created with a
 
 ## Create an API key
 
-1. Open your OWOX Data Marts project.
+1. Open your P2PDigital Data Marts project.
 2. In the project menu, open **Project settings → My API Keys**.
 3. Click **Create API Key**.
 4. Enter a **Name**.

@@ -169,7 +169,7 @@ describe('OWOXApiClient', () => {
         name: 'OWOXApiError',
         code: 'NETWORK_ERROR',
       });
-      expect(error.message).toContain(`Unable to reach OWOX Data Marts API at ${apiOrigin}`);
+      expect(error.message).toContain(`Unable to reach P2PDigital Data Marts API at ${apiOrigin}`);
       expect(error.message).not.toContain('fetch failed');
       expect(error.message).not.toContain(apiKeySecret);
     });
@@ -658,7 +658,7 @@ describe('OWOXApiClient', () => {
         name: 'OWOXApiError',
         code: 'NETWORK_ERROR',
       });
-      expect(error.message).toContain(`Unable to reach OWOX Data Marts API at ${apiOrigin}`);
+      expect(error.message).toContain(`Unable to reach P2PDigital Data Marts API at ${apiOrigin}`);
       expect(error.message).not.toContain('fetch failed');
       expect(error.message).not.toContain(apiKeySecret);
     });

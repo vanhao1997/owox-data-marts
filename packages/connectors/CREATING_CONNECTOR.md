@@ -334,7 +334,7 @@ After creating your connector:
 
 3. **Test integration:**
    - Run backend application with `npm run dev -w owox`
-   - Move to OWOX Data Marts application in your browser: `http://localhost:3000`
+   - Move to P2PDigital Data Marts application in your browser: `http://localhost:3000`
    - Create new data mart with new source connector
    - Create a configuration with required parameters
    - Test source with existing storage

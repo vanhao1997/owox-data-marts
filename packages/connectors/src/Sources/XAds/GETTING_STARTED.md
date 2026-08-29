@@ -4,11 +4,11 @@ Before you start, verify:
 
 - You have [X Ads API credentials](CREDENTIALS.md): Consumer Key, Consumer Secret, Access Token, and Access Token Secret.
 - You have your **Account ID** — find it in your [ads.x.com](https://ads.x.com/) URL (covered in [Set Up the Connector](#set-up-the-connector) below).
-- You have [set up **OWOX Data Marts**](https://docs.owox.com/docs/getting-started/quick-start/). You also need [at least one storage](https://docs.owox.com/docs/storages/manage-storages/) in **Storages** — you can configure it later if needed.
+- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/). You also need [at least one storage](https://docs.p2pdigital.vn/docs/storages/manage-storages/) in **Storages** — you can configure it later if needed.
 
 ## Create the Data Mart
 
-- Click **New Data Mart** (available from any page in OWOX Data Marts).
+- Click **New Data Mart** (available from any page in P2PDigital Data Marts).
 - Enter a title and select the Storage. If you haven't configured a storage yet, click **New Storage** to create one now and configure it later.
 - Click **Create Data Mart**.
 
@@ -116,6 +116,6 @@ Your X account lacks permission for this endpoint. Re-check your account's acces
 
 For anything else:
 
-- Browse the [Q&A section](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) — your question might already be answered.
-- Found a bug? [Open an issue](https://github.com/OWOX/owox-data-marts/issues).
-- Join the [discussion forum](https://github.com/OWOX/owox-data-marts/discussions) to ask questions or propose improvements.
+- Browse the [Q&A section](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) — your question might already be answered.
+- Found a bug? [Open an issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues).
+- Join the [discussion forum](https://github.com/vanhao1997/p2pdigital-data-marts/discussions) to ask questions or propose improvements.

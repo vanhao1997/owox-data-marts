@@ -181,6 +181,6 @@ Always generate and use the authorization code **immediately** after receiving i
 
 If you encounter any other issues:
 
-1. Please [visit Q&A](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) first
-2. If you want to report a bug, please [open an issue](https://github.com/OWOX/owox-data-marts/issues)
-3. Join the [discussion forum](https://github.com/OWOX/owox-data-marts/discussions) to ask questions or propose improvements
+1. Please [visit Q&A](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) first
+2. If you want to report a bug, please [open an issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+3. Join the [discussion forum](https://github.com/vanhao1997/p2pdigital-data-marts/discussions) to ask questions or propose improvements

@@ -20,7 +20,7 @@ import {
 } from './project-billing.service';
 
 /** Not configurable: the license key travels here as a bearer token, so a redirectable base URL would leak it. */
-const LICENSE_CLOUD_BASE_URL = 'https://app.owox.com';
+const LICENSE_CLOUD_BASE_URL = 'https://app.p2pdigital.vn';
 
 /**
  * Billing for self-managed deployments: Report Runs are authorized and billed through

@@ -70,7 +70,7 @@ The form also asks you to describe how you'll use the API. X grants access based
 
 Adapt this example:
 
-> *"We are advertisers connecting to the X Ads API to access campaign analytics, campaign management, and ad creative data for reporting and optimization. The data will be imported via the OWOX Data Marts platform to support strategic marketing decisions."*
+> *"We are advertisers connecting to the X Ads API to access campaign analytics, campaign management, and ad creative data for reporting and optimization. The data will be imported via the P2PDigital Data Marts platform to support strategic marketing decisions."*
 
 ![Ads API Access Form with fields for company info, contact details, Developer App ID, and API purpose description](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/daaf25b4-209d-4ee6-04fd-2e513164d600/public)
 
@@ -231,6 +231,6 @@ Go to the [Getting Started Guide](GETTING_STARTED.md) to complete the setup.
 
 ## Support
 
-- Browse the [**Q&A section**](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) for common answers
-- Found a bug? [**Open an issue**](https://github.com/OWOX/owox-data-marts/issues)
-- Have a suggestion? [**Start a discussion**](https://github.com/OWOX/owox-data-marts/discussions)
+- Browse the [**Q&A section**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) for common answers
+- Found a bug? [**Open an issue**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+- Have a suggestion? [**Start a discussion**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)

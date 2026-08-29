@@ -1,7 +1,7 @@
 {
   "name": "@owox/api-client",
   "version": "0.32.0",
-  "description": "HTTP API client for OWOX Data Marts",
+  "description": "HTTP API client for P2PDigital Data Marts",
   "type": "module",
   "author": "OWOX",
   "license": "ELv2",
@@ -11,11 +11,11 @@
   "engines": {
     "node": ">=22.22.0"
   },
-  "homepage": "https://github.com/OWOX/owox-data-marts",
-  "bugs": "https://github.com/OWOX/owox-data-marts/issues",
+  "homepage": "https://github.com/vanhao1997/p2pdigital-data-marts",
+  "bugs": "https://github.com/vanhao1997/p2pdigital-data-marts/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git",
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git",
     "directory": "packages/api-client"
   },
   "scripts": {

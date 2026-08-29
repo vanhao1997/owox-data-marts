@@ -13,7 +13,7 @@
  *  - Parsed object for valid JSON
  *  - Raw string otherwise (pass-through)
  *
- * @see https://github.com/OWOX/owox-data-marts/blob/main/docs/getting-started/deployment-guide/environment-variables.md#mysql-ssl
+ * @see https://github.com/vanhao1997/p2pdigital-data-marts/blob/main/docs/getting-started/deployment-guide/environment-variables.md#mysql-ssl
  * @see https://sidorares.github.io/node-mysql2/docs/documentation/ssl
  * @example
  * parseMysqlSslEnv('true') // {}

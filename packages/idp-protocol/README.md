@@ -1,6 +1,6 @@
 # @owox/idp-protocol
 
-Identity Provider protocol package for OWOX Data Marts. Provides core types, middleware, and provider implementations for authentication and authorization.
+Identity Provider protocol package for P2PDigital Data Marts. Provides core types, middleware, and provider implementations for authentication and authorization.
 
 ## Features
 

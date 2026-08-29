@@ -1,9 +1,9 @@
 # owox-ctl
 
-`owox-ctl` is the OWOX Data Marts Control CLI for scripts, CI jobs, and AI agents.
+`owox-ctl` is the P2PDigital Data Marts Control CLI for scripts, CI jobs, and AI agents.
 
-> `owox-ctl` controls an existing OWOX Data Marts deployment through the HTTP API.
-> The existing `owox` CLI is used to run or manage a local/self-managed OWOX Data Marts runtime.
+> `owox-ctl` controls an existing P2PDigital Data Marts deployment through the HTTP API.
+> The existing `owox` CLI is used to run or manage a local/self-managed P2PDigital Data Marts runtime.
 
 ## Install
 
@@ -53,7 +53,7 @@ Example:
 
 ```json
 {
-  "apiOrigin": "https://app.owox.com",
+  "apiOrigin": "https://app.p2pdigital.vn",
   "apiKeyId": "pmk_1234567890abcdef",
   "authenticated": true,
   "envFile": null,
@@ -75,7 +75,7 @@ With auto-loaded `.env`, `envFile` is the default path used:
 
 ```json
 {
-  "apiOrigin": "https://app.owox.com",
+  "apiOrigin": "https://app.p2pdigital.vn",
   "apiKeyId": "pmk_1234567890abcdef",
   "authenticated": true,
   "envFile": "/path/to/project/.env",
@@ -170,7 +170,7 @@ Aggregation and date buckets require an explicit `--column` projection; they can
 
 ## Use owox-ctl with AI agents
 
-AI agents can call `owox-ctl` as a regular terminal command. This lets AI agents inspect available data marts, storages, destinations, and Data Mart rows without building a direct integration with the OWOX Data Marts API.
+AI agents can call `owox-ctl` as a regular terminal command. This lets AI agents inspect available data marts, storages, destinations, and Data Mart rows without building a direct integration with the P2PDigital Data Marts API.
 
 Recommended setup:
 
@@ -196,4 +196,4 @@ Security notes:
 
 ## Build custom integrations
 
-If you need to call OWOX Data Marts from TypeScript or JavaScript code instead of shell commands, use [@owox/api-client](./api-client/).
+If you need to call P2PDigital Data Marts from TypeScript or JavaScript code instead of shell commands, use [@owox/api-client](./api-client/).

@@ -11,22 +11,22 @@ describe('MCP OAuth protocol schemas', () => {
   it('accepts protected-resource metadata for the MCP resource', () => {
     const result = OAuthProtectedResourceMetadataSchema.parse({
       resource: 'https://mcp.owox.com/mcp',
-      authorization_servers: ['https://app.owox.com'],
+      authorization_servers: ['https://app.p2pdigital.vn'],
       scopes_supported: ['mcp:read', 'mcp:write'],
-      resource_documentation: 'https://docs.owox.com/docs/mcp',
+      resource_documentation: 'https://docs.p2pdigital.vn/docs/mcp',
     });
 
     expect(result.resource).toBe('https://mcp.owox.com/mcp');
-    expect(result.authorization_servers).toEqual(['https://app.owox.com']);
+    expect(result.authorization_servers).toEqual(['https://app.p2pdigital.vn']);
   });
 
   it('accepts authorization-code metadata with PKCE and dynamic registration', () => {
     const result = OAuthAuthorizationServerMetadataSchema.parse({
-      issuer: 'https://app.owox.com',
-      authorization_endpoint: 'https://app.owox.com/oauth/authorize',
-      token_endpoint: 'https://app.owox.com/oauth/token',
-      registration_endpoint: 'https://app.owox.com/oauth/register',
-      jwks_uri: 'https://app.owox.com/oauth/jwks',
+      issuer: 'https://app.p2pdigital.vn',
+      authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
+      token_endpoint: 'https://app.p2pdigital.vn/oauth/token',
+      registration_endpoint: 'https://app.p2pdigital.vn/oauth/register',
+      jwks_uri: 'https://app.p2pdigital.vn/oauth/jwks',
       response_types_supported: ['code'],
       grant_types_supported: ['authorization_code', 'refresh_token'],
       code_challenge_methods_supported: ['S256'],

@@ -7,7 +7,7 @@ export function ParseMarkdownToHtmlSpec() {
     ApiOperation({ summary: 'Convert Markdown to application-rendered HTML' }),
     ApiBody({ type: MarkdownParseRequestApiDto }),
     ApiCreatedResponse({
-      description: 'Rendered HTML using the same Markdown pipeline as the OWOX Data Marts UI',
+      description: 'Rendered HTML using the same Markdown pipeline as the P2PDigital Data Marts UI',
       content: {
         'text/html': {
           schema: {

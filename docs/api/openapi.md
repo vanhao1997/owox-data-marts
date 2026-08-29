@@ -1,14 +1,14 @@
 # OpenAPI and Swagger UI
 
-OWOX Data Marts exposes OpenAPI specifications and Swagger UI for the HTTP API.
+P2PDigital Data Marts exposes OpenAPI specifications and Swagger UI for the HTTP API.
 
-For OWOX Data Marts Cloud at [https://app.owox.com](https://app.owox.com), API documentation is available at:
+For P2PDigital Data Marts Cloud at [https://app.p2pdigital.vn](https://app.p2pdigital.vn), API documentation is available at:
 
-- [https://app.owox.com/api/openapi.json](https://app.owox.com/api/openapi.json)
-- [https://app.owox.com/api/openapi.yaml](https://app.owox.com/api/openapi.yaml)
-- [https://app.owox.com/api/swagger-ui](https://app.owox.com/api/swagger-ui)
+- [https://app.p2pdigital.vn/api/openapi.json](https://app.p2pdigital.vn/api/openapi.json)
+- [https://app.p2pdigital.vn/api/openapi.yaml](https://app.p2pdigital.vn/api/openapi.yaml)
+- [https://app.p2pdigital.vn/api/swagger-ui](https://app.p2pdigital.vn/api/swagger-ui)
 
-For a self-managed OWOX Data Marts deployment at `https://your-owox.example.com`, use:
+For a self-managed P2PDigital Data Marts deployment at `https://your-owox.example.com`, use:
 
 - `https://your-owox.example.com/api/openapi.json`
 - `https://your-owox.example.com/api/openapi.yaml`
@@ -49,7 +49,7 @@ X-OWOX-Api-Key-Id: <apiKeyId>
 ```
 
 Send this request to the decoded `apiOrigin`, for example
-`https://app.owox.com/api/auth/api-keys/exchange`.
+`https://app.p2pdigital.vn/api/auth/api-keys/exchange`.
 
 The response contains an access token:
 
@@ -85,4 +85,4 @@ the run (and its executed query) through the run history endpoint.
 
 ## Compatibility
 
-The same client and OWOX Data Marts server version is supported. Different versions are best effort.
+The same client and P2PDigital Data Marts server version is supported. Different versions are best effort.

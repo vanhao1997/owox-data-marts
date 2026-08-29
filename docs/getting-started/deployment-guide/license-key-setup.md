@@ -1,6 +1,6 @@
 # Configure a Self-Managed License Key
 
-A managed license key enables Report Runs on a self-managed OWOX Data Marts deployment and bills their consumption to the OWOX Data Marts Cloud project that issued the key.
+A managed license key enables Report Runs on a self-managed P2PDigital Data Marts deployment and bills their consumption to the P2PDigital Data Marts Cloud project that issued the key.
 
 This guide covers deployment configuration. To create, rename, rotate, or revoke keys, see [License Keys in Project Settings](../../project/license-keys.md).
 
@@ -8,9 +8,9 @@ This guide covers deployment configuration. To create, rename, rotate, or revoke
 
 You need:
 
-- a self-managed OWOX Data Marts deployment;
+- a self-managed P2PDigital Data Marts deployment;
 - its public HTTP or HTTPS origin;
-- access to an OWOX Data Marts Cloud project;
+- access to an P2PDigital Data Marts Cloud project;
 - a Project Admin who can create a license key in that project.
 
 ## 1. Set the public origin
@@ -31,7 +31,7 @@ The value is part of the license validation. A key created for a different origi
 
 ## 2. Create and copy the key
 
-In OWOX Data Marts Cloud, open **Project Settings → License keys** and create a key whose **Public origin** matches `PUBLIC_ORIGIN`.
+In P2PDigital Data Marts Cloud, open **Project Settings → License keys** and create a key whose **Public origin** matches `PUBLIC_ORIGIN`.
 
 Copy the full key when it is revealed. It is displayed only once. For the complete management workflow, see [Create a license key](../../project/license-keys.md#create-a-license-key).
 
@@ -61,7 +61,7 @@ See [Consumption from licensed self-managed deployments](../billing/consumption-
 
 ## What the license changes
 
-- Successful Report Runs are authorized through OWOX Data Marts Cloud and charged to the Cloud project that issued the key.
+- Successful Report Runs are authorized through P2PDigital Data Marts Cloud and charged to the Cloud project that issued the key.
 - Report Run consumption includes the license key ID, self-managed project, and deployment origin so Cloud can display it separately from native Cloud usage.
 - Process Runs continue to execute on the self-managed deployment and are not sent to Cloud for consumption billing through the license key.
 - Without a valid key, the deployment uses the Community edition. Configuration remains available, but Report Runs finish as restricted.

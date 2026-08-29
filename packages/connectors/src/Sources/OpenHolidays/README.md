@@ -10,13 +10,13 @@ To begin, check out [**GETTING STARTED.md**](GETTING_STARTED.md) for step-by-ste
 
 - [**GETTING STARTED**](GETTING_STARTED.md) – quick and easy setup guide.
 - [**README**](README.md) – general information about the source.
-- [**Q&A**](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) – troubleshooting common issues.
+- [**Q&A**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) – troubleshooting common issues.
 
 ## Support & Feedback
 
-- If you encounter an issue, please check the [**Q&A**](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) section first.
-- To report a bug, open an [**issue**](https://github.com/OWOX/owox-data-marts/issues)
-- Have an idea or want a new integration? Submit a [**feature request**](https://github.com/OWOX/owox-data-marts/discussions)
+- If you encounter an issue, please check the [**Q&A**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) section first.
+- To report a bug, open an [**issue**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+- Have an idea or want a new integration? Submit a [**feature request**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)
 
 ## Other Data Sources
 
@@ -24,4 +24,4 @@ Looking for other data sources? Check out our [full list of data sources](../../
 
 ## License
 
-This source is part of the OWOX Data Marts project and is distributed under the [MIT license](../../../../../licenses/MIT.md).
+This source is part of the P2PDigital Data Marts project and is distributed under the [MIT license](../../../../../licenses/MIT.md).

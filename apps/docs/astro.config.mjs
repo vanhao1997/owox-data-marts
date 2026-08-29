@@ -14,13 +14,13 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     starlight({
-      title: 'OWOX Data Marts',
+      title: 'P2PDigital Data Marts',
       favicon: 'favicon.png',
       logo: {
         src: './public/logo.svg',
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/OWOX/owox-data-marts' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/vanhao1997/p2pdigital-data-marts' },
       ],
       customCss: ['./src/styles/custom.css'],
       components: {

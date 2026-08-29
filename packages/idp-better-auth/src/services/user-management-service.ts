@@ -10,7 +10,7 @@ import crypto from 'node:crypto';
 
 export class UserManagementService {
   private static readonly DEFAULT_ORGANIZATION_ID = 'owox_data_marts_organization';
-  private static readonly DEFAULT_ORGANIZATION_NAME = 'OWOX Data Marts';
+  private static readonly DEFAULT_ORGANIZATION_NAME = 'P2PDigital Data Marts';
   private static readonly DEFAULT_ORGANIZATION_SLUG = 'owox-data-marts';
 
   /**

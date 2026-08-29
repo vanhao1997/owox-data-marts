@@ -1,6 +1,6 @@
 # TypeScript/JavaScript API Client
 
-`@owox/api-client` is a TypeScript/JavaScript package for calling the OWOX Data Marts API from custom scripts, internal tools, automation, and AI agent workflows.
+`@owox/api-client` is a TypeScript/JavaScript package for calling the P2PDigital Data Marts API from custom scripts, internal tools, automation, and AI agent workflows.
 
 Use `owox-ctl` for terminal commands. Use `@owox/api-client` for code-level integrations.
 
@@ -242,7 +242,7 @@ back to keyword matching.
 ## Convert Markdown to HTML
 
 Use `markdown.parseToHtml()` to render Markdown with the same pipeline and styling wrapper used by
-the OWOX Data Marts web interface. The method returns the rendered HTML string directly.
+the P2PDigital Data Marts web interface. The method returns the rendered HTML string directly.
 
 ```ts
 const html = await client.markdown.parseToHtml({
@@ -473,7 +473,7 @@ const destinations = await client.destinations.list();
 
 ## Use in AI agents and scripts
 
-AI agents can run scripts that use `@owox/api-client` when they need structured access to OWOX Data Marts from TypeScript or JavaScript.
+AI agents can run scripts that use `@owox/api-client` when they need structured access to P2PDigital Data Marts from TypeScript or JavaScript.
 
 ```ts
 import { OWOXApiClient } from '@owox/api-client';
@@ -538,7 +538,7 @@ try {
 
 ## Compatibility
 
-The same `@owox/api-client` and OWOX Data Marts server version is supported. Different versions are best effort.
+The same `@owox/api-client` and P2PDigital Data Marts server version is supported. Different versions are best effort.
 
 ## Related docs
 

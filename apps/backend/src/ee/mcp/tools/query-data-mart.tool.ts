@@ -430,13 +430,13 @@ If truncated is true, not all matching rows were returned: narrow the query (few
       if (err.blockedReasons.includes(ProjectBlockedReason.OVERDRAFT_LIMIT_EXCEEDED)) {
         return toStructuredToolError(
           'insufficient_credits',
-          'This OWOX Data Marts project has reached its credit limit. Upgrade your plan to get more credits.'
+          'This P2PDigital Data Marts project has reached its credit limit. Upgrade your plan to get more credits.'
         );
       }
       if (err.blockedReasons.includes(ProjectBlockedReason.BI_PROJECT_NOT_ACTIVE)) {
         return toStructuredToolError(
           'project_inactive',
-          'This OWOX Data Marts project is inactive. Activate the project to continue.'
+          'This P2PDigital Data Marts project is inactive. Activate the project to continue.'
         );
       }
     }

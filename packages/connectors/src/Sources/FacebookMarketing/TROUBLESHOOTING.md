@@ -57,6 +57,6 @@ Meta explains the full model in [Marketing API rate limiting](https://developers
 
 If the Run history error does not match any case above:
 
-1. Search [Q&A](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a).
-2. Open an [issue](https://github.com/OWOX/owox-data-marts/issues) to report a bug.
-3. Join the [discussion forum](https://github.com/OWOX/owox-data-marts/discussions).
+1. Search [Q&A](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a).
+2. Open an [issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues) to report a bug.
+3. Join the [discussion forum](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

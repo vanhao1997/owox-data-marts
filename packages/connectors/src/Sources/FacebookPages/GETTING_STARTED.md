@@ -1,6 +1,6 @@
 # Import Facebook Fanpage Insights
 
-1. Create a storage in OWOX Data Marts.
+1. Create a storage in P2PDigital Data Marts.
 2. Create a new Data Mart and select the storage.
 3. Choose **Connector** as the input source and select **Facebook Fanpage**.
 4. Click **Continue with Facebook**, approve requested Page permissions, and select one or more managed Pages; or choose manual Access Token auth and enter `Access Token`, `App ID`, `App Secret`, and comma-separated `Page IDs`.

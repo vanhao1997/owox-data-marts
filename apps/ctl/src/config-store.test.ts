@@ -4,7 +4,7 @@ import { resolveAuthConfig } from './config-store.js';
 
 const validApiKey = `owox_key_${Buffer.from(
   JSON.stringify({
-    apiOrigin: 'https://app.owox.com',
+    apiOrigin: 'https://app.p2pdigital.vn',
     apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
     apiKeySecret: 'env-secret',
   }),
@@ -19,7 +19,7 @@ describe('auth config', () => {
       })
     ).toEqual({
       apiKey: validApiKey,
-      apiOrigin: 'https://app.owox.com',
+      apiOrigin: 'https://app.p2pdigital.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
     });
   });
@@ -32,7 +32,7 @@ describe('auth config', () => {
   it('does not accept legacy split credential variables', () => {
     expect(() =>
       resolveAuthConfig({
-        OWOX_API_ORIGIN: 'https://app.owox.com',
+        OWOX_API_ORIGIN: 'https://app.p2pdigital.vn',
         OWOX_API_KEY_ID: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
         OWOX_API_KEY_SECRET: 'env-secret',
       })

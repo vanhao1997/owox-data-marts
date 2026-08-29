@@ -2,7 +2,7 @@
 
 ## 1. Go to the Storages Page
 
-In the OWOX Data Marts web application, navigate to **Storages** from the main navigation pane and click **+ New Storage**.
+In the P2PDigital Data Marts web application, navigate to **Storages** from the main navigation pane and click **+ New Storage**.
 
 ## 2. Choose Storage Type
 
@@ -13,7 +13,7 @@ Click **Google BigQuery** to create a new **Storage** configuration.
 
 ## 3. Add title
 
-Give the storage configuration a clear **title**, eg `OWOX Data Marts – Your Name`.
+Give the storage configuration a clear **title**, eg `P2PDigital Data Marts – Your Name`.
 
 ## 4. Set General Settings and Connection Details
 
@@ -33,7 +33,7 @@ NOTE: BigQuery usage costs will be applied to this project.
 
 ### Choose Authentication Method
 
-OWOX Data Marts supports two authentication methods for BigQuery:
+P2PDigital Data Marts supports two authentication methods for BigQuery:
 
 #### Option A: Service Account (JSON Key)
 

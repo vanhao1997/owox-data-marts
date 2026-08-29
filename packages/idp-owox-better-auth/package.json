@@ -7,7 +7,7 @@
   "description": "OWOX Better Auth implementation for OWOX IDP Protocol",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git"
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git"
   },
   "scripts": {
     "build": "tsc && node ./scripts/copy-public.cjs",

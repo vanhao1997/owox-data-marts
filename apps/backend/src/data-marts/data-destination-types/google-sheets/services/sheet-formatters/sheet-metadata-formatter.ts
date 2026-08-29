@@ -201,11 +201,11 @@ export class SheetMetadataFormatter {
   /**
    * The single-line ODM ownership marker, shared by the full first-column note
    * and the short marker written to the remaining columns so both read
-   * identically: `--- Imported via OWOX Data Marts ---`.
+   * identically: `--- Imported via P2PDigital Data Marts ---`.
    */
   private buildOdmMarker(isCommunityEdition: boolean): string {
     const editionSuffix = isCommunityEdition ? ' Community Edition' : '';
-    return `--- Imported via OWOX Data Marts${editionSuffix} ---`;
+    return `--- Imported via P2PDigital Data Marts${editionSuffix} ---`;
   }
 
   /**

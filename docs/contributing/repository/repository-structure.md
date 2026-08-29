@@ -1,6 +1,6 @@
 # Repository Structure
 
-This document describes the structure of the OWOX Data Marts monorepo, which is organized to separate deployable applications from shared packages.
+This document describes the structure of the P2PDigital Data Marts monorepo, which is organized to separate deployable applications from shared packages.
 
 The monorepo is divided into two main sections:
 
@@ -101,7 +101,7 @@ owox-data-marts/
 
 ### Prettier Config (`packages/prettier-config/`)
 
-- Shared Prettier configuration for the OWOX Data Marts workspace
+- Shared Prettier configuration for the P2PDigital Data Marts workspace
 - Provides different configurations for various project types:
   - **base**: Core formatting rules for all projects
   - **typescript**: TypeScript-specific rules and file type handling

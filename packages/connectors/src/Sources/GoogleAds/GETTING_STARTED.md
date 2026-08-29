@@ -3,7 +3,7 @@
 Before proceeding, please make sure that:
 
 - You have already created a credentials, as described in [CREDENTIALS](CREDENTIALS.md).  
-- You [have run **OWOX Data Marts**](https://docs.owox.com/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
+- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Google Ads Storage](res/googleads_storage.png)
 
@@ -31,7 +31,7 @@ Before proceeding, please make sure that:
 
 ### For **OAuth2 Authentication** (with OAuth button)
 
-If your OWOX Data Marts instance has OAuth pre-configured by an administrator, you will see a **"Sign in with Google"** button. This is the recommended approach — it handles token exchange automatically.
+If your P2PDigital Data Marts instance has OAuth pre-configured by an administrator, you will see a **"Sign in with Google"** button. This is the recommended approach — it handles token exchange automatically.
 
 1. Click **Sign in with Google**.
 2. In the popup, select your Google account and grant access.
@@ -122,6 +122,6 @@ The data will be written to the dataset specified earlier.
 If you encounter any issues:
 
 1. Check the Run history for specific error messages
-2. Please [visit Q&A](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) first
-3. If you want to report a bug, please [open an issue](https://github.com/OWOX/owox-data-marts/issues)
-4. Join the [discussion forum](https://github.com/OWOX/owox-data-marts/discussions) to ask questions or propose improvements
+2. Please [visit Q&A](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) first
+3. If you want to report a bug, please [open an issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+4. Join the [discussion forum](https://github.com/vanhao1997/p2pdigital-data-marts/discussions) to ask questions or propose improvements

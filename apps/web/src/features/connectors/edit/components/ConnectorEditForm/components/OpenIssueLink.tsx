@@ -11,7 +11,7 @@ export function OpenIssueLink({ label }: OpenIssueLinkProps) {
     <div className='border-border text-muted-foreground mt-3 flex items-center justify-center gap-2 border-t pt-3 text-sm'>
       <Button variant='outline' asChild>
         <Link
-          to='https://github.com/OWOX/owox-data-marts/issues'
+          to='https://github.com/vanhao1997/p2pdigital-data-marts/issues'
           target='_blank'
           rel='noopener noreferrer'
         >

@@ -14,7 +14,7 @@ describe('MCP OAuth discovery (e2e)', () => {
 
   beforeAll(async () => {
     process.env.MCP_PUBLIC_BASE_URL = 'https://mcp.owox.com';
-    process.env.OWOX_AUTH_PUBLIC_BASE_URL = 'https://app.owox.com';
+    process.env.OWOX_AUTH_PUBLIC_BASE_URL = 'https://app.p2pdigital.vn';
     process.env.MCP_OPENAI_APPS_CHALLENGE_TOKEN = challengeToken;
     const testApp = await createTestApp();
     app = testApp.app;
@@ -48,7 +48,7 @@ describe('MCP OAuth discovery (e2e)', () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       resource: 'https://mcp.owox.com/mcp',
-      authorization_servers: ['https://app.owox.com'],
+      authorization_servers: ['https://app.p2pdigital.vn'],
       scopes_supported: ['mcp:read', 'mcp:write'],
     });
   });
@@ -63,7 +63,7 @@ describe('MCP OAuth discovery (e2e)', () => {
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
         resource: 'https://mcp.owox.com/mcp',
-        authorization_servers: ['https://app.owox.com'],
+        authorization_servers: ['https://app.p2pdigital.vn'],
         scopes_supported: ['mcp:read', 'mcp:write'],
       });
     }
@@ -86,10 +86,10 @@ describe('MCP OAuth discovery (e2e)', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
-      issuer: 'https://app.owox.com',
-      authorization_endpoint: 'https://app.owox.com/oauth/authorize',
-      token_endpoint: 'https://app.owox.com/oauth/token',
-      registration_endpoint: 'https://app.owox.com/oauth/register',
+      issuer: 'https://app.p2pdigital.vn',
+      authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
+      token_endpoint: 'https://app.p2pdigital.vn/oauth/token',
+      registration_endpoint: 'https://app.p2pdigital.vn/oauth/register',
     });
   });
 
@@ -102,10 +102,10 @@ describe('MCP OAuth discovery (e2e)', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
-        issuer: 'https://app.owox.com',
-        authorization_endpoint: 'https://app.owox.com/oauth/authorize',
-        token_endpoint: 'https://app.owox.com/oauth/token',
-        registration_endpoint: 'https://app.owox.com/oauth/register',
+        issuer: 'https://app.p2pdigital.vn',
+        authorization_endpoint: 'https://app.p2pdigital.vn/oauth/authorize',
+        token_endpoint: 'https://app.p2pdigital.vn/oauth/token',
+        registration_endpoint: 'https://app.p2pdigital.vn/oauth/register',
       });
     }
   });

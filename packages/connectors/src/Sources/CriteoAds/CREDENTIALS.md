@@ -8,7 +8,7 @@ Create a new app by clicking the ➕ icon in the **My Apps** section or by press
 
 ![Criteo Create App](res/criteo_createapp.png)
 
-Enter a descriptive **Application Name** (e.g., `OWOX Data Marts`).  
+Enter a descriptive **Application Name** (e.g., `P2PDigital Data Marts`).  
 > 📌 It's recommended to use a clearly identifiable name to simplify future troubleshooting.
 
 Optionally, add a description. Click **Next**.
@@ -58,6 +58,6 @@ Once access is granted, you now have all the necessary credentials (`client_id`,
 
 If you encounter any issues:
 
-1. Please [visit Q&A](https://github.com/OWOX/owox-data-marts/discussions/categories/q-a) first
-2. If you want to report a bug, please [open an issue](https://github.com/OWOX/owox-data-marts/issues)
-3. Join the [discussion forum](https://github.com/OWOX/owox-data-marts/discussions) to ask questions or propose improvements
+1. Please [visit Q&A](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a) first
+2. If you want to report a bug, please [open an issue](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+3. Join the [discussion forum](https://github.com/vanhao1997/p2pdigital-data-marts/discussions) to ask questions or propose improvements

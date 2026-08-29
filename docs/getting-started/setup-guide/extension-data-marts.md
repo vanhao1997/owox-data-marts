@@ -2,14 +2,14 @@
 
 ## Why This Matters
 
-You already use the [OWOX Reports Google Sheets Extension](https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832). You have Data Marts defined with SQL queries — running within your BigQuery project and sending data to Google Sheets. While this is a powerful way to handle ad-hoc reporting, you can do more with **[OWOX Data Marts](https://app.owox.com)** while keeping your current setups fully functional:
+You already use the [OWOX Reports Google Sheets Extension](https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832). You have Data Marts defined with SQL queries — running within your BigQuery project and sending data to Google Sheets. While this is a powerful way to handle ad-hoc reporting, you can do more with **[P2PDigital Data Marts](https://app.p2pdigital.vn)** while keeping your current setups fully functional:
 
 - get reusable Insights defined by SQL with AI assistance
 - unlock new delivery destinations like Data Studio, Email, Slack, MS Teams or Google Chat for your data
 - simplify access and scheduling management at the organizational level
 - gain full visibility into run history
 
-> 💡 OWOX Data Marts detects your existing Extension Data Marts and automatically
+> 💡 P2PDigital Data Marts detects your existing Extension Data Marts and automatically
 > creates a **system storage** named after your GCP project ID. The storage type is “Google BigQuery (used in OWOX extension)”.
 > This system storage cannot be added, edited, or deleted manually.
 
@@ -27,19 +27,19 @@ Follow the steps below to complete the setup:
 
 ### Step 1: Select Your Storage
 
-In OWOX Data Marts, go to **Storages**. Find the entry labeled **Google BigQuery (used in OWOX extension)** — it appears automatically, named after your GCP project ID.
+In P2PDigital Data Marts, go to **Storages**. Find the entry labeled **Google BigQuery (used in OWOX extension)** — it appears automatically, named after your GCP project ID.
 
 > ☝️ The Title and Project ID of this storage are locked. Each GCP project gets
 > exactly one system storage to maintain stable integration with the Extension.
 
-![OWOX Data Marts Storages list showing four entries. Arrows highlight the Storages navigation item and the "Google BigQuery (used in OWOX extension)" type label.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/ea5d2ae7-a086-4dee-dc97-ca4967ca6a00/public)
+![P2PDigital Data Marts Storages list showing four entries. Arrows highlight the Storages navigation item and the "Google BigQuery (used in OWOX extension)" type label.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/ea5d2ae7-a086-4dee-dc97-ca4967ca6a00/public)
 
 ### Step 2: Grant Access to Google BigQuery
 
 Click on the storage entry to open its settings. Then:
 
 1. Under **Authentication Method**, choose **Service Account JSON** or **Connect with Google**.
-2. If using Service Account JSON, paste your [Service Account JSON key](https://docs.owox.com/docs/storages/supported-storages/google-bigquery-used-in-owox-extension/#step-3-add-a-service-account) into the **Service Account** field.
+2. If using Service Account JSON, paste your [Service Account JSON key](https://docs.p2pdigital.vn/docs/storages/supported-storages/google-bigquery-used-in-owox-extension/#step-3-add-a-service-account) into the **Service Account** field.
 3. Leave **Auto-detect location** selected unless you experience region-specific query errors.
 4. Click **Save**.
 
@@ -51,7 +51,7 @@ After completing the storage setup, your extension Data Marts appear with **Draf
 
 To publish multiple Data Marts at once, open the three-dot menu on the storage row and select **Publish drafts**.
 
-![OWOX Data Marts Storages list with a three-dot context menu open on the "smwyc-test-3" row (Google BigQuery used in OWOX extension). The menu shows three options: View details, Edit, and Publish drafts. An arrow points to the "Publish drafts" option.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/b5d43691-a9a8-4c95-317f-92b7f3ff3e00/public)
+![P2PDigital Data Marts Storages list with a three-dot context menu open on the "smwyc-test-3" row (Google BigQuery used in OWOX extension). The menu shows three options: View details, Edit, and Publish drafts. An arrow points to the "Publish drafts" option.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/b5d43691-a9a8-4c95-317f-92b7f3ff3e00/public)
 
 Once published, each Data Mart is live: its output schema is visible and it can be connected to destinations.
 
@@ -105,18 +105,18 @@ OWOX can analyze the output schema and run history of a Data Mart to surface ano
 
 ### Create Email-Based Reports
 
-1. Add an [Email destination](https://docs.owox.com/docs/destinations/supported-destinations/email/).
+1. Add an [Email destination](https://docs.p2pdigital.vn/docs/destinations/supported-destinations/email/).
 2. Open a published Data Mart and go to the **Destinations** tab.
-3. Configure recipients and set a [Report Trigger](https://docs.owox.com/docs/getting-started/setup-guide/report-triggers/) (daily, weekly, monthly, or on an interval).
+3. Configure recipients and set a [Report Trigger](https://docs.p2pdigital.vn/docs/getting-started/setup-guide/report-triggers/) (daily, weekly, monthly, or on an interval).
 
 At the scheduled time, OWOX queries BigQuery using your stored credentials, formats the result, and sends it by email.
 
 ### Build Reports in Data Studio
 
-1. Add a [Data Studio destination](https://docs.owox.com/docs/destinations/supported-destinations/data-studio/).
+1. Add a [Data Studio destination](https://docs.p2pdigital.vn/docs/destinations/supported-destinations/data-studio/).
 2. Open a published Data Mart and go to the **Destinations** tab.
 3. Enable the **Available in Data Studio** toggle for that destination.
-4. In Data Studio, connect using the OWOX Data Marts connector and the JSON Config token generated by the web app.
+4. In Data Studio, connect using the P2PDigital Data Marts connector and the JSON Config token generated by the web app.
 
 ![Data Mart Destinations tab with a Data Studio destination row expanded. The "Available in Data Studio" toggle is switched on, and the status reads "Waiting for Data Studio to fetch data". An arrow points to the toggle.](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/0758c088-0ddc-4da7-1b1d-5e7823c33800/public)
 
@@ -127,13 +127,13 @@ At the scheduled time, OWOX queries BigQuery using your stored credentials, form
 
 ### Set Up Connector-Based Data Marts
 
-Your existing extension Data Marts query data already in BigQuery. [Connector-based Data Marts](https://docs.owox.com/docs/getting-started/setup-guide/connector-data-mart/) go one step further: they pull raw data from ad platforms directly into BigQuery, which you can then query with your existing SQL Data Marts.
+Your existing extension Data Marts query data already in BigQuery. [Connector-based Data Marts](https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-data-mart/) go one step further: they pull raw data from ad platforms directly into BigQuery, which you can then query with your existing SQL Data Marts.
 
 Supported sources: Facebook Ads, TikTok Ads, LinkedIn Ads, X Ads, Microsoft Ads, Reddit Ads, Criteo Ads, and others.
 
 ## Additional Resources
 
-- [Schedule Data Mart runs](https://docs.owox.com/docs/getting-started/setup-guide/report-triggers/)
-- [Set up email notifications](https://docs.owox.com/docs/notifications/email/)
-- [Add a new data storage](https://docs.owox.com/docs/storages/manage-storages/)
-- [Core concepts](https://docs.owox.com/docs/getting-started/core-concepts/)
+- [Schedule Data Mart runs](https://docs.p2pdigital.vn/docs/getting-started/setup-guide/report-triggers/)
+- [Set up email notifications](https://docs.p2pdigital.vn/docs/notifications/email/)
+- [Add a new data storage](https://docs.p2pdigital.vn/docs/storages/manage-storages/)
+- [Core concepts](https://docs.p2pdigital.vn/docs/getting-started/core-concepts/)

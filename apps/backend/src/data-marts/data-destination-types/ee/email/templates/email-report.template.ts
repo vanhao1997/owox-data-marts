@@ -56,9 +56,9 @@ export function renderEmailReportTemplate(props: EmailReportTemplateProps): stri
                   <td class="stack-column" style="vertical-align:middle;text-align:left;">
                     <a href="${props.publicOrigin}" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;color:#1E88E5;font-size:14px;font-weight:bold;">
                       <span style="display:inline-block;padding:0px 4px;height:30px;border-radius:6px;border:1px solid #e6e9ee;background-color:#ffffff;text-align:center;line-height:28px;">
-                        <img alt="OWOX Data Marts" width="24" style="display:inline-block;vertical-align:middle;" src="https://cdn.prod.website-files.com/676a9690ef4ec151a6957187/67925ebc5ee92f1146111dd8_34665.png"/>
+                        <img alt="P2PDigital Data Marts" width="24" style="display:inline-block;vertical-align:middle;" src="https://cdn.prod.website-files.com/676a9690ef4ec151a6957187/67925ebc5ee92f1146111dd8_34665.png"/>
                       </span>
-                      <span style="display:inline-block;color:#0f172a;padding-left:2px;">OWOX Data Marts</span>
+                      <span style="display:inline-block;color:#0f172a;padding-left:2px;">P2PDigital Data Marts</span>
                     </a>
                   </td>                 
                 </tr>

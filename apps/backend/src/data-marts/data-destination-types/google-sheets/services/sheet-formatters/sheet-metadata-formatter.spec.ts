@@ -110,25 +110,25 @@ describe('SheetMetadataFormatter', () => {
   describe('buildImportedColumnMarker', () => {
     it('places the column description first, separated by a blank line from the marker', () => {
       expect(formatter.buildImportedColumnMarker('Revenue per campaign', false)).toBe(
-        'Revenue per campaign\n\n--- Imported via OWOX Data Marts ---'
+        'Revenue per campaign\n\n--- Imported via P2PDigital Data Marts ---'
       );
     });
 
     it('returns only the short ODM ownership marker when there is no description', () => {
       expect(formatter.buildImportedColumnMarker(undefined, false)).toBe(
-        '--- Imported via OWOX Data Marts ---'
+        '--- Imported via P2PDigital Data Marts ---'
       );
     });
 
     it('collapses an empty-string description to the bare marker (no leading blank line)', () => {
       expect(formatter.buildImportedColumnMarker('', false)).toBe(
-        '--- Imported via OWOX Data Marts ---'
+        '--- Imported via P2PDigital Data Marts ---'
       );
     });
 
     it('includes the Community Edition suffix inside the marker', () => {
       expect(formatter.buildImportedColumnMarker(undefined, true)).toBe(
-        '--- Imported via OWOX Data Marts Community Edition ---'
+        '--- Imported via P2PDigital Data Marts Community Edition ---'
       );
     });
 
@@ -138,14 +138,14 @@ describe('SheetMetadataFormatter', () => {
 
       // Description truncated to 45,000 chars + ellipsis, then the marker.
       expect(note.length).toBeLessThan(50_000);
-      expect(note).toContain('…\n\n--- Imported via OWOX Data Marts ---');
+      expect(note).toContain('…\n\n--- Imported via P2PDigital Data Marts ---');
     });
   });
 
   describe('buildImportedColumnNote', () => {
     const baseArgs = {
       title: 'Test Data Mart',
-      url: 'https://app.owox.com/ui/proj-1/dm-2',
+      url: 'https://app.p2pdigital.vn/ui/proj-1/dm-2',
       date: '2026-04-02 12:00:00 UTC',
     };
 
@@ -160,9 +160,9 @@ describe('SheetMetadataFormatter', () => {
 
       const lines = note.split('\n');
       // Description on the first line; ODM info begins after a blank line led
-      // by the `--- Imported via OWOX Data Marts ---` marker.
+      // by the `--- Imported via P2PDigital Data Marts ---` marker.
       expect(lines[0]).toBe('Total revenue per campaign per day');
-      expect(note).toContain('\n\n--- Imported via OWOX Data Marts ---\n');
+      expect(note).toContain('\n\n--- Imported via P2PDigital Data Marts ---\n');
       expect(note).toContain('Imported at 2026-04-02 12:00:00 UTC');
       expect(note).toContain(`Data Mart: ${baseArgs.title}`);
       expect(note).toContain(`Data Mart page: ${baseArgs.url}`);
@@ -178,7 +178,7 @@ describe('SheetMetadataFormatter', () => {
         false
       );
 
-      expect(note.startsWith('--- Imported via OWOX Data Marts ---')).toBe(true);
+      expect(note.startsWith('--- Imported via P2PDigital Data Marts ---')).toBe(true);
       expect(note).not.toContain('\n\n');
     });
 
@@ -190,7 +190,7 @@ describe('SheetMetadataFormatter', () => {
         baseArgs.date,
         true
       );
-      expect(note).toContain('--- Imported via OWOX Data Marts Community Edition ---');
+      expect(note).toContain('--- Imported via P2PDigital Data Marts Community Edition ---');
     });
 
     it('truncates oversize descriptions before composing the note', () => {
@@ -205,7 +205,7 @@ describe('SheetMetadataFormatter', () => {
 
       // Truncated to 45,000 chars + ellipsis; ODM info block still fits.
       expect(note.length).toBeLessThan(50_000);
-      expect(note).toContain('…\n\n--- Imported via OWOX Data Marts ---');
+      expect(note).toContain('…\n\n--- Imported via P2PDigital Data Marts ---');
       expect(note).toContain('Imported at');
     });
 

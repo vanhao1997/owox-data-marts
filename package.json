@@ -1,17 +1,17 @@
 {
-  "name": "owox-data-marts",
+  "name": "p2pdigital-data-marts",
   "version": "0.0.0",
-  "description": "OWOX Data Marts",
-  "homepage": "https://github.com/OWOX/owox-data-marts#readme",
+  "description": "P2PDigital Data Marts",
+  "homepage": "https://github.com/vanhao1997/p2pdigital-data-marts#readme",
   "bugs": {
-    "url": "https://github.com/OWOX/owox-data-marts/issues"
+    "url": "https://github.com/vanhao1997/p2pdigital-data-marts/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git"
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git"
   },
   "license": "ELv2",
-  "author": "OWOX",
+  "author": "P2PDigital",
   "workspaces": [
     "apps/*",
     "packages/*"

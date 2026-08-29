@@ -1,8 +1,8 @@
 {
   "name": "@owox/web",
   "version": "0.32.0",
-  "description": "Web interface for OWOX Data Marts - an open-source solution for Data Analysts",
-  "author": "OWOX",
+  "description": "Web interface for P2PDigital Data Marts",
+  "author": "P2PDigital",
   "license": "ELv2",
   "publishConfig": {
     "access": "public"
@@ -12,21 +12,21 @@
     "node": ">=22.22.0"
   },
   "keywords": [
-    "owox",
+    "p2pdigital",
     "data-marts",
     "web-app",
     "react",
     "typescript",
     "tailwind"
   ],
-  "homepage": "https://github.com/OWOX/owox-data-marts",
+  "homepage": "https://github.com/vanhao1997/p2pdigital-data-marts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git",
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git",
     "directory": "apps/web"
   },
   "bugs": {
-    "url": "https://github.com/OWOX/owox-data-marts/issues"
+    "url": "https://github.com/vanhao1997/p2pdigital-data-marts/issues"
   },
   "main": "./dist/index.html",
   "files": [

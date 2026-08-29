@@ -137,7 +137,7 @@ export async function getStatus(
 }
 
 export default class StatusCommand extends BaseCommand {
-  static override description = 'Validate OWOX Data Marts API credentials';
+  static override description = 'Validate P2PDigital Data Marts API credentials';
   static override flags = {
     ...BaseCommand.baseFlags,
   };

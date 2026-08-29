@@ -1,6 +1,6 @@
 # Email
 
-Configure **Email** as a Destination in OWOX Data Marts to allow business users to receive messages based on the results of each Data Mart run.  
+Configure **Email** as a Destination in P2PDigital Data Marts to allow business users to receive messages based on the results of each Data Mart run.  
 
 For example, you may want to notify a stakeholder every time a scheduled run produces updated data (such as new results from the Facebook Ads connector). You can also choose to receive an email only when the run result is empty.
 
@@ -18,9 +18,9 @@ Follow the steps below to configure your **Email** destination.
 
 #### 1.1. Open the Destinations page
 
-In the OWOX Data Marts web application, open **Destinations** in the main menu and click **+ New Destination**.
+In the P2PDigital Data Marts web application, open **Destinations** in the main menu and click **+ New Destination**.
 
-![OWOX Data Marts Destinations page with Destinations selected in the left sidebar. The main panel shows a searchable list of existing destinations and a New Destination button in the top right corner](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/6cbc0c35-2e5e-4513-9f4a-538ae9b11200/public)
+![P2PDigital Data Marts Destinations page with Destinations selected in the left sidebar. The main panel shows a searchable list of existing destinations and a New Destination button in the top right corner](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/6cbc0c35-2e5e-4513-9f4a-538ae9b11200/public)
 
 #### 1.2. Select the Destination type
 
@@ -142,4 +142,4 @@ Click **Create & Run report** to save the report and trigger an immediate run. T
 
 ---
 
-Have questions? Join the [OWOX Community](https://github.com/OWOX/owox-data-marts/discussions).
+Have questions? Join the [OWOX Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

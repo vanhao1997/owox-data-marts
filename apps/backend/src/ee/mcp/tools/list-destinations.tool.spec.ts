@@ -16,7 +16,7 @@ describe('ListDestinationsTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   it('lists destinations using token project-member context', async () => {
@@ -36,7 +36,7 @@ describe('ListDestinationsTool', () => {
           name: 'Marketing Sheet',
           type: 'google_sheets',
           owner: 'ann@owox.com',
-          url: 'https://app.owox.com/ui/project-1/data-destinations?id=dest_1',
+          url: 'https://app.p2pdigital.vn/ui/project-1/data-destinations?id=dest_1',
         },
       ],
     };

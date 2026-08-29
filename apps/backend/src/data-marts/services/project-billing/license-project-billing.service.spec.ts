@@ -65,7 +65,7 @@ describe('LicenseProjectBillingService', () => {
       await service.verifyCanPerformOperations('local-project', RunKind.HTTP_DATA_RUN);
 
       expect(fetchWithBackoffMock).toHaveBeenCalledWith(
-        'https://app.owox.com/api/license/can-perform',
+        'https://app.p2pdigital.vn/api/license/can-perform',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
@@ -134,7 +134,7 @@ describe('LicenseProjectBillingService', () => {
       await service.registerHttpDataRunConsumption(fakeDataMart(), 'run-1');
 
       const [url, init] = fetchWithBackoffMock.mock.calls[0];
-      expect(url).toBe('https://app.owox.com/api/license/consumption');
+      expect(url).toBe('https://app.p2pdigital.vn/api/license/consumption');
       expect(JSON.parse(init?.body as string)).toEqual({
         kind: RunKind.HTTP_DATA_RUN,
         payload: expect.objectContaining({ dataMartId: 'dm-1', reportRunId: 'run-1' }),

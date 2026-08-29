@@ -1,7 +1,7 @@
 # Google Sheets
 
 Google Sheets is a cloud-based spreadsheet application that allows users to create, edit, and collaborate on spreadsheets in real-time.  
-Configure Google Sheets as a **Destination** in OWOX Data Marts to enable business users to access and analyze data directly within their spreadsheets.
+Configure Google Sheets as a **Destination** in P2PDigital Data Marts to enable business users to access and analyze data directly within their spreadsheets.
 
 Watch the walkthrough below for the full setup.
 
@@ -15,7 +15,7 @@ Watch the walkthrough below for the full setup.
 
 #### 1. Enable the Google Sheets API
 
-To allow OWOX Data Marts to interact with Google Sheets, enable the Google Sheets API in your Google Cloud project.
+To allow P2PDigital Data Marts to interact with Google Sheets, enable the Google Sheets API in your Google Cloud project.
 
 1. Sign in to your Google account and open the [Google Sheets API](https://console.cloud.google.com/apis/library/sheets.googleapis.com/) page.
 2. Click **Enable** to activate the API for your project.
@@ -31,22 +31,22 @@ The Sheets API can read and write spreadsheets, but it cannot place a file into 
 
 #### 3. Create a Service Account and JSON Key
 
-A service account is required to authenticate OWOX Data Marts with Google Sheets.
+A service account is required to authenticate P2PDigital Data Marts with Google Sheets.
 
 1. Navigate to **IAM & Admin** > **Service Accounts** in the [Google Cloud Console](https://console.cloud.google.com/iam-admin/serviceaccounts).
 2. Create a new service account or select an existing one.
-3. On the Service Accounts page, find the service account to use in OWOX Data Marts and click the **Actions** menu (three dots).
+3. On the Service Accounts page, find the service account to use in P2PDigital Data Marts and click the **Actions** menu (three dots).
 4. Select **Manage keys**, then click **Add Key** > **Create new key**.
 5. Choose **JSON** and click **Create**.
 6. Download the JSON key file.
 
 ---
 
-### OWOX Data Marts
+### P2PDigital Data Marts
 
 #### 1. Access the Destinations Page
 
-In the OWOX Data Marts web application, navigate to **Destinations** from the main navigation pane and click **+ New Destination**.
+In the P2PDigital Data Marts web application, navigate to **Destinations** from the main navigation pane and click **+ New Destination**.
 
 #### 2. Choose Destination Type
 
@@ -58,7 +58,7 @@ Select **Google Sheets** from the **Destination Type** dropdown.
 
 #### 4. Choose Authentication Method
 
-OWOX Data Marts supports two authentication methods for Google Sheets:
+P2PDigital Data Marts supports two authentication methods for Google Sheets:
 
 ##### Option A: Service Account (JSON Key)
 
@@ -92,7 +92,7 @@ When a **Destination** has a Drive folder configured, OWOX checks that it can ac
 
 ## Working with Imported Data
 
-OWOX Data Marts owns only the columns it writes — the **imported range** —
+P2PDigital Data Marts owns only the columns it writes — the **imported range** —
 and treats the rest of your sheet as your space. This section describes what
 survives a refresh, what changes, and how the sheet reacts to schema or
 result-set changes.
@@ -182,5 +182,5 @@ successful run replaces it.
 Each imported column header carries a note (hover the cell in Google Sheets
 to view it). The note begins with the column's Output Schema description (if
 one is set) followed by a provenance block: the data mart name, a link to
-it in OWOX Data Marts, and the timestamp of the latest refresh. Use these
+it in P2PDigital Data Marts, and the timestamp of the latest refresh. Use these
 notes to confirm the source and freshness of any column at a glance.

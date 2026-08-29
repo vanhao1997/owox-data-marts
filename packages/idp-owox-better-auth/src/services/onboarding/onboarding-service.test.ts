@@ -417,7 +417,7 @@ describe('OnboardingService', () => {
 
     it('strips www. from org_domain', async () => {
       await service.saveAnswers('user-1', 'project-1', 'bi-user-1', 'admin', {
-        answers: [{ questionId: 'org_domain', answerValue: 'https://www.owox.com/demo' }],
+        answers: [{ questionId: 'org_domain', answerValue: 'https://www.p2pdigital.vn/demo' }],
       });
 
       const saved = jest.mocked(store.saveOnboardingAnswers).mock.calls[0]![0] as Array<{

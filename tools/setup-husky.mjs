@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Setup script for OWOX Data Marts linter configuration
+ * Setup script for P2PDigital Data Marts linter configuration
  *
  * This script automatically configures Husky git hooks
  * and sets up the necessary files for pre-commit validation.
@@ -99,7 +99,7 @@ function createPreCommitHook() {
  */
 function main() {
   try {
-    console.log('🚀 Setting up OWOX Data Marts husky configuration...');
+    console.log('🚀 Setting up P2PDigital Data Marts husky configuration...');
     console.log(`📱 Platform: ${platform()}`);
 
     const changed = createPreCommitHook();

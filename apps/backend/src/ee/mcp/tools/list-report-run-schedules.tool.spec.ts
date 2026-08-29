@@ -14,7 +14,7 @@ describe('ListReportRunSchedulesTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   const scheduleItem = {
@@ -43,14 +43,14 @@ describe('ListReportRunSchedulesTool', () => {
           report: {
             id: 'report-1',
             title: 'Weekly Sales',
-            url: 'https://app.owox.com/ui/project-1/data-marts/dm-1/reports',
+            url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm-1/reports',
           },
           data_mart: {
             id: 'dm-1',
             title: 'Sales DM',
-            url: 'https://app.owox.com/ui/project-1/data-marts/dm-1/data-setup',
+            url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm-1/data-setup',
           },
-          schedules_url: 'https://app.owox.com/ui/project-1/data-marts/schedules',
+          schedules_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/schedules',
           cron_expression: '0 9 * * 1',
           time_zone: 'Europe/Kyiv',
           is_active: true,

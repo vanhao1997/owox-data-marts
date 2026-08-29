@@ -269,7 +269,7 @@ describe('Data Marts API', () => {
     const result = client.dataMarts.list();
     await expect(result).rejects.toMatchObject({
       name: 'OWOXApiError',
-      message: 'OWOX Data Marts API returned an unexpected response shape',
+      message: 'P2PDigital Data Marts API returned an unexpected response shape',
       details: response,
     });
     await expect(result).rejects.toBeInstanceOf(OWOXApiError);
@@ -289,7 +289,7 @@ describe('Data Marts API', () => {
 
     await expect(client.dataMarts.list()).rejects.toMatchObject({
       name: 'OWOXApiError',
-      message: 'OWOX Data Marts API returned an unexpected response shape',
+      message: 'P2PDigital Data Marts API returned an unexpected response shape',
       details: response,
     });
   });

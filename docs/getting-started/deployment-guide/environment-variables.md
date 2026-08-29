@@ -1,6 +1,6 @@
 # Environment Variables
 
-This document describes how to configure environment variables for working with OWOX Data Marts.
+This document describes how to configure environment variables for working with P2PDigital Data Marts.
 The system automatically loads configuration when starting the application with the `owox serve` command.
 
 ## Table of Contents
@@ -12,7 +12,7 @@ The system automatically loads configuration when starting the application with 
 
 ## Core Principles
 
-OWOX Data Marts can receive environment variables in two ways:
+P2PDigital Data Marts can receive environment variables in two ways:
 
 - **From system environment** - variables set directly in the runtime environment
 - **From configuration file** - variables loaded from a `.env` file
@@ -25,7 +25,7 @@ Depending on the selected database type for the backend (`DB_TYPE`) and identity
 - **For the shared Cloud deployment** - provision a separate INTERNAL-bound `LICENSE_KEY` through the deployment secret process; Project Settings never issues this key. It must be bound to the Cloud `PUBLIC_ORIGIN`, must not carry a customer billing project, and requires the complete `BALANCE_ENDPOINT_*` integration. Rotate it through the same secret process and retain every old signing key until the last license it signed expires
 - **For the Cloud deployment that issues customer license keys** - set `LICENSE_ISSUANCE_ENABLED=true` together with `LICENSE_SIGNING_SERVICE_ACCOUNT_KEY_JSON` (a user-managed key of the OWOX license service account, injected from the secret store) and the `BALANCE_ENDPOINT_*` variables. Self-managed deployments never set these
 
-The complete list of all available environment variables is located in the [.env.example](https://github.com/OWOX/owox-data-marts/blob/main/.env.example) file in the project root directory.
+The complete list of all available environment variables is located in the [.env.example](https://github.com/vanhao1997/p2pdigital-data-marts/blob/main/.env.example) file in the project root directory.
 
 ## Configuration Methods
 
@@ -223,13 +223,13 @@ See also: mysql2 official SSL documentation — <https://sidorares.github.io/nod
 ## Plugins
 
 Plugins are third-party web apps embedded in a sandboxed iframe. These variables control
-who may publish them and how OWOX Data Marts reads their GitHub sources.
+who may publish them and how P2PDigital Data Marts reads their GitHub sources.
 
 | Variable                                                     | Purpose                                                                                                                                                                                                                                                                                                   |
 | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OWOX_DEPLOYMENT_PLUGIN_PUBLISHER_API_KEY_IDS`               | Comma-separated API key IDs allowed to publish, suspend and resume plugins for the whole deployment.                                                                                                                                                                                                      |
 | `GITHUB_TOKEN`                                               | Read-only, fine-grained PAT for reading private plugin repositories. Self-managed deployments.                                                                                                                                                                                                            |
-| `GITHUB_APP_ID`, `GITHUB_APP_SLUG`, `GITHUB_APP_PRIVATE_KEY` | [OWOX Data Marts GitHub App](https://github.com/apps/owox-data-marts) credentials, for reading private repositories in the cloud. Required together. The key takes the whole PEM with newlines as `\n`, or just its base64 body with the BEGIN/END lines stripped when a secret store mangles the armour. |
+| `GITHUB_APP_ID`, `GITHUB_APP_SLUG`, `GITHUB_APP_PRIVATE_KEY` | [P2PDigital Data Marts GitHub App](https://github.com/apps/owox-data-marts) credentials, for reading private repositories in the cloud. Required together. The key takes the whole PEM with newlines as `\n`, or just its base64 body with the BEGIN/END lines stripped when a secret store mangles the armour. |
 | `GITHUB_API_BASE_URL`                                        | GitHub REST base URL. Override only for GitHub Enterprise.                                                                                                                                                                                                                                                |
 | `PLUGIN_HOST_SYNC_MIN_INTERVAL_SEC`                          | Optional minimum seconds between two synchronizations of the same plugin. Defaults to `30` with GitHub App or server-token access and `300` with anonymous access. An explicit value overrides every access mode. During the cooldown, publishing reuses the last validated version.                      |
 | `PLUGIN_HOST_REMOTE_PROBE_TIMEOUT_MS`                        | Timeout for probing a plugin's delivery URL. Default `8000`.                                                                                                                                                                                                                                              |

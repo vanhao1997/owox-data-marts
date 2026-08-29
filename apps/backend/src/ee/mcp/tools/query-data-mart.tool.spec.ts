@@ -31,7 +31,7 @@ describe('QueryDataMartTool', () => {
   };
   const cls = { update: jest.fn(), get: jest.fn(), set: jest.fn(), runWithContext: jest.fn() };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
   const tool = new QueryDataMartTool(facade as never, cls as never, publicOrigin);
 
@@ -114,7 +114,7 @@ describe('QueryDataMartTool', () => {
           data_mart: {
             id: 'dm1',
             title: 'Orders',
-            url: 'https://app.owox.com/ui/p1/data-marts/dm1/data-setup',
+            url: 'https://app.p2pdigital.vn/ui/p1/data-marts/dm1/data-setup',
           },
         },
         calculation_origin: { rows: 'taken_from_owox', totals: 'not_available' },

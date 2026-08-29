@@ -1,6 +1,6 @@
 # How to Contribute
 
-There are thousands of data sources and their APIs constantly evolve, so no single team can build and maintain every connector. Within the OWOX Data Marts project we collaborate as a community to share this responsibility, and this guide explains how you can work with us to adjust existing integrations and create new ones.
+There are thousands of data sources and their APIs constantly evolve, so no single team can build and maintain every connector. Within the P2PDigital Data Marts project we collaborate as a community to share this responsibility, and this guide explains how you can work with us to adjust existing integrations and create new ones.
 
 When contributing, please keep the wider community in mind. We review pull requests for technical quality and for how broadly the connector can be applied beyond the contributor's specific scenario. If you plan work that cannot be contributed back, be ready to maintain your own fork. We highly recommend designing every connector so that it can be upstreamed when requirements allow.
 
@@ -120,5 +120,5 @@ Pull request authors must sign the [OWOX CLA](https://cla-assistant.io/OWOX/js-d
 
 Got a question? Feel free to ask the community:
 
-- Check [Issues](https://github.com/OWOX/owox-data-marts/issues)
-- Join [Discussions](https://github.com/OWOX/owox-data-marts/discussions)
+- Check [Issues](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+- Join [Discussions](https://github.com/vanhao1997/p2pdigital-data-marts/discussions)

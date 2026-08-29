@@ -155,7 +155,7 @@ describe('RemoteUrlValidatorService', () => {
     it.each([
       ['x-frame-options', 'DENY'],
       ['x-frame-options', 'SAMEORIGIN'],
-      ['x-frame-options', 'ALLOW-FROM https://app.owox.com'],
+      ['x-frame-options', 'ALLOW-FROM https://app.p2pdigital.vn'],
       ['content-security-policy', "frame-ancestors 'none'"],
       ['content-security-policy', "frame-ancestors 'self'"],
       ['content-security-policy', 'frame-ancestors https://other.example'],
@@ -183,11 +183,11 @@ describe('RemoteUrlValidatorService', () => {
       route({
         ...okPlugin,
         'plugin.example.com': () =>
-          page({ 'content-security-policy': 'frame-ancestors https://app.owox.com' }),
+          page({ 'content-security-policy': 'frame-ancestors https://app.p2pdigital.vn' }),
       });
 
       await expect(
-        service({ PUBLIC_ORIGIN: 'https://app.owox.com' }).validate(PLUGIN_URL)
+        service({ PUBLIC_ORIGIN: 'https://app.p2pdigital.vn' }).validate(PLUGIN_URL)
       ).resolves.toMatchObject({ ok: true });
     });
 
@@ -196,7 +196,7 @@ describe('RemoteUrlValidatorService', () => {
     it('rejects a host allowlist that names a different origin', async () => {
       route({
         'plugin.example.com': () =>
-          page({ 'content-security-policy': 'frame-ancestors https://app.owox.com' }),
+          page({ 'content-security-policy': 'frame-ancestors https://app.p2pdigital.vn' }),
       });
 
       await expect(service().validate(PLUGIN_URL)).resolves.toMatchObject({

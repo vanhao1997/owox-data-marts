@@ -55,7 +55,7 @@ Each connector requires authentication. Here is how you can obtain the required 
 - [Reddit Ads](../../../packages/connectors/src/Sources/RedditAds/CREDENTIALS.md)
 - [Criteo Ads](../../../packages/connectors/src/Sources/CriteoAds/CREDENTIALS.md)
 - [Open Exchange Rates](../../../packages/connectors/src/Sources/OpenExchangeRates/CREDENTIALS.md)
-- [Other platforms](https://github.com/OWOX/owox-data-marts/tree/main/packages/connectors/src/Sources)
+- [Other platforms](https://github.com/vanhao1997/p2pdigital-data-marts/tree/main/packages/connectors/src/Sources)
 
 Use the **credentials screen** to manage access per platform.
 

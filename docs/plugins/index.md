@@ -1,6 +1,6 @@
 # Build a plugin with AI
 
-Turn an idea into a useful experience inside OWOX Data Marts—a dashboard, workflow helper,
+Turn an idea into a useful experience inside P2PDigital Data Marts—a dashboard, workflow helper,
 analysis tool, or something unique to your team. You can build a plugin with an AI coding agent
 even if you do not usually write software.
 
@@ -24,7 +24,7 @@ explain, review, and improve.
 ## Work with a coding agent
 
 Tell the agent what someone should accomplish and what a successful first version looks like. The
-agent can create the project, build the interface, connect it to OWOX Data Marts, run checks, and
+agent can create the project, build the interface, connect it to P2PDigital Data Marts, run checks, and
 prepare deployment and release steps.
 
 ## Continue building

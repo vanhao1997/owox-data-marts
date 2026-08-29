@@ -62,7 +62,7 @@ export class TemplateService {
     data: Record<string, unknown> & { providers: UiAuthProviders; gtmContainerId?: string }
   ): string {
     return this.renderWithLayout('pages/sign-in.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Sign In - OWOX Data Marts',
+      pageTitle: 'Sign In - P2PDigital Data Marts',
       heading: 'Sign in to OWOX',
       ...data,
       providers: data.providers,
@@ -74,7 +74,7 @@ export class TemplateService {
     data: Record<string, unknown> & { providers: UiAuthProviders; gtmContainerId?: string }
   ): string {
     return this.renderWithLayout('pages/sign-up.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Sign Up - OWOX Data Marts',
+      pageTitle: 'Sign Up - P2PDigital Data Marts',
       heading: 'Create your OWOX account',
       magicLinkSignupIntent: MAGIC_LINK_INTENT.SIGNUP,
       ...data,
@@ -153,7 +153,7 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/onboarding.ejs', 'layouts/onboarding.ejs', {
-      pageTitle: 'Welcome - OWOX Data Marts',
+      pageTitle: 'Welcome - P2PDigital Data Marts',
       heading: 'Help us personalize your experience',
       useCaseOptions: USE_CASE_OPTIONS,
       primaryRoleOptions: PRIMARY_ROLE_OPTIONS,

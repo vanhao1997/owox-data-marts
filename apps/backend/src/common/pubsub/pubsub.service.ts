@@ -43,7 +43,7 @@ export class PubSubService implements OnModuleDestroy {
       body: payloadObject,
       order: Date.now(),
       producer: {
-        name: 'OWOX Data Marts',
+        name: 'P2PDigital Data Marts',
       },
     };
     return this.publishMessage(topicName, wrappedPayload, attributes);

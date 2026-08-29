@@ -1,6 +1,6 @@
 {
   "name": "@owox/ctl",
-  "description": "OWOX Data Marts Control CLI",
+  "description": "P2PDigital Data Marts Control CLI",
   "version": "0.32.0",
   "type": "module",
   "author": "OWOX",
@@ -11,7 +11,7 @@
   "bin": {
     "owox-ctl": "./bin/run.js"
   },
-  "bugs": "https://github.com/OWOX/owox-data-marts/issues",
+  "bugs": "https://github.com/vanhao1997/p2pdigital-data-marts/issues",
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
@@ -38,7 +38,7 @@
     "./dist/**/*.js",
     "./oclif.manifest.json"
   ],
-  "homepage": "https://github.com/OWOX/owox-data-marts",
+  "homepage": "https://github.com/vanhao1997/p2pdigital-data-marts",
   "keywords": [
     "owox",
     "data-marts",
@@ -57,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git"
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git"
   },
   "scripts": {
     "build": "tsc",

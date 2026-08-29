@@ -1,6 +1,6 @@
 # `@owox/prettier-config`
 
-Shared Prettier configuration for the OWOX Data Marts workspace.
+Shared Prettier configuration for the P2PDigital Data Marts workspace.
 
 ## Usage
 

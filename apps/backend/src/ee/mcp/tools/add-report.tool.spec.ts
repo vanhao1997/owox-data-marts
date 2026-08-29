@@ -18,7 +18,7 @@ describe('AddReportTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.owox.com'),
+    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   const input = {
@@ -45,7 +45,7 @@ describe('AddReportTool', () => {
     const structuredContent = {
       report_id: 'report-1',
       destination_type: 'google_sheets',
-      report_url: 'https://app.owox.com/ui/project-1/data-marts/dm-1/reports',
+      report_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm-1/reports',
       sheet_url: 'https://docs.google.com/spreadsheets/d/ss-1/edit#gid=0',
       owner: 'ann@owox.com',
       status: 'created',
@@ -96,7 +96,7 @@ describe('AddReportTool', () => {
     expect(result.structuredContent).toMatchObject({
       report_id: 'report-2',
       destination_type: 'looker_studio',
-      report_url: 'https://app.owox.com/ui/project-1/data-marts/dm-1/reports',
+      report_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm-1/reports',
       owner: 'ann@owox.com',
       status: 'created',
       initial_run: expect.objectContaining({
@@ -104,7 +104,7 @@ describe('AddReportTool', () => {
         should_poll: false,
       }),
       setup_guide_url:
-        'https://docs.owox.com/docs/destinations/supported-destinations/data-studio/',
+        'https://docs.p2pdigital.vn/docs/destinations/supported-destinations/data-studio/',
     });
     // The user must finish the connection themselves — the secret never goes
     // through MCP — so the agent gets explicit instructions to relay.

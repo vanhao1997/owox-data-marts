@@ -22,7 +22,7 @@ Use this as the foundation for reporting in:
 - Tableau / Power BI  
 - AI assistants and analytics workflows  
 
-> **Tip:** Create a Data Mart in [OWOX Data Marts](https://www.owox.com/app-signup), paste this SQL, and reuse it across destinations — no more copying queries between dashboards.
+> **Tip:** Create a Data Mart in [P2PDigital Data Marts](https://www.p2pdigital.vn/app-signup), paste this SQL, and reuse it across destinations — no more copying queries between dashboards.
 
 ---
 

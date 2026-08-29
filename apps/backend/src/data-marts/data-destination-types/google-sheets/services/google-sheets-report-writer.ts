@@ -1000,7 +1000,7 @@ export class GoogleSheetsReportWriter implements DataDestinationReportWriter {
    * content outside it keeps its styling.
    *
    * Notes written here are short markers only (column description +
-   * `--- Imported via OWOX Data Marts ---`). The full A1 provenance block
+   * `--- Imported via P2PDigital Data Marts ---`). The full A1 provenance block
    * (including finish-time `Imported at …`) is deferred to {@link finalize}
    * so the timestamp reflects when the import actually completed, not when
    * the first data batch started writing.

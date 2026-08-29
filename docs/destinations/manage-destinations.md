@@ -84,4 +84,4 @@ Each Destination has an **Owners** list — the team members responsible for its
 ## Key Considerations
 
 - Each **Report** requires a single **Destination** association.
-- For additional guidance or troubleshooting, explore the supported **Destination** configuration pages or join the [OWOX Community](https://github.com/OWOX/owox-data-marts/discussions).
+- For additional guidance or troubleshooting, explore the supported **Destination** configuration pages or join the [OWOX Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

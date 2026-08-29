@@ -117,7 +117,7 @@ describe('McpAuthGuard', () => {
     [
       'wrong resource',
       'Bearer wrong-resource',
-      { ...tokenPayload, resource: 'https://app.owox.com/api' },
+      { ...tokenPayload, resource: 'https://app.p2pdigital.vn/api' },
     ],
     ['missing project id', 'Bearer missing-project', { ...tokenPayload, projectId: '' }],
     ['empty roles', 'Bearer empty-roles', { ...tokenPayload, roles: [] }],

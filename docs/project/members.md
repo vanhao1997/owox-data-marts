@@ -19,7 +19,7 @@ The setting is configured per BI project in **Project Settings → Members**. It
 - New users whose corporate domain matches the Organization domain are added to the Organization main project automatically.
 - The **Default Role** setting controls the project role assigned to those users.
 - The default access scope is **Entire Project**.
-- Project Admins can choose **Selected Contexts** and select particular contexts. This context scope is applied inside OWOX Data Marts and is not stored in analytics.
+- Project Admins can choose **Selected Contexts** and select particular contexts. This context scope is applied inside P2PDigital Data Marts and is not stored in analytics.
 
 ### Manual provisioning
 

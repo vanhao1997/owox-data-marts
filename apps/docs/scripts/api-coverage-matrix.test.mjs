@@ -27,8 +27,8 @@ const validMatrix = `# Support Matrix
 
 | Endpoint | OpenAPI | API client |
 | --- | --- | --- |
-| \`GET /api/data-marts/insight-templates\` | [Covered](https://app.owox.com/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-01 | [Covered](./api-client/#list-project-insight-templates) · 2026-07-02 |
-| \`GET /api/model-canvas/data-marts\` | [Covered](https://app.owox.com/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-03 | Gap |
+| \`GET /api/data-marts/insight-templates\` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-01 | [Covered](./api-client/#list-project-insight-templates) · 2026-07-02 |
+| \`GET /api/model-canvas/data-marts\` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-03 | Gap |
 
 ## Project settings
 
@@ -53,7 +53,7 @@ test('calculates totals from endpoint rows', () => {
 test('parses a linked covered cell into semantic status, date, and target', () => {
   assert.deepEqual(
     matrixModule.parseCoverageCell(
-      '[Covered](https://app.owox.com/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-01',
+      '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-01',
       'OpenAPI',
       'GET /api/data-marts/insight-templates'
     ),
@@ -61,7 +61,7 @@ test('parses a linked covered cell into semantic status, date, and target', () =
       status: 'Covered',
       coveredSince: '2026-07-01',
       target:
-        'https://app.owox.com/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list',
+        'https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list',
     }
   );
 });
@@ -69,14 +69,14 @@ test('parses a linked covered cell into semantic status, date, and target', () =
 test('accepts the exact Markdown parser coverage targets', () => {
   assert.deepEqual(
     matrixModule.parseCoverageCell(
-      '[Covered](https://app.owox.com/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml) · 2026-07-22',
+      '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml) · 2026-07-22',
       'OpenAPI',
       'POST /api/markdown/parse-to-html'
     ),
     {
       status: 'Covered',
       coveredSince: '2026-07-22',
-      target: 'https://app.owox.com/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml',
+      target: 'https://app.p2pdigital.vn/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml',
     }
   );
   assert.deepEqual(
@@ -96,14 +96,14 @@ test('accepts the exact Markdown parser coverage targets', () => {
 test('accepts the exact Search coverage targets', () => {
   assert.deepEqual(
     matrixModule.parseCoverageCell(
-      '[Covered](https://app.owox.com/api/swagger-ui#/Search/SearchController_search) · 2026-07-23',
+      '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Search/SearchController_search) · 2026-07-23',
       'OpenAPI',
       'GET /api/search'
     ),
     {
       status: 'Covered',
       coveredSince: '2026-07-23',
-      target: 'https://app.owox.com/api/swagger-ui#/Search/SearchController_search',
+      target: 'https://app.p2pdigital.vn/api/swagger-ui#/Search/SearchController_search',
     }
   );
   assert.deepEqual(
@@ -123,14 +123,14 @@ test('accepts the exact Search coverage targets', () => {
 test('accepts the exact Data Mart list coverage targets', () => {
   assert.deepEqual(
     matrixModule.parseCoverageCell(
-      '[Covered](https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_list) · 2026-07-23',
+      '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_list) · 2026-07-23',
       'OpenAPI',
       'GET /api/data-marts'
     ),
     {
       status: 'Covered',
       coveredSince: '2026-07-23',
-      target: 'https://app.owox.com/api/swagger-ui#/DataMarts/DataMartController_list',
+      target: 'https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_list',
     }
   );
   assert.deepEqual(
@@ -154,14 +154,14 @@ test('resolves the Data Mart list API client coverage target to the checked-in g
 test('accepts the exact HTTP Data coverage targets', () => {
   assert.deepEqual(
     matrixModule.parseCoverageCell(
-      '[Covered](https://app.owox.com/api/swagger-ui#/HTTP%20Data/HttpDataController_stream) · 2026-07-23',
+      '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/HTTP%20Data/HttpDataController_stream) · 2026-07-23',
       'OpenAPI',
       'GET /api/external/http-data/data-marts/{dataMartId}.ndjson'
     ),
     {
       status: 'Covered',
       coveredSince: '2026-07-23',
-      target: 'https://app.owox.com/api/swagger-ui#/HTTP%20Data/HttpDataController_stream',
+      target: 'https://app.p2pdigital.vn/api/swagger-ui#/HTTP%20Data/HttpDataController_stream',
     }
   );
   assert.deepEqual(
@@ -200,9 +200,9 @@ test('rejects summary drift', () => {
 
 test('rejects duplicate endpoint rows', () => {
   const duplicateRow =
-    '| `GET /api/data-marts/insight-templates` | [Covered](https://app.owox.com/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-01 | [Covered](./api-client/#list-project-insight-templates) · 2026-07-02 |';
+    '| `GET /api/data-marts/insight-templates` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-01 | [Covered](./api-client/#list-project-insight-templates) · 2026-07-02 |';
   const markdown = validMatrix.replace(
-    '| `GET /api/model-canvas/data-marts` | [Covered](https://app.owox.com/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-03 | Gap |',
+    '| `GET /api/model-canvas/data-marts` | [Covered](https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-03 | Gap |',
     duplicateRow
   );
 
@@ -211,7 +211,7 @@ test('rejects duplicate endpoint rows', () => {
 
 test('rejects unsupported statuses', () => {
   const markdown = validMatrix.replace(
-    '[Covered](https://app.owox.com/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-03 | Gap',
+    '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-07-03 | Gap',
     'Partial | Gap'
   );
 
@@ -222,7 +222,7 @@ test('rejects malformed covered dates', () => {
   assert.throws(
     () =>
       matrixModule.parseCoverageCell(
-        '[Covered](https://app.owox.com/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-02-30',
+        '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts) · 2026-02-30',
         'OpenAPI',
         'GET /api/model-canvas/data-marts'
       ),
@@ -244,8 +244,8 @@ test('rejects an unlinked covered status', () => {
 
 test('rejects generic Swagger targets', () => {
   for (const target of [
-    'https://app.owox.com/api/swagger-ui',
-    'https://app.owox.com/api/swagger-ui#/Model%20Canvas',
+    'https://app.p2pdigital.vn/api/swagger-ui',
+    'https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas',
   ]) {
     assert.throws(
       () =>
@@ -284,7 +284,7 @@ test('rejects targets from the wrong coverage dimension', () => {
   assert.throws(
     () =>
       matrixModule.parseCoverageCell(
-        '[Covered](https://app.owox.com/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-02',
+        '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list) · 2026-07-02',
         'API client',
         'GET /api/data-marts/insight-templates'
       ),
@@ -296,7 +296,7 @@ test('rejects stale endpoint-to-operation and endpoint-to-heading targets', () =
   assert.throws(
     () =>
       matrixModule.parseCoverageCell(
-        '[Covered](https://app.owox.com/api/swagger-ui#/Run%20History/ProjectDataMartRunsController_list) · 2026-07-01',
+        '[Covered](https://app.p2pdigital.vn/api/swagger-ui#/Run%20History/ProjectDataMartRunsController_list) · 2026-07-01',
         'OpenAPI',
         'GET /api/data-marts/insight-templates'
       ),
@@ -326,7 +326,7 @@ test('rejects linked Gap and Unassessed values', () => {
   assert.throws(
     () =>
       matrixModule.parseCoverageCell(
-        '[Unassessed](https://app.owox.com/api/swagger-ui#/ProjectSettings/ProjectSettingsController_getSettings)',
+        '[Unassessed](https://app.p2pdigital.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_getSettings)',
         'OpenAPI',
         'GET /api/projects/settings'
       ),

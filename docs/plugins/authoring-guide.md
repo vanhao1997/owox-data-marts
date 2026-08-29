@@ -1,6 +1,6 @@
 # Plugin authoring guide
 
-Use this guide while building and maintaining an OWOX Data Marts plugin. It defines the production
+Use this guide while building and maintaining an P2PDigital Data Marts plugin. It defines the production
 plugin contract, SDK usage, UI foundation, deployment, releases, publication, and updates.
 
 If the repository and development tools are not ready yet, first
@@ -40,18 +40,18 @@ A simple plugin can use this project structure:
 ```
 
 Keep reusable controls in `src/components/ui/`. Vite's default build output is `dist/`; GitHub
-Pages publishes that directory. Keep `plugin.json` at the repository root: OWOX Data Marts reads
+Pages publishes that directory. Keep `plugin.json` at the repository root: P2PDigital Data Marts reads
 it from the GitHub Release commit rather than from the deployed page.
 
 ## Understand the plugin runtime
 
-An OWOX Data Marts plugin is a small web application hosted outside OWOX Data Marts. OWOX opens
+An P2PDigital Data Marts plugin is a small web application hosted outside P2PDigital Data Marts. OWOX opens
 the application inside a protected frame and connects it to the installing member through
 `@owox/plugin-sdk`.
 
 ### Security and trust model
 
-These constraints follow from the plugin sandbox. No OWOX Data Marts setting relaxes them.
+These constraints follow from the plugin sandbox. No P2PDigital Data Marts setting relaxes them.
 
 **The page runs in an opaque origin.** It has no cookies, `localStorage`, `sessionStorage`,
 `IndexedDB`, or service workers. Use host-managed plugin collections for ordinary JSON state, or
@@ -69,7 +69,7 @@ the browser blocks its module script and the plugin runs no code. A page with an
 no assets does not encounter this issue.
 
 **The entry page must be embeddable.** It must not send `X-Frame-Options`. If it sends a
-`Content-Security-Policy` with `frame-ancestors`, the directive must permit OWOX Data Marts by
+`Content-Security-Policy` with `frame-ancestors`, the directive must permit P2PDigital Data Marts by
 using `*`, `https:`, or the exact origin of the deployment. Publication checks this and refuses a
 page that could not be displayed.
 
@@ -100,15 +100,15 @@ const ctx = await connect();
 const dataMarts = await ctx.owox.dataMarts.list();
 ```
 
-`connect()` completes a handshake with the OWOX Data Marts host. It rejects outside an OWOX Data
+`connect()` completes a handshake with the P2PDigital Data Marts host. It rejects outside an OWOX Data
 Marts frame or if no host answers within 10 seconds.
 
 | Context value | What it provides |
 | --- | --- |
-| `ctx.owox` | Authenticated [OWOX Data Marts API client](../api/api-client.md), supplied by [`@owox/plugin-sdk`](https://www.npmjs.com/package/@owox/plugin-sdk). Use the API client documentation to discover available methods. Do not install `@owox/api-client` or provide an API key inside a plugin; the SDK owns its transport, which cannot be replaced or inspected. |
+| `ctx.owox` | Authenticated [P2PDigital Data Marts API client](../api/api-client.md), supplied by [`@owox/plugin-sdk`](https://www.npmjs.com/package/@owox/plugin-sdk). Use the API client documentation to discover available methods. Do not install `@owox/api-client` or provide an API key inside a plugin; the SDK owns its transport, which cannot be replaced or inspected. |
 | `ctx.collections(name)` | Provides a host-managed JSON collection declared by the current plugin version. |
 | `ctx.ui.openExternal(url)` | Asks the host to open an external HTTPS address in a new tab. |
-| `ctx.ui.navigate(path)` | Asks the host to navigate to a page inside OWOX Data Marts—for example, `/ui/${ctx.projectId}/data-marts/${id}`—in place of the plugin frame. Resolutions off the app's origin are refused. |
+| `ctx.ui.navigate(path)` | Asks the host to navigate to a page inside P2PDigital Data Marts—for example, `/ui/${ctx.projectId}/data-marts/${id}`—in place of the plugin frame. Resolutions off the app's origin are refused. |
 | `ctx.signal` | Aborts when the host tears the plugin down. |
 | `ctx.userId`, `ctx.projectId`, `ctx.theme` | Provides display context without exposing tokens. The member's name and avatar are available through `ctx.owox.auth` when needed. |
 
@@ -127,7 +127,7 @@ are refused.
 
 ## Make the plugin feel native
 
-Plugins run in an iframe and do not inherit OWOX Data Marts styles. They must import and bundle
+Plugins run in an iframe and do not inherit P2PDigital Data Marts styles. They must import and bundle
 their own CSS. `@owox/ui` is an internal package, not a public plugin dependency, so do not import
 it.
 
@@ -277,7 +277,7 @@ Replace `OWNER` and `PLUGIN_NAME` after the first successful deployment. The URL
 be publicly reachable without a sign-in prompt, and not resolve to a private or metadata network,
 including through redirects.
 
-The manifest contains the plugin-authored fields above. OWOX Data Marts derives plugin identity
+The manifest contains the plugin-authored fields above. P2PDigital Data Marts derives plugin identity
 from the GitHub repository and the current version from the eligible GitHub Release tag. Renaming
 or transferring a repository does not create another plugin; two repositories with identical
 contents are two different plugins.
@@ -401,7 +401,7 @@ and push the manifest change, and wait for the deployment again before creating 
 
 ## Create a release
 
-OWOX Data Marts reads versions from GitHub Releases. A release becomes eligible when it is:
+P2PDigital Data Marts reads versions from GitHub Releases. A release becomes eligible when it is:
 
 - published rather than saved as a draft;
 - not marked as a GitHub prerelease;
@@ -430,9 +430,9 @@ pin an older version.
 Publishing makes a plugin findable but installs it for nobody. Every member decides whether to
 install it, and unpublishing later does not uninstall existing installations.
 
-### Publish in OWOX Data Marts
+### Publish in P2PDigital Data Marts
 
-1. Open **Plugins** in OWOX Data Marts.
+1. Open **Plugins** in P2PDigital Data Marts.
 2. Select **Publish Plugin**.
 3. Enter `OWNER/PLUGIN_NAME` in **GitHub repository**.
 4. Under **Who can find it**, choose **Only me** for testing. A Project Admin can choose
@@ -462,13 +462,13 @@ project IDs when possible: `--all-projects` makes the plugin findable in every c
 project, and projects cannot be excluded from that audience.
 
 A public repository needs no GitHub App setup. For a private repository, publish once and follow
-the installation link returned by OWOX Data Marts to grant the correct GitHub App access, then
+the installation link returned by P2PDigital Data Marts to grant the correct GitHub App access, then
 publish again. A self-managed deployment may use its own GitHub App, so use the link returned by
 that deployment.
 
 ## Test the installed plugin
 
-Publish the first release to **Only me**, install it, and test it inside OWOX Data Marts. The
+Publish the first release to **Only me**, install it, and test it inside P2PDigital Data Marts. The
 frontend depends on the host iframe and the real `@owox/plugin-sdk` handshake, so a standalone
 local frontend is not a supported preview environment.
 
@@ -480,7 +480,7 @@ eligible release before sharing the plugin more broadly.
 ## Update or roll back
 
 For a normal update, change and test the plugin, deploy it, and create a higher production release
-such as `v0.1.1`. OWOX Data Marts checks relevant repositories daily. Ask for an immediate check
+such as `v0.1.1`. P2PDigital Data Marts checks relevant repositories daily. Ask for an immediate check
 when needed:
 
 ```bash
@@ -491,7 +491,7 @@ A valid higher release applies to every installation. There is no member-level v
 To roll back, restore the last working source, deploy it, and create a new higher patch release
 that explains the restoration; do not try to move or recreate an older tag.
 
-OWOX Data Marts records the exact commit referenced by each eligible release, but the delivery URL
+P2PDigital Data Marts records the exact commit referenced by each eligible release, but the delivery URL
 does not pin the files served there. Once an eligible release version is recorded, moving,
 deleting, or recreating its tag cannot rewrite that recorded version; use a new higher eligible
 release to roll back. Deploying different files changes what installed members run even before
@@ -511,7 +511,7 @@ If the plugin cannot be published or opens as a blank page, verify that:
 - the GitHub Release is published, is not a prerelease, and has an eligible version tag;
 - scripts, fonts, and fetched assets are served with `Access-Control-Allow-Origin: *`;
 - the entry page is not blocked by `X-Frame-Options` or `frame-ancestors`;
-- the OWOX Data Marts GitHub App can read the repository when it is private;
+- the P2PDigital Data Marts GitHub App can read the repository when it is private;
 - the plugin catches errors and shows a useful message instead of a blank screen.
 
 An administrator can suspend a plugin across a deployment. A suspended plugin cannot be opened,
@@ -524,7 +524,7 @@ Before sharing the plugin with a project, confirm that:
 
 - the repository contains `AGENTS.md`, source files, `plugin.json`, and the Pages workflow;
 - build, lint, type checking, and tests pass;
-- the installed personal test in OWOX Data Marts covers narrow and wide layouts, light and dark
+- the installed personal test in P2PDigital Data Marts covers narrow and wide layouts, light and dark
   themes, and understandable loading, empty, error, and success states;
 - no credential or `.env` file is committed;
 - the deployed page and all its assets load from a public HTTPS address;

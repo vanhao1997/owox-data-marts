@@ -8,11 +8,11 @@ export const emailHeader = `
               <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="stack-column" style="vertical-align:middle;text-align:left;">
-                    <a href="https://app.owox.com" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;color:#1E88E5;font-size:14px;font-weight:bold;">
+                    <a href="https://app.p2pdigital.vn" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;color:#1E88E5;font-size:14px;font-weight:bold;">
                       <span style="display:inline-block;padding:0px 4px;height:30px;border-radius:6px;border:1px solid #e6e9ee;background-color:#ffffff;text-align:center;line-height:28px;">
                         ${OWOX_LOGO}
                       </span>
-                      <span style="display:inline-block;color:#0f172a;padding-left:2px;vertical-align:middle;">OWOX Data Marts</span>
+                      <span style="display:inline-block;color:#0f172a;padding-left:2px;vertical-align:middle;">P2PDigital Data Marts</span>
                     </a>
                   </td>
                   <td class="stack-column stack-column-center header-right" style="vertical-align:middle;text-align:right;font-size:13px;color:#6b7280;padding-left:12px;">
@@ -30,11 +30,11 @@ export const emailFooter = `
               <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;text-align:left;font-size:13px;color:#6b7280;">
-                    <span>This is an <a href="{{projectNotificationsUrl}}" target="_blank" rel="noopener noreferrer" style="color:#1E88E5;text-decoration:none;">automated notification</a> from OWOX Data Marts.</span>
+                    <span>This is an <a href="{{projectNotificationsUrl}}" target="_blank" rel="noopener noreferrer" style="color:#1E88E5;text-decoration:none;">automated notification</a> from P2PDigital Data Marts.</span>
                   </td>
                   <td style="vertical-align:middle;text-align:right;font-size:13px;color:#6b7280;">
                     Need help?
-                    <a href="https://docs.owox.com/docs/notifications/notification-settings/?utm_source=notifications&utm_medium=email&utm_campaign=service_notifications" target="_blank" rel="noopener noreferrer" style="color:#1E88E5;text-decoration:none;">Visit docs.owox.com</a>
+                    <a href="https://docs.p2pdigital.vn/docs/notifications/notification-settings/?utm_source=notifications&utm_medium=email&utm_campaign=service_notifications" target="_blank" rel="noopener noreferrer" style="color:#1E88E5;text-decoration:none;">Visit docs.p2pdigital.vn</a>
                   </td>
                 </tr>
               </table>

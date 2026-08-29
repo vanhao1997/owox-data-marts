@@ -4,7 +4,7 @@ Copyright © 2025 OWOX, Inc.
 
 1\. This Software and its associated documentation (the "Software") may be used in production,
 only if (i) you, and any entity you represent, have agreed to the OWOX Terms of Service available
-at <https://www.owox.com/policies/terms-of-service> (as amended from time to time) or have entered
+at <https://www.p2pdigital.vn/policies/terms-of-service> (as amended from time to time) or have entered
 into another written agreement with OWOX governing the use of the Software, and (ii) hold a valid
 Subscription corresponding to your scope of use.
 

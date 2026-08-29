@@ -3,7 +3,7 @@ import { IsString } from 'class-validator';
 
 export class MarkdownParseRequestApiDto {
   @ApiProperty({
-    description: 'Markdown source to render with the OWOX Data Marts Markdown pipeline',
+    description: 'Markdown source to render with the P2PDigital Data Marts Markdown pipeline',
     example: '# Revenue\n\n**Net revenue** after refunds.',
   })
   @IsString()

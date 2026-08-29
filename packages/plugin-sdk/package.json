@@ -1,7 +1,7 @@
 {
   "name": "@owox/plugin-sdk",
   "version": "0.32.0",
-  "description": "SDK for building OWOX Data Marts plugins",
+  "description": "SDK for building P2PDigital Data Marts plugins",
   "type": "module",
   "author": "OWOX",
   "license": "ELv2",
@@ -11,11 +11,11 @@
   "engines": {
     "node": ">=22.22.0"
   },
-  "homepage": "https://github.com/OWOX/owox-data-marts",
-  "bugs": "https://github.com/OWOX/owox-data-marts/issues",
+  "homepage": "https://github.com/vanhao1997/p2pdigital-data-marts",
+  "bugs": "https://github.com/vanhao1997/p2pdigital-data-marts/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWOX/owox-data-marts.git",
+    "url": "git+https://github.com/vanhao1997/p2pdigital-data-marts.git",
     "directory": "packages/plugin-sdk"
   },
   "scripts": {

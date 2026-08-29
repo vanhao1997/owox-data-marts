@@ -1,6 +1,6 @@
 # Web Application
 
-This is the web interface for OWOX Data Marts - an open-source solution for Data Analysts. This web application provides a user-friendly interface for managing Data Marts.
+This is the web interface for P2PDigital Data Marts - an open-source solution for Data Analysts. This web application provides a user-friendly interface for managing Data Marts.
 
 ## Technologies Used
 
@@ -26,7 +26,7 @@ The project follows a monorepo structure using npm workspaces.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/OWOX/owox-data-marts.git
+   git clone https://github.com/vanhao1997/p2pdigital-data-marts.git
    cd owox-data-marts
    ```
 

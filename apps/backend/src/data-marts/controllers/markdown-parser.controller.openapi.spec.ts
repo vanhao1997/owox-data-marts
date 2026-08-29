@@ -88,7 +88,7 @@ describe('MarkdownParserController OpenAPI', () => {
     });
 
     expect(operation?.responses['201']).toMatchObject({
-      description: 'Rendered HTML using the same Markdown pipeline as the OWOX Data Marts UI',
+      description: 'Rendered HTML using the same Markdown pipeline as the P2PDigital Data Marts UI',
       content: {
         'text/html': {
           schema: { type: 'string' },

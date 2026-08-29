@@ -309,7 +309,7 @@ export function translateOutputControlsError(
     ].join(' ');
     sections.push({
       code: 'unique_count_not_reportable',
-      message: `${detail} A report's Unique Count selection cannot be set over MCP — remove the field and retry, and tell the user to turn it on for this report in the OWOX Data Marts UI. It IS available in query_data_mart.`,
+      message: `${detail} A report's Unique Count selection cannot be set over MCP — remove the field and retry, and tell the user to turn it on for this report in the P2PDigital Data Marts UI. It IS available in query_data_mart.`,
     });
   }
 

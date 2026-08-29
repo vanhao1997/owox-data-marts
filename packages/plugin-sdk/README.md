@@ -1,6 +1,6 @@
 # @owox/plugin-sdk
 
-Build a plugin that runs inside OWOX Data Marts.
+Build a plugin that runs inside P2PDigital Data Marts.
 
 ```ts
 import { connect } from '@owox/plugin-sdk';

@@ -1,6 +1,6 @@
 # @owox/api-client
 
-TypeScript/JavaScript client for calling the OWOX Data Marts API from custom
+TypeScript/JavaScript client for calling the P2PDigital Data Marts API from custom
 scripts, internal tools, automation, and local agent workflows.
 
 ## Install
@@ -53,6 +53,6 @@ await client.deleteJson('/api/example-resource/item-123'); // Empty or 204 respo
 
 ## Documentation
 
-- [@owox/api-client guide](https://docs.owox.com/docs/api/api-client/)
-- [API Keys](https://docs.owox.com/docs/api/api-keys/)
-- [OpenAPI and Swagger UI](https://docs.owox.com/docs/api/openapi/)
+- [@owox/api-client guide](https://docs.p2pdigital.vn/docs/api/api-client/)
+- [API Keys](https://docs.p2pdigital.vn/docs/api/api-keys/)
+- [OpenAPI and Swagger UI](https://docs.p2pdigital.vn/docs/api/openapi/)

@@ -1,5 +1,5 @@
 /**
- * Base Prettier configuration for OWOX Data Marts workspace
+ * Base Prettier configuration for P2PDigital Data Marts workspace
  * @type {import("prettier").Config}
  */
 export const config = {

@@ -5,10 +5,10 @@
 Copy this prompt into a new coding-agent task:
 
 ```text
-Help me prepare an OWOX Data Marts plugin project.
+Help me prepare an P2PDigital Data Marts plugin project.
 
 Follow this page with me:
-https://docs.owox.com/docs/plugins/project-setup/
+https://docs.p2pdigital.vn/docs/plugins/project-setup/
 
 Guide me through the prerequisites, command-line tools, repository creation, and AGENTS.md setup.
 Stop when the repository is ready to build, and report any step that needs me to authenticate or
@@ -17,7 +17,7 @@ make a choice.
 
 ## Before you begin
 
-You need an OWOX Data Marts project, a GitHub account, Node.js and npm, and a coding agent.
+You need an P2PDigital Data Marts project, a GitHub account, Node.js and npm, and a coding agent.
 
 ## Set up the GitHub CLI
 
@@ -74,12 +74,12 @@ requires an eligible paid plan, and the deployed page must remain public.
 Save the following as the root `AGENTS.md` file:
 
 ```md
-# OWOX Data Marts plugin development
+# P2PDigital Data Marts plugin development
 
 Before changing this plugin, read:
-https://docs.owox.com/docs/plugins/authoring-guide/
+https://docs.p2pdigital.vn/docs/plugins/authoring-guide/
 
-Use the OWOX Data Marts plugin authoring guide as the source of truth for plugin behavior,
+Use the P2PDigital Data Marts plugin authoring guide as the source of truth for plugin behavior,
 security constraints, manifests, SDK usage, deployment, releases, and publishing.
 
 If the authoring guide cannot be accessed, report that limitation before making assumptions

@@ -114,7 +114,7 @@ describe('ReportQuickRunCell', () => {
     );
 
     expect(
-      screen.getByRole('button', { name: 'Refresh it from the OWOX add-in in Excel' })
+      screen.getByRole('button', { name: 'Refresh it from The P2PDigital add-in in Excel' })
     ).toBeDisabled();
   });
 
@@ -132,7 +132,7 @@ describe('ReportQuickRunCell', () => {
     );
 
     const trigger = screen
-      .getByRole('button', { name: 'Refresh it from the OWOX add-in in Excel' })
+      .getByRole('button', { name: 'Refresh it from The P2PDigital add-in in Excel' })
       .closest('span');
     expect(trigger).not.toBeNull();
 
@@ -142,7 +142,7 @@ describe('ReportQuickRunCell', () => {
 
     await waitFor(() => {
       expect(
-        screen.getAllByText('Refresh it from the OWOX add-in in Excel').length
+        screen.getAllByText('Refresh it from The P2PDigital add-in in Excel').length
       ).toBeGreaterThan(0);
     });
   });

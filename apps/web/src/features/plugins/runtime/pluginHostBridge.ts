@@ -17,7 +17,7 @@ export interface PluginHostBridgeOptions {
   context: PluginHostContext;
   fetchRuntimeToken: FetchRuntimeToken;
   onOpenExternal: (url: string) => void;
-  /** A page inside OWOX the plugin asks to go to. The host decides whether it may. */
+  /** A page inside P2PDigital the plugin asks to go to. The host decides whether it may. */
   onNavigate: (path: string) => void;
   /**
    * The bridge closed the channel on its own, and the frame is now inert.

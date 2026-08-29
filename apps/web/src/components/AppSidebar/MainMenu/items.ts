@@ -12,44 +12,44 @@ import type { MainMenuItem } from './types';
 
 export const MainMenuItems: MainMenuItem[] = [
   {
-    title: 'Data Marts',
+    title: 'sidebar.dataMarts',
     url: '/data-marts',
     icon: Box,
     children: [
       {
-        title: 'Models',
+        title: 'sidebar.models',
         url: '/data-marts/models',
         icon: Network,
       },
       {
-        title: 'Reports',
+        title: 'sidebar.reports',
         url: '/data-marts/reports',
         icon: FileText,
       },
       {
-        title: 'Insights',
+        title: 'sidebar.insights',
         url: '/data-marts/insights',
         icon: Bookmark,
       },
       {
-        title: 'Triggers',
+        title: 'sidebar.triggers',
         url: '/data-marts/schedules',
         icon: CalendarClock,
       },
       {
-        title: 'Run History',
+        title: 'sidebar.runHistory',
         url: '/data-marts/runs',
         icon: HistoryIcon,
       },
     ],
   },
   {
-    title: 'Storages',
+    title: 'sidebar.storages',
     url: '/data-storages',
     icon: DatabaseIcon,
   },
   {
-    title: 'Destinations',
+    title: 'sidebar.destinations',
     url: '/data-destinations',
     icon: ArchiveRestore,
   },

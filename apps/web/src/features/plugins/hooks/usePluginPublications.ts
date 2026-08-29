@@ -65,7 +65,7 @@ export function usePluginManageablePublications(pluginId: string): PluginPublica
 
 export interface PublishFailure {
   message: string;
-  /** Present when OWOX cannot read the repository and the publisher can grant access. */
+  /** Present when P2PDigital cannot read the repository and the publisher can grant access. */
   installationUrl?: string;
 }
 
@@ -97,7 +97,7 @@ export function usePluginPublishing() {
   /**
    * Returns the failure instead of throwing, because one of them is actionable.
    *
-   * A repository OWOX cannot read is fixed by installing the GitHub App, and the server
+   * A repository P2PDigital cannot read is fixed by installing the GitHub App, and the server
    * hands back exactly where. A toast would bury the one link that resolves it.
    */
   const publish = useCallback(

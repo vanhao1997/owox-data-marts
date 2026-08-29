@@ -15,6 +15,25 @@ vi.mock('../../../features/idp', () => ({
   }),
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'sidebar.dataMarts': 'Data Marts',
+        'sidebar.models': 'Models',
+        'sidebar.reports': 'Reports',
+        'sidebar.insights': 'Insights',
+        'sidebar.triggers': 'Triggers',
+        'sidebar.runHistory': 'Run History',
+        'sidebar.storages': 'Storages',
+        'sidebar.destinations': 'Destinations',
+      };
+      return translations[key] ?? key;
+    },
+    i18n: { language: 'en', changeLanguage: vi.fn() },
+  }),
+}));
+
 describe('MainMenu', () => {
   it.each([
     ['Models', '/ui/project-1/data-marts/models'],

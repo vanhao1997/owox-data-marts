@@ -76,9 +76,9 @@ describe('RequestAccessPage', () => {
     expect(container.querySelector('.dm-page')).toBeInTheDocument();
     expect(container.querySelector('.dm-card')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Request project access' })).toBeInTheDocument();
-    expect(screen.getByText('owox.com · OWOX')).toBeInTheDocument();
+    expect(screen.getByText('owox.com · P2PDigital')).toBeInTheDocument();
     expect(screen.getByText('a.marchenko.dev@owox.com')).toBeInTheDocument();
-    expect(screen.getByText('OWOX')).toBeInTheDocument();
+    expect(screen.getByText('P2PDigital')).toBeInTheDocument();
     expect(screen.getByText('owox.com')).toBeInTheDocument();
     expect(screen.getByText('Business User')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Create new project/ })).toBeInTheDocument();
@@ -90,7 +90,7 @@ describe('RequestAccessPage', () => {
     userProvisioningServiceMock.requestAccess.mockResolvedValueOnce({
       userId: 'user-1',
       projectId: 'main-project',
-      projectTitle: 'OWOX',
+      projectTitle: 'P2PDigital',
       request: {
         role: 'viewer',
         status: 'processing',
@@ -158,7 +158,7 @@ function context(overrides: Partial<RequestAccessContext> = {}): RequestAccessCo
     },
     project: {
       projectId: 'main-project',
-      projectTitle: 'OWOX',
+      projectTitle: 'P2PDigital',
     },
     availableRoles: ['viewer', 'editor', 'admin'],
     defaultRole: 'viewer',

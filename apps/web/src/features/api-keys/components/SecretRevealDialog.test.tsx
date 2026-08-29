@@ -112,7 +112,7 @@ describe('SecretRevealDialog', () => {
 
     const docsLink = screen.getByRole('link', { name: 'API Keys documentation' });
 
-    expect(docsLink).toHaveAttribute('href', 'https://docs.owox.com/docs/api/api-keys/');
+    expect(docsLink).toHaveAttribute('href', 'https://docs.p2pdigital.vn/docs/api/api-keys/');
     expect(docsLink.closest('[data-slot="dialog-footer"]')).not.toBeNull();
     expect(docsLink).not.toHaveClass('hover:bg-muted');
   });

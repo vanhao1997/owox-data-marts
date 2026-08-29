@@ -24,7 +24,7 @@ export default function AthenaAccessKeyIdDescription() {
             Learn more about how to create a user in AWS&nbsp;
             <ExternalAnchor
               className='underline'
-              href='https://docs.owox.com/docs/storages/supported-storages/aws-athena/?utm_source=owox_data_marts&utm_medium=storage_enity&utm_campaign=tooltip_aws'
+              href='https://docs.p2pdigital.vn/docs/storages/supported-storages/aws-athena/?utm_source=owox_data_marts&utm_medium=storage_enity&utm_campaign=tooltip_aws'
             >
               in documentation
             </ExternalAnchor>

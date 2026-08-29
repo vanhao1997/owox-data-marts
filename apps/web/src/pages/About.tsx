@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 function About() {
+  const { t } = useTranslation();
   return (
     <div className='app-container'>
-      <h1>About OWOX</h1>
-      <p>OWOX Data Marts — Free, Open-Source Connectors for Data Analysts</p>
+      <h1>{t('about.title')}</h1>
+      <p>{t('about.description')}</p>
     </div>
   );
 }

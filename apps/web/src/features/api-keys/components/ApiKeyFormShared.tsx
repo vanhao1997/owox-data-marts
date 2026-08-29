@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 import { FormLabel, FormSection } from '@owox/ui/components/form';
 import { ExternalLink } from 'lucide-react';
 
-const API_KEYS_DOCS_URL = 'https://docs.owox.com/docs/api/api-keys/';
-const OWOX_CTL_DOCS_URL = 'https://docs.owox.com/docs/api/owox-ctl/';
-const API_CLIENT_DOCS_URL = 'https://docs.owox.com/docs/api/api-client/';
-const OPENAPI_DOCS_URL = 'https://docs.owox.com/docs/api/openapi/';
+const API_KEYS_DOCS_URL = 'https://docs.p2pdigital.vn/docs/api/api-keys/';
+const OWOX_CTL_DOCS_URL = 'https://docs.p2pdigital.vn/docs/api/owox-ctl/';
+const API_CLIENT_DOCS_URL = 'https://docs.p2pdigital.vn/docs/api/api-client/';
+const OPENAPI_DOCS_URL = 'https://docs.p2pdigital.vn/docs/api/openapi/';
 
 interface ApiKeyFormLabelProps {
   description: string;

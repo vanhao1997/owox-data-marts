@@ -38,9 +38,9 @@ describe('InstallPluginDialog', () => {
 
     const notice = screen.getByTestId('install-data-notice');
 
-    expect(notice).toHaveTextContent('Acts with your access to OWOX Data Marts.');
+    expect(notice).toHaveTextContent('Acts with your access to P2PDigital Data Marts.');
     expect(notice).toHaveTextContent(
-      'Anything it reads can leave OWOX and reach the plugin publisher.'
+      'Anything it reads can leave P2PDigital and reach the plugin publisher.'
     );
     expect(notice).toHaveTextContent(
       'Reinstalling restores nothing the plugin kept on its own side.'

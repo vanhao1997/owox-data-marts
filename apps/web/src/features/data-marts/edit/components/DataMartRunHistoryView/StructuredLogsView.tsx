@@ -7,10 +7,10 @@ interface StructuredLogsViewProps {
   logs: LogEntry[];
 }
 
-const OWOX_APP_URL = 'https://app.owox.com';
+const OWOX_APP_URL = 'https://app.p2pdigital.vn';
 
 const renderMessage = (message: string) =>
-  message.split(/(https:\/\/app\.owox\.com)/g).map((part, index) =>
+  message.split(/(https:\/\/app\.p2pdigital\.vn)/g).map((part, index) =>
     part === OWOX_APP_URL ? (
       <a
         key={`${part}-${String(index)}`}

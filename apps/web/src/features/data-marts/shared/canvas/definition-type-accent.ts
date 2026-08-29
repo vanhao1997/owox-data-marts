@@ -9,7 +9,7 @@ import {
 } from './owox-palette';
 
 /**
- * Accent / badge color per definition type, drawn from the OWOX corporate
+ * Accent / badge color per definition type, drawn from The P2PDigital corporate
  * palette. Kept in one place so ERD-style cards across canvases (Models
  * canvas, Joinable Data Marts diagram) stay in sync.
  */

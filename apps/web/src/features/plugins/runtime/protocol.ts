@@ -126,7 +126,7 @@ export type PluginRequest =
     }
   | { id: string; kind: 'openExternal'; url: string }
   /**
-   * A path inside OWOX, opened in place. Distinct from openExternal on purpose: one
+   * A path inside P2PDigital, opened in place. Distinct from openExternal on purpose: one
    * leaves the app in a new tab, the other replaces the page the plugin is running on,
    * and the host validates them by different rules.
    */

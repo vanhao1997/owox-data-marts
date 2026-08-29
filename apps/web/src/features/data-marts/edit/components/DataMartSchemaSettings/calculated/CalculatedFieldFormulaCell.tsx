@@ -121,7 +121,7 @@ const PREVIEW_CLASSES =
   'max-w-full font-mono text-xs break-words whitespace-pre-wrap text-gray-600 dark:text-gray-300';
 
 const CALCULATED_FIELDS_DOCS =
-  'https://docs.owox.com/docs/getting-started/setup-guide/calculated-fields/' +
+  'https://docs.p2pdigital.vn/docs/getting-started/setup-guide/calculated-fields/' +
   '?utm_source=owox_data_marts&utm_medium=dm_page_data_setup_tab&utm_campaign=calculated_field_formula_editor';
 
 /**

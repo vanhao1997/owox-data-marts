@@ -33,7 +33,7 @@ describe('PublishPluginSheet', () => {
     ).toBeTruthy();
     expect(screen.getByRole('button', { name: 'What each option does' })).toBeTruthy();
     // Collapsed: the explanation is not on screen until asked for.
-    expect(screen.queryByText(/OWOX Data Marts GitHub App/)).toBeNull();
+    expect(screen.queryByText(/P2PDigital Data Marts GitHub App/)).toBeNull();
   });
 
   it('names the GitHub App as what unlocks a private repository', () => {
@@ -41,7 +41,7 @@ describe('PublishPluginSheet', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Which repositories can be published' }));
 
-    expect(screen.getByText(/OWOX Data Marts GitHub App/)).toBeTruthy();
+    expect(screen.getByText(/P2PDigital Data Marts GitHub App/)).toBeTruthy();
   });
 
   it('renders exactly one form element', () => {
@@ -54,7 +54,7 @@ describe('PublishPluginSheet', () => {
     const onClose = vi.fn();
     render(<PublishPluginSheet isOpen onClose={onClose} />);
 
-    fireEvent.change(screen.getByPlaceholderText('OWOX/example-plugin'), {
+    fireEvent.change(screen.getByPlaceholderText('p2pdigital/example-plugin'), {
       target: { value: 'romandubovyi/owox-plugin-example' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Publish' }));

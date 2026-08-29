@@ -87,7 +87,7 @@ describe('usePluginPublishing', () => {
       response: {
         data: {
           code: 'GITHUB_REPO_NOT_ACCESSIBLE',
-          message: 'OWOX cannot read OWOX/example',
+          message: 'P2PDigital cannot read OWOX/example',
           errorDetails: { installationUrl: 'https://github.com/apps/owox/installations/new' },
         },
       },

@@ -144,9 +144,9 @@ export function ConnectGoogleSheetsPage() {
       <div className='bg-card text-card-foreground w-full max-w-lg space-y-4 rounded-lg p-4 shadow-lg'>
         <h1 className='text-lg font-semibold'>Connect Google Sheets</h1>
         <p className='text-muted-foreground text-sm'>
-          Google OAuth isn&apos;t configured for this OWOX instance, so this quick-connect page
+          Google OAuth isn&apos;t configured for this P2PDigital instance, so this quick-connect page
           can&apos;t be used. Ask your admin to configure Google OAuth, or create a Google Sheets
-          destination manually from the OWOX web app (Destinations → Add destination) using a
+          destination manually from the P2PDigital web app (Destinations → Add destination) using a
           Service Account key instead.
         </p>
       </div>
@@ -177,7 +177,7 @@ export function ConnectGoogleSheetsPage() {
             </FormItem>
 
             <FormItem>
-              <FormLabel tooltip='Authorize OWOX to access your Google Sheets'>
+              <FormLabel tooltip='Authorize P2PDigital to access your Google Sheets'>
                 Connect with Google OAuth
               </FormLabel>
               <GoogleOAuthConnectButton

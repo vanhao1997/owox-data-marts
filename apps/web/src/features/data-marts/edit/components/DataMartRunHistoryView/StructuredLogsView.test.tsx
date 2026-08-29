@@ -14,14 +14,14 @@ describe('StructuredLogsView', () => {
             id: 'log-1',
             timestamp: '2026-08-18 12:43:25',
             level: LogLevel.ERROR,
-            message: 'Create a managed license key at https://app.owox.com to enable execution.',
+            message: 'Create a managed license key at https://app.p2pdigital.vn to enable execution.',
           },
         ]}
       />
     );
 
-    const link = screen.getByRole('link', { name: 'https://app.owox.com' });
-    expect(link).toHaveAttribute('href', 'https://app.owox.com');
+    const link = screen.getByRole('link', { name: 'https://app.p2pdigital.vn' });
+    expect(link).toHaveAttribute('href', 'https://app.p2pdigital.vn');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });

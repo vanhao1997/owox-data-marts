@@ -49,6 +49,23 @@ vi.mock('../components/Logo', () => ({
   Logo: () => <span>Logo</span>,
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'sidebar.dataMarts': 'Data Marts',
+        'sidebar.storages': 'Storages',
+        'sidebar.destinations': 'Destinations',
+        'sidebar.accessRequired': 'Access required',
+        'sidebar.waitingForAccess': 'Waiting for project access',
+        'sidebar.requestAccess': 'Request access to use this section',
+      };
+      return translations[key] ?? key;
+    },
+    i18n: { language: 'en', changeLanguage: vi.fn() },
+  }),
+}));
+
 describe('MainLayout', () => {
   beforeEach(() => {
     currentUser.value = user([]);

@@ -36,7 +36,7 @@ export function ProjectIdGuard({ children }: { children: React.ReactNode }): Rea
 
   useEffect(() => {
     if (!hasMismatch) return;
-    // The managed OWOX provider still owns project selection in its sign-in
+    // the managed P2PDigital provider still owns project selection in its sign-in
     // flow. Only self-hosted Better Auth exposes the local selection endpoint.
     if (!usesLocalProjectManagement) {
       signIn({ projectId: safeUrlProjectId });

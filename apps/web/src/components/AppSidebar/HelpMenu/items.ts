@@ -1,23 +1,25 @@
 import type { HelpMenuItem } from './types';
 import { Info, Clapperboard, MessagesSquare, Rocket, Airplay, ListTodo } from 'lucide-react';
 import { openIntercom } from '../../../app/intercom/intercomUtils';
+import type { TFunction } from 'i18next';
 
 export function helpMenuItems(
   openPopover: (id: string) => void,
-  openSetupChecklist: () => void
+  openSetupChecklist: () => void,
+  t: TFunction
 ): HelpMenuItem[] {
   return [
     {
       type: 'menu-item',
-      title: 'What´s new',
+      title: t('helpMenu.whatsNew'),
       icon: Rocket,
-      href: 'https://docs.owox.com/docs/changelog/?utm_source=community_edition&utm_medium=organic&utm_campaign=support_menu_dropdown&utm_content=whats_new',
+      href: 'https://docs.p2pdigital.vn/docs/changelog/?utm_source=community_edition&utm_medium=organic&utm_campaign=support_menu_dropdown&utm_content=whats_new',
       visible: true,
     },
     { type: 'separator' },
     {
       type: 'menu-item',
-      title: 'Get to know OWOX',
+      title: t('helpMenu.getToKnow'),
       icon: ListTodo,
       onClick: () => {
         openSetupChecklist();
@@ -26,62 +28,62 @@ export function helpMenuItems(
     },
     {
       type: 'menu-item',
-      title: 'Documentation',
-      href: 'https://docs.owox.com/?utm_source=community_edition&utm_medium=organic&utm_campaign=support_menu_dropdown&utm_content=documentation',
+      title: t('helpMenu.documentation'),
+      href: 'https://docs.p2pdigital.vn/?utm_source=community_edition&utm_medium=organic&utm_campaign=support_menu_dropdown&utm_content=documentation',
       icon: Info,
       visible: { flagKey: 'MENU_DOCUMENTATION_COMMUNITY_EDITION_VISIBLE', expectedValue: 'true' },
     },
     {
       type: 'menu-item',
-      title: 'Documentation',
-      href: 'https://docs.owox.com/?utm_source=app_owox_com&utm_medium=organic&utm_campaign=support_menu_dropdown&utm_content=documentation',
+      title: t('helpMenu.documentation'),
+      href: 'https://docs.p2pdigital.vn/?utm_source=app_p2pdigital_vn&utm_medium=organic&utm_campaign=support_menu_dropdown&utm_content=documentation',
       icon: Info,
       visible: { flagKey: 'MENU_DOCUMENTATION_OWOX_CLOUD_VISIBLE', expectedValue: 'true' },
     },
     {
       type: 'submenu',
-      title: 'Video tutorials',
+      title: t('helpMenu.videoTutorials'),
       icon: Clapperboard,
       visible: true,
       submenu: {
         options: [
           {
-            label: 'Getting Started with Data Marts',
+            label: t('helpMenu.gettingStarted'),
             icon: Airplay,
             onClick: () => {
               openPopover('video-3-getting-started-with-data-marts');
             },
           },
           {
-            label: 'SQL to Google Sheets in Minutes',
+            label: t('helpMenu.sqlToSheets'),
             icon: Airplay,
             onClick: () => {
               openPopover('video-1-google-sheets');
             },
           },
           {
-            label: 'Data Studio Setup',
+            label: t('helpMenu.dataStudioSetup'),
             icon: Airplay,
             onClick: () => {
               openPopover('video-2-looker');
             },
           },
           {
-            label: 'Complete BigQuery storage setup to publish Data Marts',
+            label: t('helpMenu.bigQuerySetup'),
             icon: Airplay,
             onClick: () => {
               openPopover('video-4-legacy-storage-setup');
             },
           },
           {
-            label: 'Insights: how to get automated reports from questions',
+            label: t('helpMenu.insightsVideo'),
             icon: Airplay,
             onClick: () => {
               openPopover('video-5-try-insights');
             },
           },
           {
-            label: 'Email reports: how to send reports by email',
+            label: t('helpMenu.emailReports'),
             icon: Airplay,
             onClick: () => {
               openPopover('video-6-email-reports');
@@ -93,7 +95,7 @@ export function helpMenuItems(
     { type: 'separator' },
     {
       type: 'menu-item',
-      title: 'Online Chat',
+      title: t('helpMenu.onlineChat'),
       icon: MessagesSquare,
       onClick: () => {
         openIntercom();

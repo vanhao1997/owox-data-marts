@@ -46,7 +46,7 @@ export function RecipientsSection({
                 <p className='mb-2'>
                   Only project members can receive notifications. To add new recipients, first
                   invite them to the project through{' '}
-                  <ExternalAnchor href='https://platform.owox.com/ui/p/none/settings/members'>
+                  <ExternalAnchor href='https://platform.p2pdigital.vn/ui/p/none/settings/members'>
                     Project Settings → Members
                   </ExternalAnchor>{' '}
                   page.

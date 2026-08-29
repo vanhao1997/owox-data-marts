@@ -95,7 +95,7 @@ export function DataStorageTable<TData, TValue>({
         <InviteTeammatesCard
           hint='— Not sure which storage to connect? Ask someone with access to help you'
           docsLabel='Learn more about Storages'
-          docsHref='https://docs.owox.com/docs/storages/manage-storages/'
+          docsHref='https://docs.p2pdigital.vn/docs/storages/manage-storages/'
         />
       </div>
     );

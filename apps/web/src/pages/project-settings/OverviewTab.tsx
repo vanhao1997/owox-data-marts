@@ -316,11 +316,11 @@ export function OverviewTab() {
           <CollapsibleCardContent>
             <div className='group flex w-full flex-col gap-3 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <p className='text-muted-foreground text-sm'>
-                For a single-project setup, use the published OWOX MCP server in Claude, Codex,
+                For a single-project setup, use the published P2PDigital MCP server in Claude, Codex,
                 ChatGPT, and similar tools. For multi-project workflows, use this project-specific
                 URL as a custom MCP server. See the{' '}
                 <a
-                  href='https://docs.owox.com/docs/getting-started/setup-guide/mcp/'
+                  href='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/mcp/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='text-primary hover:underline'
@@ -351,7 +351,7 @@ export function OverviewTab() {
           <CollapsibleCardHeader>
             <CollapsibleCardHeaderTitle
               icon={Settings}
-              tooltip='Open the full project settings on platform.owox.com'
+              tooltip='Open the full project settings on platform.p2pdigital.vn'
             >
               Legacy platform settings
             </CollapsibleCardHeaderTitle>
@@ -359,12 +359,12 @@ export function OverviewTab() {
           <CollapsibleCardContent>
             <div className='group flex w-full flex-col gap-3 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <p className='text-muted-foreground text-sm'>
-                Some project-level settings still live on platform.owox.com. Open the legacy
+                Some project-level settings still live on platform.p2pdigital.vn. Open the legacy
                 settings page in a new tab to manage them.
               </p>
               <Button asChild variant='outline' size='sm' className='w-fit' disabled={!projectId}>
                 <a
-                  href={`https://platform.owox.com/ui/p/${projectId}/settings/general`}
+                  href={`https://platform.p2pdigital.vn/ui/p/${projectId}/settings/general`}
                   target='_blank'
                   rel='noopener noreferrer'
                 >

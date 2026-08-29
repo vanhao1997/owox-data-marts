@@ -129,7 +129,7 @@ function DataMartDestinationsContentInner() {
               <InviteTeammatesCard
                 hint='— Ask colleagues to configure Google Sheets destination'
                 docsLabel='Learn more about Google Sheets destination'
-                docsHref='https://docs.owox.com/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=no_sheets_destination_invite_teammates_card'
+                docsHref='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=no_sheets_destination_invite_teammates_card'
               />
             </div>
           )}

@@ -21,7 +21,7 @@ interface InstallPluginDialogProps {
  * Deliberately not a second product page. What the plugin does, who wrote it and where it
  * came from live on the plugin's own page; this dialog only restates the three things a
  * member must accept before the plugin can act: it uses their access, data it reads can
- * leave OWOX, and reinstalling restores nothing the plugin kept on its own side.
+ * leave P2PDigital, and reinstalling restores nothing the plugin kept on its own side.
  *
  * The name and current SemVer stay because §13 requires the installation screen to show
  * display metadata and the current version.
@@ -128,10 +128,10 @@ export function InstallPluginDialog({
           data-testid='install-data-notice'
         >
           <Fact icon={<KeyRound className='size-4 shrink-0' aria-hidden />}>
-            Acts with your access to OWOX Data Marts.
+            Acts with your access to P2PDigital Data Marts.
           </Fact>
           <Fact icon={<Share2 className='size-4 shrink-0' aria-hidden />}>
-            Anything it reads can leave OWOX and reach the plugin publisher.
+            Anything it reads can leave P2PDigital and reach the plugin publisher.
           </Fact>
           <Fact icon={<RotateCcw className='size-4 shrink-0' aria-hidden />}>
             Reinstalling restores nothing the plugin kept on its own side.

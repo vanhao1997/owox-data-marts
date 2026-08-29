@@ -14,14 +14,14 @@ export default function MicrosoftTeamsDescription() {
         </p>
         <p className='mb-2'>
           In the report settings, add a subject and message, and set the delivery conditions. The
-          generated report will be delivered by OWOX Data Marts to the selected channel as a
+          generated report will be delivered by P2PDigital Data Marts to the selected channel as a
           message.
         </p>
         <p className='mb-2'>
           For more details, read the{' '}
           <ExternalAnchor
             className='underline'
-            href='https://docs.owox.com/docs/destinations/supported-destinations/microsoft-teams/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-microsoft-teams'
+            href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/microsoft-teams/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-microsoft-teams'
           >
             OWOX documentation
           </ExternalAnchor>

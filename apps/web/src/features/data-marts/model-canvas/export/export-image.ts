@@ -70,7 +70,7 @@ export function resolveCanvasBackground(element: HTMLElement): string {
   return '#ffffff';
 }
 
-/** Export the model as an SVG file with the OWOX watermark bottom-right. */
+/** Export the model as an SVG file with The P2PDigital watermark bottom-right. */
 export async function exportCanvasSvg(
   viewport: HTMLElement,
   rfNodes: Node[],

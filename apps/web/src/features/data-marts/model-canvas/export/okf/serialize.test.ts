@@ -95,7 +95,7 @@ describe('serializeOkfBundle', () => {
     const { files } = serializeOkfBundle(GRAPH, 'My Storage');
     const index = files['my-storage/index.md'];
     expect(index).toContain('| [Orders](./orders.md) | SQL | BigQuery (Common) |');
-    expect(index).toContain('Generated with [OWOX Data Marts]');
+    expect(index).toContain('Generated with [P2PDigital Data Marts]');
     expect(files['my-storage/orders.md']).toContain('- **Status:** PUBLISHED');
     expect(files['my-storage/customers.md']).toContain('- **Status:** DRAFT');
   });

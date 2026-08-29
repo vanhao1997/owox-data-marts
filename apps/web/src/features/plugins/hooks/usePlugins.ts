@@ -212,7 +212,7 @@ function reportOutcome(result: PluginUpdateResult): void {
 
   if (outcome === 'failed') {
     toast.error(
-      `Couldn't check for updates. ${version} remains active and OWOX will try again automatically.`
+      `Couldn't check for updates. ${version} remains active and P2PDigital will try again automatically.`
     );
     return;
   }

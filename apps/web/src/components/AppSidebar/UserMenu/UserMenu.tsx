@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DropdownMenu } from '@owox/ui/components/dropdown-menu';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../features/idp/hooks';
 import { generateInitials } from '../../../shared/utils';
 import { UserMenuItems } from './items';
@@ -10,6 +11,7 @@ import { UserMenuContent } from './UserMenuContent';
 export function UserMenu() {
   const { user, signOut } = useAuth();
   const { setTheme, theme } = useTheme();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!user) return null;
@@ -17,6 +19,10 @@ export function UserMenu() {
   const { fullName, email, avatar } = user;
   const displayName = fullName ?? email ?? 'Unknown User';
   const initials = generateInitials(fullName, email);
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div
@@ -32,7 +38,16 @@ export function UserMenu() {
           avatar={avatar}
           initials={initials}
         />
-        <UserMenuContent items={UserMenuItems({ theme, setTheme, signOut })} />
+        <UserMenuContent
+          items={UserMenuItems({
+            theme,
+            setTheme,
+            signOut,
+            t,
+            language: i18n.language,
+            changeLanguage,
+          })}
+        />
       </DropdownMenu>
     </div>
   );

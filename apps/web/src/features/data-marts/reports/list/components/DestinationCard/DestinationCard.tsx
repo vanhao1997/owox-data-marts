@@ -176,7 +176,7 @@ export function DestinationCard({
           <InviteTeammatesCard
             hint='— Give business users self-service access to reporting in Google Sheets'
             docsLabel='Learn more about Google Sheets destination'
-            docsHref='https://docs.owox.com/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=no_reports_google_sheets_destination'
+            docsHref='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=no_reports_google_sheets_destination'
           />
         )}
       </div>

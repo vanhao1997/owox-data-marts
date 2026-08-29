@@ -399,7 +399,7 @@ export function TargetSetupStep({
           <AppWizardStepHero
             icon={<GoogleBigQueryIcon />}
             title='Google BigQuery'
-            docUrl='https://docs.owox.com/docs/storages/supported-storages/google-bigquery/'
+            docUrl='https://docs.p2pdigital.vn/docs/storages/supported-storages/google-bigquery/'
             variant='compact'
           />
           <AppWizardStepSection title='Choose where to store your data'>
@@ -474,7 +474,7 @@ export function TargetSetupStep({
           <AppWizardStepHero
             icon={<AwsAthenaIcon />}
             title='AWS Athena'
-            docUrl='https://docs.owox.com/docs/storages/supported-storages/aws-athena/'
+            docUrl='https://docs.p2pdigital.vn/docs/storages/supported-storages/aws-athena/'
             variant='compact'
           />
           <AppWizardStepSection title='Choose where to store your data'>
@@ -549,7 +549,7 @@ export function TargetSetupStep({
           <AppWizardStepHero
             icon={<SnowflakeIcon />}
             title='Snowflake'
-            docUrl='https://docs.owox.com/docs/storages/supported-storages/snowflake/'
+            docUrl='https://docs.p2pdigital.vn/docs/storages/supported-storages/snowflake/'
             variant='compact'
           />
           <AppWizardStepSection title='Choose where to store your data'>
@@ -656,7 +656,7 @@ export function TargetSetupStep({
           <AppWizardStepHero
             icon={<AwsRedshiftIcon />}
             title='AWS Redshift'
-            docUrl='https://docs.owox.com/docs/storages/supported-storages/aws-redshift/'
+            docUrl='https://docs.p2pdigital.vn/docs/storages/supported-storages/aws-redshift/'
             variant='compact'
           />
           <AppWizardStepSection title='Choose where to store your data'>
@@ -733,7 +733,7 @@ export function TargetSetupStep({
           <AppWizardStepHero
             icon={<DatabricksIcon />}
             title='Databricks'
-            docUrl='https://docs.owox.com/docs/storages/supported-storages/databricks/'
+            docUrl='https://docs.p2pdigital.vn/docs/storages/supported-storages/databricks/'
             variant='compact'
           />
           <AppWizardStepSection title='Choose where to store your data'>

@@ -93,7 +93,7 @@ export function DataDestinationTable<TData, TValue>({
         <InviteTeammatesCard
           hint='— Not sure which destination to connect? Ask someone with access to help you'
           docsLabel='Learn more about Destinations'
-          docsHref='https://docs.owox.com/docs/destinations/manage-destinations/'
+          docsHref='https://docs.p2pdigital.vn/docs/destinations/manage-destinations/'
         />
       </div>
     );

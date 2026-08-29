@@ -34,7 +34,7 @@ export interface PluginGalleryEntry {
   installationState: PluginInstallationState;
   source: PluginSource;
   /**
-   * When OWOX first learned of this plugin. Backs the "Newest" ordering.
+   * When P2PDigital first learned of this plugin. Backs the "Newest" ordering.
    *
    * Optional because a backend older than this build does not send it, and the browser
    * can be the newer half of a rolling deploy. Ordering degrades; nothing breaks.

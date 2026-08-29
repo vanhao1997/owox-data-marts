@@ -274,7 +274,7 @@ export default function PluginDetailsPage() {
             <CollapsibleCardContent>
               <div className='flex flex-col gap-4 md:flex-row'>
                 {/* §16: the owner is always disclosed. Shown with the same avatar pill the
-                    project's member lists use -- a GitHub owner is not an OWOX user and has
+                    project's member lists use -- a GitHub owner is not a P2PDigital user and has
                     no avatar, but it should not read as a different kind of thing either. */}
                 <InfoCard label='Author' hint='The GitHub account that controls future releases'>
                   {ownerHref ? (

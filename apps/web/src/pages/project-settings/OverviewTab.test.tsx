@@ -146,7 +146,7 @@ describe('OverviewTab project status', () => {
     expect(screen.getByText(mcpServerUrl)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: mcpServerUrl })).not.toBeInTheDocument();
     expect(
-      screen.getByText(/For a single-project setup, use the published OWOX MCP server/i)
+      screen.getByText(/For a single-project setup, use the published P2PDigital MCP server/i)
     ).toBeInTheDocument();
     expect(
       screen.getByText(/For multi-project workflows, use this project-specific URL/i)
@@ -155,7 +155,7 @@ describe('OverviewTab project status', () => {
     const setupGuideLink = screen.getByRole('link', { name: 'MCP setup guide' });
     expect(setupGuideLink).toHaveAttribute(
       'href',
-      'https://docs.owox.com/docs/getting-started/setup-guide/mcp/'
+      'https://docs.p2pdigital.vn/docs/getting-started/setup-guide/mcp/'
     );
 
     fireEvent.click(screen.getByTitle('Copy project-mcp-url to clipboard'));

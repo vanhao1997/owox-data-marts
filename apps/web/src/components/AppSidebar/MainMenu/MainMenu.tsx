@@ -12,6 +12,7 @@ import { useProjectRoute } from '../../../shared/hooks';
 import { getActiveMenuItemClassName, isSameOrNestedPath } from '../menu-item-active';
 import { MainMenuItems } from './items';
 import type { MainMenuItem } from './types';
+import { useTranslation } from 'react-i18next';
 
 const PROJECT_WIDE_DATA_MART_PATHS = [
   '/data-marts/models',
@@ -24,14 +25,15 @@ const PROJECT_WIDE_DATA_MART_PATHS = [
 export function MainMenu() {
   const { scope } = useProjectRoute();
   const location = useLocation();
+  const { t } = useTranslation();
 
   return (
     <SidebarMenu>
       {MainMenuItems.map(item =>
         item.children?.length ? (
-          <MainMenuBranch key={item.title} item={item} pathname={location.pathname} scope={scope} />
+          <MainMenuBranch key={item.title} item={item} pathname={location.pathname} scope={scope} t={t} />
         ) : (
-          <MainMenuLeaf key={item.title} item={item} pathname={location.pathname} scope={scope} />
+          <MainMenuLeaf key={item.title} item={item} pathname={location.pathname} scope={scope} t={t} />
         )
       )}
     </SidebarMenu>
@@ -42,12 +44,14 @@ interface MainMenuItemProps {
   item: MainMenuItem;
   pathname: string;
   scope: (path: string) => string;
+  t: (key: string) => string;
 }
 
-function MainMenuLeaf({ item, pathname, scope }: MainMenuItemProps) {
+function MainMenuLeaf({ item, pathname, scope, t }: MainMenuItemProps) {
   const Icon = item.icon;
   const href = scope(item.url);
   const isActive = isMenuItemActive(item.url, pathname, scope);
+  const label = t(item.title);
 
   return (
     <SidebarMenuItem key={item.title}>
@@ -56,7 +60,7 @@ function MainMenuLeaf({ item, pathname, scope }: MainMenuItemProps) {
           <SidebarMenuButton asChild className={getActiveMenuItemClassName(isActive)}>
             <Link to={href} aria-current={isActive ? 'page' : undefined}>
               <Icon className='size-4 shrink-0 transition-all' />
-              <span>{item.title}</span>
+              <span>{label}</span>
               {item.badge && (
                 <span className='bg-primary/20 text-primary ml-auto rounded-full px-2 py-0.5 text-xs'>
                   {item.badge}
@@ -65,16 +69,17 @@ function MainMenuLeaf({ item, pathname, scope }: MainMenuItemProps) {
             </Link>
           </SidebarMenuButton>
         </TooltipTrigger>
-        <TooltipContent side='right'>{item.title}</TooltipContent>
+        <TooltipContent side='right'>{label}</TooltipContent>
       </Tooltip>
     </SidebarMenuItem>
   );
 }
 
-function MainMenuBranch({ item, pathname, scope }: MainMenuItemProps) {
+function MainMenuBranch({ item, pathname, scope, t }: MainMenuItemProps) {
   const Icon = item.icon;
   const href = scope(item.url);
   const isActive = isMenuItemActive(item.url, pathname, scope);
+  const label = t(item.title);
 
   return (
     <SidebarMenuItem key={item.title}>
@@ -83,7 +88,7 @@ function MainMenuBranch({ item, pathname, scope }: MainMenuItemProps) {
           <SidebarMenuButton asChild className={getActiveMenuItemClassName(isActive)}>
             <Link to={href} aria-current={isActive ? 'page' : undefined}>
               <Icon className='size-4 shrink-0 transition-all' />
-              <span>{item.title}</span>
+              <span>{label}</span>
               {item.badge && (
                 <span className='bg-primary/20 text-primary ml-auto rounded-full px-2 py-0.5 text-xs'>
                   {item.badge}
@@ -92,7 +97,7 @@ function MainMenuBranch({ item, pathname, scope }: MainMenuItemProps) {
             </Link>
           </SidebarMenuButton>
         </TooltipTrigger>
-        <TooltipContent side='right'>{item.title}</TooltipContent>
+        <TooltipContent side='right'>{label}</TooltipContent>
       </Tooltip>
 
       <SidebarMenuSub>
@@ -100,13 +105,14 @@ function MainMenuBranch({ item, pathname, scope }: MainMenuItemProps) {
           const ChildIcon = child.icon;
           const childHref = scope(child.url);
           const isChildActive = isMenuItemActive(child.url, pathname, scope);
+          const childLabel = t(child.title);
 
           return (
             <SidebarMenuSubItem key={child.title}>
               <SidebarMenuSubButton asChild className={getActiveMenuItemClassName(isChildActive)}>
                 <Link to={childHref} aria-current={isChildActive ? 'page' : undefined}>
                   <ChildIcon className='size-4 shrink-0 transition-all' />
-                  <span>{child.title}</span>
+                  <span>{childLabel}</span>
                 </Link>
               </SidebarMenuSubButton>
             </SidebarMenuSubItem>

@@ -27,7 +27,7 @@ interface ExternalPlatformTabProps {
 
 /**
  * Shared placeholder for Project Settings tabs whose features still live on
- * platform.owox.com. Wraps the CTA in a DataMart-style `CollapsibleCard` so
+ * platform.p2pdigital.vn. Wraps the CTA in a DataMart-style `CollapsibleCard` so
  * Credit Consumption and Subscription tabs feel like native project-settings
  * sections rather than empty placeholders.
  */
@@ -38,7 +38,7 @@ export function ExternalPlatformTab({
   description,
   href,
   icon,
-  cta = 'Open in platform.owox.com',
+  cta = 'Open in platform.p2pdigital.vn',
 }: ExternalPlatformTabProps) {
   const user = useUser();
   const projectId = user?.projectId;

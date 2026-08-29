@@ -35,7 +35,7 @@ export default function SnowflakeAuthMethodDescription() {
                 Learn more about{' '}
                 <ExternalAnchor
                   className='underline'
-                  href='https://docs.owox.com/docs/storages/supported-storages/snowflake/'
+                  href='https://docs.p2pdigital.vn/docs/storages/supported-storages/snowflake/'
                 >
                   authentication methods
                 </ExternalAnchor>

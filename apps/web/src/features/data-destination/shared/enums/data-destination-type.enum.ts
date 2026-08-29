@@ -32,7 +32,7 @@ export function pullBasedRunHint(type: DataDestinationType): string | null {
     return null;
   }
   return type === DataDestinationType.EXCEL
-    ? 'Refresh it from the OWOX add-in in Excel'
+    ? 'Refresh it from The P2PDigital add-in in Excel'
     : 'The destination reads this report itself';
 }
 

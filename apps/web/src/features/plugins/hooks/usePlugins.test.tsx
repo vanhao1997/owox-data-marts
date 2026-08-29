@@ -138,7 +138,7 @@ describe('usePluginActions', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith(
-      "Couldn't check for updates. v1.0.0 remains active and OWOX will try again automatically."
+      "Couldn't check for updates. v1.0.0 remains active and P2PDigital will try again automatically."
     );
     // The member cannot act on which host was unreachable, and it is a publisher
     // diagnostic besides.

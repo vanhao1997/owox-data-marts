@@ -46,7 +46,7 @@ type SettingsSubItem =
     };
 
 const PLATFORM_BASE_URL =
-  import.meta.env.VITE_OWOX_PLATFORM_URL?.replace(/\/$/, '') ?? 'https://platform.owox.com';
+  import.meta.env.VITE_OWOX_PLATFORM_URL?.replace(/\/$/, '') ?? 'https://platform.p2pdigital.vn';
 
 const settingsItems: SettingsSubItem[] = [
   { kind: 'internal', title: 'Overview', path: '', icon: Settings },

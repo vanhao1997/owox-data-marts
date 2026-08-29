@@ -1,18 +1,25 @@
-import { LogOut, Monitor, Moon, Sun } from 'lucide-react';
+import { LogOut, Monitor, Moon, Sun, Globe } from 'lucide-react';
 import type { UserMenuItem } from './types';
+import type { TFunction } from 'i18next';
 
 export const UserMenuItems = ({
   theme,
   setTheme,
   signOut,
+  t,
+  language,
+  changeLanguage,
 }: {
   theme: string | undefined;
   setTheme: (theme: string) => void;
   signOut: () => void;
+  t: TFunction;
+  language: string;
+  changeLanguage: (lng: string) => void;
 }): UserMenuItem[] => [
   {
     type: 'submenu',
-    title: 'Appearance',
+    title: t('userMenu.appearance'),
     icon: getAppearanceIcon(theme),
     submenu: {
       value: theme,
@@ -20,16 +27,31 @@ export const UserMenuItems = ({
         setTheme(value);
       },
       options: [
-        { value: 'system', label: 'System', icon: Monitor },
-        { value: 'light', label: 'Light', icon: Sun },
-        { value: 'dark', label: 'Dark', icon: Moon },
+        { value: 'system', label: t('userMenu.system'), icon: Monitor },
+        { value: 'light', label: t('userMenu.light'), icon: Sun },
+        { value: 'dark', label: t('userMenu.dark'), icon: Moon },
+      ],
+    },
+  },
+  {
+    type: 'submenu',
+    title: t('userMenu.language'),
+    icon: Globe,
+    submenu: {
+      value: language,
+      onChange: (value: string) => {
+        changeLanguage(value);
+      },
+      options: [
+        { value: 'en', label: 'English' },
+        { value: 'vi', label: 'Tiếng Việt' },
       ],
     },
   },
   { type: 'separator' },
   {
     type: 'item',
-    title: 'Sign out',
+    title: t('userMenu.signOut'),
     icon: LogOut,
     onClick: signOut,
     className: 'text-red-600 focus:text-red-600',

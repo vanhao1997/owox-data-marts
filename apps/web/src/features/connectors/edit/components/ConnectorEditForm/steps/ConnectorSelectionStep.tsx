@@ -81,7 +81,7 @@ export function ConnectorSelectionStep({
           variant='inline'
           hint='— Ask someone with access to help you'
           docsLabel='Learn more about Connectors'
-          docsHref='https://docs.owox.com/docs/getting-started/setup-guide/connector-data-mart/'
+          docsHref='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-data-mart/'
         />
       </AppWizardStepSection>
 

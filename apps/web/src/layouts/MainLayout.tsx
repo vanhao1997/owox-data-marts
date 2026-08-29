@@ -29,17 +29,19 @@ import { ArchiveRestore, Box, DatabaseIcon, LockKeyhole } from 'lucide-react';
 import { HelpMenu } from '../components/AppSidebar/HelpMenu';
 import { UserMenu } from '../components/AppSidebar/UserMenu';
 import { SidebarProjectMenu } from '../components/AppSidebar/ProjectMenu';
+import { useTranslation } from 'react-i18next';
 
-// Constants
 const SIDEBAR_STATE_KEY = 'sidebar_state';
-const RESTRICTED_NAV_ITEMS = [
-  { title: 'Data Marts', icon: Box },
-  { title: 'Storages', icon: DatabaseIcon },
-  { title: 'Destinations', icon: ArchiveRestore },
-];
 const ignoreSetupChecklist = () => undefined;
 
 function RestrictedProjectSidebar() {
+  const { t } = useTranslation();
+  const RESTRICTED_NAV_ITEMS = [
+    { title: t('sidebar.dataMarts'), icon: Box },
+    { title: t('sidebar.storages'), icon: DatabaseIcon },
+    { title: t('sidebar.destinations'), icon: ArchiveRestore },
+  ];
+
   return (
     <Sidebar variant='inset' collapsible='icon' data-testid='restricted-project-sidebar'>
       <SidebarHeader>
@@ -54,10 +56,10 @@ function RestrictedProjectSidebar() {
                 <SidebarMenuButton
                   aria-disabled='true'
                   className='text-muted-foreground hover:text-muted-foreground cursor-default hover:bg-transparent'
-                  tooltip='Waiting for project access'
+                  tooltip={t('sidebar.waitingForAccess')}
                 >
                   <LockKeyhole className='size-4 shrink-0' />
-                  <span>Access required</span>
+                  <span>{t('sidebar.accessRequired')}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -74,7 +76,7 @@ function RestrictedProjectSidebar() {
                     <SidebarMenuButton
                       aria-disabled='true'
                       className='text-muted-foreground/70 hover:text-muted-foreground/70 cursor-not-allowed hover:bg-transparent'
-                      tooltip='Request access to use this section'
+                      tooltip={t('sidebar.requestAccess')}
                     >
                       <Icon className='size-4 shrink-0' />
                       <span>{item.title}</span>
@@ -107,9 +109,7 @@ function MainLayoutContent() {
 
   return (
     <>
-      {/* New Sonner toaster for shared UI toasts */}
       <SonnerToaster position='bottom-right' closeButton />
-      {/* Legacy react-hot-toast Toaster to keep previously configured toasts working */}
       <HotToaster />
       <GlobalLoader isLoading={isLoading} />
       <ProjectAuthGuards>
@@ -136,13 +136,10 @@ function MainLayoutContent() {
 }
 
 function MainLayout() {
-  // Read the initial state from localStorage using our service
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
-    // Get value as boolean, default to true if not found
     return storageService.get(SIDEBAR_STATE_KEY, 'boolean') ?? true;
   });
 
-  // Save state to localStorage using our service
   const handleSidebarChange = (open: boolean) => {
     setSidebarOpen(open);
     storageService.set(SIDEBAR_STATE_KEY, open);

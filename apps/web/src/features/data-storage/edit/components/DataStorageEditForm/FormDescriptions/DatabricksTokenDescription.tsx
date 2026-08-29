@@ -33,7 +33,7 @@ export default function DatabricksTokenDescription() {
               Click <strong>Generate new token</strong>.
             </li>
             <li>
-              (Optional) Enter a comment to describe the purpose of the token (e.g., "OWOX Data
+              (Optional) Enter a comment to describe the purpose of the token (e.g., "P2PDigital Data
               Marts").
             </li>
             <li>

@@ -25,7 +25,7 @@ function escapeLinkText(value: string): string {
 // both the filenames and every cross-reference.
 
 const OKF_FOOTER =
-  '\n\n---\n\n_Generated with [OWOX Data Marts](https://www.owox.com/) · ' +
+  '\n\n---\n\n_Generated with [P2PDigital Data Marts](https://www.p2pdigital.vn/) · ' +
   '[open source](https://github.com/OWOX/owox-data-marts)_\n';
 
 export interface OkfBundle {
@@ -63,8 +63,8 @@ export function serializeOkfBundle(graph: ModelGraph, bundleTitle = 'Data Marts'
   files[`${folder}/index.md`] = `---\n${renderFrontmatter({
     type: 'index',
     title: bundleTitle,
-    description: 'Index of exported OWOX data marts.',
-    tags: ['owox', 'index'],
+    description: 'Index of exported P2PDigital Data Marts.',
+    tags: ['P2PDigital', 'index'],
   })}\n---\n\n# ${bundleTitle}\n\n| Data Mart | Type | Storage |\n|-----------|------|---------|\n${rows}\n${OKF_FOOTER}`;
 
   return { files };
@@ -79,7 +79,7 @@ function renderNode(
     type: 'OWOX Data Mart',
     title: node.title,
     description: node.description === '' ? undefined : node.description,
-    tags: ['owox', node.inputSource.toLowerCase()],
+    tags: ['P2PDigital', node.inputSource.toLowerCase()],
   });
 
   const overview = [

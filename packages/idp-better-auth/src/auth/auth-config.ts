@@ -109,7 +109,7 @@ export async function createBetterAuthConfig(
         viewer: viewerRole,
       },
       allowUserToCreateOrganization: true,
-      organizationLimit: 20,
+      organizationLimit: 50,
       creatorRole: 'admin',
       invitationExpiresIn: 60 * 60 * 24 * 7,
       async sendInvitationEmail(_data) {

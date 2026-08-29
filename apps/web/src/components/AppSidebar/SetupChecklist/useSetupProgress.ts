@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { SETUP_GROUPS, SETUP_STEPS } from './items';
+import { useTranslation } from 'react-i18next';
+import { getSetupGroups, getSetupSteps } from './items';
 import {
   GroupStatusType,
   ProgressKey,
@@ -40,9 +41,6 @@ const EMPTY_PROGRESS: ProjectSetupProgress = {
   [ProgressKey.HAS_GOOGLE_SHEETS_REPORT_RUN]: { done: false, completedAt: null },
 };
 
-/**
- * Filter groups based on their showCondition
- */
 function getVisibleGroups(groups: SetupGroup[], user: User | null): SetupGroup[] {
   return groups.filter(group => {
     if (!group.isConditional || !group.showCondition) return true;
@@ -50,9 +48,6 @@ function getVisibleGroups(groups: SetupGroup[], user: User | null): SetupGroup[]
   });
 }
 
-/**
- * Get steps that belong to visible groups
- */
 function getVisibleSteps(steps: SetupStep[], visibleGroups: SetupGroup[]): SetupStep[] {
   const visibleStepIds = new Set(visibleGroups.flatMap(g => g.stepIds));
   return steps.filter(step => visibleStepIds.has(step.id));
@@ -60,11 +55,12 @@ function getVisibleSteps(steps: SetupStep[], visibleGroups: SetupGroup[]): Setup
 
 function calculateGroupProgress(
   progress: ProjectSetupProgress,
-  visibleGroups: SetupGroup[]
+  visibleGroups: SetupGroup[],
+  allSteps: SetupStep[]
 ): GroupProgress[] {
   return visibleGroups.map(group => {
     const stepIdsSet = new Set(group.stepIds);
-    const steps = SETUP_STEPS.filter(step => stepIdsSet.has(step.id));
+    const steps = allSteps.filter(step => stepIdsSet.has(step.id));
     const completedSteps = steps.filter(step => progress[step.progressKey].done);
     const completedCount = completedSteps.length;
     const totalCount = steps.length;
@@ -98,28 +94,23 @@ function calculateGroupProgress(
   });
 }
 
-/**
- * Query keys for the setup progress.
- */
 export const setupProgressKeys = {
   all: ['setup-progress'] as const,
   byProject: (projectId: string) => [...setupProgressKeys.all, projectId] as const,
 };
 
-/**
- * Fetches the setup progress for the current project.
- */
 export async function fetchSetupProgress(): Promise<ProjectSetupProgress> {
   const response = await setupProgressService.getProgress();
   return response.steps;
 }
 
-/**
- * Hook to get the setup progress for the current project.
- */
 export function useSetupProgress(): SetupProgressResult {
   const projectId = useProjectId();
   const user = useUser();
+  const { t } = useTranslation();
+
+  const setupSteps = useMemo(() => getSetupSteps(t), [t]);
+  const setupGroups = useMemo(() => getSetupGroups(t), [t]);
 
   const {
     data: progress = EMPTY_PROGRESS,
@@ -129,14 +120,11 @@ export function useSetupProgress(): SetupProgressResult {
     enabled: !!projectId,
     queryKey: projectId ? setupProgressKeys.byProject(projectId) : setupProgressKeys.all,
     queryFn: fetchSetupProgress,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
-  // Filter groups based on user onboarding (conditional groups)
-  const visibleGroups = useMemo(() => getVisibleGroups(SETUP_GROUPS, user), [user]);
-
-  // Get steps that belong to visible groups
-  const visibleSteps = useMemo(() => getVisibleSteps(SETUP_STEPS, visibleGroups), [visibleGroups]);
+  const visibleGroups = useMemo(() => getVisibleGroups(setupGroups, user), [setupGroups, user]);
+  const visibleSteps = useMemo(() => getVisibleSteps(setupSteps, visibleGroups), [setupSteps, visibleGroups]);
 
   const completedStepIds: string[] = [];
 
@@ -150,8 +138,8 @@ export function useSetupProgress(): SetupProgressResult {
   const totalCount = visibleSteps.length;
   const percentage = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
   const groupProgresses = useMemo(
-    () => calculateGroupProgress(progress, visibleGroups),
-    [progress, visibleGroups]
+    () => calculateGroupProgress(progress, visibleGroups, setupSteps),
+    [progress, visibleGroups, setupSteps]
   );
   const isAllComplete = completedCount >= totalCount;
 
@@ -170,9 +158,6 @@ export function useSetupProgress(): SetupProgressResult {
   };
 }
 
-/**
- * Hook to refresh the setup progress.
- */
 export function useRefreshSetupProgress() {
   const queryClient = useQueryClient();
 

@@ -106,7 +106,7 @@ export function ProjectsProvider({ children }: { children: React.ReactNode }) {
     async (projectId: string) => {
       const project = await archiveProjectApi(projectId);
       // Archiving the active project may switch Better Auth's active
-      // organization to another membership; refresh the OWOX token before
+      // organization to another membership; refresh the P2PDigital token before
       // rendering project-scoped routes.
       await refreshToken();
       await loadProjects();

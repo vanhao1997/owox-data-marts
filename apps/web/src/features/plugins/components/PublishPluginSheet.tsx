@@ -136,7 +136,7 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                     <FormItem>
                       <FormLabel>GitHub repository</FormLabel>
                       <FormControl>
-                        <Input placeholder='OWOX/example-plugin' {...field} />
+                        <Input placeholder='p2pdigital/example-plugin' {...field} />
                       </FormControl>
                       <FormDescription>
                         A URL or owner/name. The plugin&apos;s versions come from its GitHub
@@ -164,9 +164,9 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                           {/* No link yet: the App does not exist. The server already returns the
                               exact installation URL when it cannot read a repository, and the
                               failure panel below renders it, so nothing here has to guess one. */}
-                          A public repository works immediately. For a private one, the OWOX Data
+                          A public repository works immediately. For a private one, the P2PDigital Data
                           Marts GitHub App has to be installed on it first — publish it once and
-                          OWOX will show you the exact link to grant that access.
+                          P2PDigital will show you the exact link to grant that access.
                         </p>
                       </FieldHelp>
                     </FormItem>
@@ -232,7 +232,7 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                   {installationHref && (
                     <p>
                       <ExternalAnchor href={installationHref}>
-                        Give OWOX Data Marts access to this repository
+                        Give P2PDigital Data Marts access to this repository
                       </ExternalAnchor>
                       , then publish again.
                     </p>

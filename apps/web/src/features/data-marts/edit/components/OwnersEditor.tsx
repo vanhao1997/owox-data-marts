@@ -31,7 +31,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
 
   const addColleaguesHref = useMemo(() => {
     if (checkVisible('IDP_PROVIDER', ['owox-better-auth'], flags)) {
-      return `https://platform.owox.com/ui/p/${projectId}/settings/members`;
+      return `https://platform.p2pdigital.vn/ui/p/${projectId}/settings/members`;
     }
     if (checkVisible('IDP_PROVIDER', ['better-auth'], flags)) {
       return '/auth';

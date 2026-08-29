@@ -3,6 +3,7 @@ import { ChevronDown, LockKeyhole } from 'lucide-react';
 import { Logo } from '../../Logo';
 import { useProject } from '../../../app/store/hooks';
 import { useUser, useProjects } from '../../../features/idp/hooks';
+import { useTranslation } from 'react-i18next';
 
 interface ProjectMenuTriggerProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ export function ProjectMenuTrigger({ isOpen }: ProjectMenuTriggerProps) {
   const { title } = useProject();
   const user = useUser();
   const { projects } = useProjects();
+  const { t } = useTranslation();
   const isArchived = projects.some(project => project.id === user?.projectId && project.archived);
   return (
     <DropdownMenuTrigger asChild>
@@ -31,13 +33,13 @@ export function ProjectMenuTrigger({ isOpen }: ProjectMenuTriggerProps) {
         </div>
 
         <div className='grid flex-1 text-left text-sm leading-tight'>
-          <span className='truncate font-medium'>OWOX Data Marts</span>
+          <span className='truncate font-medium'>{t('brand.productName')}</span>
           <span className='text-muted-foreground flex items-center gap-1 truncate text-xs'>
-            <span className='truncate'>{title ?? 'Project'}</span>
+            <span className='truncate'>{title ?? t('common.project')}</span>
             {isArchived && (
-              <span className='inline-flex shrink-0 items-center gap-0.5' title='Read-only project'>
+              <span className='inline-flex shrink-0 items-center gap-0.5' title={t('common.readOnly')}>
                 <LockKeyhole className='size-3' aria-hidden='true' />
-                <span className='sr-only'>Read-only</span>
+                <span className='sr-only'>{t('common.readOnly')}</span>
               </span>
             )}
           </span>

@@ -28,7 +28,7 @@ export default function ConnectorStateDescription() {
             For more details, see the{' '}
             <ExternalAnchor
               className='underline'
-              href='https://docs.owox.com/?utm_source=owox_data_marts&utm_medium=manual_run_sheet&utm_campaign=tooltip_connector_state'
+              href='https://docs.p2pdigital.vn/?utm_source=owox_data_marts&utm_medium=manual_run_sheet&utm_campaign=tooltip_connector_state'
             >
               OWOX documentation
             </ExternalAnchor>

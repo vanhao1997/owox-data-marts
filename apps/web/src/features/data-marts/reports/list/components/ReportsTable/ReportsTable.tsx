@@ -119,7 +119,7 @@ export function ReportsTable({ destination, onEditReport, onAddReport }: Reports
             </>
           ) : (
             <p className='text-muted-foreground text-sm font-medium'>
-              Create your first report from the OWOX add-in in Excel
+              Create your first report from The P2PDigital add-in in Excel
             </p>
           )}
         </div>

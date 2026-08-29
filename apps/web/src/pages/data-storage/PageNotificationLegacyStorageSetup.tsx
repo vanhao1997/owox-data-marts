@@ -36,7 +36,7 @@ export function PageNotificationLegacyStorageSetup() {
                     rel='noopener noreferrer'
                     className='text-foreground font-semibold underline'
                   >
-                    OWOX Reports
+                    P2PDigital Reports
                   </a>{' '}
                   (Google Sheets extension) are listed below in{' '}
                   <span className='font-semibold'>Draft</span> status.
@@ -51,7 +51,7 @@ export function PageNotificationLegacyStorageSetup() {
                   </li>
                   <li>
                     <span className='font-semibold'>Grant access</span> to Google BigQuery (used in
-                    OWOX extension)
+                    P2PDigital extension)
                   </li>
                   <li>
                     <span className='font-semibold'>Publish</span> your Data Marts
@@ -68,7 +68,7 @@ export function PageNotificationLegacyStorageSetup() {
                 </Button>
                 <Button variant='outline' asChild>
                   <Link
-                    to='https://docs.owox.com/docs/getting-started/setup-guide/extension-data-marts/?utm_source=owox-data-marts&utm_medium=ui&utm_campaign=legacy-storage-info-block'
+                    to='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/extension-data-marts/?utm_source=owox-data-marts&utm_medium=ui&utm_campaign=legacy-storage-info-block'
                     target='_blank'
                     rel='noopener noreferrer'
                   >

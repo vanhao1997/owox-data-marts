@@ -6,8 +6,8 @@ export default function ExcelDescription() {
       <AccordionTrigger>How do I connect to Microsoft Excel?</AccordionTrigger>
       <AccordionContent>
         <p className='mb-2'>
-          There is nothing to set up here. The P2PDigital add-in for Excel creates this destination for
-          you the first time you build a report from a workbook.
+          There is nothing to set up here. The P2PDigital add-in for Excel creates this destination
+          for you the first time you build a report from a workbook.
         </p>
         <p className='mb-2'>
           Unlike other destinations, it stores no credentials: the add-in reads your data using your

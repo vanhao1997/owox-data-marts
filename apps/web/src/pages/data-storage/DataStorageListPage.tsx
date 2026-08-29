@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DataStorageProvider } from '../../features/data-storage/shared/model/context';
 import { DataStorageList } from '../../features/data-storage/list/components';
 import { useDataStorage } from '../../features/data-storage/shared/model/hooks/useDataStorage';
@@ -50,12 +51,13 @@ const DataStorageListWithContext = ({
 };
 
 export const DataStorageListPage = () => {
+  const { t } = useTranslation();
   const [shouldOpenDialog, setShouldOpenDialog] = useState(false);
 
   return (
     <div className='dm-page' data-testid='storageListPage'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>Storages</h1>
+        <h1 className='dm-page-header-title'>{t('storagesPage.title', 'Storages')}</h1>
       </header>
 
       <div className='dm-page-content'>

@@ -6,6 +6,24 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RequestStatus } from '../../../shared/types/request-status.ts';
 import { SwitchProjectMenu } from './SwitchProjectMenu';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const map: Record<string, string> = {
+        'projectMenu.switchProject': 'Switch project',
+        'projectMenu.searchProject': 'Search project...',
+        'projectMenu.loadingProjects': 'Loading projects...',
+        'projectMenu.unableToLoad': 'Unable to load projects. Please try again.',
+        'projectMenu.retry': 'Retry',
+        'projectMenu.noProjectsFound': 'No projects found',
+        'projectMenu.noOtherProjects': 'No other projects available',
+      };
+      return map[key] ?? key;
+    },
+    i18n: { language: 'en', changeLanguage: vi.fn() },
+  }),
+}));
+
 const mockNavigate = vi.fn();
 vi.mock('react-router', async importOriginal => {
   const original = await importOriginal<typeof import('react-router')>();
@@ -194,7 +212,7 @@ describe('SwitchProjectMenu', () => {
   });
 
   it('filters projects based on search query', () => {
-    const testProjects = Array.from({ length: 12 }, (_, i) => ({
+    const testProjects = Array.from({ length: 11 }, (_, i) => ({
       id: `project-${i + 1}`,
       title: `Project ${i + 1}`,
     }));
@@ -232,7 +250,6 @@ describe('SwitchProjectMenu', () => {
 
     const projectList = screen.getByTestId('project-list');
 
-    // Simulate ArrowDown to move to first item, then Enter to navigate
     fireEvent.keyDown(projectList, { key: 'ArrowDown' });
     fireEvent.keyDown(projectList, { key: 'Enter' });
 
@@ -274,14 +291,11 @@ describe('SwitchProjectMenu', () => {
 
     const projectList = screen.getByTestId('project-list');
 
-    // Simulate ArrowDown to navigate to Project 2 (index 0 in visibleProjects list)
     fireEvent.keyDown(projectList, { key: 'ArrowDown' });
 
-    // Project 2 should be highlighted
     const project2Item = screen.getByText('Project 2').closest('[role="option"]');
     expect(project2Item).toHaveClass('bg-accent');
 
-    // Press Enter to navigate
     fireEvent.keyDown(projectList, { key: 'Enter' });
     expect(mockNavigate).toHaveBeenCalledWith('/ui/project-2/');
   });
@@ -301,13 +315,10 @@ describe('SwitchProjectMenu', () => {
 
     const searchInput = screen.getByPlaceholderText('Search project...');
 
-    // Type a query that matches multiple projects
     fireEvent.change(searchInput, { target: { value: 'Project 1' } });
 
-    // Press Enter directly in the search input
     fireEvent.keyDown(searchInput, { key: 'Enter' });
 
-    // Should navigate to "Project 1" (which is index 0 in the filtered results)
     expect(mockNavigate).toHaveBeenCalledWith('/ui/project-1/');
   });
 
@@ -327,18 +338,15 @@ describe('SwitchProjectMenu', () => {
     const projectList = screen.getByTestId('project-list');
     fireEvent.keyDown(projectList, { key: 'ArrowDown' });
 
-    // First item is highlighted
     const firstItem = screen.getByText('Project 1').closest('[role="option"]');
     expect(firstItem).toHaveClass('bg-accent');
 
-    // Re-render
     rerender(
       <MemoryRouter>
         <SwitchProjectMenu />
       </MemoryRouter>
     );
 
-    // First item should still be highlighted
     expect(screen.getByText('Project 1').closest('[role="option"]')).toHaveClass('bg-accent');
   });
 });

@@ -4,6 +4,7 @@ import {
   useDataMartList,
 } from '../../../features/data-marts/list';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getDataMartColumns } from '../../../features/data-marts/list/components/DataMartTable/columns/columns.tsx';
 import { ConnectorContextProvider } from '../../../features/connectors/shared/model/context';
 import { useConnector } from '../../../features/connectors/shared/model/hooks/useConnector.ts';
@@ -15,6 +16,7 @@ import { useProjectRoute } from '../../../shared/hooks';
 import { useDataQualitySummaries } from '../../../features/data-marts/data-quality';
 
 const DataMartsPageContent = () => {
+  const { t } = useTranslation();
   const { items, loadDataMarts, deleteDataMart, publishDataMart, refreshList, loading } =
     useDataMartList();
   const { connectors, fetchAvailableConnectors } = useConnector();
@@ -37,10 +39,10 @@ const DataMartsPageContent = () => {
     <div className='dm-page'>
       <header className='dm-page-header'>
         <div className='flex flex-wrap items-center justify-between gap-4'>
-          <h1 className='dm-page-header-title'>Data Marts</h1>
+          <h1 className='dm-page-header-title'>{t('dataMartsPage.title', 'Data Marts')}</h1>
           <RunActivityIndicator
             active={hasActiveQualityRun}
-            label='Checking data quality'
+            label={t('dataMartsPage.checkingQuality', 'Checking data quality')}
             onViewRuns={() => {
               navigate('/data-marts/runs');
             }}

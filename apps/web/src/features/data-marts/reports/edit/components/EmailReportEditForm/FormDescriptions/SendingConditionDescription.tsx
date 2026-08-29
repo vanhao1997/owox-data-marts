@@ -19,9 +19,9 @@ export default function SendingConditionDescription() {
             running an SQL query that retrieves data for your report.
           </p>
           <p>
-            Before sending a report, P2PDigital automatically runs the Data Mart and checks its result.
-            Depending on your settings, the report can be sent always, only if the result is not
-            empty, or only if it’s empty.
+            Before sending a report, P2PDigital automatically runs the Data Mart and checks its
+            result. Depending on your settings, the report can be sent always, only if the result is
+            not empty, or only if it’s empty.
           </p>
         </AccordionContent>
       </AccordionItem>

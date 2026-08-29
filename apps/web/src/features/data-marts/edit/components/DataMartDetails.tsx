@@ -12,6 +12,7 @@ import { ArrowLeft, CircleCheckBig, MoreVertical, Play, Trash2 } from 'lucide-re
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { NavLink, Outlet } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { useFlags } from '../../../../app/store/hooks';
 import { Button } from '../../../../shared/components/Button';
 import { ConfirmationDialog } from '../../../../shared/components/ConfirmationDialog';
@@ -58,6 +59,7 @@ interface DataMartDetailsProps {
 }
 
 export function DataMartDetails({ id }: DataMartDetailsProps) {
+  const { t } = useTranslation();
   const { navigate } = useProjectRoute();
   const { user } = useAuth();
   const { flags } = useFlags();
@@ -175,12 +177,14 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
   }, [dismissAllPromos]);
 
   const navigation = [
-    { name: 'Overview', path: 'overview' },
+    { name: t('dataMartDetails.tabs.overview', 'Overview'), path: 'overview' },
     { name: 'Data Setup', path: 'data-setup' },
     { name: 'Data Quality', path: 'quality' },
-    ...(shouldShowInsights ? [{ name: 'Insights', path: 'insights-v2' }] : []),
+    ...(shouldShowInsights
+      ? [{ name: t('dataMartDetails.tabs.insights', 'Insights'), path: 'insights-v2' }]
+      : []),
     { name: 'Destinations', path: 'reports' },
-    { name: 'Triggers', path: 'triggers' },
+    { name: t('dataMartDetails.tabs.triggers', 'Triggers'), path: 'triggers' },
     { name: 'Run History', path: 'run-history' },
   ];
 
@@ -517,7 +521,9 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
                 }}
               >
                 <Trash2 className='h-4 w-4 text-red-600' />
-                <span className='text-red-600'>Delete Data Mart</span>
+                <span className='text-red-600'>
+                  {t('dataMartDetails.deleteDataMart', 'Delete Data Mart')}
+                </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

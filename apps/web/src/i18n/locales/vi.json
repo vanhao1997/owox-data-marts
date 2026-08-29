@@ -13,9 +13,49 @@
     "runHistory": "Lịch sử chạy",
     "storages": "Storages",
     "destinations": "Destinations",
+    "plugins": "Plugins",
     "accessRequired": "Yêu cầu quyền truy cập",
     "waitingForAccess": "Đang chờ quyền truy cập dự án",
     "requestAccess": "Yêu cầu quyền truy cập để sử dụng mục này"
+  },
+  "actionButton": {
+    "newDataMart": "Tạo Data Mart mới"
+  },
+  "search": {
+    "button": "Tìm kiếm",
+    "placeholder": "Tìm kiếm…",
+    "noResults": "Không tìm thấy kết quả.",
+    "searching": "Đang tìm kiếm…",
+    "failed": "Tìm kiếm thất bại.",
+    "hint": "Nhập từ khóa để tìm kiếm Data Marts, Storages và Destinations.",
+    "labelDataMart": "Data Mart",
+    "labelStorage": "Storage",
+    "labelDestination": "Destination"
+  },
+  "projectMenu": {
+    "switchProject": "Chuyển dự án",
+    "searchProject": "Tìm kiếm dự án...",
+    "loadingProjects": "Đang tải danh sách dự án...",
+    "unableToLoad": "Không thể tải danh sách dự án. Vui lòng thử lại.",
+    "retry": "Thử lại",
+    "noProjectsFound": "Không tìm thấy dự án",
+    "noOtherProjects": "Không có dự án nào khác",
+    "manageProjects": "Quản lý dự án",
+    "projectSettings": "Cài đặt dự án",
+    "overview": "Tổng quan",
+    "members": "Thành viên",
+    "contexts": "Ngữ cảnh",
+    "creditConsumption": "Tiêu thụ credit",
+    "subscription": "Gói dịch vụ",
+    "licenseKeys": "Mã bản quyền",
+    "notifications": "Thông báo",
+    "myApiKeys": "Mã API của tôi",
+    "githubCommunity": "Cộng đồng GitHub",
+    "discoverUpgradeOptions": "Khám phá tùy chọn nâng cấp",
+    "leaveFeedback": "Gửi phản hồi",
+    "issues": "Báo lỗi",
+    "license": "Giấy phép",
+    "owoxBi": "P2PDigital BI"
   },
   "userMenu": {
     "appearance": "Giao diện",
@@ -92,6 +132,120 @@
   },
   "common": {
     "project": "Dự án",
-    "readOnly": "Chỉ đọc"
+    "readOnly": "Chỉ đọc",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo",
+    "confirm": "Xác nhận",
+    "close": "Đóng",
+    "loading": "Đang tải...",
+    "search": "Tìm kiếm",
+    "actions": "Thao tác",
+    "view": "Xem",
+    "back": "Quay lại",
+    "title": "Tiêu đề",
+    "status": "Trạng thái",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Cập nhật lần cuối",
+    "createdBy": "Người tạo",
+    "type": "Loại",
+    "name": "Tên",
+    "description": "Mô tả",
+    "active": "Hoạt động",
+    "draft": "Bản nháp",
+    "published": "Đã publish",
+    "archived": "Đã lưu trữ",
+    "yes": "Có",
+    "no": "Không",
+    "unknown": "Chưa xác định"
+  },
+  "dataMartsPage": {
+    "title": "Data Marts",
+    "checkingQuality": "Đang kiểm tra chất lượng dữ liệu",
+    "createDataMart": "Tạo Data Mart mới"
+  },
+  "storagesPage": {
+    "title": "Storages",
+    "emptyTitle": "Kết nối data warehouse của bạn",
+    "emptySubtitle": "Tập trung quyền truy cập vào dữ liệu thô bằng cách kết nối data warehouse để xây dựng Data Marts và báo cáo.",
+    "newStorage": "Storage mới"
+  },
+  "destinationsPage": {
+    "title": "Destinations",
+    "emptyTitle": "Chưa có destination nào được thiết lập",
+    "emptySubtitle": "Tạo destination để gửi kết quả báo cáo đến Google Sheets, Looker Studio, Email, v.v.",
+    "newDestination": "Destination mới"
+  },
+  "projectsPage": {
+    "title": "Dự án",
+    "subtitle": "Quản lý tối đa 20 dự án. Các dự án đã lưu trữ vẫn có thể đọc nhưng ở chế độ chỉ đọc.",
+    "newProjectName": "Tên dự án mới",
+    "create": "Tạo mới",
+    "noProjectsYet": "Chưa tham gia dự án nào.",
+    "archivedReadOnly": "Đã lưu trữ · Chỉ đọc",
+    "defaultProject": "Dự án mặc định",
+    "active": "Đang hoạt động",
+    "unarchive": "Bỏ lưu trữ",
+    "archive": "Lưu trữ",
+    "rename": "Đổi tên",
+    "open": "Mở"
+  },
+  "apiKeysPage": {
+    "title": "Mã API của tôi",
+    "emptyTitle": "Bạn chưa có mã API nào",
+    "emptySubtitle": "Tạo mã API để cho phép các công cụ bên ngoài truy cập dự án này dưới danh nghĩa của bạn.",
+    "createButton": "Tạo mã API",
+    "infoNote": "Mã API cá nhân dành cho thành viên của bạn trong dự án này. Các mã này đại diện cho bạn — không phải cho toàn bộ dự án.",
+    "revokeTitle": "Thu hồi mã API",
+    "revokeConfirm": "Bạn có chắc chắn muốn thu hồi",
+    "revokeWarning": "Thao tác này không thể hoàn tác. Mọi tích hợp sử dụng mã này sẽ ngừng hoạt động ngay lập tức."
+  },
+  "notFoundPage": {
+    "title": "Lạc vào miền dữ liệu 404",
+    "subtitle": "Ở chiều không gian này, 1+1=3, tỷ lệ phần trăm vượt quá 100%, và bảng điều khiển dự báo ngày hôm qua.\nHãy thoát ra khi còn có thể!",
+    "goHome": "Đưa tôi về trang chủ"
+  },
+  "noAccessPage": {
+    "title": "Bạn không có quyền truy cập",
+    "subtitle": "Tài nguyên này tồn tại nhưng bạn không có quyền xem.\nVui lòng liên hệ quản trị viên dự án hoặc chủ sở hữu tài nguyên để yêu cầu quyền truy cập.",
+    "goDashboard": "Về trang chính"
+  },
+  "emptyStates": {
+    "triggers": {
+      "title": "Chưa có trigger nào",
+      "description": "Các Trigger được tạo trong Data Mart sẽ xuất hiện ở đây cùng lịch trình, mục tiêu và trạng thái."
+    },
+    "reports": {
+      "title": "Chưa có report nào",
+      "description": "Các Report được cấu hình trong Data Mart sẽ xuất hiện ở đây cùng destination, trạng thái chạy và thao tác."
+    },
+    "insights": {
+      "title": "Chưa có insight nào",
+      "description": "Các Insight được tạo từ dữ liệu Data Mart sẽ xuất hiện ở đây cùng chi tiết cập nhật và thao tác."
+    },
+    "runs": {
+      "title": "Chưa có lượt chạy nào",
+      "description": "Lịch sử các lượt chạy Data Mart trong dự án sẽ xuất hiện ở đây khi bắt đầu và hoàn thành."
+    },
+    "chooseDataMart": "Chọn một Data Mart"
+  },
+  "dataMartDetails": {
+    "tabs": {
+      "dataSetup": "Thiết lập dữ liệu",
+      "overview": "Tổng quan",
+      "quality": "Chất lượng",
+      "insights": "Insights",
+      "reports": "Báo cáo",
+      "triggers": "Triggers",
+      "runHistory": "Lịch sử chạy"
+    },
+    "publish": "Publish",
+    "publishing": "Đang publish...",
+    "published": "Đã publish",
+    "runNow": "Chạy ngay",
+    "deleteDataMart": "Xóa Data Mart",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa Data Mart này? Thao tác này không thể hoàn tác."
   }
 }

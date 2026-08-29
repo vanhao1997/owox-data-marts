@@ -31,9 +31,21 @@ export function MainMenu() {
     <SidebarMenu>
       {MainMenuItems.map(item =>
         item.children?.length ? (
-          <MainMenuBranch key={item.title} item={item} pathname={location.pathname} scope={scope} t={t} />
+          <MainMenuBranch
+            key={item.title}
+            item={item}
+            pathname={location.pathname}
+            scope={scope}
+            t={t}
+          />
         ) : (
-          <MainMenuLeaf key={item.title} item={item} pathname={location.pathname} scope={scope} t={t} />
+          <MainMenuLeaf
+            key={item.title}
+            item={item}
+            pathname={location.pathname}
+            scope={scope}
+            t={t}
+          />
         )
       )}
     </SidebarMenu>

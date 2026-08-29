@@ -144,10 +144,10 @@ export function ConnectGoogleSheetsPage() {
       <div className='bg-card text-card-foreground w-full max-w-lg space-y-4 rounded-lg p-4 shadow-lg'>
         <h1 className='text-lg font-semibold'>Connect Google Sheets</h1>
         <p className='text-muted-foreground text-sm'>
-          Google OAuth isn&apos;t configured for this P2PDigital instance, so this quick-connect page
-          can&apos;t be used. Ask your admin to configure Google OAuth, or create a Google Sheets
-          destination manually from the P2PDigital web app (Destinations → Add destination) using a
-          Service Account key instead.
+          Google OAuth isn&apos;t configured for this P2PDigital instance, so this quick-connect
+          page can&apos;t be used. Ask your admin to configure Google OAuth, or create a Google
+          Sheets destination manually from the P2PDigital web app (Destinations → Add destination)
+          using a Service Account key instead.
         </p>
       </div>
     );

@@ -2,25 +2,32 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { ArchiveRestore, Box, ChevronRight, DatabaseIcon, Loader2, Search } from 'lucide-react';
 import { Input } from '@owox/ui/components/input';
+import { useTranslation } from 'react-i18next';
 import { useProjectRoute } from '../../shared/hooks';
 import type { AppIcon } from '../../shared';
 import { useSearch } from './useSearch';
 
 const ENTITY_TYPE_META: Partial<
-  Record<string, { label: string; icon: AppIcon; to: (entityId: string) => string }>
+  Record<
+    string,
+    { labelKey: string; defaultLabel: string; icon: AppIcon; to: (entityId: string) => string }
+  >
 > = {
   DATA_MART: {
-    label: 'Data Mart',
+    labelKey: 'search.labelDataMart',
+    defaultLabel: 'Data Mart',
     icon: Box,
     to: entityId => `/data-marts/${entityId}/data-setup`,
   },
   DATA_STORAGE: {
-    label: 'Storage',
+    labelKey: 'search.labelStorage',
+    defaultLabel: 'Storage',
     icon: DatabaseIcon,
     to: entityId => `/data-storages?id=${entityId}`,
   },
   DATA_DESTINATION: {
-    label: 'Destination',
+    labelKey: 'search.labelDestination',
+    defaultLabel: 'Destination',
     icon: ArchiveRestore,
     to: entityId => `/data-destinations?id=${entityId}`,
   },
@@ -31,6 +38,7 @@ export function SearchPage() {
   const queryParam = searchParams.get('q') ?? '';
   const [query, setQuery] = useState(queryParam);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
   const { results, isFetching, hasQuery, isError, retry, isDebouncing } = useSearch(query);
   const { scope } = useProjectRoute();
   const visibleResults = results.filter(result => Boolean(ENTITY_TYPE_META[result.entityType]));
@@ -80,21 +88,26 @@ export function SearchPage() {
               { replace: true }
             );
           }}
-          placeholder='Search…'
-          aria-label='Search'
+          placeholder={t('search.placeholder', 'Search…')}
+          aria-label={t('search.button', 'Search')}
           className='h-12 pl-10 text-base'
         />
       </div>
 
       {!hasQuery ? (
         <p className='text-muted-foreground py-12 text-center text-sm'>
-          Start typing to search across data marts, storages, and destinations.
+          {t(
+            'search.hint',
+            'Start typing to search across data marts, storages, and destinations.'
+          )}
         </p>
       ) : showLoading ? (
-        <p className='text-muted-foreground py-12 text-center text-sm'>Searching…</p>
+        <p className='text-muted-foreground py-12 text-center text-sm'>
+          {t('search.searching', 'Searching…')}
+        </p>
       ) : isError ? (
         <div className='flex flex-col items-center gap-3 py-12 text-center'>
-          <p className='text-muted-foreground text-sm'>Search failed.</p>
+          <p className='text-muted-foreground text-sm'>{t('search.failed', 'Search failed.')}</p>
           <button
             type='button'
             onClick={() => {
@@ -102,11 +115,13 @@ export function SearchPage() {
             }}
             className='border-input hover:bg-muted rounded-md border px-3 py-1.5 text-sm transition-colors'
           >
-            Retry
+            {t('projectMenu.retry', 'Retry')}
           </button>
         </div>
       ) : results.length === 0 ? (
-        <p className='text-muted-foreground py-12 text-center text-sm'>No results found.</p>
+        <p className='text-muted-foreground py-12 text-center text-sm'>
+          {t('search.noResults', 'No results found.')}
+        </p>
       ) : (
         <div className='flex flex-col gap-0.5'>
           {unsupportedCount > 0 ? (
@@ -128,7 +143,7 @@ export function SearchPage() {
                   <span className='truncate text-sm font-medium'>{result.title}</span>
                   <span className='text-muted-foreground flex items-center gap-1 text-xs'>
                     <Icon className='size-3.5 shrink-0' aria-hidden='true' />
-                    {meta.label}
+                    {t(meta.labelKey, meta.defaultLabel)}
                   </span>
                 </span>
                 <ChevronRight className='text-muted-foreground/40 group-hover:text-muted-foreground size-4 shrink-0 transition-colors' />

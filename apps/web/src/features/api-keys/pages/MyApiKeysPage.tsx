@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { KeyRound, Plus } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
+import { useTranslation } from 'react-i18next';
 import { ApiKeysTable } from '../components/ApiKeysTable/ApiKeysTable';
 import { CreateApiKeySheet } from '../components/CreateApiKeySheet';
 import { EditApiKeySheet } from '../components/EditApiKeySheet';
@@ -13,6 +14,7 @@ import { useUrlParam } from '../../../shared/hooks/useUrlParam';
 const API_KEY_DETAILS_PARAM = 'apiKeyId';
 
 export function MyApiKeysPage() {
+  const { t } = useTranslation();
   const { keys, loading, fetchKeys, revokeKey } = useApiKeys();
   const {
     value: selectedApiKeyId,
@@ -74,22 +76,20 @@ export function MyApiKeysPage() {
   return (
     <div className='dm-page'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>My API Keys</h1>
+        <h1 className='dm-page-header-title'>{t('apiKeysPage.title')}</h1>
       </header>
 
       <div className='dm-page-content'>
         {loading ? (
-          <div className='text-muted-foreground p-4'>Loading...</div>
+          <div className='text-muted-foreground p-4'>{t('common.loading')}</div>
         ) : (
           <div className='flex flex-col gap-4'>
             {keys.length === 0 ? (
               <div className='dm-card'>
                 <div className='dm-empty-state'>
                   <KeyRound className='dm-empty-state-ico' strokeWidth={1} />
-                  <h2 className='dm-empty-state-title'>You don&apos;t have any API keys yet</h2>
-                  <p className='dm-empty-state-subtitle'>
-                    Create one to allow external tools to access this project as you.
-                  </p>
+                  <h2 className='dm-empty-state-title'>{t('apiKeysPage.emptyTitle')}</h2>
+                  <p className='dm-empty-state-subtitle'>{t('apiKeysPage.emptySubtitle')}</p>
                   <Button
                     variant='outline'
                     onClick={() => {
@@ -97,7 +97,7 @@ export function MyApiKeysPage() {
                     }}
                   >
                     <Plus className='h-4 w-4' />
-                    Create API Key
+                    {t('apiKeysPage.createButton')}
                   </Button>
                 </div>
               </div>
@@ -119,10 +119,7 @@ export function MyApiKeysPage() {
               />
             )}
             <div className='bg-muted/50 rounded-md border-b border-gray-200 px-4 py-3 dark:border-white/2 dark:bg-white/2'>
-              <p className='text-muted-foreground text-sm'>
-                Personal API keys for your membership in this project. These keys act as you — not
-                as the project.
-              </p>
+              <p className='text-muted-foreground text-sm'>{t('apiKeysPage.infoNote')}</p>
             </div>
           </div>
         )}
@@ -152,14 +149,14 @@ export function MyApiKeysPage() {
         onOpenChange={open => {
           if (!open) setRevokingKey(null);
         }}
-        title='Revoke API Key'
+        title={t('apiKeysPage.revokeTitle')}
         description={
           <>
-            Are you sure you want to revoke <strong>{revokingKey?.name}</strong>? This action cannot
-            be undone. Any integrations using this key will stop working immediately.
+            {t('apiKeysPage.revokeConfirm')} <strong>{revokingKey?.name}</strong>?{' '}
+            {t('apiKeysPage.revokeWarning')}
           </>
         }
-        confirmLabel='Revoke'
+        confirmLabel={t('common.delete')}
         variant='destructive'
         onConfirm={() => {
           void handleRevokeConfirm();

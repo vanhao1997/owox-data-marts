@@ -28,8 +28,8 @@ export default function GoogleBigQueryOAuthDescription() {
             </li>
           </ul>
           <p className='mt-2 text-sm'>
-            P2PDigital will only access BigQuery resources that you explicitly configure as storage. You
-            can revoke access at any time from your{' '}
+            P2PDigital will only access BigQuery resources that you explicitly configure as storage.
+            You can revoke access at any time from your{' '}
             <a
               href='https://myaccount.google.com/permissions'
               target='_blank'

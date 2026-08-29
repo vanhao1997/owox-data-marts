@@ -14,7 +14,8 @@ describe('StructuredLogsView', () => {
             id: 'log-1',
             timestamp: '2026-08-18 12:43:25',
             level: LogLevel.ERROR,
-            message: 'Create a managed license key at https://app.p2pdigital.vn to enable execution.',
+            message:
+              'Create a managed license key at https://app.p2pdigital.vn to enable execution.',
           },
         ]}
       />

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '@owox/ui/components/button';
 import { Input } from '@owox/ui/components/input';
+import { useTranslation } from 'react-i18next';
 import { useProjects } from '../../features/idp/hooks/useProjects';
 import { buildProjectPath } from '../../utils/path';
 import { useFlags } from '../../app/store/hooks';
@@ -10,6 +11,7 @@ import { checkVisible } from '../../utils/check-visible';
 export function ProjectsPage() {
   const navigate = useNavigate();
   const { flags } = useFlags();
+  const { t } = useTranslation();
   const {
     projects,
     isLoading,
@@ -43,7 +45,7 @@ export function ProjectsPage() {
 
   async function handleRename(projectId: string) {
     const title = window.prompt(
-      'Project name',
+      t('projectsPage.newProjectName'),
       projects.find(p => p.id === projectId)?.title ?? ''
     );
     if (title == null) return;
@@ -65,10 +67,8 @@ export function ProjectsPage() {
 
   return (
     <main className='mx-auto max-w-3xl p-8'>
-      <h1 className='mb-2 text-2xl font-semibold'>Projects</h1>
-      <p className='text-muted-foreground mb-6 text-sm'>
-        Manage up to 20 Projects. Archived Projects remain readable but are read-only.
-      </p>
+      <h1 className='mb-2 text-2xl font-semibold'>{t('projectsPage.title')}</h1>
+      <p className='text-muted-foreground mb-6 text-sm'>{t('projectsPage.subtitle')}</p>
       {canManageProjects ? (
         <div className='mb-8 flex gap-2'>
           <Input
@@ -76,11 +76,11 @@ export function ProjectsPage() {
             onChange={e => {
               setName(e.target.value);
             }}
-            placeholder='New project name'
+            placeholder={t('projectsPage.newProjectName')}
             maxLength={100}
           />
           <Button onClick={() => void handleCreate()} disabled={!name.trim() || isLoading}>
-            Create
+            {t('projectsPage.create')}
           </Button>
         </div>
       ) : (
@@ -101,21 +101,21 @@ export function ProjectsPage() {
               <div className='font-medium'>{project.title}</div>
               <div className='text-muted-foreground text-xs'>
                 {project.archived
-                  ? 'Archived · read-only'
+                  ? t('projectsPage.archivedReadOnly')
                   : project.id === '0'
-                    ? 'Default Project'
-                    : 'Active'}
+                    ? t('projectsPage.defaultProject')
+                    : t('projectsPage.active')}
               </div>
             </div>
             <div className='flex gap-2'>
               {canManageProjects &&
                 (project.archived ? (
                   <Button variant='outline' onClick={() => void unarchiveProject(project.id)}>
-                    Unarchive
+                    {t('projectsPage.unarchive')}
                   </Button>
                 ) : (
                   <Button variant='outline' onClick={() => void archiveProject(project.id)}>
-                    Archive
+                    {t('projectsPage.archive')}
                   </Button>
                 ))}
               {canManageProjects && (
@@ -125,16 +125,18 @@ export function ProjectsPage() {
                     void handleRename(project.id);
                   }}
                 >
-                  Rename
+                  {t('projectsPage.rename')}
                 </Button>
               )}
-              <Button onClick={() => void handleSelect(project.id)}>Open</Button>
+              <Button onClick={() => void handleSelect(project.id)}>
+                {t('projectsPage.open')}
+              </Button>
             </div>
           </section>
         ))}
       </div>
       {!projects.length && !isLoading && (
-        <p className='text-muted-foreground text-sm'>No Project memberships yet.</p>
+        <p className='text-muted-foreground text-sm'>{t('projectsPage.noProjectsYet')}</p>
       )}
     </main>
   );

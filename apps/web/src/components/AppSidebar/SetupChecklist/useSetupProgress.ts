@@ -124,7 +124,10 @@ export function useSetupProgress(): SetupProgressResult {
   });
 
   const visibleGroups = useMemo(() => getVisibleGroups(setupGroups, user), [setupGroups, user]);
-  const visibleSteps = useMemo(() => getVisibleSteps(setupSteps, visibleGroups), [setupSteps, visibleGroups]);
+  const visibleSteps = useMemo(
+    () => getVisibleSteps(setupSteps, visibleGroups),
+    [setupSteps, visibleGroups]
+  );
 
   const completedStepIds: string[] = [];
 

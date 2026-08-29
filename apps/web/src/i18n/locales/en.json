@@ -13,9 +13,49 @@
     "runHistory": "Run History",
     "storages": "Storages",
     "destinations": "Destinations",
+    "plugins": "Plugins",
     "accessRequired": "Access required",
     "waitingForAccess": "Waiting for project access",
     "requestAccess": "Request access to use this section"
+  },
+  "actionButton": {
+    "newDataMart": "New Data Mart"
+  },
+  "search": {
+    "button": "Search",
+    "placeholder": "Search…",
+    "noResults": "No results found.",
+    "searching": "Searching…",
+    "failed": "Search failed.",
+    "hint": "Start typing to search across data marts, storages, and destinations.",
+    "labelDataMart": "Data Mart",
+    "labelStorage": "Storage",
+    "labelDestination": "Destination"
+  },
+  "projectMenu": {
+    "switchProject": "Switch project",
+    "searchProject": "Search project...",
+    "loadingProjects": "Loading projects...",
+    "unableToLoad": "Unable to load projects. Please try again.",
+    "retry": "Retry",
+    "noProjectsFound": "No projects found",
+    "noOtherProjects": "No other projects available",
+    "manageProjects": "Manage projects",
+    "projectSettings": "Project settings",
+    "overview": "Overview",
+    "members": "Members",
+    "contexts": "Contexts",
+    "creditConsumption": "Credit consumption",
+    "subscription": "Subscription",
+    "licenseKeys": "License keys",
+    "notifications": "Notifications",
+    "myApiKeys": "My API Keys",
+    "githubCommunity": "GitHub Community",
+    "discoverUpgradeOptions": "Discover Upgrade Options",
+    "leaveFeedback": "Leave Feedback",
+    "issues": "Issues",
+    "license": "License",
+    "owoxBi": "P2PDigital BI"
   },
   "userMenu": {
     "appearance": "Appearance",
@@ -92,6 +132,120 @@
   },
   "common": {
     "project": "Project",
-    "readOnly": "Read-only"
+    "readOnly": "Read-only",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "confirm": "Confirm",
+    "close": "Close",
+    "loading": "Loading...",
+    "search": "Search",
+    "actions": "Actions",
+    "view": "View",
+    "back": "Back",
+    "title": "Title",
+    "status": "Status",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "createdBy": "Created By",
+    "type": "Type",
+    "name": "Name",
+    "description": "Description",
+    "active": "Active",
+    "draft": "Draft",
+    "published": "Published",
+    "archived": "Archived",
+    "yes": "Yes",
+    "no": "No",
+    "unknown": "Unknown"
+  },
+  "dataMartsPage": {
+    "title": "Data Marts",
+    "checkingQuality": "Checking data quality",
+    "createDataMart": "New Data Mart"
+  },
+  "storagesPage": {
+    "title": "Storages",
+    "emptyTitle": "Connect your data warehouse",
+    "emptySubtitle": "Centralize access to raw data by connecting data warehouse to build Data Marts and reports.",
+    "newStorage": "New Storage"
+  },
+  "destinationsPage": {
+    "title": "Destinations",
+    "emptyTitle": "No destinations configured yet",
+    "emptySubtitle": "Create destinations to deliver report outputs to Google Sheets, Looker Studio, Email, and more.",
+    "newDestination": "New Destination"
+  },
+  "projectsPage": {
+    "title": "Projects",
+    "subtitle": "Manage up to 20 Projects. Archived Projects remain readable but are read-only.",
+    "newProjectName": "New project name",
+    "create": "Create",
+    "noProjectsYet": "No Project memberships yet.",
+    "archivedReadOnly": "Archived · read-only",
+    "defaultProject": "Default Project",
+    "active": "Active",
+    "unarchive": "Unarchive",
+    "archive": "Archive",
+    "rename": "Rename",
+    "open": "Open"
+  },
+  "apiKeysPage": {
+    "title": "My API Keys",
+    "emptyTitle": "You don't have any API keys yet",
+    "emptySubtitle": "Create one to allow external tools to access this project as you.",
+    "createButton": "Create API Key",
+    "infoNote": "Personal API keys for your membership in this project. These keys act as you — not as the project.",
+    "revokeTitle": "Revoke API Key",
+    "revokeConfirm": "Are you sure you want to revoke",
+    "revokeWarning": "This action cannot be undone. Any integrations using this key will stop working immediately."
+  },
+  "notFoundPage": {
+    "title": "Lost in the 404th Data Realm",
+    "subtitle": "In this dimension, 1+1=3, percentages exceed 100%, and dashboards predict yesterday.\nEscape while you can!",
+    "goHome": "Guide Me Home"
+  },
+  "noAccessPage": {
+    "title": "You don't have access",
+    "subtitle": "This resource exists but you don't have permission to view it.\nContact your project admin or the resource owner to request access.",
+    "goDashboard": "Go to Dashboard"
+  },
+  "emptyStates": {
+    "triggers": {
+      "title": "No triggers yet",
+      "description": "Triggers created inside Data Marts will appear here with their schedule, run target, and status."
+    },
+    "reports": {
+      "title": "No reports yet",
+      "description": "Reports configured inside Data Marts will appear here with their destination, run status, and actions."
+    },
+    "insights": {
+      "title": "No insights yet",
+      "description": "Insights created from Data Mart data will appear here with their update details and actions."
+    },
+    "runs": {
+      "title": "No runs yet",
+      "description": "Data Mart runs will appear here as they start and finish across the project."
+    },
+    "chooseDataMart": "Choose a Data Mart"
+  },
+  "dataMartDetails": {
+    "tabs": {
+      "dataSetup": "Data setup",
+      "overview": "Overview",
+      "quality": "Quality",
+      "insights": "Insights",
+      "reports": "Reports",
+      "triggers": "Triggers",
+      "runHistory": "Run history"
+    },
+    "publish": "Publish",
+    "publishing": "Publishing...",
+    "published": "Published",
+    "runNow": "Run now",
+    "deleteDataMart": "Delete Data Mart",
+    "deleteConfirm": "Are you sure you want to delete this Data Mart? This action cannot be undone."
   }
 }

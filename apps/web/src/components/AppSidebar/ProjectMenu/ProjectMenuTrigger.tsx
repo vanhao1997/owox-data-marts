@@ -37,7 +37,10 @@ export function ProjectMenuTrigger({ isOpen }: ProjectMenuTriggerProps) {
           <span className='text-muted-foreground flex items-center gap-1 truncate text-xs'>
             <span className='truncate'>{title ?? t('common.project')}</span>
             {isArchived && (
-              <span className='inline-flex shrink-0 items-center gap-0.5' title={t('common.readOnly')}>
+              <span
+                className='inline-flex shrink-0 items-center gap-0.5'
+                title={t('common.readOnly')}
+              >
                 <LockKeyhole className='size-3' aria-hidden='true' />
                 <span className='sr-only'>{t('common.readOnly')}</span>
               </span>

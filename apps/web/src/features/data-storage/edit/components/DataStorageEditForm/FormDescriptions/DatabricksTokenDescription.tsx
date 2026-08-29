@@ -33,8 +33,8 @@ export default function DatabricksTokenDescription() {
               Click <strong>Generate new token</strong>.
             </li>
             <li>
-              (Optional) Enter a comment to describe the purpose of the token (e.g., "P2PDigital Data
-              Marts").
+              (Optional) Enter a comment to describe the purpose of the token (e.g., "P2PDigital
+              Data Marts").
             </li>
             <li>
               (Optional) Set a lifetime for the token. If you don't specify a lifetime, the token

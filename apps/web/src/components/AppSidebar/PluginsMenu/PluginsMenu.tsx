@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -28,6 +29,7 @@ import { getActiveMenuItemClassName, isSameOrNestedPath } from '../menu-item-act
 export function PluginsMenu() {
   const { scope } = useProjectRoute();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const { plugins, isLoading: galleryLoading } = usePluginGallery();
   const { installations, isLoading: installationsLoading } = usePluginInstallations(true);
@@ -64,7 +66,7 @@ export function PluginsMenu() {
             <SidebarMenuButton asChild className={getActiveMenuItemClassName(isRootActive)}>
               <Link to={rootHref} aria-current={isRootActive ? 'page' : undefined}>
                 <Puzzle className='size-4 shrink-0 transition-all' />
-                <span>Plugins</span>
+                <span>{t('sidebar.plugins')}</span>
               </Link>
             </SidebarMenuButton>
           </TooltipTrigger>

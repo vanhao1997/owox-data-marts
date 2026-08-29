@@ -316,9 +316,9 @@ export function OverviewTab() {
           <CollapsibleCardContent>
             <div className='group flex w-full flex-col gap-3 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <p className='text-muted-foreground text-sm'>
-                For a single-project setup, use the published P2PDigital MCP server in Claude, Codex,
-                ChatGPT, and similar tools. For multi-project workflows, use this project-specific
-                URL as a custom MCP server. See the{' '}
+                For a single-project setup, use the published P2PDigital MCP server in Claude,
+                Codex, ChatGPT, and similar tools. For multi-project workflows, use this
+                project-specific URL as a custom MCP server. See the{' '}
                 <a
                   href='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/mcp/'
                   target='_blank'

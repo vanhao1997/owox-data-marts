@@ -20,8 +20,8 @@ export default function StorageTypeDatabricksDescription() {
             lakehouse architecture that combines the best of data lakes and data warehouses.
           </p>
           <p className='mb-2'>
-            To Connect P2PDigital to Databricks, you'll need your workspace URL, SQL warehouse HTTP path,
-            and a Personal Access Token for authentication.
+            To Connect P2PDigital to Databricks, you'll need your workspace URL, SQL warehouse HTTP
+            path, and a Personal Access Token for authentication.
           </p>
           <p className='mb-2'>
             Learn more in{' '}

@@ -3,6 +3,13 @@ import { MemoryRouter } from 'react-router';
 import { SidebarProvider } from '@owox/ui/components/sidebar';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => (key === 'sidebar.plugins' ? 'Plugins' : key),
+    i18n: { language: 'en', changeLanguage: vi.fn() },
+  }),
+}));
+
 vi.mock('../../../shared/hooks', () => ({
   useProjectRoute: () => ({ scope: (path: string) => `/ui/project-1${path}` }),
 }));
@@ -33,8 +40,6 @@ const galleryPlugin = (overrides = {}) => ({
   ...overrides,
 });
 
-// SidebarMenu* read layout state from context, so the provider is required even though
-// nothing here asserts on it.
 const renderMenu = (path = '/ui/project-1/plugins') =>
   render(
     <MemoryRouter initialEntries={[path]}>
@@ -110,7 +115,6 @@ describe('PluginsMenu', () => {
       installations.mockReturnValue({ installations: [installation()], isLoading: false });
     });
 
-    // Two highlighted rows would claim the reader is in two places at once.
     it('highlights only the plugin while its page is open', () => {
       renderMenu('/ui/project-1/plugins/run/i1');
 
@@ -118,10 +122,6 @@ describe('PluginsMenu', () => {
       expect(isHighlighted('Plugins')).toBe(false);
     });
 
-    /**
-     * History and a plugin's own page have no entry of their own, so the parent still
-     * has to answer "where am I" for them.
-     */
     it.each(['/ui/project-1/plugins', '/ui/project-1/plugins/history', '/ui/project-1/plugins/p1'])(
       'highlights Plugins on %s',
       path => {
@@ -133,7 +133,6 @@ describe('PluginsMenu', () => {
     );
   });
 
-  // Uninstalling removes the shortcut but keeps the plugin restorable from history.
   it('drops a removed installation from the submenu', () => {
     installations.mockReturnValue({
       installations: [installation({ uninstalledAt: '2026-07-01T00:00:00Z' })],

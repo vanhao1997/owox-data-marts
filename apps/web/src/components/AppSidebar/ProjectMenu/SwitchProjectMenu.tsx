@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { ArrowRightLeft, Check, Loader2, LockKeyhole } from 'lucide-react';
 import {
@@ -38,6 +39,7 @@ function SwitchProjectMenuInner({
   const { user } = useAuth();
   const { flags } = useFlags();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
@@ -134,7 +136,7 @@ function SwitchProjectMenuInner({
       {showSeparator && <DropdownMenuSeparator />}
       <DropdownMenuSubTrigger className='flex items-center gap-2'>
         <ArrowRightLeft className='h-4 w-4' />
-        Switch project
+        {t('projectMenu.switchProject')}
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
         <DropdownMenuSubContent
@@ -192,16 +194,16 @@ function SwitchProjectMenuInner({
             {(isLoading || isInitialLoad) && (
               <DropdownMenuItem disabled>
                 <span className='flex items-center gap-2'>
-                  <Loader2 className='h-4 w-4 animate-spin' /> Loading projects...
+                  <Loader2 className='h-4 w-4 animate-spin' /> {t('projectMenu.loadingProjects')}
                 </span>
               </DropdownMenuItem>
             )}
             {!isLoading && error && (
               <>
-                <DropdownMenuItem disabled>
-                  Unable to load projects. Please try again.
+                <DropdownMenuItem disabled>{t('projectMenu.unableToLoad')}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void loadProjects()}>
+                  {t('projectMenu.retry')}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => void loadProjects()}>Retry</DropdownMenuItem>
               </>
             )}
             {!isLoading &&
@@ -209,7 +211,7 @@ function SwitchProjectMenuInner({
               !error &&
               filteredProjects.length === 0 &&
               (searchQuery.trim() ? (
-                <DropdownMenuItem disabled>No projects found</DropdownMenuItem>
+                <DropdownMenuItem disabled>{t('projectMenu.noProjectsFound')}</DropdownMenuItem>
               ) : (
                 visibleProjects.length === 0 &&
                 emptyMessage && <DropdownMenuItem disabled>{emptyMessage}</DropdownMenuItem>

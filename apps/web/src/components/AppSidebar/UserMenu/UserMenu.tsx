@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { DropdownMenu } from '@owox/ui/components/dropdown-menu';
-import { useTheme } from 'next-themes';
-import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../../features/idp/hooks';
-import { generateInitials } from '../../../shared/utils';
-import { UserMenuItems } from './items';
-import { UserMenuTrigger } from './UserMenuTrigger';
-import { UserMenuContent } from './UserMenuContent';
+import { useState } from "react";
+import { DropdownMenu } from "@owox/ui/components/dropdown-menu";
+import { useTheme } from "next-themes";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../features/idp/hooks";
+import { generateInitials } from "../../../shared/utils";
+import { UserMenuItems } from "./items";
+import { UserMenuTrigger } from "./UserMenuTrigger";
+import { UserMenuContent } from "./UserMenuContent";
+import { LANGUAGE_STORAGE_KEY } from "../../../i18n";
 
 export function UserMenu() {
   const { user, signOut } = useAuth();
@@ -17,18 +18,25 @@ export function UserMenu() {
   if (!user) return null;
 
   const { fullName, email, avatar } = user;
-  const displayName = fullName ?? email ?? 'Unknown User';
+  const displayName = fullName ?? email ?? "Unknown User";
   const initials = generateInitials(fullName, email);
+
+  const activeLanguage = (i18n.resolvedLanguage ?? i18n.language ?? "en").slice(0, 2);
 
   const changeLanguage = (lng: string) => {
     void i18n.changeLanguage(lng);
+    try {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lng);
+    } catch {
+      // ignore
+    }
   };
 
   return (
     <div
-      data-slot='sidebar-menu-item'
-      data-sidebar='menu-item'
-      className='group/menu-item relative'
+      data-slot="sidebar-menu-item"
+      data-sidebar="menu-item"
+      className="group/menu-item relative"
     >
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <UserMenuTrigger
@@ -44,7 +52,7 @@ export function UserMenu() {
             setTheme,
             signOut,
             t,
-            language: i18n.language,
+            language: activeLanguage,
             changeLanguage,
           })}
         />
@@ -52,3 +60,4 @@ export function UserMenu() {
     </div>
   );
 }
+

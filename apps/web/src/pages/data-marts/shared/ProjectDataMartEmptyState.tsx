@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { ArrowRight, CalendarClock, FileText, History, Bookmark } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
+import { useTranslation } from 'react-i18next';
 import { useProjectRoute } from '../../../shared/hooks';
 
 type ProjectDataMartEmptyStateVariant = 'triggers' | 'reports' | 'insights' | 'runs';
@@ -44,18 +45,21 @@ interface ProjectDataMartEmptyStateProps {
 
 export function ProjectDataMartEmptyState({ variant }: ProjectDataMartEmptyStateProps) {
   const { scope } = useProjectRoute();
+  const { t } = useTranslation();
   const copy = EMPTY_STATE_COPY[variant];
   const Icon = copy.icon;
 
   return (
     <div className='dm-empty-state' data-testid={`project-${variant}-empty-state`}>
       <Icon className='dm-empty-state-ico' strokeWidth={1} />
-      <h2 className='dm-empty-state-title'>{copy.title}</h2>
-      <p className='dm-empty-state-subtitle'>{copy.description}</p>
+      <h2 className='dm-empty-state-title'>{t(`emptyStates.${variant}.title`, copy.title)}</h2>
+      <p className='dm-empty-state-subtitle'>
+        {t(`emptyStates.${variant}.description`, copy.description)}
+      </p>
       <Button variant='outline' asChild>
         <Link to={scope('/data-marts')}>
           <ArrowRight className='h-4 w-4' />
-          Choose a Data Mart
+          {t('emptyStates.chooseDataMart', 'Choose a Data Mart')}
         </Link>
       </Button>
     </div>

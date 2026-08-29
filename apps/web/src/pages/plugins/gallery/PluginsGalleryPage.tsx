@@ -197,8 +197,8 @@ export default function PluginsGalleryPage() {
               <Puzzle className='dm-empty-state-ico' strokeWidth={1} aria-hidden />
               <h2 className='dm-empty-state-title'>Add your first plugin</h2>
               <p className='dm-empty-state-subtitle'>
-                Extend P2PDigital Data Marts with plugins published from a GitHub repository. Publishing
-                one lists it here — installing it is still up to each member.
+                Extend P2PDigital Data Marts with plugins published from a GitHub repository.
+                Publishing one lists it here — installing it is still up to each member.
               </p>
             </div>
           )}

@@ -164,9 +164,9 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                           {/* No link yet: the App does not exist. The server already returns the
                               exact installation URL when it cannot read a repository, and the
                               failure panel below renders it, so nothing here has to guess one. */}
-                          A public repository works immediately. For a private one, the P2PDigital Data
-                          Marts GitHub App has to be installed on it first — publish it once and
-                          P2PDigital will show you the exact link to grant that access.
+                          A public repository works immediately. For a private one, the P2PDigital
+                          Data Marts GitHub App has to be installed on it first — publish it once
+                          and P2PDigital will show you the exact link to grant that access.
                         </p>
                       </FieldHelp>
                     </FormItem>

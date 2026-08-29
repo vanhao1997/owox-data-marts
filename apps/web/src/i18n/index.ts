@@ -15,8 +15,13 @@ void i18n
       vi: { translation: vi },
     },
     fallbackLng: 'en',
+    supportedLngs: ['en', 'vi'],
+    load: 'languageOnly',
     interpolation: {
       escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
     },
     detection: {
       order: ['localStorage', 'navigator'],

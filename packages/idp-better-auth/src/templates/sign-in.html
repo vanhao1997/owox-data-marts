@@ -184,6 +184,15 @@
     const urlParams = new URLSearchParams(window.location.search);
     const error = urlParams.get('error');
     if (error) {
+      const errorMessages = {
+        'Invalid email or password. Please try again.': 'Email hoặc mật khẩu không đúng. Vui lòng thử lại.',
+        'Sign in failed. Please try again.': 'Đăng nhập không thành công. Vui lòng thử lại.',
+        'An error occurred during sign in. Please try again.': 'Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại.',
+        'Invalid or expired magic link': 'Liên kết xác thực không hợp lệ hoặc đã hết hạn.',
+        'Invalid magic link': 'Liên kết xác thực không hợp lệ.',
+        'Something went wrong with the magic link': 'Đã xảy ra lỗi với liên kết xác thực.',
+      };
+      const translatedError = errorMessages[decodeURIComponent(error)] || decodeURIComponent(error);
       const errorDiv = document.createElement('div');
       errorDiv.className = 'mb-4 p-4 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md';
       errorDiv.innerHTML = `
@@ -191,9 +200,10 @@
           <svg class="w-4 h-4 mr-2 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
-          <span class="text-destructive">${decodeURIComponent(error)}</span>
+          <span id="auth-error-text" class="text-destructive"></span>
         </div>
       `;
+      errorDiv.querySelector('#auth-error-text').textContent = translatedError;
       document.querySelector('form').insertBefore(errorDiv, document.querySelector('form').firstChild);
     }
   </script>

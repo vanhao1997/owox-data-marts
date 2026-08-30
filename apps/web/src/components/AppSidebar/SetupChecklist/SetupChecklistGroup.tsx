@@ -2,6 +2,7 @@ import { ArrowRight, CircleCheckBig, CircleArrowRight } from 'lucide-react';
 import type { GroupProgress } from './types';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { GroupStatusType } from './types';
+import { useTranslation } from 'react-i18next';
 
 interface SetupChecklistGroupProps {
   groupProgress: GroupProgress;
@@ -10,28 +11,30 @@ interface SetupChecklistGroupProps {
 
 interface GroupStatusConfig {
   icon: React.ReactNode;
-  label: string;
+  labelKey: string;
 }
 
 const GROUP_STATUS_CONFIG: Record<GroupStatusType, GroupStatusConfig> = {
   [GroupStatusType.DONE]: {
     icon: <CircleCheckBig className='text-muted-foreground/50 size-4 shrink-0' />,
-    label: 'Done',
+    labelKey: 'setupChecklist.statusDone',
   },
   [GroupStatusType.IN_PROGRESS]: {
     icon: <CircleArrowRight className='text-muted-foreground size-4 shrink-0' />,
-    label: 'In progress',
+    labelKey: 'setupChecklist.statusInProgress',
   },
   [GroupStatusType.NOT_STARTED]: {
     icon: <ArrowRight className='text-muted-foreground size-4 shrink-0' />,
-    label: 'Not started',
+    labelKey: 'setupChecklist.statusNotStarted',
   },
 };
 
 export function SetupChecklistGroup({ groupProgress, onClick }: SetupChecklistGroupProps) {
   const { group, status } = groupProgress;
+  const { t } = useTranslation();
   const isDone = status === GroupStatusType.DONE;
-  const { icon, label } = GROUP_STATUS_CONFIG[status];
+  const { icon, labelKey } = GROUP_STATUS_CONFIG[status];
+  const label = t(labelKey);
 
   return (
     <Tooltip>

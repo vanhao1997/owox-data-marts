@@ -60,11 +60,11 @@ export function SetupGroupPopover({ groupProgress, progress }: SetupGroupPopover
             </div>
             {status === GroupStatusType.DONE && completedAt ? (
               <p className='text-muted-foreground text-xs'>
-                Completed on {formatDateShort(completedAt)}
+                {t('setupChecklist.completedOn', { date: formatDateShort(completedAt) })}
               </p>
             ) : (
               <p className='text-muted-foreground text-xs'>
-                {completedCount} of {totalCount} completed
+                {t('setupChecklist.completedCount', { completed: completedCount, total: totalCount })}
               </p>
             )}
           </div>

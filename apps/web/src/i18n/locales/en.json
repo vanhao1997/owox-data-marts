@@ -136,7 +136,16 @@
     "completedTitle": "You did an amazing job!",
     "completedSubtitle": "Your data is ready. Keep exploring.",
     "progressAria": "Setup progress: {{completed}} of {{total}} steps completed",
-    "progressTooltip": "Get to know P2PDigital — {{percentage}}% completed"
+    "progressTooltip": "Get to know P2PDigital — {{percentage}}% completed",
+    "title": "Get to know P2PDigital",
+    "subtitle": "Easy steps to set up and run",
+    "percentCompleted": "{{percentage}}% completed",
+    "dismissAria": "Dismiss setup checklist",
+    "statusDone": "Done",
+    "statusInProgress": "In progress",
+    "statusNotStarted": "Not started",
+    "completedOn": "Completed on {{date}}",
+    "completedCount": "{{completed}} of {{total}} completed"
   },
   "authGuard": {
     "accessDenied": "Access denied",
@@ -711,6 +720,14 @@
     "ariaLabel": "Data Last Updated for {{title}}: {{label}}",
     "checking": "Checking Data Last Updated…",
     "notChecked": "Data Last Updated has not been checked yet. Use Actions → Check Data Last Updated to measure the visible Data Marts."
+    ,"allTablesChecked": "All source tables were checked."
+    ,"partialCoverage": "Some source tables could not be checked — the actual time can only be more recent."
+    ,"storageUnavailable": "The storage did not report when the source tables last changed."
+    ,"sourceTablesChanged": "Source tables last changed: {{date}}"
+    ,"noModificationTime": "The storage did not report a modification time."
+    ,"checked": "Checked {{time}}"
+    ,"writeTimeCaveat": "Reflects when source tables were written to, not which period the data covers."
+    ,"notCheckedYet": "Not checked yet"
   },
   "owners": {
     "title": "Owners",

@@ -5,6 +5,7 @@ import type { SetupProgressResult } from './useSetupProgress';
 import type { SetupChecklistVisibility } from './useSetupChecklistVisibility';
 import { SetupChecklistCompleted } from './SetupChecklistCompleted';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SetupChecklistProps {
   progressResult: SetupProgressResult;
@@ -14,6 +15,7 @@ interface SetupChecklistProps {
 export function SetupChecklist({ progressResult, visibility }: SetupChecklistProps) {
   const { percentage, progress, groupProgresses } = progressResult;
   const { hide } = visibility;
+  const { t } = useTranslation();
 
   const handleDismiss = useCallback(() => {
     hide();
@@ -33,23 +35,17 @@ export function SetupChecklist({ progressResult, visibility }: SetupChecklistPro
         <div className='flex items-start justify-between gap-2'>
           <div className='flex flex-col gap-0.5 py-2 pl-4'>
             <span className='text-sidebar-foreground text-sm font-semibold'>
-              Get to know P2PDigital
+              {t('setupChecklist.title')}
             </span>
             <span className='text-muted-foreground text-xs'>
-              {isEmpty ? (
-                'Easy steps to set up and run'
-              ) : (
-                <>
-                  <span className='tabular-nums'>{percentage}%</span> completed
-                </>
-              )}
+              {isEmpty ? t('setupChecklist.subtitle') : t('setupChecklist.percentCompleted', { percentage })}
             </span>
           </div>
           <button
             type='button'
             onClick={handleDismiss}
             className='text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/75 mt-1 mr-1 rounded p-1 transition-colors'
-            aria-label='Dismiss setup checklist'
+            aria-label={t('setupChecklist.dismissAria')}
           >
             <X className='size-4' />
           </button>

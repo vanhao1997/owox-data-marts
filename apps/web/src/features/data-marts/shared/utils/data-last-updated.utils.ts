@@ -2,16 +2,11 @@ import type {
   DataLastUpdatedCoverage,
   DataLastUpdatedDto,
 } from '../types/api/response/data-mart-data-last-updated.dto';
+import i18n from '../../../../i18n';
 
-const ABSOLUTE_FORMAT = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-});
-
-const RELATIVE_FORMAT = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' });
+function getLocale(): string {
+  return String(i18n.resolvedLanguage).startsWith('vi') ? 'vi-VN' : 'en-US';
+}
 
 const RELATIVE_STEPS: { limitMs: number; divisorMs: number; unit: Intl.RelativeTimeFormatUnit }[] =
   [
@@ -31,13 +26,24 @@ export function formatRelativeTime(iso: string, now: Date = new Date()): string 
   // The last step has an Infinity limit, so find() always matches.
   const step =
     RELATIVE_STEPS.find(s => elapsedMs < s.limitMs) ?? RELATIVE_STEPS[RELATIVE_STEPS.length - 1];
-  return RELATIVE_FORMAT.format(-Math.round(elapsedMs / step.divisorMs), step.unit);
+  return new Intl.RelativeTimeFormat(getLocale(), { numeric: 'auto' }).format(
+    -Math.round(elapsedMs / step.divisorMs),
+    step.unit
+  );
 }
 
 /** "Jul 25, 2026, 08:30 AM" — the exact-value companion to the relative label. */
 export function formatAbsoluteTime(iso: string): string {
   const date = new Date(iso);
-  return Number.isNaN(date.getTime()) ? '' : ABSOLUTE_FORMAT.format(date);
+  return Number.isNaN(date.getTime())
+    ? ''
+    : new Intl.DateTimeFormat(getLocale(), {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(date);
 }
 
 /**
@@ -47,7 +53,7 @@ export function formatAbsoluteTime(iso: string): string {
  * - partial coverage → the true time can only be more recent, so the value is a floor.
  */
 export function formatDataLastUpdatedLabel(block: DataLastUpdatedDto | null | undefined): string {
-  if (!block?.dataLastUpdatedAt) return 'Unknown';
+  if (!block?.dataLastUpdatedAt) return i18n.t('common.unknown', 'Unknown');
   const relative = formatRelativeTime(block.dataLastUpdatedAt);
   return block.coverage === 'partial' ? `≥ ${relative}` : relative;
 }
@@ -56,10 +62,16 @@ export function formatDataLastUpdatedLabel(block: DataLastUpdatedDto | null | un
 export function describeCoverage(coverage: DataLastUpdatedCoverage): string {
   switch (coverage) {
     case 'complete':
-      return 'All source tables were checked.';
+      return i18n.t('dataLastUpdated.allTablesChecked', 'All source tables were checked.');
     case 'partial':
-      return 'Some source tables could not be checked — the actual time can only be more recent.';
+      return i18n.t(
+        'dataLastUpdated.partialCoverage',
+        'Some source tables could not be checked — the actual time can only be more recent.'
+      );
     case 'unavailable':
-      return 'The storage did not report when the source tables last changed.';
+      return i18n.t(
+        'dataLastUpdated.storageUnavailable',
+        'The storage did not report when the source tables last changed.'
+      );
   }
 }

@@ -6,6 +6,7 @@ import {
   formatDataLastUpdatedLabel,
   formatRelativeTime,
 } from '../../utils/data-last-updated.utils';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Tooltip body for a Data Last Updated snapshot: exact timestamp, when the check ran, coverage,
@@ -14,14 +15,17 @@ import {
  * story.
  */
 export function DataLastUpdatedDetails({ block }: { block: DataLastUpdatedDto }) {
+  const { t } = useTranslation();
   return (
     <div className='flex flex-col gap-1 text-xs'>
       <div>
         {block.dataLastUpdatedAt
-          ? `Source tables last changed: ${formatAbsoluteTime(block.dataLastUpdatedAt)}`
-          : 'The storage did not report a modification time.'}
+          ? t('dataLastUpdated.sourceTablesChanged', 'Source tables last changed: {{date}}', {
+              date: formatAbsoluteTime(block.dataLastUpdatedAt),
+            })
+          : t('dataLastUpdated.noModificationTime', 'The storage did not report a modification time.')}
       </div>
-      <div>Checked {formatRelativeTime(block.computedAt)}</div>
+      <div>{t('dataLastUpdated.checked', 'Checked {{time}}', { time: formatRelativeTime(block.computedAt) })}</div>
       <div>{describeCoverage(block.coverage)}</div>
       {block.sources && block.sources.length > 0 && (
         <ul className='mt-1 flex flex-col gap-0.5'>
@@ -31,13 +35,16 @@ export function DataLastUpdatedDetails({ block }: { block: DataLastUpdatedDto })
               {' — '}
               {source.dataLastUpdatedAt
                 ? formatAbsoluteTime(source.dataLastUpdatedAt)
-                : (source.note ?? 'unknown')}
+                : (source.note ?? t('common.unknown', 'Unknown'))}
             </li>
           ))}
         </ul>
       )}
       <div className='text-muted-foreground'>
-        Reflects when source tables were written to, not which period the data covers.
+        {t(
+          'dataLastUpdated.writeTimeCaveat',
+          'Reflects when source tables were written to, not which period the data covers.'
+        )}
       </div>
     </div>
   );
@@ -56,11 +63,15 @@ interface DataLastUpdatedValueProps {
  * "stale"), and a "≥" floor for partial coverage.
  */
 export function DataLastUpdatedValue({ block, compact, className }: DataLastUpdatedValueProps) {
+  const { t } = useTranslation();
   const label = formatDataLastUpdatedLabel(block);
 
   if (!block) {
     return (
-      <span className={className ?? 'text-muted-foreground text-sm'} title='Not checked yet'>
+      <span
+        className={className ?? 'text-muted-foreground text-sm'}
+        title={t('dataLastUpdated.notCheckedYet', 'Not checked yet')}
+      >
         {label}
       </span>
     );

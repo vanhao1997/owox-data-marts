@@ -25,6 +25,7 @@ import { SortableHeader, ToggleColumnsHeader } from '../../../../../../shared/co
 import { ContextBadges } from '../../../../../../features/contexts/components/ContextBadges/ContextBadges';
 import { Check } from 'lucide-react';
 import { DataLastUpdatedValue } from '../../../../shared/components/DataLastUpdatedValue';
+import { formatDateOnly } from '../../../../../../utils/date-formatters';
 
 interface DataMartTableColumnsProps {
   onDeleteSuccess?: () => void;
@@ -164,11 +165,7 @@ export const getDataMartColumns = ({
     ),
     cell: ({ row }) => {
       const date = row.getValue<Date>('createdAt');
-      const formatted = new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }).format(date);
+      const formatted = formatDateOnly(date);
 
       return <div className='text-muted-foreground'>{formatted}</div>;
     },

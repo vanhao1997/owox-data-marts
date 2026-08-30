@@ -136,7 +136,16 @@
     "completedTitle": "Bạn đã hoàn thành xuất sắc!",
     "completedSubtitle": "Dữ liệu đã sẵn sàng. Hãy tiếp tục khám phá.",
     "progressAria": "Tiến độ thiết lập: đã hoàn thành {{completed}}/{{total}} bước",
-    "progressTooltip": "Tìm hiểu P2PDigital — đã hoàn thành {{percentage}}%"
+    "progressTooltip": "Tìm hiểu P2PDigital — đã hoàn thành {{percentage}}%",
+    "title": "Tìm hiểu P2PDigital",
+    "subtitle": "Các bước đơn giản để thiết lập và chạy",
+    "percentCompleted": "Đã hoàn thành {{percentage}}%",
+    "dismissAria": "Ẩn danh sách kiểm tra thiết lập",
+    "statusDone": "Đã hoàn thành",
+    "statusInProgress": "Đang thực hiện",
+    "statusNotStarted": "Chưa bắt đầu",
+    "completedOn": "Hoàn thành vào {{date}}",
+    "completedCount": "Đã hoàn thành {{completed}}/{{total}}"
   },
   "authGuard": {
     "accessDenied": "Truy cập bị từ chối",
@@ -711,6 +720,14 @@
     "ariaLabel": "Dữ liệu cập nhật lần cuối của {{title}}: {{label}}",
     "checking": "Đang kiểm tra dữ liệu cập nhật lần cuối…",
     "notChecked": "Dữ liệu cập nhật lần cuối chưa được kiểm tra. Hãy mở Thao tác → Kiểm tra dữ liệu cập nhật lần cuối để đo các Data Mart đang hiển thị."
+    ,"allTablesChecked": "Đã kiểm tra tất cả bảng nguồn."
+    ,"partialCoverage": "Không thể kiểm tra một số bảng nguồn — thời điểm thực tế chỉ có thể mới hơn."
+    ,"storageUnavailable": "Kho lưu trữ không cung cấp thời điểm thay đổi gần nhất của các bảng nguồn."
+    ,"sourceTablesChanged": "Bảng nguồn thay đổi lần cuối: {{date}}"
+    ,"noModificationTime": "Kho lưu trữ không cung cấp thời điểm sửa đổi."
+    ,"checked": "Đã kiểm tra {{time}}"
+    ,"writeTimeCaveat": "Cho biết thời điểm ghi các bảng nguồn, không phải khoảng thời gian dữ liệu bao phủ."
+    ,"notCheckedYet": "Chưa kiểm tra"
   },
   "owners": {
     "title": "Người phụ trách",

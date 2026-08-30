@@ -1,5 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ResizableColumns from '../../../../shared/components/ResizableColumns/ResizableColumns';
 import InsightEditor from './InsightEditor.tsx';
 import {
@@ -49,9 +50,9 @@ import {
 } from '@owox/ui/components/tooltip';
 import { formatDateShort, trackEvent } from '../../../../utils';
 import { DataMartStatus } from '../../shared';
-import { NO_PERMISSION_MESSAGE } from '../../../../app/permissions';
 
 export default function InsightDetailsView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { insightId } = useParams<{ insightId: string }>();
   const storageKey = useMemo(() => 'insight_details_split', []);
@@ -102,16 +103,16 @@ export default function InsightDetailsView() {
     if (!text) return;
     const ok = await copyToClipboard(text, 'insight-output');
     if (ok) {
-      toast.success('Markdown copied to clipboard');
+      toast.success(t('insightsUi.copied'));
     } else {
-      toast.error('Failed to copy to clipboard');
+      toast.error(t('insightsUi.copyFailed'));
     }
     trackEvent({
       event: 'insight_output_copied',
       category: 'Insights',
       action: 'Copy',
     });
-  }, [insight?.output, copyToClipboard]);
+  }, [insight?.output, copyToClipboard, t]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -199,7 +200,7 @@ export default function InsightDetailsView() {
 
   if (insightLoading) {
     // TODO:: Add skeleton loading indicator
-    return <div className='text-muted-foreground flex flex-col gap-2 text-sm'>Loading...</div>;
+    return <div className='text-muted-foreground flex flex-col gap-2 text-sm'>{t('common.loading')}</div>;
   }
 
   if (!insight || !dataMart) {
@@ -210,10 +211,8 @@ export default function InsightDetailsView() {
             <BookmarkX />
           </EmptyMedia>
         </EmptyHeader>
-        <EmptyTitle>Insight not found</EmptyTitle>
-        <EmptyDescription>
-          The insight you're looking for doesn't exist or couldn't be loaded
-        </EmptyDescription>
+        <EmptyTitle>{t('insightsUi.notFound')}</EmptyTitle>
+        <EmptyDescription>{t('insightsUi.notFoundDescription')}</EmptyDescription>
       </Empty>
     );
   }
@@ -225,17 +224,17 @@ export default function InsightDetailsView() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to='..'>Insights</Link>
+                <Link to='..'>{t('insightsUi.insightPlural')}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <span aria-current='page' className='block max-w-[480px] truncate'>
                 <InlineEditTitle
-                  title={titleValue || 'Untitled insight'}
+                  title={titleValue || t('insightsUi.untitled')}
                   onUpdate={handleTitleUpdate}
                   className='font-medium'
-                  errorMessage='Title cannot be empty'
+                  errorMessage={t('insightsUi.titleCannotEmpty')}
                   minWidth='200px'
                   readOnly={!canEdit}
                 />
@@ -247,7 +246,7 @@ export default function InsightDetailsView() {
         <div className='flex items-center gap-2'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' size='icon' aria-label='Insight actions'>
+              <Button variant='ghost' size='icon' aria-label={t('insightsUi.rowActions')}>
                 <MoreVertical className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
@@ -263,11 +262,11 @@ export default function InsightDetailsView() {
                       disabled={!canDelete}
                     >
                       <Trash2 className='h-4 w-4 text-red-600' />{' '}
-                      <span className='text-red-600'>Delete insight</span>
+                      <span className='text-red-600'>{t('insightsUi.deleteInsight')}</span>
                     </DropdownMenuItem>
                   </div>
                 </TooltipTrigger>
-                {!canDelete && <TooltipContent side='left'>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+                {!canDelete && <TooltipContent side='left'>{t('common.noPermission')}</TooltipContent>}
               </Tooltip>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -287,7 +286,7 @@ export default function InsightDetailsView() {
                     setValue('template', v, { shouldDirty: true });
                   }}
                   height={'calc(100vh - 275px)'}
-                  placeholder='Type / to view available commands...'
+                  placeholder={t('insightsUi.editorPlaceholder')}
                   readOnly={isRunning || !canEdit}
                   excludeInsightId={insightId}
                 />
@@ -314,11 +313,11 @@ export default function InsightDetailsView() {
                               >
                                 {isTemplateDirty ? (
                                   <span className='inline-flex items-center gap-2'>
-                                    <Bookmark /> Save Insight
+                                    <Bookmark /> {t('insightsUi.save')}
                                   </span>
                                 ) : (
                                   <span className='inline-flex items-center gap-2'>
-                                    <Bookmark /> Run Insight
+                                    <Bookmark /> {t('insightsUi.runInsight')}
                                   </span>
                                 )}
                               </Button>
@@ -326,9 +325,9 @@ export default function InsightDetailsView() {
                           </TooltipTrigger>
                           <TooltipContent side='top'>
                             {canRun ? (
-                              <p>To run an insight, publish the Data Mart first</p>
+                              <p>{t('insightsUi.publishBeforeRun')}</p>
                             ) : (
-                              <p>{NO_PERMISSION_MESSAGE}</p>
+                              <p>{t('common.noPermission')}</p>
                             )}
                           </TooltipContent>
                         </Tooltip>
@@ -348,22 +347,22 @@ export default function InsightDetailsView() {
                             >
                               {isRunning ? (
                                 <span className='inline-flex items-center gap-2'>
-                                  <Loader2 className='h-3 w-3 animate-spin' /> Running…
+                                  <Loader2 className='h-3 w-3 animate-spin' /> {t('insightsUi.running')}
                                 </span>
                               ) : isTemplateDirty ? (
                                 <span className='inline-flex items-center gap-2'>
-                                  <Bookmark /> Save & Run Insight
+                                  <Bookmark /> {t('insightsUi.saveAndRun')}
                                 </span>
                               ) : (
                                 <span className='inline-flex items-center gap-2'>
-                                  <Bookmark /> Run Insight
+                                  <Bookmark /> {t('insightsUi.runInsight')}
                                 </span>
                               )}
                             </Button>
                           </div>
                         </TooltipTrigger>
                         {!canRun && (
-                          <TooltipContent side='top'>{NO_PERMISSION_MESSAGE}</TooltipContent>
+                          <TooltipContent side='top'>{t('common.noPermission')}</TooltipContent>
                         )}
                       </Tooltip>
                     );
@@ -389,7 +388,7 @@ export default function InsightDetailsView() {
                               className='gap-2'
                             >
                               <Send className='text-muted-foreground h-4 w-4' />
-                              Send & Schedule ...
+                              {t('insightsUi.sendSchedule')}
                             </Button>
                           </span>
                         );
@@ -400,17 +399,16 @@ export default function InsightDetailsView() {
                         if (isDraft) {
                           return (
                             <p>
-                              You can schedule and send reports only after publishing the Data Mart
+                              {t('insightsUi.scheduleAfterPublish')}
                             </p>
                           );
                         }
                         if (!canSendAndSchedule) {
-                          return <p>{NO_PERMISSION_MESSAGE}</p>;
+                          return <p>{t('common.noPermission')}</p>;
                         }
                         return (
                           <p>
-                            You can schedule this insight to run at a specific time or send it to a
-                            recipient
+                            {t('insightsUi.scheduleDescription')}
                           </p>
                         );
                       })()}
@@ -426,7 +424,7 @@ export default function InsightDetailsView() {
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side='top'>
-                        <p>Last run: {formatDateShort(insight.outputUpdatedAt)}</p>
+                        <p>{t('insightsUi.lastRun')} {formatDateShort(insight.outputUpdatedAt)}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -444,9 +442,9 @@ export default function InsightDetailsView() {
                     <EmptyMedia variant='icon'>
                       <Bookmark />
                     </EmptyMedia>
-                    <EmptyTitle>Ready to explore your data?</EmptyTitle>
+                    <EmptyTitle>{t('insightsUi.readyToExplore')}</EmptyTitle>
                     <EmptyDescription>
-                      Write prompt to&nbsp;uncover the story behind your data!
+                      {t('insightsUi.runToUncover')}
                     </EmptyDescription>
                   </EmptyHeader>
                 </Empty>
@@ -483,14 +481,14 @@ export default function InsightDetailsView() {
                                     variant='outline'
                                     size='icon'
                                     className='h-8 w-8'
-                                    aria-label='Copy markdown to clipboard'
+                                    aria-label={t('insightsUi.copyMarkdown')}
                                     onClick={() => void handleCopyOutput()}
                                   >
                                     <Copy className='h-4 w-4' />
                                   </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side='left'>
-                                  <p>Copy markdown to clipboard</p>
+                                  <p>{t('insightsUi.copyMarkdown')}</p>
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
@@ -509,10 +507,10 @@ export default function InsightDetailsView() {
       <ConfirmationDialog
         open={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
-        title='Delete Insight'
-        description='Are you sure you want to delete this insight? This action cannot be undone.'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('insightsUi.deleteInsightTitle')}
+        description={t('insightsUi.deleteInsightConfirm')}
+        confirmLabel={t('common.delete')}
+        cancelLabel={t('common.cancel')}
         variant='destructive'
         onConfirm={() => {
           void handleDelete();
@@ -529,7 +527,7 @@ export default function InsightDetailsView() {
           isInsightContext={true}
           preSelectedDestination={null}
           prefill={{
-            title: insight.title || titleValue || 'New report',
+            title: insight.title || titleValue || t('insightsUi.newReportPrefill'),
             subject: `Insight: ${insight.title || titleValue || ''}`.trim(),
             messageTemplate: templateValue ?? '',
           }}

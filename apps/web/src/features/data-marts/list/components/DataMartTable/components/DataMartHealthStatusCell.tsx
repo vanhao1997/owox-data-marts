@@ -27,6 +27,7 @@ import { cn } from '@owox/ui/lib/utils';
 import { DataMartHealthStatus } from '../../../../shared/types';
 import type { DataMartRunItem } from '../../../../edit/model/types/data-mart-run';
 import { usePrefetchOnHover } from '../../../../../../shared/hooks/usePrefetchOnHover';
+import { useTranslation } from 'react-i18next';
 
 interface DataMartHealthStatusCellProps {
   row: { original: DataMartListItem };
@@ -44,30 +45,30 @@ const RUN_STATUS_TO_TYPE: Record<DataMartRunStatus, StatusTypeEnum> = {
 
 const HEALTH_STATUS_CONFIG: Record<
   DataMartHealthStatus,
-  { text: string; dotClass: string; ringClass: string }
+  { textKey: string; dotClass: string; ringClass: string }
 > = {
   [DataMartHealthStatus.NO_RUNS]: {
-    text: 'No runs in the last 30 days',
+    textKey: 'healthStatus.noRunsLast30',
     dotClass: 'bg-neutral-400 dark:bg-neutral-600',
     ringClass: 'ring-neutral-400/50 dark:ring-neutral-600/50',
   },
   [DataMartHealthStatus.ALL_RUNS_SUCCESS]: {
-    text: 'All recent runs succeeded',
+    textKey: 'healthStatus.allSucceeded',
     dotClass: 'bg-green-500',
     ringClass: 'ring-green-500/50 dark:ring-green-500/50',
   },
   [DataMartHealthStatus.MIXED_RUNS]: {
-    text: 'Mixed results in the last 30 days',
+    textKey: 'healthStatus.mixedResults',
     dotClass: 'bg-yellow-500',
     ringClass: 'ring-yellow-500/50 dark:ring-yellow-500/50',
   },
   [DataMartHealthStatus.ALL_RUNS_FAILED]: {
-    text: 'All recent runs failed',
+    textKey: 'healthStatus.allFailed',
     dotClass: 'bg-red-500',
     ringClass: 'ring-red-500/50 dark:ring-red-500/50',
   },
   [DataMartHealthStatus.RUNS_IN_PROGRESS]: {
-    text: 'Some runs are in progress',
+    textKey: 'healthStatus.inProgress',
     dotClass: 'bg-blue-500',
     ringClass: 'ring-blue-500/50 dark:ring-blue-500/50',
   },
@@ -82,21 +83,23 @@ function getTooltipText(params: {
   healthStatus: DataMartHealthStatus;
   isLoading: boolean;
   isNotFetched: boolean;
+  t: (key: string) => string;
 }): string {
-  const { healthStatus, isLoading, isNotFetched } = params;
+  const { healthStatus, isLoading, isNotFetched, t } = params;
 
-  if (isLoading) return 'Loading run status...';
-  if (isNotFetched) return 'Hover to load run status';
+  if (isLoading) return t('healthStatus.loading');
+  if (isNotFetched) return t('healthStatus.hoverToLoad');
 
-  return HEALTH_STATUS_CONFIG[healthStatus].text;
+  return t(HEALTH_STATUS_CONFIG[healthStatus].textKey);
 }
 
 interface HealthStatusRowProps {
   label: string;
   run: DataMartRunItem | null;
+  noRunsLabel: string;
 }
 
-function HealthStatusRow({ label, run }: HealthStatusRowProps) {
+function HealthStatusRow({ label, run, noRunsLabel }: HealthStatusRowProps) {
   return (
     <HoverCardItem>
       <HoverCardItemLabel>{label}</HoverCardItemLabel>
@@ -106,7 +109,7 @@ function HealthStatusRow({ label, run }: HealthStatusRowProps) {
             <RelativeTime date={run.createdAt} /> ({run.triggerType})
           </StatusLabel>
         ) : (
-          <span className='text-muted-foreground text-sm'>No runs</span>
+          <span className='text-muted-foreground text-sm'>{noRunsLabel}</span>
         )}
       </HoverCardItemValue>
     </HoverCardItem>
@@ -114,6 +117,7 @@ function HealthStatusRow({ label, run }: HealthStatusRowProps) {
 }
 
 export const DataMartHealthStatusCell = ({ row }: DataMartHealthStatusCellProps) => {
+  const { t } = useTranslation();
   const { navigate } = useProjectRoute();
   const dataMart = row.original;
 
@@ -142,7 +146,7 @@ export const DataMartHealthStatusCell = ({ row }: DataMartHealthStatusCellProps)
         </TooltipTrigger>
 
         <TooltipContent side='top' align='center'>
-          Draft Data Mart is not available to run. Publish it to activate runs.
+          {t('healthStatus.draftUnavailable')}
         </TooltipContent>
       </Tooltip>
     );
@@ -191,6 +195,7 @@ export const DataMartHealthStatusCell = ({ row }: DataMartHealthStatusCellProps)
                 healthStatus,
                 isLoading,
                 isNotFetched,
+                t,
               })}
             </TooltipContent>
           </Tooltip>
@@ -203,18 +208,30 @@ export const DataMartHealthStatusCell = ({ row }: DataMartHealthStatusCellProps)
             <HoverCardHeaderText>
               <HoverCardHeaderTitle>{dataMart.title}</HoverCardHeaderTitle>
               <HoverCardHeaderDescription>
-                Recent run history for last 30 days
+                {t('healthStatus.recentHistory')}
               </HoverCardHeaderDescription>
             </HoverCardHeaderText>
           </HoverCardHeader>
 
           <HoverCardBody>
             {showConnectorRun && (
-              <HealthStatusRow label='Connector run' run={latestRunsByType.connector} />
+              <HealthStatusRow
+                label={t('healthStatus.connectorRun')}
+                run={latestRunsByType.connector}
+                noRunsLabel={t('healthStatus.noRuns')}
+              />
             )}
 
-            <HealthStatusRow label='Report run' run={latestRunsByType.report} />
-            <HealthStatusRow label='Insight run' run={latestRunsByType.insight} />
+            <HealthStatusRow
+              label={t('healthStatus.reportRun')}
+              run={latestRunsByType.report}
+              noRunsLabel={t('healthStatus.noRuns')}
+            />
+            <HealthStatusRow
+              label={t('healthStatus.insightRun')}
+              run={latestRunsByType.insight}
+              noRunsLabel={t('healthStatus.noRuns')}
+            />
           </HoverCardBody>
 
           <HoverCardFooter>
@@ -224,7 +241,7 @@ export const DataMartHealthStatusCell = ({ row }: DataMartHealthStatusCellProps)
                 navigate(`/data-marts/${dataMart.id}/run-history`);
               }}
             >
-              View Full Run History
+              {t('healthStatus.viewFullHistory')}
               <ChevronRight className='h-4 w-4' />
             </Button>
           </HoverCardFooter>

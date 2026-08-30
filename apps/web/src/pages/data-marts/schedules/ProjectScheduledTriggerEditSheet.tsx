@@ -20,6 +20,7 @@ import type { ScheduledReportRunConfig } from '../../../features/data-marts/sche
 import type { ScheduledTriggerFormData } from '../../../features/data-marts/scheduled-triggers/schemas';
 import { scheduledTriggerService } from '../../../features/data-marts/scheduled-triggers/services';
 import { buildProjectDataMartContextValue } from '../shared/projectDataMartContext';
+import { useTranslation } from 'react-i18next';
 
 interface ProjectScheduledTriggerEditSheetProps {
   trigger: ProjectScheduledTrigger | null;
@@ -34,6 +35,7 @@ export function ProjectScheduledTriggerEditSheet({
   onClose,
   onSaved,
 }: ProjectScheduledTriggerEditSheetProps) {
+  const { t } = useTranslation();
   useIntercomLauncher(isOpen);
 
   const {
@@ -103,9 +105,9 @@ export function ProjectScheduledTriggerEditSheet({
     >
       <SheetContent data-testid='projectTriggerEditSheet'>
         <SheetHeader>
-          <SheetTitle>Edit Scheduled Trigger</SheetTitle>
+          <SheetTitle>{t('scheduledTriggers.editTitle', 'Edit scheduled trigger')}</SheetTitle>
           <SheetDescription>
-            Configure automatic runs for reports, connectors, or Data Quality checks.
+            {t('scheduledTriggers.editDescription', 'Configure automatic runs for reports, connectors, or Data Quality checks.')}
           </SheetDescription>
         </SheetHeader>
 

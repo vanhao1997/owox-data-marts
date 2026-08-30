@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Sheet,
   SheetContent,
@@ -27,11 +28,6 @@ import {
 import type { ContextDto } from '../../../../contexts/types/context.types';
 import { RoleHelpAccordion, ScopeHelpAccordion } from '../MemberFormFields/MemberRoleHelp';
 
-const ROLE_SCOPE_LABELS: Record<RoleScope, string> = {
-  entire_project: 'Entire Project',
-  selected_contexts: 'Selected Contexts',
-};
-
 interface DefaultRoleSheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -53,6 +49,7 @@ export function DefaultRoleSheet({
   contextIds,
   disabled = false,
 }: DefaultRoleSheetProps) {
+  const { t } = useTranslation();
   const [localRole, setLocalRole] = useState<Role>(defaultRole);
   const [localRoleScope, setLocalRoleScope] = useState<RoleScope>(roleScope);
   const [localContextIds, setLocalContextIds] = useState<string[]>(contextIds);
@@ -119,16 +116,16 @@ export function DefaultRoleSheet({
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Default roles and scopes</SheetTitle>
+          <SheetTitle>{t('membersPage.defaultRoleTitle')}</SheetTitle>
           <SheetDescription>
-            Configure the defaults for new members who automatically join this project
+            {t('membersPage.defaultRoleDescription')}
           </SheetDescription>
         </SheetHeader>
 
         <FormLayout>
-          <FormSection title='Role' name='default-role-role'>
+          <FormSection title={t('membersPage.role')} name='default-role-role'>
             <FormItem>
-              <Label>Role</Label>
+              <Label>{t('membersPage.role')}</Label>
               <Select value={localRole} onValueChange={handleRoleChange} disabled={disabled}>
                 <SelectTrigger className='w-full'>
                   <SelectValue />
@@ -146,17 +143,17 @@ export function DefaultRoleSheet({
           </FormSection>
 
           {isAdminRole ? (
-            <FormSection title='Access' name='default-role-admin-access'>
+            <FormSection title={t('membersPage.access')} name='default-role-admin-access'>
               <FormItem>
                 <p className='text-muted-foreground text-sm'>
-                  Project Admin has project-wide access. Scope and context assignments do not apply.
+                  {t('membersPage.adminAccessDescription')}
                 </p>
               </FormItem>
             </FormSection>
           ) : (
-            <FormSection title='Scope' name='default-role-scope'>
+            <FormSection title={t('membersPage.scope')} name='default-role-scope'>
               <FormItem>
-                <Label>Role scope</Label>
+                <Label>{t('membersPage.roleScope')}</Label>
                 <Select
                   value={localRoleScope}
                   onValueChange={value => {
@@ -170,7 +167,7 @@ export function DefaultRoleSheet({
                   <SelectContent>
                     {ROLE_SCOPE_VALUES.map(scope => (
                       <SelectItem key={scope} value={scope}>
-                        {ROLE_SCOPE_LABELS[scope]}
+                        {scope === 'entire_project' ? t('membersPage.entireProject') : t('membersPage.selectedContextsOnly')}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -181,9 +178,9 @@ export function DefaultRoleSheet({
           )}
 
           {showContexts && (
-            <FormSection title='Contexts' name='default-role-contexts'>
+            <FormSection title={t('membersPage.contexts')} name='default-role-contexts'>
               <FormItem>
-                <Label>Assign to contexts (optional)</Label>
+                <Label>{t('membersPage.assignContextsOptional')}</Label>
                 <ContextsCheckboxList
                   idPrefix='default-role-ctx'
                   contexts={contexts}
@@ -193,9 +190,11 @@ export function DefaultRoleSheet({
                 />
                 {staleContextCount > 0 && (
                   <p className='text-muted-foreground text-sm'>
-                    {staleContextCount} saved{' '}
-                    {staleContextCount === 1 ? 'context is' : 'contexts are'} no longer available
-                    and will be removed on save.
+                    {t('membersPage.staleContexts', {
+                      count: staleContextCount,
+                      contextWord: staleContextCount === 1 ? t('membersPage.context') : t('membersPage.contextsLower'),
+                      state: staleContextCount === 1 ? 'is' : 'are',
+                    })}
                   </p>
                 )}
               </FormItem>
@@ -205,10 +204,10 @@ export function DefaultRoleSheet({
 
         <FormActions>
           <Button className='w-full' disabled={isApplyDisabled} onClick={handleApply}>
-            Apply
+            {t('common.apply')}
           </Button>
           <Button variant='outline' className='w-full' onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
         </FormActions>
       </SheetContent>

@@ -12,12 +12,13 @@ import { SortableHeader, ToggleColumnsHeader } from '../../../../shared/componen
 import toast from 'react-hot-toast';
 import type { LicenseKey } from '../../types';
 import { ExpirationValue } from '../../../../shared/components/ExpirationValue/ExpirationValue';
-import { LICENSE_KEY_EXPIRED_NOTICE, LICENSE_KEY_EXPIRING_SOON_NOTICE } from '../../utils';
 import { UserReference } from '../../../../shared/components/UserReference';
+import type { TFunction } from 'i18next';
 
 interface LicenseKeysColumnsProps {
   onEdit?: (key: LicenseKey) => void;
   onRevoke?: (key: LicenseKey) => void;
+  t: TFunction;
 }
 
 const relativeTimeCellClassName =
@@ -26,19 +27,20 @@ const relativeTimeCellClassName =
 export const getLicenseKeysColumns = ({
   onEdit,
   onRevoke,
+  t,
 }: LicenseKeysColumnsProps): ColumnDef<LicenseKey>[] => [
   {
     accessorKey: 'name',
     size: 180,
-    meta: { title: 'Name' },
-    header: ({ column }) => <SortableHeader column={column}>Name</SortableHeader>,
+    meta: { title: t('common.name') },
+    header: ({ column }) => <SortableHeader column={column}>{t('common.name')}</SortableHeader>,
     cell: ({ row }) => <span className='font-medium'>{row.original.name}</span>,
   },
   {
     accessorKey: 'licenseKeyId',
     size: 240,
-    meta: { title: 'License key ID' },
-    header: ({ column }) => <SortableHeader column={column}>License key ID</SortableHeader>,
+    meta: { title: t('licenseKeysPage.table.licenseKeyId') },
+    header: ({ column }) => <SortableHeader column={column}>{t('licenseKeysPage.table.licenseKeyId')}</SortableHeader>,
     cell: ({ row }) => (
       <div className='flex items-center gap-1.5'>
         <code className='text-muted-foreground text-xs'>{row.original.licenseKeyId}</code>
@@ -46,13 +48,13 @@ export const getLicenseKeysColumns = ({
           variant='ghost'
           size='icon'
           className='size-6'
-          aria-label='Copy license key ID'
+          aria-label={t('licenseKeysPage.table.copyId')}
           onClick={e => {
             e.stopPropagation();
             void navigator.clipboard
               .writeText(row.original.licenseKeyId)
-              .then(() => toast.success('License key ID copied'))
-              .catch(() => toast.error('Failed to copy license key ID'));
+              .then(() => toast.success(t('licenseKeysPage.table.idCopied')))
+              .catch(() => toast.error(t('licenseKeysPage.table.copyFailed')));
           }}
         >
           <Copy className='size-3' />
@@ -63,8 +65,8 @@ export const getLicenseKeysColumns = ({
   {
     accessorKey: 'origin',
     size: 240,
-    meta: { title: 'Public origin' },
-    header: ({ column }) => <SortableHeader column={column}>Public origin</SortableHeader>,
+    meta: { title: t('licenseKeysPage.table.origin') },
+    header: ({ column }) => <SortableHeader column={column}>{t('licenseKeysPage.table.origin')}</SortableHeader>,
     cell: ({ row }) => (
       <div className='flex items-center gap-1.5'>
         <code className='text-muted-foreground text-xs'>{row.original.origin}</code>
@@ -72,13 +74,13 @@ export const getLicenseKeysColumns = ({
           variant='ghost'
           size='icon'
           className='size-6'
-          aria-label='Copy public origin'
+          aria-label={t('licenseKeysPage.table.copyOrigin')}
           onClick={e => {
             e.stopPropagation();
             void navigator.clipboard
               .writeText(row.original.origin)
-              .then(() => toast.success('Public origin copied'))
-              .catch(() => toast.error('Failed to copy public origin'));
+              .then(() => toast.success(t('licenseKeysPage.table.originCopied')))
+              .catch(() => toast.error(t('licenseKeysPage.table.copyFailed')));
           }}
         >
           <Copy className='size-3' />
@@ -93,14 +95,14 @@ export const getLicenseKeysColumns = ({
       return Number.isNaN(time) ? Number.POSITIVE_INFINITY : time;
     },
     size: 200,
-    meta: { title: 'Expires' },
+    meta: { title: t('licenseKeysPage.table.expires') },
     sortingFn: 'basic',
-    header: ({ column }) => <SortableHeader column={column}>Expires</SortableHeader>,
+    header: ({ column }) => <SortableHeader column={column}>{t('licenseKeysPage.table.expires')}</SortableHeader>,
     cell: ({ row }) => (
       <ExpirationValue
         expiresAt={row.original.expiresAt}
-        expiredNotice={LICENSE_KEY_EXPIRED_NOTICE}
-        expiringSoonNotice={LICENSE_KEY_EXPIRING_SOON_NOTICE}
+        expiredNotice={t('licenseKeysPage.expiredNotice')}
+        expiringSoonNotice={t('licenseKeysPage.expiringSoonNotice')}
         focusable
       />
     ),
@@ -108,8 +110,8 @@ export const getLicenseKeysColumns = ({
   {
     accessorKey: 'createdAt',
     size: 130,
-    meta: { title: 'Created' },
-    header: ({ column }) => <SortableHeader column={column}>Created</SortableHeader>,
+    meta: { title: t('common.createdAt') },
+    header: ({ column }) => <SortableHeader column={column}>{t('common.createdAt')}</SortableHeader>,
     cell: ({ row }) => (
       <RelativeTime date={new Date(row.original.createdAt)} className={relativeTimeCellClassName} />
     ),
@@ -117,11 +119,11 @@ export const getLicenseKeysColumns = ({
   {
     accessorKey: 'lastUsedAt',
     size: 150,
-    meta: { title: 'Last activity' },
-    header: ({ column }) => <SortableHeader column={column}>Last activity</SortableHeader>,
+    meta: { title: t('licenseKeysPage.table.lastActivity') },
+    header: ({ column }) => <SortableHeader column={column}>{t('licenseKeysPage.table.lastActivity')}</SortableHeader>,
     cell: ({ row }) => {
       const { lastUsedAt } = row.original;
-      if (!lastUsedAt) return <span className='text-muted-foreground'>Never</span>;
+      if (!lastUsedAt) return <span className='text-muted-foreground'>{t('licenseKeysPage.table.never')}</span>;
       return <RelativeTime date={new Date(lastUsedAt)} className={relativeTimeCellClassName} />;
     },
   },
@@ -129,8 +131,8 @@ export const getLicenseKeysColumns = ({
     id: 'createdByUser',
     accessorFn: row => row.createdByUser?.fullName ?? row.createdByUser?.email ?? '',
     size: 200,
-    meta: { title: 'Created by' },
-    header: ({ column }) => <SortableHeader column={column}>Created by</SortableHeader>,
+    meta: { title: t('common.createdBy') },
+    header: ({ column }) => <SortableHeader column={column}>{t('common.createdBy')}</SortableHeader>,
     cell: ({ row }) => {
       const creator = row.original.createdByUser;
       if (!creator) return <span className='text-muted-foreground'>—</span>;
@@ -146,7 +148,7 @@ export const getLicenseKeysColumns = ({
       onEdit && onRevoke ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='ghost' size='icon' className='size-7' aria-label='License key actions'>
+            <Button variant='ghost' size='icon' className='size-7' aria-label={t('common.actions')}>
               <MoreHorizontal className='size-4' />
             </Button>
           </DropdownMenuTrigger>
@@ -157,7 +159,7 @@ export const getLicenseKeysColumns = ({
               }}
             >
               <Pencil className='mr-2 size-4' />
-              Edit name
+              {t('apiKeysPage.table.editName')}
             </DropdownMenuItem>
             <DropdownMenuItem
               className='text-red-600 focus:text-red-600'
@@ -166,7 +168,7 @@ export const getLicenseKeysColumns = ({
               }}
             >
               <Trash2 className='mr-2 size-4' />
-              Revoke
+              {t('licenseKeysPage.revokeButton')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

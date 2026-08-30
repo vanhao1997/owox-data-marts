@@ -10,6 +10,7 @@ import {
 import { TablePagination } from '@owox/ui/components/common/table-pagination';
 import { getTableColumnSize } from '../../utils/getTableColumnSize';
 import { cn } from '@owox/ui/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Props for BaseTable component
@@ -73,6 +74,7 @@ export function BaseTable<TData>({
   paginationProps,
   ariaLabel = 'Data table',
 }: BaseTableProps<TData>) {
+  const { t } = useTranslation();
   const hasToolbar = renderToolbarLeft ?? renderToolbarRight;
   const ACTIONS_COLUMN_ID = 'actions';
 
@@ -160,7 +162,10 @@ export function BaseTable<TData>({
                             header.column.resetSize();
                           }}
                           className='absolute top-0 right-[2px] h-full w-1 cursor-col-resize bg-transparent select-none hover:bg-neutral-200 dark:hover:bg-white/4'
-                          title='Drag to resize. Double-click to reset width'
+                          title={t(
+                            'table.dragToResize',
+                            'Drag to resize. Double-click to reset width'
+                          )}
                         />
                       )}
                     </TableHead>
@@ -220,7 +225,7 @@ export function BaseTable<TData>({
                   colSpan={table.getVisibleLeafColumns().length}
                   className='text-muted-foreground min-h-32 text-center'
                 >
-                  Oops! No data found
+                  {t('table.noData', 'Oops! No data found')}
                 </TableCell>
               </TableRow>
             )}
@@ -230,7 +235,24 @@ export function BaseTable<TData>({
       {/* end: TABLE */}
 
       {/* PAGINATION */}
-      {showPagination && <TablePagination table={table} {...paginationProps} />}
+      {showPagination && (
+        <TablePagination
+          table={table}
+          {...paginationProps}
+          labels={{
+            rowsPerPage: t('table.rowsPerPage', 'Rows per page'),
+            selectedRow: t('table.selectedRow', 'row selected'),
+            selectedRows: t('table.selectedRows', 'rows selected'),
+            row: t('table.row', 'row'),
+            rows: t('table.rows', 'rows'),
+            of: t('table.of', 'of'),
+            firstPage: t('table.firstPage', 'Go to first page'),
+            previousPage: t('table.previousPage', 'Go to previous page'),
+            nextPage: t('table.nextPage', 'Go to next page'),
+            lastPage: t('table.lastPage', 'Go to last page'),
+          }}
+        />
+      )}
       {/* end: PAGINATION */}
     </>
   );

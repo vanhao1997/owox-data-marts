@@ -2,7 +2,11 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { UserAvatarGroup } from '../../../../../../shared/components/UserAvatarGroup/UserAvatarGroup';
 import { UserReference } from '../../../../../../shared/components/UserReference';
 import type { DataMartListItem } from '../../../model/types';
-import { type DataMartStatusInfo, getDataMartStatusType } from '../../../../shared';
+import {
+  type DataMartStatusInfo,
+  DataMartStatusModel,
+  getDataMartStatusType,
+} from '../../../../shared';
 import { StatusLabel } from '../../../../../../shared/components/StatusLabel';
 import { DataStorageType } from '../../../../../data-storage';
 import { DataStorageTypeModel } from '../../../../../data-storage/shared/types/data-storage-type.model.ts';
@@ -10,8 +14,12 @@ import { DataMartActionsCell, DataMartHealthStatusCell } from '../components';
 import { DataMartDefinitionType } from '../../../../shared';
 import { DataMartDefinitionTypeModel } from '../../../../shared/types/data-mart-definition-type.model.ts';
 import { DataMartColumnKey } from './columnKeys.ts';
-import { dataMartColumnLabels } from './columnLabels.ts';
+import {
+  dataMartColumnLabels as defaultDataMartColumnLabels,
+  getDataMartColumnLabels,
+} from './columnLabels.ts';
 import type { ConnectorListItem } from '../../../../../connectors/shared/model/types/connector';
+import type { TFunction } from 'i18next';
 import { RawBase64Icon } from '../../../../../../shared';
 import { SortableHeader, ToggleColumnsHeader } from '../../../../../../shared/components/Table';
 import { ContextBadges } from '../../../../../../features/contexts/components/ContextBadges/ContextBadges';
@@ -21,12 +29,20 @@ import { DataLastUpdatedValue } from '../../../../shared/components/DataLastUpda
 interface DataMartTableColumnsProps {
   onDeleteSuccess?: () => void;
   connectors?: ConnectorListItem[];
+  t?: TFunction;
 }
 
 export const getDataMartColumns = ({
   onDeleteSuccess,
   connectors = [],
-}: DataMartTableColumnsProps = {}): ColumnDef<DataMartListItem>[] => [
+  t,
+}: DataMartTableColumnsProps = {}): ColumnDef<DataMartListItem>[] => {
+  // Keep the English labels as a standalone fallback for non-React callers and tests.
+  const dataMartColumnLabels = t
+    ? getDataMartColumnLabels(t)
+    : defaultDataMartColumnLabels;
+
+  return [
   {
     id: DataMartColumnKey.HEALTH_STATUS,
     size: 40,
@@ -61,7 +77,7 @@ export const getDataMartColumns = ({
         const connector = connectors.find(c => c.name === connectorSourceName);
         return connector?.displayName ?? connector?.name ?? 'Unknown';
       } else {
-        const { displayName } = DataMartDefinitionTypeModel.getInfo(type);
+        const { displayName } = DataMartDefinitionTypeModel.getInfo(type, t);
         return displayName;
       }
     },
@@ -89,7 +105,7 @@ export const getDataMartColumns = ({
           );
         }
         default: {
-          const { displayName, icon: Icon } = DataMartDefinitionTypeModel.getInfo(type);
+          const { displayName, icon: Icon } = DataMartDefinitionTypeModel.getInfo(type, t);
           return (
             <div className='text-muted-foreground flex items-center gap-2'>
               <Icon className='h-4 w-4' />
@@ -213,10 +229,11 @@ export const getDataMartColumns = ({
     ),
     cell: ({ row }) => {
       const statusInfo = row.getValue<DataMartStatusInfo>('status');
+      const localizedStatusInfo = DataMartStatusModel.getInfo(statusInfo.code, t);
 
       return (
         <StatusLabel type={getDataMartStatusType(statusInfo.code)} variant='ghost' showIcon={false}>
-          {statusInfo.displayName}
+          {localizedStatusInfo.displayName}
         </StatusLabel>
       );
     },
@@ -366,4 +383,5 @@ export const getDataMartColumns = ({
     header: ({ table }) => <ToggleColumnsHeader table={table} />,
     cell: ({ row }) => <DataMartActionsCell row={row} onDeleteSuccess={onDeleteSuccess} />,
   },
-];
+  ];
+};

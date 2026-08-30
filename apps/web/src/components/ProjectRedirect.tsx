@@ -2,6 +2,7 @@ import { Navigate } from 'react-router';
 import { useAuth } from '../features/idp';
 import { AuthStatus } from '../features/idp/types';
 import { LoadingSpinner } from '@owox/ui/components/common/loading-spinner';
+import { useTranslation } from 'react-i18next';
 import { buildProjectPath } from '../utils/path';
 import { buildProjectRequestAccessPath } from '../features/user-provisioning/utils/request-access-routing';
 
@@ -11,13 +12,14 @@ import { buildProjectRequestAccessPath } from '../features/user-provisioning/uti
  */
 export function ProjectRedirect({ to = '/data-marts' }: { to?: string }) {
   const { user, status } = useAuth();
+  const { t } = useTranslation();
 
   if (status === AuthStatus.LOADING) {
-    return <LoadingSpinner fullScreen message='Loading...' />;
+    return <LoadingSpinner fullScreen message={t('common.loading', 'Loading...')} />;
   }
 
   if (status === AuthStatus.UNAUTHENTICATED || !user) {
-    return <LoadingSpinner fullScreen message='Authentication...' />;
+    return <LoadingSpinner fullScreen message={t('projectRedirect.auth', 'Authentication...')} />;
   }
 
   if (Array.isArray(user.roles) && user.roles.length === 0) {
@@ -33,5 +35,5 @@ export function ProjectRedirect({ to = '/data-marts' }: { to?: string }) {
     return <Navigate to={projectPath} replace />;
   }
 
-  return <LoadingSpinner fullScreen message='Project not found' />;
+  return <LoadingSpinner fullScreen message={t('projectRedirect.notFound', 'Project not found')} />;
 }

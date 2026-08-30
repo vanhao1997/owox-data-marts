@@ -37,6 +37,7 @@ import { AddContextSheet } from '../../../../../features/contexts/components/Add
 import { useMembersSettings } from '../../model/members-settings.context';
 import { MemberFormFields } from '../MemberFormFields/MemberFormFields';
 import type { ContextDto } from '../../../../../features/contexts/types/context.types';
+import { useTranslation } from 'react-i18next';
 
 const inviteMemberSchema = z.object({
   email: z.string().trim().email('Please enter a valid email address').max(320),
@@ -65,6 +66,7 @@ export function InviteMemberSheet({
   onClose,
   onInvited,
 }: InviteMemberSheetProps) {
+  const { t } = useTranslation();
   const form = useForm<InviteMemberFormValues>({
     resolver: zodResolver(inviteMemberSchema),
     defaultValues: DEFAULT_VALUES,
@@ -106,12 +108,12 @@ export function InviteMemberSheet({
     try {
       await navigator.clipboard.writeText(magicLinkResult.magicLink);
       setCopied(true);
-      toast.success('Magic link copied to clipboard');
+      toast.success(t('membersPage.magicLinkCopied', 'Magic link copied to clipboard'));
       window.setTimeout(() => {
         setCopied(false);
       }, 2000);
     } catch {
-      toast.error('Failed to copy. Select the link and copy manually.');
+      toast.error(t('membersPage.magicLinkCopyFailed', 'Failed to copy. Select the link and copy manually.'));
     }
   };
 
@@ -136,7 +138,7 @@ export function InviteMemberSheet({
         if (result.kind === 'magic-link') {
           setMagicLinkResult(result);
         } else {
-          toast.success(result.message ?? `Invitation email sent to ${result.email}`, {
+          toast.success(result.message ?? t('membersPage.invitationSent', { email: result.email, defaultValue: 'Invitation email sent to {{email}}' }), {
             duration: 6000,
           });
           reset();
@@ -144,13 +146,13 @@ export function InviteMemberSheet({
           onClose();
         }
       } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Failed to send invitation';
+        const msg = err instanceof Error ? err.message : t('membersPage.invitationFailed', 'Failed to send invitation');
         toast.error(msg);
       } finally {
         setSending(false);
       }
     },
-    [selectedContextIds, onInvited, onClose, reset]
+    [selectedContextIds, onInvited, onClose, reset, t]
   );
 
   const handleToggleContext = (contextId: string, checked: boolean) => {
@@ -175,22 +177,21 @@ export function InviteMemberSheet({
                   <span className='bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
                     <Link2 className='h-4 w-4' />
                   </span>
-                  Invitation link ready
+                  {t('membersPage.invitationLinkReady', 'Invitation link ready')}
                 </SheetTitle>
                 <SheetDescription>
-                  Share this one-time sign-in link with the invitee through any channel (email,
-                  Slack, etc.).
+                  {t('membersPage.invitationLinkDescription', 'Share this one-time sign-in link with the invitee through any channel (email, Slack, etc.).')}
                 </SheetDescription>
               </SheetHeader>
 
               <FormLayout>
-                <FormSection title='Invitee' name='magic-link-invitee'>
+                <FormSection title={t('membersPage.invitee', 'Invitee')} name='magic-link-invitee'>
                   <FormItem>
                     <div className='bg-muted/40 flex items-center justify-between gap-3 rounded-md border p-3'>
                       <div className='min-w-0'>
                         <div className='truncate text-sm font-medium'>{magicLinkResult.email}</div>
                         <div className='text-muted-foreground text-xs'>
-                          Will join as {getRoleDisplayName(magicLinkResult.role)}
+                          {t('membersPage.willJoinAs', 'Will join as')} {getRoleDisplayName(magicLinkResult.role)}
                         </div>
                       </div>
                       <Badge variant='outline' className='shrink-0'>
@@ -200,7 +201,7 @@ export function InviteMemberSheet({
                   </FormItem>
                 </FormSection>
 
-                <FormSection title='One-time link' name='magic-link-url'>
+                <FormSection title={t('membersPage.oneTimeLink', 'One-time link')} name='magic-link-url'>
                   <FormItem>
                     <button
                       type='button'
@@ -208,7 +209,7 @@ export function InviteMemberSheet({
                         void handleCopyMagicLink();
                       }}
                       className='group border-input hover:border-primary/40 hover:bg-muted/60 bg-muted/30 focus-visible:ring-ring flex w-full items-center gap-3 rounded-md border p-3 text-left transition focus-visible:ring-2 focus-visible:outline-none'
-                      aria-label='Copy invitation link'
+                      aria-label={t('membersPage.copyInvitationLink', 'Copy invitation link')}
                     >
                       <Link2 className='text-muted-foreground h-4 w-4 shrink-0' />
                       <span
@@ -228,12 +229,12 @@ export function InviteMemberSheet({
                     <div className='text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs'>
                       <span className='inline-flex items-center gap-1'>
                         <ShieldCheck className='h-3.5 w-3.5' />
-                        Single-use
+                        {t('membersPage.singleUse', 'Single-use')}
                       </span>
                       {magicLinkResult.expiresAt && (
                         <span className='inline-flex items-center gap-1'>
                           <Clock className='h-3.5 w-3.5' />
-                          Expires {new Date(magicLinkResult.expiresAt).toLocaleString()}
+                          {t('membersPage.expiresAt', 'Expires')} {new Date(magicLinkResult.expiresAt).toLocaleString()}
                         </span>
                       )}
                     </div>
@@ -250,7 +251,7 @@ export function InviteMemberSheet({
                   }}
                 >
                   {copied ? <Check className='mr-2 h-4 w-4' /> : <Copy className='mr-2 h-4 w-4' />}
-                  {copied ? 'Copied to clipboard' : 'Copy invitation link'}
+                  {copied ? t('membersPage.copiedToClipboard', 'Copied to clipboard') : t('membersPage.copyInvitationLink', 'Copy invitation link')}
                 </Button>
                 <Button
                   type='button'
@@ -258,16 +259,16 @@ export function InviteMemberSheet({
                   className='w-full'
                   onClick={handleDoneMagicLink}
                 >
-                  Done
+                  {t('common.done', 'Done')}
                 </Button>
               </FormActions>
             </>
           ) : (
             <>
               <SheetHeader>
-                <SheetTitle>Invite member</SheetTitle>
+                <SheetTitle>{t('membersPage.inviteTitle', 'Invite member')}</SheetTitle>
                 <SheetDescription>
-                  Send an invitation via email. The member will receive a link to join the project.
+                  {t('membersPage.inviteDescription', 'Send an invitation via email. The member will receive a link to join the project.')}
                 </SheetDescription>
               </SheetHeader>
 
@@ -278,13 +279,13 @@ export function InviteMemberSheet({
                   }}
                 >
                   <FormLayout>
-                    <FormSection title='General' name='invite-general'>
+                    <FormSection title={t('common.general', 'General')} name='invite-general'>
                       <FormField
                         control={control}
                         name='email'
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel tooltip="The member's email address">Email</FormLabel>
+                            <FormLabel tooltip={t('membersPage.emailTooltip', "The member's email address")}>{t('membersPage.email', 'Email')}</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -315,7 +316,7 @@ export function InviteMemberSheet({
                   <FormActions>
                     <Button type='submit' className='w-full' disabled={sending}>
                       {sending && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-                      Send invitation
+                      {t('membersPage.sendInvitation', 'Send invitation')}
                     </Button>
                     <Button
                       type='button'
@@ -324,7 +325,7 @@ export function InviteMemberSheet({
                       onClick={handleClose}
                       disabled={sending}
                     >
-                      Cancel
+                      {t('common.cancel', 'Cancel')}
                     </Button>
                   </FormActions>
                 </AppForm>

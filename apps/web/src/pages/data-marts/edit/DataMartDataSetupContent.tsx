@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import {
   DataMartDataStorageView,
   DataMartDefinitionSettings,
@@ -19,6 +20,7 @@ import type { DataMartDefinitionType } from '../../../features/data-marts/shared
 import { DataQualityCompactStatusLink } from '../../../features/data-marts/data-quality';
 
 export default function DataMartDataSetupContent() {
+  const { t } = useTranslation();
   const { dataMart, updateDataMartStorage } = useDataMartContext();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const initialDefinitionType = dataMart?.definitionType ?? null;
@@ -33,9 +35,9 @@ export default function DataMartDataSetupContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={DatabaseIcon}
-            tooltip='Configure where your data will be stored'
+            tooltip={t('dataMartDataSetup.storageTooltip', 'Configure where your data will be stored')}
           >
-            Storage
+            {t('dataMartDataSetup.storage', 'Storage')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
@@ -60,9 +62,12 @@ export default function DataMartDataSetupContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={CodeIcon}
-            tooltip='Configure how to extract data from your data warehouse'
+            tooltip={t(
+              'dataMartDataSetup.inputSourceTooltip',
+              'Configure how to extract data from your data warehouse'
+            )}
           >
-            Input Source
+            {t('dataMartDataSetup.inputSource', 'Input source')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
@@ -82,9 +87,12 @@ export default function DataMartDataSetupContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={Columns3}
-            tooltip='Configure your data mart output schema'
+            tooltip={t(
+              'dataMartDataSetup.outputSchemaTooltip',
+              'Configure your data mart output schema'
+            )}
           >
-            Output Schema
+            {t('dataMartDataSetup.outputSchema', 'Output schema')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>

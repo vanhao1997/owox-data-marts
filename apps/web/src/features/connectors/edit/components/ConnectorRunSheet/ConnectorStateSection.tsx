@@ -1,4 +1,5 @@
 import type { ConnectorDefinitionConfig } from '../../../../data-marts/edit';
+import { useTranslation } from 'react-i18next';
 import { AppWizardCollapsible } from '@owox/ui/components/common/wizard';
 import { FormItem, FormLabel, FormControl, FormDescription } from '@owox/ui/components/form';
 import ConnectorStateDescription from './FormDescriptions/ConnectorStateDescription';
@@ -15,6 +16,7 @@ export function ConnectorStateSection({
   configuration,
   connectorState,
 }: ConnectorStateSectionProps) {
+  const { t } = useTranslation();
   const config = configuration?.connector.source.configuration ?? [];
   const configIds = config
     .map((item, idx) => {
@@ -33,13 +35,13 @@ export function ConnectorStateSection({
     .filter((v): v is { state: (typeof states)[number]; index: number } => Boolean(v));
 
   return (
-    <AppWizardCollapsible title='State Info'>
+    <AppWizardCollapsible title={t('connectorRun.stateInfo')}>
       {ordered.length === 0 ? (
         <FormItem>
-          <FormLabel>Connector state</FormLabel>
+          <FormLabel>{t('connectorRun.connectorState')}</FormLabel>
           <FormControl>
             <div className='bg-muted min-h-[70px] cursor-not-allowed overflow-auto rounded-md px-3 py-2 font-mono text-sm whitespace-pre-wrap opacity-70'>
-              No state available
+              {t('connectorRun.noState')}
             </div>
           </FormControl>
           <FormDescription>
@@ -65,8 +67,8 @@ export function ConnectorStateSection({
 
             return (
               <FormItem key={state._id}>
-                <FormLabel tooltip={`Created at ${createdAt}`}>
-                  {`Connector state of configuration #${String(index + 1)}`}
+                <FormLabel tooltip={t('connectorRun.createdAt', { createdAt })}>
+                  {t('connectorRun.configurationState', { index: index + 1 })}
                 </FormLabel>
                 <FormControl>
                   <SecureJsonInput

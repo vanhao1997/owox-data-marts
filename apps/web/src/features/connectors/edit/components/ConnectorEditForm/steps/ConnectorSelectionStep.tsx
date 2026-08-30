@@ -12,6 +12,7 @@ import {
 } from '@owox/ui/components/common/wizard';
 import { trackEvent } from '../../../../../../utils';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { InviteTeammatesCard } from '../../../../../../shared/components/InviteTeammatesCard';
 
 interface ConnectorSelectionStepProps {
@@ -31,6 +32,8 @@ export function ConnectorSelectionStep({
   onConnectorSelect,
   onConnectorDoubleClick,
 }: ConnectorSelectionStepProps) {
+  const { t } = useTranslation();
+
   useEffect(() => {
     trackEvent({
       event: 'connector_setup',
@@ -48,14 +51,14 @@ export function ConnectorSelectionStep({
     return (
       <Alert variant='destructive'>
         <AlertCircle className='h-4 w-4' />
-        <AlertDescription>Failed to load available connectors. Please try again.</AlertDescription>
+        <AlertDescription>{t('connectorWizard.loadFailed')}</AlertDescription>
       </Alert>
     );
   }
 
   return (
     <AppWizardStep>
-      <AppWizardStepSection title='Choose Connector'>
+      <AppWizardStepSection title={t('connectorWizard.chooseConnector')}>
         <AppWizardGrid>
           {connectors.map(connector => (
             <AppWizardGridItem
@@ -79,8 +82,8 @@ export function ConnectorSelectionStep({
         </AppWizardGrid>
         <InviteTeammatesCard
           variant='inline'
-          hint='— Ask someone with access to help you'
-          docsLabel='Learn more about Connectors'
+          hint={t('connectorWizard.askTeammate')}
+          docsLabel={t('connectorWizard.learnMore')}
           docsHref='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-data-mart/'
         />
       </AppWizardStepSection>
@@ -88,8 +91,8 @@ export function ConnectorSelectionStep({
       {connectors.length === 0 && (
         <AppWizardStepHero
           icon={<Unplug size={56} strokeWidth={1} />}
-          title='No connectors available'
-          subtitle='Ask your administrator to configure connectors.'
+          title={t('connectorWizard.noAvailable')}
+          subtitle={t('connectorWizard.askAdministrator')}
         />
       )}
     </AppWizardStep>

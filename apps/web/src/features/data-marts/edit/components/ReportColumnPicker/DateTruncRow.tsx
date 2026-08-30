@@ -5,6 +5,7 @@ import { cn } from '@owox/ui/lib/utils';
 import type { DateTruncRule } from '../../../shared/types/output-config';
 import type { ReportAggregateFunction } from '../../../shared/types/relationship.types';
 import { AggregationEditorPopover, type AggregationDraft } from './AggregationEditorPopover';
+import { useTranslation } from 'react-i18next';
 
 interface DateTruncRowProps {
   rule: DateTruncRule;
@@ -34,6 +35,7 @@ export function DateTruncRow({
   onApplyDraft,
   onRemove,
 }: DateTruncRowProps) {
+  const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
 
   return (
@@ -48,8 +50,8 @@ export function DateTruncRow({
           {isOrphaned && (
             <span
               className='inline-flex items-center text-red-600'
-              title='This column is no longer a date/timestamp column. Remove this rule or restore the column.'
-              aria-label='Column not found in schema'
+              title={t('reportColumnPicker.dateColumnUnavailable', 'This column is no longer a date/timestamp column. Remove this rule or restore the column.')}
+              aria-label={t('reportColumnPicker.columnNotFound', 'Column not found in schema')}
             >
               <AlertTriangle className='h-3 w-3' />
             </span>
@@ -62,7 +64,7 @@ export function DateTruncRow({
           <div className='text-muted-foreground truncate text-[11px]'>{dataMartName}</div>
         )}
         <div className='truncate font-mono text-[11px]'>
-          <span className='text-muted-foreground'>grouped by </span>
+          <span className='text-muted-foreground'>{t('reportColumnPicker.groupedBy', 'grouped by')} </span>
           <span className='text-foreground/70 font-medium'>{rule.unit}</span>
           {rule.timeZone && <span className='text-muted-foreground'> · {rule.timeZone}</span>}
         </div>
@@ -73,8 +75,8 @@ export function DateTruncRow({
           size='sm'
           disabled
           className='text-muted-foreground h-6 w-6 p-0 opacity-40'
-          aria-label='Edit disabled — column missing from schema'
-          title='Edit disabled — column missing from schema'
+          aria-label={t('reportColumnPicker.editDisabledColumnMissing', 'Edit disabled — column missing from schema')}
+          title={t('reportColumnPicker.editDisabledColumnMissing', 'Edit disabled — column missing from schema')}
         >
           <Pencil className='h-4 w-4' />
         </Button>
@@ -90,7 +92,7 @@ export function DateTruncRow({
                 'text-muted-foreground hover:text-foreground h-6 w-6 p-0 transition-opacity group-hover/control-row:opacity-100',
                 editing ? 'opacity-100' : 'opacity-0'
               )}
-              aria-label='Edit date bucket'
+              aria-label={t('reportColumnPicker.editDateBucket', 'Edit date bucket')}
             >
               <Pencil className='h-4 w-4' />
             </Button>

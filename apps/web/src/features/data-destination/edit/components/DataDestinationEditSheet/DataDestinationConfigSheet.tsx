@@ -17,6 +17,7 @@ import { useUnsavedGuard } from '../../../../../hooks/useUnsavedGuard';
 import { useIntercomLauncher } from '../../../../../shared/hooks/useIntercomLauncher';
 import { useProjectRoute } from '../../../../../shared/hooks';
 import { CopyLinkButton } from '@owox/ui/components/common/copy-link-button';
+import { useTranslation } from 'react-i18next';
 
 interface DataDestinationEditSheetProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ export function DataDestinationConfigSheet({
   initialFormData,
   allowedDestinationTypes,
 }: DataDestinationEditSheetProps) {
+  const { t } = useTranslation();
   const { updateDataDestination, createDataDestination } = useDataDestination();
 
   const {
@@ -192,9 +194,11 @@ export function DataDestinationConfigSheet({
         }}
       >
         <SheetHeader>
-          <SheetTitle>Destination Config</SheetTitle>
+          <SheetTitle>{t('configDialogs.destinationTitle', 'Destination Config')}</SheetTitle>
           <div className='flex w-full items-center gap-4'>
-            <SheetDescription>Customize settings for your destination</SheetDescription>
+            <SheetDescription>
+              {t('configDialogs.destinationDescription', 'Customize settings for your destination')}
+            </SheetDescription>
             {destinationLink && (
               <CopyLinkButton link={destinationLink} ariaLabel='Copy link to this destination' />
             )}

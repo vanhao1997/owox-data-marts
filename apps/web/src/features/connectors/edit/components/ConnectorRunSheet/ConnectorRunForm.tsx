@@ -1,6 +1,7 @@
 import { Button } from '@owox/ui/components/button';
 import { Input } from '@owox/ui/components/input';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import type { ConnectorDefinitionConfig } from '../../../../data-marts/edit';
 import { useCallback, useEffect, useId, useState } from 'react';
 import { useConnector } from '../../../shared/model/hooks/useConnector';
@@ -32,6 +33,7 @@ interface ConnectorRunFormProps {
 }
 
 export function ConnectorRunForm({ configuration, onClose, onSubmit }: ConnectorRunFormProps) {
+  const { t } = useTranslation();
   const [loadedSpecifications, setLoadedSpecifications] = useState<Set<string>>(new Set());
   const formId = useId();
   const form = useForm<ConnectorRunFormData>({
@@ -88,32 +90,32 @@ export function ConnectorRunForm({ configuration, onClose, onSubmit }: Connector
   };
 
   if (loadingSpecification) {
-    return <div>Loading...</div>;
+    return <div>{t('common.loading')}</div>;
   }
 
   if (!connectorSpecification) {
-    return <div>No connector specification found</div>;
+    return <div>{t('connectorRun.noSpecification')}</div>;
   }
 
   return (
     <Form {...form}>
       <AppForm id={formId} noValidate onSubmit={e => void form.handleSubmit(handleSubmit)(e)}>
         <FormLayout>
-          <FormSection title='General'>
+          <FormSection title={t('common.general')}>
             <FormField
               control={form.control}
               name='runType'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Select how you want to load data: incremental updates or full backfill for a period'>
-                    Run type
+                <FormLabel tooltip={t('connectorRun.runTypeTooltip')}>
+                    {t('connectorRun.runType')}
                   </FormLabel>
                   <FormControl>
                     <>
                       <FormRadioGroup
                         options={[
-                          { value: RunType.INCREMENTAL, label: 'Incremental load' },
-                          { value: RunType.MANUAL_BACKFILL, label: 'Backfill (custom period)' },
+                          { value: RunType.INCREMENTAL, label: t('connectorRun.incrementalLoad') },
+                          { value: RunType.MANUAL_BACKFILL, label: t('connectorRun.manualBackfill') },
                         ]}
                         value={field.value}
                         onChange={field.onChange}
@@ -121,8 +123,8 @@ export function ConnectorRunForm({ configuration, onClose, onSubmit }: Connector
                       />
                       <FormDescription>
                         {form.watch('runType') === RunType.MANUAL_BACKFILL
-                          ? 'Reloads all data for a specific time range from the source, replacing existing records for that period. Use when you need to correct or update historical data.'
-                          : 'Adds only new or updated records since the last run, using the current state of your Data Mart as a reference. Ideal for keeping data fresh without reloading what`s already there.'}
+                          ? t('connectorRun.manualBackfillDescription')
+                          : t('connectorRun.incrementalDescription')}
                       </FormDescription>
                     </>
                   </FormControl>
@@ -138,7 +140,7 @@ export function ConnectorRunForm({ configuration, onClose, onSubmit }: Connector
             )}
           </FormSection>
           {form.watch('runType') === RunType.MANUAL_BACKFILL && (
-            <FormSection title='Run configuration'>
+            <FormSection title={t('connectorRun.runConfiguration')}>
               {connectorSpecification
                 .filter(field =>
                   field.attributes?.includes(ConnectorSpecificationAttribute.MANUAL_BACKFILL)
@@ -179,10 +181,10 @@ export function ConnectorRunForm({ configuration, onClose, onSubmit }: Connector
         </FormLayout>
         <FormActions>
           <Button type='submit' disabled={!form.formState.isValid || loadingSpecification}>
-            Run
+            {t('common.run')}
           </Button>
           <Button type='button' variant='outline' onClick={handleCancel}>
-            Cancel
+            {t('common.cancel')}
           </Button>
         </FormActions>
       </AppForm>

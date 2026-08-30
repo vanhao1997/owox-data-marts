@@ -9,11 +9,13 @@ import {
   DropdownMenuTrigger,
 } from '@owox/ui/components/dropdown-menu';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { ConfirmationDialog } from '../../../../../../shared/components/ConfirmationDialog';
 import { showApiErrorToast } from '../../../../../../shared/utils/showApiErrorToast';
 import type { DataMartReport } from '../../../shared/model/types/data-mart-report';
 import { useReport, ReportStatusEnum, reportService } from '../../../shared';
 import {
+  DataDestinationType,
   isPullBasedDestinationType,
   pullBasedRunHint,
 } from '../../../../../data-destination/shared/enums';
@@ -34,12 +36,19 @@ export function ReportActionsCell({
   onEditReport,
   onRunSuccess,
 }: ReportActionsCellProps) {
+  const { t } = useTranslation();
   const canRun = row.original.canRun;
   const canEditConfig = row.original.canEditConfig;
   // A greyed-out button with no reason reads as a missing permission. This one is not: nobody
   // can start such a run, because the destination reads the data itself.
   const isPullBased = isPullBasedDestinationType(row.original.dataDestination.type);
   const pullRunHint = pullBasedRunHint(row.original.dataDestination.type);
+  const localizedPullRunHint =
+    row.original.dataDestination.type === DataDestinationType.EXCEL
+      ? t('reportsUi.pullRunHintExcel', 'Refresh it from the P2PDigital add-in in Excel')
+      : row.original.dataDestination.type === DataDestinationType.LOOKER_STUDIO
+        ? t('reportsUi.pullRunHintDestination', 'The destination reads this report itself')
+        : pullRunHint;
   const [isRunning, setIsRunning] = useState(
     row.original.lastRunStatus === ReportStatusEnum.RUNNING
   );
@@ -177,7 +186,7 @@ export function ReportActionsCell({
             className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${
               menuOpen ? 'opacity-100' : 'group-hover:opacity-100'
             }`}
-            aria-label={`Actions for report: ${row.original.title}`}
+            aria-label={t('reportsUi.actionsForReport', 'Actions for report: {{title}}', { title: row.original.title })}
             aria-haspopup='true'
             aria-expanded={menuOpen}
             aria-controls={actionsMenuId}
@@ -196,8 +205,8 @@ export function ReportActionsCell({
           >
             <Play className='text-foreground h-4 w-4' aria-hidden='true' />
             <div className='flex flex-col'>
-              <span>{isRunning ? 'Running report...' : 'Run report'}</span>
-              {pullRunHint && <span className='text-muted-foreground text-xs'>{pullRunHint}</span>}
+            <span>{isRunning ? t('reportActions.running', 'Running report...') : t('reportActions.run', 'Run report')}</span>
+              {localizedPullRunHint && <span className='text-muted-foreground text-xs'>{localizedPullRunHint}</span>}
             </div>
           </DropdownMenuItem>
 
@@ -210,7 +219,7 @@ export function ReportActionsCell({
             role='menuitem'
           >
             <Pencil className='text-foreground h-4 w-4' aria-hidden='true' />
-            Edit report
+            {t('reportActions.edit', 'Edit report')}
           </DropdownMenuItem>
 
           {/* Only offered after a failed run — the error text names this button.
@@ -228,10 +237,12 @@ export function ReportActionsCell({
                 void handleReconnectSheet();
               }}
               role='menuitem'
-              aria-label={`Reconnect sheet and run report: ${row.original.title}`}
+              aria-label={t('reportsUi.reconnectSheetAndRun', 'Reconnect sheet and run report: {{title}}', { title: row.original.title })}
             >
               <Link2 className='text-foreground h-4 w-4' aria-hidden='true' />
-              {isReconnecting ? 'Reconnecting…' : 'Reconnect & run'}
+              {isReconnecting
+                ? t('reportActions.reconnecting', 'Reconnecting…')
+                : t('reportActions.reconnect', 'Reconnect & run')}
             </DropdownMenuItem>
           )}
 
@@ -244,10 +255,10 @@ export function ReportActionsCell({
               handleDeleteClick();
             }}
             role='menuitem'
-            aria-label={`Delete report: ${row.original.title}`}
+            aria-label={t('reportsUi.deleteReportAria', 'Delete report: {{title}}', { title: row.original.title })}
           >
             <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
-            <span className='text-red-600'>Delete report</span>
+            <span className='text-red-600'>{t('reportActions.delete', 'Delete report')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -255,16 +266,16 @@ export function ReportActionsCell({
       <ConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        title='Delete Report'
+        title={t('reportActions.deleteTitle', 'Delete Report')}
         description={
           <p className='break-words'>
-            Are you sure you want to delete "
-            <span className='font-semibold [overflow-wrap:anywhere]'>{row.original.title}</span>
-            "? This action cannot be undone.
+            {t('reportActions.deleteDescription', 'Are you sure you want to delete "{{title}}"? This action cannot be undone.', {
+              title: row.original.title,
+            })}
           </p>
         }
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => {
           void handleDelete();
         }}

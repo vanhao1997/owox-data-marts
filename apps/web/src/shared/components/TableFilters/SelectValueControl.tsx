@@ -12,6 +12,7 @@ import {
 } from '@owox/ui/components/combobox';
 import type { SelectOption } from './collectOptions.utils';
 import type { FilterConfigItem } from './types';
+import { useTranslation } from 'react-i18next';
 
 interface SelectValueControlProps {
   configItem: FilterConfigItem | undefined;
@@ -20,6 +21,7 @@ interface SelectValueControlProps {
 }
 
 export function SelectValueControl({ configItem, value, onChange }: SelectValueControlProps) {
+  const { t } = useTranslation();
   const anchorRef = useComboboxAnchor();
   const items = (configItem?.options ?? []) as SelectOption[];
   const isDisabled = !configItem;
@@ -45,14 +47,14 @@ export function SelectValueControl({ configItem, value, onChange }: SelectValueC
                   </ComboboxChip>
                 );
               })}
-              <ComboboxChipsInput placeholder={isDisabled ? 'Value' : ''} />
+              <ComboboxChipsInput placeholder={isDisabled ? t('common.value', 'Value') : ''} />
             </>
           )}
         </ComboboxValue>
       </ComboboxChips>
 
       <ComboboxContent anchor={anchorRef}>
-        <ComboboxEmpty>No options</ComboboxEmpty>
+        <ComboboxEmpty>{t('tableFilters.noOptions', 'No options')}</ComboboxEmpty>
         <ComboboxList>
           {item => {
             const option = item as SelectOption;

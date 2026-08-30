@@ -3,6 +3,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/too
 import { DataLastUpdatedDetails } from '../../shared/components/DataLastUpdatedValue';
 import type { DataLastUpdatedDto } from '../../shared/types/api/response/data-mart-data-last-updated.dto';
 import { formatDataLastUpdatedLabel } from '../../shared/utils/data-last-updated.utils';
+import { useTranslation } from 'react-i18next';
 
 interface DataLastUpdatedCanvasIconProps {
   dataMartTitle: string;
@@ -23,7 +24,10 @@ export function DataLastUpdatedCanvasIcon({
   block,
   isChecking = false,
 }: DataLastUpdatedCanvasIconProps) {
-  const label = isChecking ? 'checking…' : formatDataLastUpdatedLabel(block);
+  const { t } = useTranslation();
+  const label = isChecking
+    ? t('dataLastUpdated.checkingShort', 'checking…')
+    : formatDataLastUpdatedLabel(block);
 
   return (
     <Tooltip>
@@ -35,7 +39,10 @@ export function DataLastUpdatedCanvasIcon({
               ? 'text-muted-foreground hover:text-foreground'
               : 'text-muted-foreground/50 hover:text-muted-foreground'
           }`}
-          aria-label={`Data Last Updated for ${dataMartTitle}: ${label}`}
+          aria-label={t('dataLastUpdated.ariaLabel', 'Data Last Updated for {{title}}: {{label}}', {
+            title: dataMartTitle,
+            label,
+          })}
           onPointerDown={e => {
             e.stopPropagation();
           }}
@@ -49,13 +56,15 @@ export function DataLastUpdatedCanvasIcon({
       </TooltipTrigger>
       <TooltipContent side='top' align='start' role='tooltip' className='max-w-xs'>
         {isChecking ? (
-          <div className='text-xs'>Checking Data Last Updated…</div>
+          <div className='text-xs'>{t('dataLastUpdated.checking', 'Checking Data Last Updated…')}</div>
         ) : block ? (
           <DataLastUpdatedDetails block={block} />
         ) : (
           <div className='text-xs'>
-            Data Last Updated has not been checked yet. Use Actions → Check Data Last Updated to
-            measure the visible Data Marts.
+            {t(
+              'dataLastUpdated.notChecked',
+              'Data Last Updated has not been checked yet. Use Actions → Check Data Last Updated to measure the visible Data Marts.'
+            )}
           </div>
         )}
       </TooltipContent>

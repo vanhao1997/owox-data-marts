@@ -7,6 +7,7 @@ import { useProjectRoute } from '../../../shared/hooks/useProjectRoute';
 import type { PluginGalleryEntry } from '../types';
 import { describeVisibility } from '../visibility';
 import { AudienceIcon } from './AudienceIcon';
+import { useTranslation } from 'react-i18next';
 
 interface PluginCardProps {
   plugin: PluginGalleryEntry;
@@ -22,6 +23,7 @@ interface PluginCardProps {
  * only when it is public.
  */
 export function PluginCard({ plugin, onInstall }: PluginCardProps) {
+  const { t } = useTranslation();
   const { scope } = useProjectRoute();
   const navigate = useNavigate();
   const isInstalled = plugin.installationState === 'installed';
@@ -63,13 +65,13 @@ export function PluginCard({ plugin, onInstall }: PluginCardProps) {
                 variant='ghost'
                 size='icon'
                 className='-mt-1 shrink-0'
-                aria-label={`Open ${plugin.displayName} settings`}
+                aria-label={t('pluginsPage.openSettings', { name: plugin.displayName, defaultValue: 'Open {{name}} settings' })}
                 onClick={open}
               >
                 <Settings className='size-4' />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Settings</TooltipContent>
+            <TooltipContent>{t('pluginsPage.settings', 'Settings')}</TooltipContent>
           </Tooltip>
         ) : (
           <Tooltip>
@@ -79,7 +81,7 @@ export function PluginCard({ plugin, onInstall }: PluginCardProps) {
                 size='icon'
                 className='-mt-1 shrink-0'
                 disabled={!canInstall}
-                aria-label={`Install ${plugin.displayName}`}
+                aria-label={t('pluginsPage.installNamed', { name: plugin.displayName, defaultValue: 'Install {{name}}' })}
                 onClick={() => {
                   onInstall(plugin);
                 }}
@@ -87,7 +89,7 @@ export function PluginCard({ plugin, onInstall }: PluginCardProps) {
                 <Plus className='size-4' />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Install</TooltipContent>
+            <TooltipContent>{t('pluginsPage.install', 'Install')}</TooltipContent>
           </Tooltip>
         )}
       </div>
@@ -109,7 +111,9 @@ export function PluginCard({ plugin, onInstall }: PluginCardProps) {
           {plugin.currentSemver && <Badge variant='secondary'>v{plugin.currentSemver}</Badge>}
           {/* Suspended plugins stay listed rather than vanishing: a member who has one
               installed needs to see why it stopped working. */}
-          {plugin.suspended && <Badge variant='destructive'>Unavailable</Badge>}
+          {plugin.suspended && (
+            <Badge variant='destructive'>{t('pluginsPage.unavailable', 'Unavailable')}</Badge>
+          )}
         </div>
 
         {/*

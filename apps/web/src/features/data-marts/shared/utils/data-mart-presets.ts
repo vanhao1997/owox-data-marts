@@ -26,7 +26,9 @@ export type DataMartPresetKey = (typeof DATA_MART_PRESETS)[number];
 // Interface for a preset config
 export interface DataMartPreset {
   title: string;
+  titleKey: string;
   datamartTitle?: string;
+  datamartTitleKey?: string;
   connectorSourceTitle?: string;
   definitionType?: DataMartDefinitionType;
   icon?: AppIcon;
@@ -36,60 +38,78 @@ export interface DataMartPreset {
 export const dataMartPresetsMap: Record<DataMartPresetKey, DataMartPreset> = {
   facebook: {
     title: 'Facebook Ads',
+    titleKey: 'dataMartPresets.facebook.title',
     datamartTitle: 'Facebook Ads Data Mart',
+    datamartTitleKey: 'dataMartPresets.facebook.datamartTitle',
     connectorSourceTitle: 'FacebookMarketing',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: FacebookAdsIcon,
   },
   'facebook-pages': {
     title: 'Facebook Fanpage',
+    titleKey: 'dataMartPresets.facebookPages.title',
     datamartTitle: 'Facebook Fanpage Data Mart',
+    datamartTitleKey: 'dataMartPresets.facebookPages.datamartTitle',
     connectorSourceTitle: 'FacebookPages',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: FacebookAdsIcon,
   },
   linkedin: {
     title: 'LinkedIn Ads',
+    titleKey: 'dataMartPresets.linkedin.title',
     datamartTitle: 'LinkedIn Ads Data Mart',
+    datamartTitleKey: 'dataMartPresets.linkedin.datamartTitle',
     connectorSourceTitle: 'LinkedInAds',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: LinkedInAdsIcon,
   },
   tiktok: {
     title: 'TikTok Ads',
+    titleKey: 'dataMartPresets.tiktok.title',
     datamartTitle: 'TikTok Ads Data Mart',
+    datamartTitleKey: 'dataMartPresets.tiktok.datamartTitle',
     connectorSourceTitle: 'TikTokAds',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: TikTokAdsIcon,
   },
   microsoft: {
     title: 'Microsoft Ads',
+    titleKey: 'dataMartPresets.microsoft.title',
     datamartTitle: 'Microsoft Ads Data Mart',
+    datamartTitleKey: 'dataMartPresets.microsoft.datamartTitle',
     connectorSourceTitle: 'MicrosoftAds',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: MicrosoftAdsIcon,
   },
   connector: {
     title: 'Other connector',
+    titleKey: 'dataMartPresets.otherConnector.title',
     datamartTitle: 'Connector-based Data Mart',
+    datamartTitleKey: 'dataMartPresets.otherConnector.datamartTitle',
     definitionType: DataMartDefinitionType.CONNECTOR,
     icon: Plug,
   },
   sql: {
     title: 'SQL query',
+    titleKey: 'dataMartPresets.sqlQuery.title',
     datamartTitle: 'SQL-based Data Mart',
+    datamartTitleKey: 'dataMartPresets.sqlQuery.datamartTitle',
     definitionType: DataMartDefinitionType.SQL,
     icon: Code,
   },
   table: {
     title: 'Existing Table',
+    titleKey: 'dataMartPresets.existingTable.title',
     datamartTitle: 'Table-based Data Mart',
+    datamartTitleKey: 'dataMartPresets.existingTable.datamartTitle',
     definitionType: DataMartDefinitionType.TABLE,
     icon: Table,
   },
   blank: {
     title: 'Blank Data Mart',
+    titleKey: 'dataMartPresets.blankDataMart.title',
     datamartTitle: 'New Data Mart',
+    datamartTitleKey: 'dataMartPresets.blankDataMart.datamartTitle',
     icon: Box,
   },
 };

@@ -30,6 +30,7 @@ import { ConnectorRunView } from '../../../../../connectors/edit/components/Conn
 import type { ConnectorRunFormData } from '../../../../../connectors/shared/model/types/connector';
 import { ConfirmationDialog } from '../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface ConnectorDefinitionFieldProps {
   control: Control<DataMartDefinitionFormData>;
@@ -46,6 +47,7 @@ export function ConnectorDefinitionField({
   autoOpen = false,
   saveDataMartDefinition,
 }: ConnectorDefinitionFieldProps) {
+  const { t } = useTranslation();
   const { dataMart, runDataMart, hasActiveRuns } = useOutletContext<DataMartContextType>();
   const { setValue, getValues, trigger } = useFormContext<DataMartDefinitionFormData>();
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
@@ -169,7 +171,7 @@ export function ConnectorDefinitionField({
         }}
       >
         <Edit3 className='h-4 w-4' />
-        <span>Edit Fields ({String(fieldsCount)})</span>
+        <span>{t('schemaSettings.editFields', { count: fieldsCount })}</span>
       </Button>
     );
   };
@@ -263,7 +265,7 @@ export function ConnectorDefinitionField({
   const manualRunButton = (
     <Button variant='outline' disabled={isManualRunDisabled}>
       <Play className='h-4 w-4' />
-      <span>Manual Run...</span>
+      <span>{t('dataMartDetails.manualRun')}</span>
     </Button>
   );
 

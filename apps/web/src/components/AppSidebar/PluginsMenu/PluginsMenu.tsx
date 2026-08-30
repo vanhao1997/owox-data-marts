@@ -70,7 +70,7 @@ export function PluginsMenu() {
               </Link>
             </SidebarMenuButton>
           </TooltipTrigger>
-          <TooltipContent side='right'>Plugins</TooltipContent>
+          <TooltipContent side='right'>{t('sidebar.plugins')}</TooltipContent>
         </Tooltip>
 
         <SidebarMenuSub>

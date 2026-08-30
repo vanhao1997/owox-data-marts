@@ -1,6 +1,7 @@
 import { type Table } from '@tanstack/react-table';
 import { Input } from '@owox/ui/components/input';
 import { Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface TableColumnSearchProps<TData> {
   /** TanStack Table instance */
@@ -20,8 +21,9 @@ export interface TableColumnSearchProps<TData> {
 export function TableColumnSearch<TData>({
   table,
   columnId,
-  placeholder = 'Search',
+  placeholder,
 }: TableColumnSearchProps<TData>) {
+  const { t } = useTranslation();
   const column = table.getColumn(columnId);
 
   // If column does not exist or cannot be filtered, render nothing
@@ -33,7 +35,7 @@ export function TableColumnSearch<TData>({
     <div className='relative max-w-md min-w-0 flex-1'>
       <Search className='text-muted-foreground absolute top-2.5 left-2 h-4 w-4' />
       <Input
-        placeholder={placeholder}
+        placeholder={placeholder ?? t('search.placeholder', 'Search…')}
         value={column.getFilterValue() as string}
         onChange={event => {
           column.setFilterValue(event.target.value);

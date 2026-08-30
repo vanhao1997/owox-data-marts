@@ -4,28 +4,24 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
+import { useTranslation } from 'react-i18next';
 
 export function RoleHelpAccordion() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='member-role-help'>
-        <AccordionTrigger>Which role should I pick?</AccordionTrigger>
+        <AccordionTrigger>{t('membersPage.roleHelp.question')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            <strong>Business User</strong> — sees accessible Data Marts and Reports, creates Reports
-            for Data Marts available for reporting, manages Reports they own (edit, delete, change
-            owners), manages Report Triggers under their Reports, and uses Destinations available
-            for use. Cannot create, edit, or delete Data Marts, Data Mart Triggers, or Storages.
+            <strong>{t('requestAccessPage.roles.viewer')}</strong> — {t('membersPage.roleHelp.businessUser')}
           </p>
           <p className='mb-2'>
-            <strong>Technical User</strong> — everything a Business User may do, plus: creates,
-            edits, and deletes Data Marts, Data Mart Triggers, and Storages; edits and deletes
-            Reports project-wide; changes Report owners; manages Report Triggers project-wide.
+            <strong>{t('requestAccessPage.roles.editor')}</strong> — {t('membersPage.roleHelp.technicalUser')}
           </p>
           <p className='mb-2'>
-            <strong>Project Admin</strong> — everything a Technical User may do, plus: manages
-            Project Members, manages billing, and manages general Project settings such as the
-            Project title.
+            <strong>{t('requestAccessPage.roles.admin')}</strong> — {t('membersPage.roleHelp.projectAdmin')}
           </p>
         </AccordionContent>
       </AccordionItem>
@@ -34,19 +30,18 @@ export function RoleHelpAccordion() {
 }
 
 export function ScopeHelpAccordion() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='member-scope-help'>
-        <AccordionTrigger>What do the scopes mean?</AccordionTrigger>
+        <AccordionTrigger>{t('membersPage.scopeHelp.question')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            <strong>Entire project</strong> — the member sees every shared resource in the project
-            (subject to role and ownership rules).
+            <strong>{t('membersPage.entireProject')}</strong> — {t('membersPage.scopeHelp.entireProject')}
           </p>
           <p className='mb-2'>
-            <strong>Selected contexts only</strong> — the member sees resources only if they share
-            at least one assigned context, or if the member is an owner. Picking this with no
-            contexts below is a valid "no shared access" state.
+            <strong>{t('membersPage.scopeHelp.selectedContextsLabel')}</strong> — {t('membersPage.scopeHelp.selectedContexts')}
           </p>
         </AccordionContent>
       </AccordionItem>

@@ -21,7 +21,7 @@ export function UserMenu() {
   const displayName = fullName ?? email ?? "Unknown User";
   const initials = generateInitials(fullName, email);
 
-  const activeLanguage = (i18n.resolvedLanguage ?? i18n.language ?? "en").slice(0, 2);
+  const activeLanguage = String(i18n.resolvedLanguage).startsWith('vi') ? 'vi' : 'en';
 
   const changeLanguage = (lng: string) => {
     void i18n.changeLanguage(lng);

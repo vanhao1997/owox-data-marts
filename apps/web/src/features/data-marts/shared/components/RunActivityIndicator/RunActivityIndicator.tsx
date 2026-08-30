@@ -1,6 +1,7 @@
 import { Button } from '@owox/ui/components/button';
 import { cn } from '@owox/ui/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface RunActivityIndicatorProps {
   active: boolean;
@@ -17,6 +18,7 @@ export function RunActivityIndicator({
   separator = false,
   className,
 }: RunActivityIndicatorProps) {
+  const { t } = useTranslation();
   return (
     <div
       aria-hidden={!active}
@@ -44,7 +46,7 @@ export function RunActivityIndicator({
         tabIndex={active ? undefined : -1}
         onClick={onViewRuns}
       >
-        View runs
+        {t('dataMartRunActivity.viewRuns', 'View runs')}
       </Button>
     </div>
   );

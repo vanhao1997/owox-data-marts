@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { InsightsActionType } from '../reducer/insights.actions';
 import { insightsService } from '../services';
@@ -18,6 +19,7 @@ import { RequestStatus } from '../../../../../shared/types/request-status.ts';
 import { isDataMartRunFinalStatus, isTaskFinalStatus } from '../../../shared';
 
 export function useInsights() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { state, dispatch } = useInsightsContext();
   const { dataMart } = useDataMartContext();
@@ -84,7 +86,7 @@ export function useInsights() {
           context: dataMart.id,
           value: dataMart.title,
         });
-        toast.success('Insight created');
+        toast.success(t('insightsUi.created'));
         return created;
       } catch (error) {
         const e = extractApiError(error);
@@ -104,7 +106,7 @@ export function useInsights() {
         return null;
       }
     },
-    [dataMart.id, dataMart.title, dispatch]
+    [dataMart.id, dataMart.title, dispatch, t]
   );
 
   const createInsightWithAi = useCallback(async () => {
@@ -119,7 +121,7 @@ export function useInsights() {
         action: 'Generate with AI',
         label: created.id,
       });
-      toast.success('Insight generated with AI');
+      toast.success(t('insightsUi.created'));
       return created;
     } catch (error) {
       dispatch({
@@ -128,7 +130,7 @@ export function useInsights() {
       });
       return null;
     }
-  }, [dataMart.id, dispatch]);
+  }, [dataMart.id, dispatch, t]);
 
   const updateInsight = useCallback(
     async (id: string, data: { title: string; template?: string | null }) => {
@@ -146,7 +148,7 @@ export function useInsights() {
           context: dataMart.id,
           details: updated.title,
         });
-        toast.success('Insight updated');
+        toast.success(t('insightsUi.saved'));
         return updated;
       } catch (error) {
         dispatch({
@@ -156,7 +158,7 @@ export function useInsights() {
         return null;
       }
     },
-    [dataMart.id, dispatch]
+    [dataMart.id, dispatch, t]
   );
 
   const deleteInsight = useCallback(
@@ -166,7 +168,7 @@ export function useInsights() {
         await insightsService.deleteInsight(dataMart.id, id);
         dispatch({ type: InsightsActionType.DELETE_INSIGHT_SUCCESS, payload: id });
         trackEvent({ event: 'insight_deleted', category: 'Insights', action: 'Delete', label: id });
-        toast.success('Insight deleted');
+        toast.success(t('insightsUi.deleted'));
       } catch (error) {
         dispatch({
           type: InsightsActionType.DELETE_INSIGHT_ERROR,
@@ -175,7 +177,7 @@ export function useInsights() {
         throw error;
       }
     },
-    [dataMart.id, dispatch]
+    [dataMart.id, dispatch, t]
   );
 
   const updateInsightTitle = useCallback(
@@ -197,7 +199,7 @@ export function useInsights() {
           context: dataMart.id,
           details: updatedInsight.title,
         });
-        toast.success('Title updated');
+        toast.success(t('insightsUi.titleUpdated'));
         return updatedInsight;
       } catch (error) {
         dispatch({
@@ -207,7 +209,7 @@ export function useInsights() {
         return null;
       }
     },
-    [dataMart.id, dispatch, state.activeInsight, state.list]
+    [dataMart.id, dispatch, state.activeInsight, state.list, t]
   );
 
   const runInsight = useCallback(

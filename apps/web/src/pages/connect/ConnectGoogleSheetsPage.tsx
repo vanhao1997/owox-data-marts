@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { Input } from '@owox/ui/components/input';
@@ -20,6 +21,7 @@ interface ConnectGoogleSheetsFormValues {
 }
 
 export function ConnectGoogleSheetsPage() {
+  const { t } = useTranslation();
   const { navigate } = useProjectRoute();
   // The Title field is never pre-filled from the URL — a query param isn't proof of what
   // the user actually wants, so the user always sets the name directly in this form.
@@ -88,7 +90,7 @@ export function ConnectGoogleSheetsPage() {
 
     let currentTitle = form.getValues('title').trim();
     if (!currentTitle) {
-      setSaveError('Title is required.');
+      setSaveError(t('googleSheetsConnectPage.titleRequired'));
       return;
     }
     savingRef.current = true;
@@ -122,7 +124,7 @@ export function ConnectGoogleSheetsPage() {
       setSaveError(
         error instanceof Error
           ? error.message
-          : 'Failed to create the destination. Please try again.'
+          : t('googleSheetsConnectPage.createFailed')
       );
       setIsSaving(false);
       savingRef.current = false;
@@ -142,12 +144,9 @@ export function ConnectGoogleSheetsPage() {
   if (oauthSettings && !oauthSettings.available) {
     return (
       <div className='bg-card text-card-foreground w-full max-w-lg space-y-4 rounded-lg p-4 shadow-lg'>
-        <h1 className='text-lg font-semibold'>Connect Google Sheets</h1>
+        <h1 className='text-lg font-semibold'>{t('googleSheetsConnectPage.title')}</h1>
         <p className='text-muted-foreground text-sm'>
-          Google OAuth isn&apos;t configured for this P2PDigital instance, so this quick-connect
-          page can&apos;t be used. Ask your admin to configure Google OAuth, or create a Google
-          Sheets destination manually from the P2PDigital web app (Destinations → Add destination)
-          using a Service Account key instead.
+          {t('googleSheetsConnectPage.oauthUnavailable')}
         </p>
       </div>
     );
@@ -158,15 +157,15 @@ export function ConnectGoogleSheetsPage() {
       <Form {...form}>
         <div className={isSaving ? 'pointer-events-none blur-sm' : undefined}>
           <div className='px-4 pt-4'>
-            <h1 className='text-lg font-semibold'>Connect Google Sheets</h1>
+            <h1 className='text-lg font-semibold'>{t('googleSheetsConnectPage.title')}</h1>
             <p className='text-muted-foreground mt-1 text-sm'>
-              Grant access to your Google account to create this destination.
+              {t('googleSheetsConnectPage.subtitle')}
             </p>
           </div>
 
           <FormLayout variant='light' className='px-4 py-4'>
             <FormItem>
-              <FormLabel tooltip='Name the destination to clarify its purpose'>Title</FormLabel>
+              <FormLabel tooltip={t('googleSheetsConnectPage.titleHelp')}>{t('common.title')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder={DEFAULT_TITLE}
@@ -177,8 +176,8 @@ export function ConnectGoogleSheetsPage() {
             </FormItem>
 
             <FormItem>
-              <FormLabel tooltip='Authorize P2PDigital to access your Google Sheets'>
-                Connect with Google OAuth
+              <FormLabel tooltip={t('googleSheetsConnectPage.oauthHelp')}>
+                {t('googleSheetsConnectPage.connectOAuth')}
               </FormLabel>
               <GoogleOAuthConnectButton
                 resourceType='destination'
@@ -192,7 +191,7 @@ export function ConnectGoogleSheetsPage() {
               />
               {oauthEmail && (
                 <div className='mt-2 flex flex-col gap-1'>
-                  <FormLabel>Authenticated email</FormLabel>
+                  <FormLabel>{t('googleSheetsConnectPage.authenticatedEmail')}</FormLabel>
                   <CopyableField value={oauthEmail}>{oauthEmail}</CopyableField>
                 </div>
               )}
@@ -210,7 +209,7 @@ export function ConnectGoogleSheetsPage() {
         >
           <p className='text-muted-foreground flex items-center gap-2 text-sm font-medium'>
             <Loader2 className='h-4 w-4 animate-spin' />
-            Creating your Google Sheets destination…
+            {t('googleSheetsConnectPage.creating')}
           </p>
         </div>
       )}

@@ -12,18 +12,19 @@ import type {
   ScheduledConnectorRunConfig,
   ScheduledReportRunConfig,
 } from '../../model/trigger-config.types';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders the target for a report run trigger
  */
-function renderReportRunTarget(trigger: ScheduledTrigger) {
+function renderReportRunTarget(trigger: ScheduledTrigger, t: (key: string, fallback: string) => string) {
   const config = trigger.triggerConfig as ScheduledReportRunConfig | undefined;
   if (!config?.report) {
     return (
       <div className='text-muted-foreground inline-flex max-w-full min-w-0 items-center gap-2 overflow-hidden text-sm whitespace-nowrap'>
         <FileText className='h-4 w-4 shrink-0' size={16} />
         <span className='max-w-full flex-1 truncate' title={config?.reportId}>
-          Report
+          {t('scheduledTriggerUi.report', 'Report')}
         </span>
       </div>
     );
@@ -46,13 +47,13 @@ function renderReportRunTarget(trigger: ScheduledTrigger) {
 /**
  * Renders the target for a connector run trigger
  */
-function renderConnectorRunTarget(trigger: ScheduledTrigger, connectors: ConnectorListItem[]) {
+function renderConnectorRunTarget(trigger: ScheduledTrigger, connectors: ConnectorListItem[], t: (key: string, fallback: string) => string) {
   const triggerConfig = trigger.triggerConfig as ScheduledConnectorRunConfig | undefined;
   if (!triggerConfig?.connector) {
     return (
       <div className='text-muted-foreground inline-flex max-w-full min-w-0 items-center gap-2 overflow-hidden text-sm whitespace-nowrap'>
         <Database className='h-4 w-4 shrink-0' size={16} />
-        <span className='max-w-full flex-1 truncate'>Connector</span>
+        <span className='max-w-full flex-1 truncate'>{t('scheduledTriggerUi.connector', 'Connector')}</span>
       </div>
     );
   }
@@ -78,11 +79,11 @@ function renderConnectorRunTarget(trigger: ScheduledTrigger, connectors: Connect
   );
 }
 
-function renderDataQualityRunTarget() {
+function renderDataQualityRunTarget(t: (key: string, fallback: string) => string) {
   return (
     <div className='text-muted-foreground inline-flex max-w-full min-w-0 items-center gap-2 overflow-hidden text-sm whitespace-nowrap'>
       <ShieldCheck className='h-4 w-4 shrink-0' size={16} />
-      <span className='max-w-full flex-1 truncate'>Data Quality checks</span>
+      <span className='max-w-full flex-1 truncate'>{t('scheduledTriggerUi.qualityChecks', 'Data Quality checks')}</span>
     </div>
   );
 }
@@ -92,15 +93,16 @@ function renderDataQualityRunTarget() {
  */
 export const ScheduledTriggerRunTarget = React.memo(
   function ScheduledTriggerRunTarget({ trigger }: { trigger: ScheduledTrigger }) {
+    const t = useTranslation().t;
     const { connectors } = useConnector();
 
     switch (trigger.type) {
       case ScheduledTriggerType.REPORT_RUN:
-        return renderReportRunTarget(trigger);
+        return renderReportRunTarget(trigger, t);
       case ScheduledTriggerType.CONNECTOR_RUN:
-        return renderConnectorRunTarget(trigger, connectors);
+        return renderConnectorRunTarget(trigger, connectors, t);
       case ScheduledTriggerType.DATA_QUALITY_RUN:
-        return renderDataQualityRunTarget();
+        return renderDataQualityRunTarget(t);
       default:
         return <div className='text-muted-foreground text-sm'>—</div>;
     }

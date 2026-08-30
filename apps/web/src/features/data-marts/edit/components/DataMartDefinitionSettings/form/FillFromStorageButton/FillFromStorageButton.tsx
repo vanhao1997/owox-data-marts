@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Database } from 'lucide-react';
 import {
   Dialog,
@@ -43,6 +44,7 @@ export function FillFromStorageButton({
   hasValue = false,
   autoOpen = false,
 }: FillFromStorageButtonProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -104,14 +106,8 @@ export function FillFromStorageButton({
     return null;
   }
 
-  const resourceLabel =
-    resourceType === 'VIEW' ? 'view' : resourceType === 'TABLE_PATTERN' ? 'table pattern' : 'table';
-  const resourceLabelPlural =
-    resourceType === 'VIEW'
-      ? 'views'
-      : resourceType === 'TABLE_PATTERN'
-        ? 'table patterns (sharded tables collapsed into a single wildcard entry)'
-        : 'tables';
+  const resourceLabel = t(`storageResourcePicker.labels.${resourceType.toLowerCase()}`);
+  const resourceLabelPlural = t(`storageResourcePicker.plurals.${resourceType.toLowerCase()}`);
 
   return (
     <>
@@ -121,19 +117,18 @@ export function FillFromStorageButton({
         onClick={() => {
           setOpen(true);
         }}
-        title={hasValue ? 'Change selection' : 'Select from storage'}
-        aria-label={hasValue ? 'Change selection' : 'Select from storage'}
+        title={hasValue ? t('storageResourcePicker.changeSelection') : t('storageResourcePicker.selectFromStorage')}
+        aria-label={hasValue ? t('storageResourcePicker.changeSelection') : t('storageResourcePicker.selectFromStorage')}
       >
         <Database />
-        {!hasValue && <span className='text-xs'>Select...</span>}
+        {!hasValue && <span className='text-xs'>{t('common.select')}</span>}
       </InputGroupButton>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='flex max-h-[90vh] flex-col gap-0 p-0 sm:max-w-4xl'>
           <DialogHeader className='px-6 pt-6 pb-6'>
-            <DialogTitle>Pick a {resourceLabel}</DialogTitle>
+            <DialogTitle>{t('storageResourcePicker.title', { resource: resourceLabel })}</DialogTitle>
             <DialogDescription>
-              Pick a namespace to see all {resourceLabelPlural} the storage has access to. Selecting
-              one fills the Fully Qualified Name.
+              {t('storageResourcePicker.description', { resources: resourceLabelPlural })}
             </DialogDescription>
           </DialogHeader>
           <div className='bg-muted dark:bg-sidebar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-b-md border-t px-6 py-4'>

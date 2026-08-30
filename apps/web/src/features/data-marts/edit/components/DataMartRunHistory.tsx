@@ -9,8 +9,10 @@ import type { DataMartContextType } from '../model/context/types';
 import { DataMartDefinitionType } from '../../shared';
 import type { ConnectorListItem } from '../../../connectors/shared/model/types/connector';
 import { DATA_MART_RUNS_PAGE_SIZE } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 export function DataMartRunHistory() {
+  const { t } = useTranslation();
   const {
     dataMart,
     getDataMartRuns,
@@ -66,7 +68,7 @@ export function DataMartRunHistory() {
           data-testid='runHistoryEmptyState'
         >
           <span role='status' aria-live='polite'>
-            No runs found for this Data Mart
+            {t('dataMartDetails.noRunsFound')}
           </span>
         </div>
       ) : (
@@ -99,10 +101,10 @@ export function DataMartRunHistory() {
                 {isLoadingMoreRuns ? (
                   <>
                     <RefreshCw className='h-4 w-4 animate-spin' />
-                    Loading...
+                      {t('projectDataMartPages.loadingMore')}
                   </>
                 ) : (
-                  'Load More'
+                  t('projectDataMartPages.loadMore')
                 )}
               </Button>
             </div>

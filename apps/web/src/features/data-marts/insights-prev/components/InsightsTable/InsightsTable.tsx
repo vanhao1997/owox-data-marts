@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getInsightColumns, type InsightTableItem } from './columns';
 import { BaseTable } from '../../../../../shared/components/Table';
 import { useBaseTable } from '../../../../../shared/hooks';
@@ -10,7 +11,8 @@ interface InsightsTableProps {
 }
 
 export function InsightsTable({ items, onRowClick, onDelete }: InsightsTableProps) {
-  const columns = useMemo(() => getInsightColumns({ onDelete }), [onDelete]);
+  const { t } = useTranslation();
+  const columns = useMemo(() => getInsightColumns({ onDelete, t }), [onDelete, t]);
 
   const { table } = useBaseTable<InsightTableItem>({
     data: items,
@@ -30,13 +32,13 @@ export function InsightsTable({ items, onRowClick, onDelete }: InsightsTableProp
         onRowClick={row => {
           onRowClick(row.original.id);
         }}
-        ariaLabel='Insights'
+        ariaLabel={t('insightsUi.insightPlural', 'Insights')}
         paginationProps={{
           displaySelected: false,
         }}
         renderEmptyState={() => (
           <span role='status' aria-live='polite'>
-            No insights found.
+            {t('insightsUi.noInsightsFound', 'No insights found.')}
           </span>
         )}
       />

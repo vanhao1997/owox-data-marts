@@ -49,11 +49,7 @@ import { useProjectRoute } from '../../../shared/hooks';
 import { formatDateOnly } from '../../../utils/date-formatters';
 import { versionHint } from './versionHint';
 import { generateInitials } from '../../../shared/utils';
-
-const UNPUBLISH_LABELS: Record<string, string> = {
-  project: 'Unpublish from project',
-  member: 'Unpublish for me',
-};
+import { useTranslation } from 'react-i18next';
 
 /**
  * One plugin's own page.
@@ -64,6 +60,7 @@ const UNPUBLISH_LABELS: Record<string, string> = {
  * has: permissions, logs and per-plugin collections are explicit non-goals.
  */
 export default function PluginDetailsPage() {
+  const { t } = useTranslation();
   const { pluginId } = useParams<{ pluginId: string }>();
   const { plugin, isLoading } = usePlugin(pluginId);
   const { install, uninstall, checkNow, isInstalling, isUpdating } = usePluginActions();
@@ -80,7 +77,7 @@ export default function PluginDetailsPage() {
   if (isLoading || !plugin) {
     return (
       <div className='dm-page'>
-        <div className='dm-page-content'>{isLoading ? 'Loading…' : 'Plugin not found'}</div>
+        <div className='dm-page-content'>{isLoading ? t('pluginsPage.loading', 'Loading…') : t('pluginsPage.notFound', 'Plugin not found')}</div>
       </div>
     );
   }
@@ -150,7 +147,7 @@ export default function PluginDetailsPage() {
             <Button
               variant='ghost'
               className='size-8 lg:size-9'
-              aria-label='Back to plugins'
+              aria-label={t('pluginsPage.back', 'Back to plugins')}
               onClick={() => void navigate(scope('/plugins'))}
             >
               <ArrowLeft className='h-4 w-4 lg:h-5 lg:w-5' />
@@ -159,7 +156,9 @@ export default function PluginDetailsPage() {
           </div>
 
           <div className='flex shrink-0 items-center gap-2'>
-            {plugin.suspended && <Badge variant='destructive'>Temporarily unavailable</Badge>}
+            {plugin.suspended && (
+              <Badge variant='destructive'>{t('pluginsPage.runtime.suspended', 'Temporarily unavailable')}</Badge>
+            )}
 
             <Button
               variant='outline'
@@ -180,16 +179,16 @@ export default function PluginDetailsPage() {
               {isInstalling && <Loader2 className='size-4 animate-spin' aria-hidden />}
               {isInstalling
                 ? showReinstall
-                  ? 'Reinstalling…'
-                  : 'Installing…'
+                  ? t('pluginsPage.reinstalling', 'Reinstalling…')
+                  : t('pluginsPage.installing', 'Installing…')
                 : showReinstall
-                  ? 'Reinstall'
-                  : 'Install'}
+                  ? t('pluginsPage.reinstall', 'Reinstall')
+                  : t('pluginsPage.install', 'Install')}
             </Button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant='ghost' size='icon' aria-label='More plugin actions'>
+                <Button variant='ghost' size='icon' aria-label={t('pluginsPage.moreActions', 'More plugin actions')}>
                   <EllipsisVertical className='size-4' />
                 </Button>
               </DropdownMenuTrigger>
@@ -199,7 +198,7 @@ export default function PluginDetailsPage() {
                     disabled={isPublishing || isUnpublishing}
                     onClick={() => void shareWithProject()}
                   >
-                    Share with the project
+                    {t('pluginsPage.shareWithProject', 'Share with the project')}
                   </DropdownMenuItem>
                 )}
 
@@ -217,7 +216,9 @@ export default function PluginDetailsPage() {
                       );
                     }}
                   >
-                    {UNPUBLISH_LABELS[publication.scope] ?? 'Unpublish'}
+                    {publication.scope === 'project'
+                      ? t('pluginsPage.unpublishProject', 'Unpublish from project')
+                      : t('pluginsPage.unpublishMember', 'Unpublish for me')}
                   </DropdownMenuItem>
                 ))}
 
@@ -225,7 +226,7 @@ export default function PluginDetailsPage() {
                   <>
                     {publications.length > 0 && <DropdownMenuSeparator />}
                     <DropdownMenuItem onClick={() => void uninstall(plugin.pluginId)}>
-                      Uninstall
+                      {t('pluginsPage.uninstall', 'Uninstall')}
                     </DropdownMenuItem>
                   </>
                 )}
@@ -236,10 +237,10 @@ export default function PluginDetailsPage() {
 
         <nav
           className='no-scrollbar -mb-px flex gap-2 overflow-x-auto border-b whitespace-nowrap'
-          aria-label='Tabs'
+            aria-label={t('pluginsPage.tabs', 'Tabs')}
         >
           <span className='border-primary text-primary border-b-2 px-4 py-4 text-sm font-medium'>
-            Overview
+            {t('pluginsPage.overview', 'Overview')}
           </span>
         </nav>
 
@@ -248,14 +249,14 @@ export default function PluginDetailsPage() {
             <CollapsibleCardHeader>
               <CollapsibleCardHeaderTitle
                 icon={BookOpenIcon}
-                tooltip='What the publisher says this plugin does'
+                tooltip={t('pluginsPage.descriptionTooltip', 'What the publisher says this plugin does')}
               >
-                Description
+                {t('common.description', 'Description')}
               </CollapsibleCardHeaderTitle>
             </CollapsibleCardHeader>
             <CollapsibleCardContent>
               <p className='max-w-prose text-sm'>
-                {plugin.description || 'This plugin has no description.'}
+                {plugin.description || t('pluginsPage.noDescription', 'This plugin has no description.')}
               </p>
             </CollapsibleCardContent>
             <CollapsibleCardFooter></CollapsibleCardFooter>
@@ -265,9 +266,9 @@ export default function PluginDetailsPage() {
             <CollapsibleCardHeader>
               <CollapsibleCardHeaderTitle
                 icon={GitHubIcon}
-                tooltip='Where this plugin comes from and which version is current'
+                tooltip={t('pluginsPage.sourceTooltip', 'Where this plugin comes from and which version is current')}
               >
-                Source
+                {t('pluginsPage.source', 'Source')}
               </CollapsibleCardHeaderTitle>
             </CollapsibleCardHeader>
 
@@ -276,7 +277,7 @@ export default function PluginDetailsPage() {
                 {/* §16: the owner is always disclosed. Shown with the same avatar pill the
                     project's member lists use -- a GitHub owner is not a P2PDigital user and has
                     no avatar, but it should not read as a different kind of thing either. */}
-                <InfoCard label='Author' hint='The GitHub account that controls future releases'>
+                <InfoCard label={t('pluginsPage.author', 'Author')} hint={t('pluginsPage.authorHint', 'The GitHub account that controls future releases')}>
                   {ownerHref ? (
                     <ExternalAnchor href={ownerHref}>
                       <Pill
@@ -308,7 +309,7 @@ export default function PluginDetailsPage() {
 
                 {/* §16: withheld for a private repository -- naming it would confirm that
                     one specific private repository exists. */}
-                <InfoCard label='Repository' hint='The plugin identity is this repository'>
+                <InfoCard label={t('pluginsPage.repository', 'Repository')} hint={t('pluginsPage.repositoryHint', 'The plugin identity is this repository')}>
                   {repositoryHref ? (
                     // owner/name runs long often enough that it has to truncate; the
                     // tooltip is how the full path stays reachable once it does.
@@ -327,8 +328,8 @@ export default function PluginDetailsPage() {
                   ) : (
                     <Pill icon={<GitHubIcon size={14} className='shrink-0' />}>
                       {plugin.source.repositoryUrl
-                        ? 'Repository link unavailable'
-                        : 'Private repository'}
+                        ? t('pluginsPage.repositoryUnavailable', 'Repository link unavailable')
+                        : t('pluginsPage.privateRepository', 'Private repository')}
                     </Pill>
                   )}
                 </InfoCard>
@@ -339,9 +340,9 @@ export default function PluginDetailsPage() {
                   ask what the version is, not as standing body text. The time is rendered in
                   the member's own timezone.
                 */}
-                <InfoCard label='Version' hint={versionHint(plugin.nextCheckAt)}>
+                <InfoCard label={t('pluginsPage.version', 'Version')} hint={versionHint(plugin.nextCheckAt)}>
                   <Pill icon={<Tag className='text-muted-foreground size-3.5 shrink-0' />}>
-                    {plugin.currentSemver ? `v${plugin.currentSemver}` : 'No eligible release'}
+                    {plugin.currentSemver ? `v${plugin.currentSemver}` : t('pluginsPage.noEligibleRelease', 'No eligible release')}
                   </Pill>
                   {/*
                     Beside the value, not in the title row: a button there is taller than
@@ -359,7 +360,7 @@ export default function PluginDetailsPage() {
                         size='icon'
                         className='shrink-0'
                         disabled={isUpdating}
-                        aria-label='Check now'
+                        aria-label={t('pluginsPage.checkNow', 'Check now')}
                         onClick={() => void checkNow(plugin.pluginId)}
                       >
                         <RefreshCw className={isUpdating ? 'size-4 animate-spin' : 'size-4'} />
@@ -369,7 +370,7 @@ export default function PluginDetailsPage() {
                       The deployment owns activation, so this only brings the already
                       scheduled check forward. No confirmation: nothing here is a choice.
                     */}
-                    <TooltipContent>Check now</TooltipContent>
+                    <TooltipContent>{t('pluginsPage.checkNow', 'Check now')}</TooltipContent>
                   </Tooltip>
                 </InfoCard>
               </div>
@@ -391,8 +392,8 @@ export default function PluginDetailsPage() {
 
           <CollapsibleCard collapsible name='plugin-details'>
             <CollapsibleCardHeader>
-              <CollapsibleCardHeaderTitle icon={Info} tooltip='Your installation of this plugin'>
-                Details
+              <CollapsibleCardHeaderTitle icon={Info} tooltip={t('pluginsPage.detailsTooltip', 'Your installation of this plugin')}>
+                {t('pluginsPage.details', 'Details')}
               </CollapsibleCardHeaderTitle>
             </CollapsibleCardHeader>
             <CollapsibleCardContent>
@@ -400,22 +401,22 @@ export default function PluginDetailsPage() {
                 <div className='flex flex-col gap-4 md:flex-row'>
                   {/* Always the reader: an installation belongs to one member in one
                       project, and nobody ever sees anyone else's. */}
-                  <InfoCard label='Installed By' hint='Installations are personal, never shared'>
+                  <InfoCard label={t('pluginsPage.installedBy', 'Installed by')} hint={t('pluginsPage.installedByHint', 'Installations are personal, never shared')}>
                     <Pill
                       icon={
                         <UserAvatar
                           avatar={user?.avatar}
                           initials={generateInitials(user?.fullName, user?.email)}
-                          displayName={user?.fullName ?? 'You'}
+                          displayName={user?.fullName ?? t('pluginsPage.you', 'You')}
                           size={UserAvatarSize.SMALL}
                         />
                       }
                     >
-                      {user?.fullName ?? 'You'}
+                      {user?.fullName ?? t('pluginsPage.you', 'You')}
                     </Pill>
                   </InfoCard>
 
-                  <InfoCard label='Installed At' hint='When you last installed or restored it'>
+                  <InfoCard label={t('pluginsPage.installedAt', 'Installed at')} hint={t('pluginsPage.installedAtHint', 'When you last installed or restored it')}>
                     <Pill
                       icon={<CalendarIcon className='text-muted-foreground size-3.5 shrink-0' />}
                     >
@@ -425,7 +426,7 @@ export default function PluginDetailsPage() {
                 </div>
               ) : (
                 <p className='text-muted-foreground text-sm'>
-                  You have not installed this plugin in this project.
+                  {t('pluginsPage.notInstalledHere', 'You have not installed this plugin in this project.')}
                 </p>
               )}
             </CollapsibleCardContent>
@@ -434,9 +435,7 @@ export default function PluginDetailsPage() {
 
           {publications.length > 0 && (
             <p className='text-muted-foreground text-sm'>
-              Unpublishing only removes the listing. Nobody is uninstalled, anyone who already
-              installed it keeps it, and publishing again restores this listing rather than creating
-              a second one.
+              {t('pluginsPage.unpublishNote', 'Unpublishing only removes the listing. Nobody is uninstalled, anyone who already installed it keeps it, and publishing again restores this listing rather than creating a second one.')}
             </p>
           )}
         </div>
@@ -464,6 +463,7 @@ export default function PluginDetailsPage() {
  * help icon surfaces on hover, then the value.
  */
 function InfoCard({ label, hint, children }: { label: string; hint: string; children: ReactNode }) {
+  const { t } = useTranslation();
   return (
     <div className='dm-card-block group'>
       <div className='text-foreground flex items-center justify-between gap-2 text-sm font-medium'>
@@ -475,7 +475,7 @@ function InfoCard({ label, hint, children }: { label: string; hint: string; chil
                 type='button'
                 tabIndex={-1}
                 className='pointer-events-none opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100'
-                aria-label='Help information'
+                aria-label={t('common.helpInformation', 'Help information')}
               >
                 <Info
                   className='text-muted-foreground/50 hover:text-muted-foreground size-4 shrink-0 transition-colors'

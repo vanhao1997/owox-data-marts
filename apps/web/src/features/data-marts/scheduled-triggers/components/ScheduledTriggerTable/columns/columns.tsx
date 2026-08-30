@@ -11,23 +11,58 @@ import { ScheduledTriggerColumnLabels } from './columnLabels';
 import { ScheduledTriggerColumnKey } from './columnKeys';
 import { UserReference } from '../../../../../../shared/components/UserReference';
 import { getScheduledTriggerTypeLabel } from '../../../utils/scheduled-trigger-labels';
+import type { TFunction } from 'i18next';
 
 interface ScheduledTriggerTableColumnsProps {
   onEditTrigger: (id: string) => void;
   onDeleteTrigger: (id: string) => void;
+  t?: TFunction;
 }
 
 export const getScheduledTriggerColumns = ({
   onEditTrigger,
   onDeleteTrigger,
-}: ScheduledTriggerTableColumnsProps): ColumnDef<ScheduledTrigger>[] => [
+  t: translate,
+}: ScheduledTriggerTableColumnsProps): ColumnDef<ScheduledTrigger>[] => {
+  const t = translate ?? ((_key: string, fallback: string) => fallback);
+  const labels = {
+    [ScheduledTriggerColumnKey.TYPE]: t(
+      'scheduledTriggerUi.columns.triggerType',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TYPE]
+    ),
+    [ScheduledTriggerColumnKey.TRIGGER_CONFIG]: t(
+      'scheduledTriggerUi.columns.runTarget',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG]
+    ),
+    [ScheduledTriggerColumnKey.CRON_EXPRESSION]: t(
+      'scheduledTriggerUi.columns.schedule',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION]
+    ),
+    [ScheduledTriggerColumnKey.NEXT_RUN]: t(
+      'scheduledTriggerUi.columns.nextRun',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN]
+    ),
+    [ScheduledTriggerColumnKey.LAST_RUN]: t(
+      'scheduledTriggerUi.columns.lastRun',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.LAST_RUN]
+    ),
+    [ScheduledTriggerColumnKey.IS_ACTIVE]: t(
+      'scheduledTriggerUi.columns.triggerStatus',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE]
+    ),
+    [ScheduledTriggerColumnKey.CREATED_BY]: t(
+      'scheduledTriggerUi.columns.createdBy',
+      ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CREATED_BY]
+    ),
+  };
+  return [
   {
     accessorKey: ScheduledTriggerColumnKey.TYPE,
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TYPE] },
+    meta: { title: labels[ScheduledTriggerColumnKey.TYPE] },
     size: 180,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TYPE]}
+        {labels[ScheduledTriggerColumnKey.TYPE]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -38,22 +73,22 @@ export const getScheduledTriggerColumns = ({
   },
   {
     accessorKey: ScheduledTriggerColumnKey.TRIGGER_CONFIG,
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG] },
+    meta: { title: labels[ScheduledTriggerColumnKey.TRIGGER_CONFIG] },
     size: 220,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG]}
+        {labels[ScheduledTriggerColumnKey.TRIGGER_CONFIG]}
       </SortableHeader>
     ),
     cell: ({ row }) => <ScheduledTriggerRunTarget trigger={row.original} />,
   },
   {
     accessorKey: ScheduledTriggerColumnKey.CRON_EXPRESSION,
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION] },
+    meta: { title: labels[ScheduledTriggerColumnKey.CRON_EXPRESSION] },
     size: 160,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION]}
+        {labels[ScheduledTriggerColumnKey.CRON_EXPRESSION]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -71,29 +106,29 @@ export const getScheduledTriggerColumns = ({
   },
   {
     accessorKey: ScheduledTriggerColumnKey.NEXT_RUN,
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN] },
+    meta: { title: labels[ScheduledTriggerColumnKey.NEXT_RUN] },
     size: 160,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN]}
+        {labels[ScheduledTriggerColumnKey.NEXT_RUN]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
       const nextRunTimestamp = row.original.nextRun;
       return (
         <div className='text-muted-foreground text-sm'>
-          {nextRunTimestamp ? <RelativeTime date={new Date(nextRunTimestamp)} /> : 'Not scheduled'}
+          {nextRunTimestamp ? <RelativeTime date={new Date(nextRunTimestamp)} /> : t('scheduledTriggerUi.notScheduled', 'Not scheduled')}
         </div>
       );
     },
   },
   {
     accessorKey: ScheduledTriggerColumnKey.LAST_RUN,
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.LAST_RUN] },
+    meta: { title: labels[ScheduledTriggerColumnKey.LAST_RUN] },
     size: 150,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.LAST_RUN]}
+        {labels[ScheduledTriggerColumnKey.LAST_RUN]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -103,7 +138,7 @@ export const getScheduledTriggerColumns = ({
           {lastRunTimestamp ? (
             <RelativeTime date={new Date(lastRunTimestamp)} />
           ) : (
-            <span className='text-muted-foreground text-sm'>Never run</span>
+            <span className='text-muted-foreground text-sm'>{t('scheduledTriggerUi.neverRun', 'Never run')}</span>
           )}
         </div>
       );
@@ -111,11 +146,11 @@ export const getScheduledTriggerColumns = ({
   },
   {
     accessorKey: ScheduledTriggerColumnKey.IS_ACTIVE,
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE] },
+    meta: { title: labels[ScheduledTriggerColumnKey.IS_ACTIVE] },
     size: 160,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE]}
+        {labels[ScheduledTriggerColumnKey.IS_ACTIVE]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -126,7 +161,7 @@ export const getScheduledTriggerColumns = ({
           variant='ghost'
           showIcon={false}
         >
-          {isActive ? 'Enabled' : 'Disabled'}
+          {isActive ? t('scheduledTriggerUi.enabled', 'Enabled') : t('scheduledTriggerUi.disabled', 'Disabled')}
         </StatusLabel>
       );
     },
@@ -137,11 +172,11 @@ export const getScheduledTriggerColumns = ({
       const u = row.createdByUser;
       return u?.fullName ?? u?.email;
     },
-    meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CREATED_BY] },
+    meta: { title: labels[ScheduledTriggerColumnKey.CREATED_BY] },
     size: 160,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CREATED_BY]}
+        {labels[ScheduledTriggerColumnKey.CREATED_BY]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -163,4 +198,5 @@ export const getScheduledTriggerColumns = ({
       />
     ),
   },
-];
+  ];
+};

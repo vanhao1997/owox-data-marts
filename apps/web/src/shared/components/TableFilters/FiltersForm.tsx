@@ -13,17 +13,11 @@ import { Plus, X } from 'lucide-react';
 import type { FilterConfigItem, FilterOperator, FiltersState } from './types';
 import { getDefaultFilterOperator, isFilterRowValid } from './filter-utils';
 import { SelectValueControl, InputValueControl } from './index';
+import { useTranslation } from 'react-i18next';
 
 /* ---------------------------------------------------------------------------
  * Operator labels
  * ------------------------------------------------------------------------ */
-
-const OPERATOR_LABELS: Record<FilterOperator, string> = {
-  eq: 'is',
-  neq: 'is not',
-  contains: 'contains',
-  not_contains: 'does not contain',
-};
 
 /* ---------------------------------------------------------------------------
  * Internal form types
@@ -150,6 +144,13 @@ function FilterBlock({
   canRemove,
   onRemove,
 }: FilterBlockProps) {
+  const { t } = useTranslation();
+  const operatorLabels: Record<FilterOperator, string> = {
+    eq: t('tableFilters.operators.eq', 'is'),
+    neq: t('tableFilters.operators.neq', 'is not'),
+    contains: t('tableFilters.operators.contains', 'contains'),
+    not_contains: t('tableFilters.operators.notContains', 'does not contain'),
+  };
   const fieldPath = filterPath(index, 'fieldId');
   const opPath = filterPath(index, 'operator');
   const valPath = filterPath(index, 'value');
@@ -191,7 +192,9 @@ function FilterBlock({
   return (
     <>
       {index > 0 && (
-        <div className='text-muted-foreground/75 px-2 text-xs font-medium tracking-wider'>AND</div>
+        <div className='text-muted-foreground/75 px-2 text-xs font-medium tracking-wider'>
+          {t('tableFilters.and', 'AND')}
+        </div>
       )}
 
       <div className='relative'>
@@ -221,7 +224,7 @@ function FilterBlock({
                     }}
                   >
                     <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='Select field' />
+                      <SelectValue placeholder={t('tableFilters.selectField', 'Select field')} />
                     </SelectTrigger>
                     <SelectContent>
                       {availableConfig.map(c => (
@@ -250,13 +253,17 @@ function FilterBlock({
                   >
                     <SelectTrigger className='w-full'>
                       <SelectValue
-                        placeholder={!selectedFieldId ? 'Condition' : 'Select condition'}
+                        placeholder={
+                          !selectedFieldId
+                            ? t('tableFilters.condition', 'Condition')
+                            : t('tableFilters.selectCondition', 'Select condition')
+                        }
                       />
                     </SelectTrigger>
                     <SelectContent>
                       {allowedOperators.map(op => (
                         <SelectItem key={op} value={op}>
-                          {OPERATOR_LABELS[op]}
+                          {operatorLabels[op]}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -297,6 +304,7 @@ export const FiltersForm = forwardRef<FiltersFormRef, FiltersFormProps>(function
   { config, defaultValues, onStateChange },
   ref
 ) {
+  const { t } = useTranslation();
   const form = useForm<FiltersFormValues>({
     defaultValues: toFormValues(defaultValues),
   });
@@ -363,7 +371,7 @@ export const FiltersForm = forwardRef<FiltersFormRef, FiltersFormProps>(function
             }}
           >
             <Plus className='h-4 w-4' />
-            New filter
+            {t('tableFilters.newFilter', 'New filter')}
           </Button>
         </div>
       </div>

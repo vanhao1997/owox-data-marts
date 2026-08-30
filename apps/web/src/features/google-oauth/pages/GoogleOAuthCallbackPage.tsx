@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Message sent from the OAuth popup back to the window that opened it.
@@ -38,6 +39,7 @@ function sendToOpener(
 }
 
 export function GoogleOAuthCallbackPage() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const processed = useRef(false);
   const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
@@ -52,14 +54,16 @@ export function GoogleOAuthCallbackPage() {
 
     if (errorParam) {
       if (!sendToOpener({ error: `OAuth error: ${errorParam}` }, state)) {
-        setFallbackMessage(`Authentication failed: ${errorParam}. You can close this window.`);
+        setFallbackMessage(
+          t('googleOAuth.callback.authenticationFailed', 'Authentication failed: {{error}}. You can close this window.', { error: errorParam })
+        );
       }
       return;
     }
 
     if (!code || !state) {
       if (!sendToOpener({ error: 'Missing authorization code or state' }, state)) {
-        setFallbackMessage('Missing authorization code. You can close this window and try again.');
+        setFallbackMessage(t('googleOAuth.callback.missingCode', 'Missing authorization code. You can close this window and try again.'));
       }
       return;
     }
@@ -69,11 +73,10 @@ export function GoogleOAuthCallbackPage() {
     // JWT signature on the state token remains the real CSRF protection.
     if (!sendToOpener({ code, state }, state)) {
       setFallbackMessage(
-        'The window that started the connection is no longer available. ' +
-          'Please close this window and try connecting again.'
+        t('googleOAuth.callback.openerUnavailable', 'The window that started the connection is no longer available. Please close this window and try connecting again.')
       );
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   if (fallbackMessage) {
     return (
@@ -89,7 +92,9 @@ export function GoogleOAuthCallbackPage() {
     <div className='flex min-h-screen items-center justify-center bg-gray-50'>
       <div className='text-center'>
         <div className='mb-4 inline-block h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-gray-900'></div>
-        <p className='text-sm text-gray-600'>Completing connection...</p>
+        <p className='text-sm text-gray-600'>
+          {t('googleOAuth.callback.completing', 'Completing connection...')}
+        </p>
       </div>
     </div>
   );

@@ -1,14 +1,11 @@
 import { useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { InsightEntity } from '../model';
 
-const insightFormSchema = z.object({
-  title: z.string().min(1, 'Title cannot be empty'),
-  template: z.string().optional(),
-});
-export type InsightForm = z.infer<typeof insightFormSchema>;
+export type InsightForm = { title: string; template?: string };
 
 export const useInsightForm = (
   insight: InsightEntity | null,
@@ -18,6 +15,11 @@ export const useInsightForm = (
   ) => Promise<InsightEntity | null>,
   updateInsightTitle: (id: string, title: string) => Promise<InsightEntity | null>
 ) => {
+  const { t } = useTranslation();
+  const insightFormSchema = z.object({
+    title: z.string().min(1, t('insightsUi.titleCannotEmpty')),
+    template: z.string().optional(),
+  });
   const {
     register,
     watch,

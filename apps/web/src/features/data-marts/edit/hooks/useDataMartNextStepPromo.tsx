@@ -84,7 +84,7 @@ export function useDataMartNextStepPromo() {
 
       switch (step) {
         case PromoStep.SCHEDULE_DATA:
-          toast(<div className='text-foreground text-sm'>Keep your data fresh automatically</div>, {
+          toast(<div className='text-foreground text-sm'>Giữ dữ liệu luôn mới tự động</div>, {
             id: toastId,
             closeButton: true,
             onDismiss,
@@ -94,13 +94,13 @@ export function useDataMartNextStepPromo() {
                 <Button size='sm' variant='outline' asChild onClick={() => toast.dismiss(toastId)}>
                   <Link to={`/ui/${projectId}/data-marts/${dataMartId}/triggers`}>
                     <CalendarClock className='h-4 w-4' />
-                    Schedule Updates
+                    Lên lịch cập nhật
                   </Link>
                 </Button>
                 <Button size='sm' variant='ghost' asChild onClick={() => toast.dismiss(toastId)}>
                   <Link to={`/ui/${projectId}/data-marts/${dataMartId}/run-history`}>
                     <History className='h-4 w-4' />
-                    View Run History
+                    Xem lịch sử chạy
                   </Link>
                 </Button>
               </div>
@@ -110,7 +110,7 @@ export function useDataMartNextStepPromo() {
           break;
 
         case PromoStep.USE_DATA:
-          toast(<div className='text-foreground text-sm'>Enable your data</div>, {
+          toast(<div className='text-foreground text-sm'>Kích hoạt dữ liệu của bạn</div>, {
             id: toastId,
             closeButton: true,
             onDismiss,
@@ -126,7 +126,7 @@ export function useDataMartNextStepPromo() {
                   >
                     <Link to={`/ui/${projectId}/data-marts/${dataMartId}/insights-v2`}>
                       <Sparkles className='h-4 w-4' />
-                      Create Insights…
+                      Tạo phân tích chuyên sâu…
                     </Link>
                   </Button>
                 )}
@@ -139,7 +139,7 @@ export function useDataMartNextStepPromo() {
                 >
                   <Link to={`/ui/${projectId}/data-marts/${dataMartId}/reports`}>
                     <FileText className='h-4 w-4' />
-                    Create Report…
+                    Tạo báo cáo…
                   </Link>
                 </Button>
               </div>

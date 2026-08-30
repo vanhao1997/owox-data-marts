@@ -29,7 +29,7 @@ import {
 } from '../../../../shared/components/Table';
 import { useBaseTable, useOnboardingVideo } from '../../../../shared/hooks';
 import { useDataMartContext } from '../../edit/model';
-import { NO_PERMISSION_MESSAGE, usePermissions } from '../../../../app/permissions';
+import { usePermissions } from '../../../../app/permissions';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { formatDateShort, trackEvent } from '../../../../utils';
 import type { InsightTemplateEntity } from '../model';
@@ -39,6 +39,7 @@ import {
   mapInsightTemplateListFromDto,
 } from '../model';
 import { InsightRowActionsCell } from './InsightRowActionsCell';
+import { useTranslation } from 'react-i18next';
 
 interface InsightTableItem {
   id: string;
@@ -50,6 +51,7 @@ interface InsightTableItem {
 }
 
 export default function InsightsListView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { dataMart } = useDataMartContext();
   const { canCreate, canDelete } = usePermissions();
@@ -66,11 +68,11 @@ export default function InsightsListView() {
       const response = await insightTemplatesService.getInsightTemplates(dataMart.id);
       setItems(mapInsightTemplateListFromDto(response));
     } catch {
-      toast.error('Failed to load insights');
+      toast.error(t('insightsUi.loadError', 'Failed to load insight'));
     } finally {
       setLoading(false);
     }
-  }, [dataMart?.id]);
+  }, [dataMart?.id, t]);
 
   useEffect(() => {
     void loadInsights();
@@ -94,8 +96,8 @@ export default function InsightsListView() {
       {
         accessorKey: 'title',
         size: 320,
-        meta: { title: 'Title' },
-        header: ({ column }) => <SortableHeader column={column}>Title</SortableHeader>,
+        meta: { title: t('common.title', 'Title') },
+        header: ({ column }) => <SortableHeader column={column}>{t('common.title', 'Title')}</SortableHeader>,
         cell: ({ row }) => (
           <div className='overflow-hidden text-ellipsis'>{row.original.title}</div>
         ),
@@ -104,8 +106,8 @@ export default function InsightsListView() {
         accessorKey: 'modifiedAt',
         size: 170,
         sortDescFirst: true,
-        meta: { title: 'Updated' },
-        header: ({ column }) => <SortableHeader column={column}>Updated</SortableHeader>,
+        meta: { title: t('insightsUi.updated', 'Updated') },
+        header: ({ column }) => <SortableHeader column={column}>{t('insightsUi.updated', 'Updated')}</SortableHeader>,
         cell: ({ row }) => (
           <div className='text-muted-foreground'>{formatDateShort(row.original.modifiedAt)}</div>
         ),
@@ -114,8 +116,8 @@ export default function InsightsListView() {
         id: 'createdBy',
         size: 150,
         enableSorting: false,
-        meta: { title: 'Created By' },
-        header: 'Created By',
+        meta: { title: t('common.createdBy', 'Created By') },
+        header: t('common.createdBy', 'Created By'),
         cell: ({ row }) =>
           row.original.createdByUser ? (
             <UserReference userProjection={row.original.createdByUser} />
@@ -139,7 +141,7 @@ export default function InsightsListView() {
         ),
       },
     ],
-    [canDelete]
+    [canDelete, t]
   );
 
   const { table } = useBaseTable<InsightTableItem>({
@@ -165,7 +167,7 @@ export default function InsightsListView() {
         details: insight.title,
         context: dataMart.id,
       });
-      toast.success('Insight created');
+      toast.success(t('insightsUi.created', 'Insight created'));
       void navigate(insight.id);
     } catch {
       trackEvent({
@@ -175,11 +177,11 @@ export default function InsightsListView() {
         label: 'Creating insight',
         context: dataMart.id,
       });
-      toast.error('Failed to create insight');
+      toast.error(t('insightsUi.createFailed', 'Failed to create insight'));
     } finally {
       setCreating(false);
     }
-  }, [creating, dataMart?.id, navigate]);
+  }, [creating, dataMart?.id, navigate, t]);
 
   const handleConfirmDelete = useCallback(() => {
     void (async () => {
@@ -195,7 +197,7 @@ export default function InsightsListView() {
           context: dataMart.id,
         });
         setItems(prev => prev.filter(item => item.id !== deleteId));
-        toast.success('Insight deleted');
+        toast.success(t('insightsUi.deleted', 'Insight deleted'));
       } catch {
         trackEvent({
           event: 'insight_error',
@@ -204,12 +206,12 @@ export default function InsightsListView() {
           label: deleteId,
           context: dataMart.id,
         });
-        toast.error('Failed to delete insight');
+        toast.error(t('insightsUi.deleteFailed', 'Failed to delete insight'));
       } finally {
         setDeleteId(null);
       }
     })();
-  }, [dataMart?.id, deleteId]);
+  }, [dataMart?.id, deleteId, t]);
 
   // Show onboarding video about insights if the user has not seen it yet
   const shouldShowOnboarding = !loading && items.length === 0;
@@ -222,8 +224,8 @@ export default function InsightsListView() {
   return (
     <CollapsibleCard>
       <CollapsibleCardHeader>
-        <CollapsibleCardHeaderTitle icon={Bookmark} tooltip='Manage and review your insights'>
-          Insights
+        <CollapsibleCardHeaderTitle icon={Bookmark} tooltip={t('insightsUi.manageTooltip', 'Manage and review your insights')}>
+          {t('sidebar.insights', 'Insights')}
         </CollapsibleCardHeaderTitle>
         <CollapsibleCardHeaderActions>
           <Tooltip>
@@ -235,28 +237,27 @@ export default function InsightsListView() {
                   disabled={!canCreate || creating}
                 >
                   <Plus className='h-4 w-4' />
-                  New insight
+                  {t('insightsUi.newInsight', 'New insight')}
                 </Button>
               </div>
             </TooltipTrigger>
-            {!canCreate && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+            {!canCreate && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
           </Tooltip>
         </CollapsibleCardHeaderActions>
       </CollapsibleCardHeader>
 
       <CollapsibleCardContent>
         {loading && items.length === 0 ? (
-          <div className='text-muted-foreground p-4 text-sm'>Loading insights…</div>
+          <div className='text-muted-foreground p-4 text-sm'>{t('insightsUi.loadingInsights', 'Loading insights…')}</div>
         ) : items.length === 0 ? (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant='icon'>
                 <Bookmark />
               </EmptyMedia>
-              <EmptyTitle>Create your first Insight</EmptyTitle>
+              <EmptyTitle>{t('insightsUi.firstInsightTitle', 'Create your first Insight')}</EmptyTitle>
               <EmptyDescription>
-                Create insights to build scheduled reports and deliver them to your preferred
-                channels (Email, Slack, etc.)
+                {t('insightsUi.firstInsightDescription', 'Create insights to build scheduled reports and deliver them to your preferred channels (Email, Slack, etc.)')}
               </EmptyDescription>
             </EmptyHeader>
 
@@ -264,7 +265,7 @@ export default function InsightsListView() {
               <div className='inline-flex'>
                 <Button onClick={() => void handleCreate()}>
                   <Plus className='h-4 w-4' />
-                  New Insight
+                  {t('insightsUi.newInsight', 'New Insight')}
                 </Button>
               </div>
             </EmptyContent>
@@ -276,13 +277,13 @@ export default function InsightsListView() {
             onRowClick={row => {
               void navigate(row.original.id);
             }}
-            ariaLabel='Insights'
+            ariaLabel={t('sidebar.insights', 'Insights')}
             paginationProps={{
               displaySelected: false,
             }}
             renderEmptyState={() => (
               <span role='status' aria-live='polite'>
-                No insights found.
+                {t('insightsUi.noInsightsFound', 'No insights found.')}
               </span>
             )}
           />
@@ -295,10 +296,10 @@ export default function InsightsListView() {
               setDeleteId(null);
             }
           }}
-          title='Delete insight'
-          description='Are you sure you want to delete this insight? This action cannot be undone.'
-          confirmLabel='Delete'
-          cancelLabel='Cancel'
+          title={t('insightsUi.deleteInsightTitle', 'Delete insight')}
+          description={t('insightsUi.deleteInsightConfirm', 'Are you sure you want to delete this insight? This action cannot be undone.')}
+          confirmLabel={t('common.delete', 'Delete')}
+          cancelLabel={t('common.cancel', 'Cancel')}
           variant='destructive'
           onConfirm={handleConfirmDelete}
         />

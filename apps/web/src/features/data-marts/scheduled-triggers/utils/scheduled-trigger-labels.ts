@@ -1,4 +1,5 @@
 import { ScheduledTriggerType } from '../enums';
+import i18n from '../../../../i18n';
 
 const SCHEDULED_TRIGGER_TYPE_LABELS: Record<string, string> = {
   [ScheduledTriggerType.REPORT_RUN]: 'Report Run',
@@ -7,5 +8,10 @@ const SCHEDULED_TRIGGER_TYPE_LABELS: Record<string, string> = {
 };
 
 export function getScheduledTriggerTypeLabel(type: string): string {
-  return SCHEDULED_TRIGGER_TYPE_LABELS[type] ?? type;
+  const keyByType: Record<string, string> = {
+    [ScheduledTriggerType.REPORT_RUN]: 'scheduledTriggerUi.reportRun',
+    [ScheduledTriggerType.CONNECTOR_RUN]: 'scheduledTriggerUi.connectorRun',
+    [ScheduledTriggerType.DATA_QUALITY_RUN]: 'scheduledTriggerUi.qualityRun',
+  };
+  return keyByType[type] ? i18n.t(keyByType[type], SCHEDULED_TRIGGER_TYPE_LABELS[type]) : type;
 }

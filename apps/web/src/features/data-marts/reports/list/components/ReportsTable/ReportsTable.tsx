@@ -9,6 +9,7 @@ import { BaseTable } from '../../../../../../shared/components/Table';
 import { AddReportButton } from '../DestinationCard/AddReportButton';
 import { useRefreshSetupProgress } from '../../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';
 import { ReportStatusEnum } from '../../../shared/enums';
+import { useTranslation } from 'react-i18next';
 
 interface ReportsTableProps {
   destination: DataDestination;
@@ -26,6 +27,7 @@ interface ReportsTableProps {
  * action hides itself for a config that names no document.
  */
 export function ReportsTable({ destination, onEditReport, onAddReport }: ReportsTableProps) {
+  const { t } = useTranslation();
   const { reports, setPollingConfig } = useReport();
 
   // The reports belonging to this destination, read off the destination itself: a separate type
@@ -70,8 +72,9 @@ export function ReportsTable({ destination, onEditReport, onAddReport }: Reports
           return;
         },
         onEditReport, // directly use the parent callback
+        t,
       }),
-    [onEditReport]
+    [onEditReport, t]
   );
 
   // Initialize table with shared hook
@@ -113,13 +116,13 @@ export function ReportsTable({ destination, onEditReport, onAddReport }: Reports
           {canCreateReportInApp(destination.type) ? (
             <>
               <p className='text-muted-foreground text-sm font-medium'>
-                Create your first report for this destination
+                {t('reportsUi.createFirstForDestination', 'Create your first report for this destination')}
               </p>
               <AddReportButton onAddReport={onAddReport} />
             </>
           ) : (
             <p className='text-muted-foreground text-sm font-medium'>
-              Create your first report from The P2PDigital add-in in Excel
+              {t('reportsUi.createFirstFromExcelAddin', 'Create your first report from the P2PDigital add-in in Excel')}
             </p>
           )}
         </div>

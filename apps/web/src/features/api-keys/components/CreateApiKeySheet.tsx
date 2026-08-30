@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -60,6 +61,7 @@ interface CreateApiKeySheetProps {
 }
 
 export function CreateApiKeySheet({ isOpen, onClose, onCreated }: CreateApiKeySheetProps) {
+  const { t } = useTranslation();
   const [submitting, setSubmitting] = useState(false);
   const [initialDefaultValues] = useState<CreateApiKeyFormValues>(() => createDefaultValues());
 
@@ -81,7 +83,7 @@ export function CreateApiKeySheet({ isOpen, onClose, onCreated }: CreateApiKeySh
       reset(createDefaultValues());
       onCreated(result);
     } catch {
-      toast.error('Failed to create API key');
+      toast.error(t('apiKeysPage.form.createFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -101,35 +103,33 @@ export function CreateApiKeySheet({ isOpen, onClose, onCreated }: CreateApiKeySh
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Create API Key</SheetTitle>
+          <SheetTitle>{t('apiKeysPage.form.title')}</SheetTitle>
           <SheetDescription>
-            Create a personal API key for external tools and automations.
+            {t('apiKeysPage.form.description')}
           </SheetDescription>
         </SheetHeader>
 
         <Form {...form}>
           <AppForm onSubmit={e => void handleSubmit(onSubmit)(e)}>
             <FormLayout>
-              <FormSection title='General' name='create-api-key-general'>
+              <FormSection title={t('formCommon.general')} name='create-api-key-general'>
                 <FormField
                   control={control}
                   name='name'
                   render={({ field }) => (
                     <FormItem>
-                      <ApiKeyFormLabel description='A human-readable label so you can identify this key later.'>
-                        Name
+                      <ApiKeyFormLabel description={t('apiKeysPage.form.nameHelp')}>
+                        {t('common.name')}
                       </ApiKeyFormLabel>
                       <FormControl>
-                        <Input {...field} placeholder='e.g. CI import job' />
+                        <Input {...field} placeholder={t('apiKeysPage.form.namePlaceholder')} />
                       </FormControl>
                       <FormDescription>
                         <Accordion variant='common' type='single' collapsible>
                           <AccordionItem value='name-help'>
-                            <AccordionTrigger>What should I name my key?</AccordionTrigger>
+                            <AccordionTrigger>{t('apiKeysPage.form.nameQuestion')}</AccordionTrigger>
                             <AccordionContent>
-                              Use a name that describes where or how the key will be used, for
-                              example &quot;CI pipeline&quot; or &quot;Looker Studio
-                              connector&quot;. This makes it easier to audit and revoke keys later.
+                              {t('apiKeysPage.form.nameAnswer')}
                             </AccordionContent>
                           </AccordionItem>
                         </Accordion>
@@ -144,8 +144,8 @@ export function CreateApiKeySheet({ isOpen, onClose, onCreated }: CreateApiKeySh
                   name='expiresAt'
                   render={({ field }) => (
                     <FormItem>
-                      <ApiKeyFormLabel description='Optional UTC date after which the key stops working.'>
-                        Expires (optional)
+                      <ApiKeyFormLabel description={t('apiKeysPage.form.expiresHelp')}>
+                        {t('apiKeysPage.form.expiresLabel')}
                       </ApiKeyFormLabel>
                       <FormControl>
                         <Input
@@ -158,12 +158,9 @@ export function CreateApiKeySheet({ isOpen, onClose, onCreated }: CreateApiKeySh
                       <FormDescription>
                         <Accordion variant='common' type='single' collapsible>
                           <AccordionItem value='expires-help'>
-                            <AccordionTrigger>What happens if I leave this empty?</AccordionTrigger>
+                            <AccordionTrigger>{t('apiKeysPage.form.expiresQuestion')}</AccordionTrigger>
                             <AccordionContent>
-                              If no expiration date is set, the key will remain active indefinitely
-                              until you manually revoke it. Setting an expiration is recommended for
-                              temporary integrations or when your security policy requires key
-                              rotation.
+                              {t('apiKeysPage.form.expiresAnswer')}
                             </AccordionContent>
                           </AccordionItem>
                         </Accordion>
@@ -179,11 +176,11 @@ export function CreateApiKeySheet({ isOpen, onClose, onCreated }: CreateApiKeySh
 
             <FormActions>
               <Button type='button' variant='secondary' onClick={handleClose}>
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button type='submit' disabled={submitting}>
                 {submitting ? <Loader2 className='mr-2 size-4 animate-spin' /> : null}
-                Create
+                {t('common.create')}
               </Button>
             </FormActions>
           </AppForm>

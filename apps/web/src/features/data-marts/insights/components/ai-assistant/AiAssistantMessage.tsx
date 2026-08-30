@@ -4,6 +4,7 @@ import type { AssistantMessageDetails } from '../../model/ai-assistant/types/ai-
 import { ACTION_LABELS } from '../../model/ai-assistant/utils/action-labels.ts';
 import { SqlPreview } from './SqlPreview.tsx';
 import { SplitActionButton } from './SplitActionButton.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface AiAssistantMessageProps {
   message: AiAssistantMessageDto;
@@ -30,6 +31,7 @@ export function AiAssistantMessage({
   onToggleSql,
   onApplyAction,
 }: AiAssistantMessageProps) {
+  const { t } = useTranslation();
   if (message.role === 'system') return null;
 
   if (message.role === 'user') {
@@ -48,6 +50,12 @@ export function AiAssistantMessage({
   const createAndAttachActionId = details?.createAndAttachAction?.id ?? null;
   const insertIntoTemplateActionId = details?.insertIntoTemplateAction?.id ?? null;
   const applyTemplateEditActionId = details?.applyTemplateEditAction?.id ?? null;
+  const actionLabels = {
+    applyChanges: t('insightsUi.applyChangesAction', ACTION_LABELS.applyChanges),
+    createAndAttach: t('insightsUi.createAttachAction', ACTION_LABELS.createAndAttach),
+    reuseSource: t('insightsUi.reuseSourceAction', ACTION_LABELS.reuseSource),
+    applyTemplateEdit: t('insightsUi.applyTemplateEditAction', ACTION_LABELS.applyTemplateEdit),
+  };
 
   return (
     <div className='flex items-start gap-2'>
@@ -72,7 +80,7 @@ export function AiAssistantMessage({
                   <ChevronRight className='h-3 w-3' />
                 )}
                 <Sparkles className='h-3 w-3' />
-                Generated SQL
+                {t('insightsUi.generatedSql', 'Generated SQL')}
               </button>
               {expandedSqlIds.has(message.id) && (
                 <div className='mt-1.5'>
@@ -86,13 +94,13 @@ export function AiAssistantMessage({
             <div className='border-border/50 mt-3 space-y-2 border-t pt-2'>
               {isApplied ? (
                 <div className='text-xs font-medium text-green-600 dark:text-green-400'>
-                  ✓ Applied
+                  ✓ {t('insightsUi.applied', 'Applied')}
                 </div>
               ) : (
                 <div className='flex flex-wrap gap-2'>
                   {applyChangesActionId && (
                     <SplitActionButton
-                      label={ACTION_LABELS.applyChanges}
+                      label={actionLabels.applyChanges}
                       onApply={() => {
                         onApplyAction({
                           assistantMessageId: message.id,
@@ -112,7 +120,7 @@ export function AiAssistantMessage({
                   )}
                   {createAndAttachActionId && (
                     <SplitActionButton
-                      label={ACTION_LABELS.createAndAttach}
+                      label={actionLabels.createAndAttach}
                       onApply={() => {
                         onApplyAction({
                           assistantMessageId: message.id,
@@ -132,7 +140,7 @@ export function AiAssistantMessage({
                   )}
                   {insertIntoTemplateActionId && (
                     <SplitActionButton
-                      label={ACTION_LABELS.reuseSource}
+                      label={actionLabels.reuseSource}
                       onApply={() => {
                         onApplyAction({
                           assistantMessageId: message.id,
@@ -152,7 +160,7 @@ export function AiAssistantMessage({
                   )}
                   {applyTemplateEditActionId && (
                     <SplitActionButton
-                      label={ACTION_LABELS.applyTemplateEdit}
+                      label={actionLabels.applyTemplateEdit}
                       onApply={() => {
                         onApplyAction({
                           assistantMessageId: message.id,

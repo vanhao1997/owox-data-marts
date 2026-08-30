@@ -7,6 +7,7 @@ import { DataMartRunStatus, DataMartRunType } from '../../../shared';
 import { downloadLogs } from './utils';
 import { canCancelDataMartRun } from './cancellable-runs';
 import { CancelRunButton } from './CancelRunButton';
+import { useTranslation } from 'react-i18next';
 
 interface LogControlsProps {
   logViewType: LogViewType;
@@ -34,6 +35,7 @@ export function LogControls({
   cancelDataMartRun,
   dataMartId,
 }: LogControlsProps) {
+  const { t } = useTranslation();
   const handleStopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -57,7 +59,7 @@ export function LogControls({
             }}
             className={`${getButtonSwitchClasses(logViewType === LogViewType.STRUCTURED)} rounded-l-lg`}
           >
-            Structured
+            {t('runHistory.structured', 'Structured')}
           </button>
           <button
             onClick={e => {
@@ -66,7 +68,7 @@ export function LogControls({
             }}
             className={`${getButtonSwitchClasses(logViewType === LogViewType.RAW)} rounded-none`}
           >
-            Raw
+            {t('runHistory.raw', 'Raw')}
           </button>
           <button
             onClick={e => {
@@ -75,7 +77,7 @@ export function LogControls({
             }}
             className={`${getButtonSwitchClasses(logViewType === LogViewType.CONFIGURATION)} rounded-r-lg`}
           >
-            Configuration
+            {t('runHistory.configuration', 'Configuration')}
           </button>
         </div>
 
@@ -84,7 +86,7 @@ export function LogControls({
             <Search className='text-muted-foreground absolute top-2.5 left-2 h-4 w-4' />
             <Input
               type='text'
-              placeholder='Search logs...'
+              placeholder={t('runHistory.searchLogs', 'Search logs...')}
               value={searchTerm}
               onChange={e => {
                 setSearchTerm(e.target.value);
@@ -117,7 +119,7 @@ export function LogControls({
           className='flex items-center gap-2'
         >
           <Download className='h-4 w-4' />
-          JSON
+          {t('runHistory.downloadJson', 'JSON')}
         </Button>
       </div>
     </div>

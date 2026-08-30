@@ -2,6 +2,7 @@ import { FormSection } from '@owox/ui/components/form';
 import type { NotificationSettingsItem } from '../../../types';
 import { TitleField } from './TitleField';
 import { EnabledField } from './EnabledField';
+import { useTranslation } from 'react-i18next';
 
 interface GeneralSectionProps {
   setting: NotificationSettingsItem;
@@ -16,8 +17,9 @@ export function GeneralSection({
   onEnabledChange,
   disabled,
 }: GeneralSectionProps) {
+  const { t } = useTranslation();
   return (
-    <FormSection title='General'>
+    <FormSection title={t('common.general', 'General')}>
       <TitleField title={setting.title} />
       <EnabledField enabled={enabled} onChange={onEnabledChange} disabled={disabled} />
     </FormSection>

@@ -12,17 +12,16 @@ export default function LookerStudioJsonConfigDescription() {
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='json-config-details'>
-        <AccordionTrigger>What is the JSON Config for Data Studio?</AccordionTrigger>
+        <AccordionTrigger>JSON Config cho Data Studio là gì?</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            The JSON Config contains the necessary credentials and configuration for connecting to
-            Data Studio.
+            JSON Config chứa thông tin xác thực và cấu hình cần thiết để kết nối với Data Studio.
           </p>
           <ul className='list-inside space-y-2 text-sm'>
-            <li>You need to copy this JSON config to use it in the Data Studio Connector.</li>
+            <li>Bạn cần sao chép JSON config này để dùng trong Data Studio Connector.</li>
             <li>
-              If you need to rotate a previous secret key, you can use the corresponding function in
-              the menu on the destinations list.
+              Nếu cần đổi khóa bí mật cũ, bạn có thể dùng chức năng tương ứng trong menu ở danh
+              sách điểm đến.
             </li>
           </ul>
         </AccordionContent>

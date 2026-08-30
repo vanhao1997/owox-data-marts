@@ -1,4 +1,5 @@
 import { Input } from '@owox/ui/components/input';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@owox/ui/components/button';
 import { X } from 'lucide-react';
 
@@ -8,6 +9,7 @@ interface LimitInputProps {
 }
 
 export function LimitInput({ value, onChange }: LimitInputProps) {
+  const { t } = useTranslation();
   return (
     <div className='flex items-center gap-2'>
       <div className='relative w-40'>
@@ -44,7 +46,7 @@ export function LimitInput({ value, onChange }: LimitInputProps) {
           </Button>
         )}
       </div>
-      <span className='text-muted-foreground text-xs'>rows</span>
+      <span className='text-muted-foreground text-xs'>{t('reportColumnPicker.rows', 'rows')}</span>
     </div>
   );
 }

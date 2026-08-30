@@ -9,6 +9,7 @@ import {
 import { CircleCheckBig, Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { type FC, useState } from 'react';
 import { DataStorageType } from '../../../shared';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Component for displaying a context menu of actions on the data storage in a table.
@@ -37,6 +38,7 @@ export const DataStorageActionsCell: FC<DataStorageActionsCellProps> = ({
   onDelete,
   onPublishDrafts,
 }) => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const canDelete = type !== DataStorageType.LEGACY_GOOGLE_BIGQUERY;
   const hasDrafts = draftDataMartsCount > 0;
@@ -48,7 +50,7 @@ export const DataStorageActionsCell: FC<DataStorageActionsCellProps> = ({
           <Button
             variant='ghost'
             className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${isMenuOpen ? 'opacity-100' : 'group-hover:opacity-100'}`}
-            aria-label='Open menu'
+            aria-label={t('common.openMenu', 'Open menu')}
           >
             <MoreHorizontal className='dm-card-table-body-row-actionbtn-icon' />
           </Button>
@@ -56,11 +58,11 @@ export const DataStorageActionsCell: FC<DataStorageActionsCellProps> = ({
         <DropdownMenuContent align='end'>
           <DropdownMenuItem onClick={() => onViewDetails?.(id)}>
             <Eye className='text-foreground h-4 w-4' aria-hidden='true' />
-            <span>View details</span>
+            <span>{t('common.viewDetails', 'View details')}</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => void onEdit?.(id)}>
             <Pencil className='text-foreground h-4 w-4' aria-hidden='true' />
-            <span>Edit</span>
+            <span>{t('common.edit', 'Edit')}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={!hasDrafts}
@@ -71,14 +73,14 @@ export const DataStorageActionsCell: FC<DataStorageActionsCellProps> = ({
             }}
           >
             <CircleCheckBig className='text-foreground h-4 w-4' aria-hidden='true' />
-            <span>Publish drafts</span>
+            <span>{t('common.publishDrafts', 'Publish drafts')}</span>
           </DropdownMenuItem>
           {canDelete && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem data-testid='storageDeleteButton' onClick={() => onDelete?.(id)}>
                 <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
-                <span className='text-red-600'>Delete</span>
+                <span className='text-red-600'>{t('common.delete', 'Delete')}</span>
               </DropdownMenuItem>
             </>
           )}

@@ -2,6 +2,7 @@ import { Button } from '@owox/ui/components/button';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import {
   createPluginHostBridge,
   fetchRuntimeToken,
@@ -117,18 +118,14 @@ export default function PluginRuntimePage() {
   }, [data, projectId, resolvedId, user, openExternal, navigateInApp, broken]);
 
   if (isLoading) {
-    return <PluginRuntimeMessage title='Loading…' />;
+    return <PluginRuntimeMessage titleKey='pluginsPage.runtime.loading' />;
   }
 
   if (error || !data) {
     return (
       <PluginRuntimeMessage
-        title={isSuspended(error) ? 'Temporarily unavailable' : 'This plugin could not be opened'}
-        description={
-          isSuspended(error)
-            ? 'An administrator has suspended this plugin across the whole deployment. Your installation is untouched and will work again once it is resumed.'
-            : 'It may have been removed, or you may no longer have access to it.'
-        }
+        titleKey={isSuspended(error) ? 'pluginsPage.runtime.suspended' : 'pluginsPage.runtime.openFailed'}
+        descriptionKey={isSuspended(error) ? 'pluginsPage.runtime.suspendedDescription' : 'pluginsPage.runtime.openFailedDescription'}
         backHref={scope('/plugins')}
       />
     );
@@ -139,8 +136,8 @@ export default function PluginRuntimePage() {
   if (broken) {
     return (
       <PluginRuntimeMessage
-        title='This plugin could not be opened'
-        description='It did not complete the handshake with P2PDigital. Reload the page to try again, and tell the publisher if it keeps happening.'
+        titleKey='pluginsPage.runtime.openFailed'
+        descriptionKey='pluginsPage.runtime.handshakeFailed'
         backHref={scope('/plugins')}
       />
     );
@@ -159,21 +156,22 @@ export default function PluginRuntimePage() {
 }
 
 function PluginRuntimeMessage({
-  title,
-  description,
+  titleKey,
+  descriptionKey,
   backHref,
 }: {
-  title: string;
-  description?: string;
+  titleKey: string;
+  descriptionKey?: string;
   backHref?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className='flex h-full flex-col items-center justify-center gap-3 p-8 text-center'>
-      <h1 className='text-lg font-medium'>{title}</h1>
-      {description && <p className='text-muted-foreground max-w-prose text-sm'>{description}</p>}
+      <h1 className='text-lg font-medium'>{t(titleKey)}</h1>
+      {descriptionKey && <p className='text-muted-foreground max-w-prose text-sm'>{t(descriptionKey)}</p>}
       {backHref && (
         <Button asChild variant='outline'>
-          <Link to={backHref}>Back to plugins</Link>
+          <Link to={backHref}>{t('pluginsPage.runtime.back')}</Link>
         </Button>
       )}
     </div>

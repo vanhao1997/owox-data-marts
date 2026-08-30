@@ -1,6 +1,7 @@
 import { Badge } from '@owox/ui/components/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { cn } from '@owox/ui/lib/utils';
+import { useTranslation } from 'react-i18next';
 import { formatDateOnly } from '../../../utils';
 import { isExpired, isExpiringSoon } from './expiration';
 
@@ -17,7 +18,8 @@ export function ExpirationValue({
   expiringSoonNotice,
   focusable,
 }: ExpirationValueProps) {
-  if (!expiresAt) return <span className='text-muted-foreground text-sm'>Never</span>;
+  const { t } = useTranslation();
+  if (!expiresAt) return <span className='text-muted-foreground text-sm'>{t('common.never')}</span>;
 
   const dateLabel = formatDateOnly(expiresAt, { timeZone: 'UTC' });
   const expired = isExpired(expiresAt);
@@ -28,13 +30,13 @@ export function ExpirationValue({
   const status = expired
     ? {
         badgeClassName: 'border-destructive/20 bg-destructive/10 text-destructive',
-        label: 'Expired',
+        label: t('common.expired'),
         tooltip: expiredNotice,
       }
     : {
         badgeClassName:
           'border-amber-300/50 bg-amber-50 text-amber-700 dark:border-amber-400/30 dark:bg-amber-500/10 dark:text-amber-300',
-        label: 'Expires soon',
+        label: t('common.expiresSoon'),
         tooltip: expiringSoonNotice,
       };
 

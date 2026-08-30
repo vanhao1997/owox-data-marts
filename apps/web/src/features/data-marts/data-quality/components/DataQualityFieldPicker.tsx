@@ -9,6 +9,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@owox/ui/components/popover';
 import { ArrowLeft, Check, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../shared/components/Button';
 import type { DataQualitySelectableField } from '../model/data-quality.model';
 
@@ -25,8 +26,10 @@ export function DataQualityFieldPicker({
   disabled,
   onAdd,
   initialFieldPathKey,
-  triggerLabel = 'Add checks',
+  triggerLabel,
 }: DataQualityFieldPickerProps) {
+  const { t } = useTranslation();
+  const resolvedTriggerLabel = triggerLabel ?? t('dataQualityUi.addChecks');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFieldPathKey, setSelectedFieldPathKey] = useState(initialFieldPathKey ?? '');
   const selectedField = fields.find(field => field.fieldPathKey === selectedFieldPathKey);
@@ -46,16 +49,16 @@ export function DataQualityFieldPicker({
           variant='outline'
           size='sm'
           disabled={disabled}
-          aria-label={triggerLabel}
+          aria-label={resolvedTriggerLabel}
         >
           <Plus className='size-4' aria-hidden='true' />
-          {!initialFieldPathKey && triggerLabel}
+          {!initialFieldPathKey && resolvedTriggerLabel}
         </Button>
       </PopoverTrigger>
       <PopoverContent
         align='end'
         className='w-[min(24rem,calc(100vw-2rem))] p-0'
-        aria-label='Add field check'
+        aria-label={t('dataQualityUi.addFieldCheck')}
       >
         {selectedField ? (
           <CheckStep
@@ -83,12 +86,14 @@ function FieldStep({
   fields: DataQualitySelectableField[];
   onSelect: (fieldPathKey: string) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Command>
-      <CommandInput placeholder='Search fields…' autoFocus />
+      <CommandInput placeholder={t('dataQualityUi.searchFields')} autoFocus />
       <CommandList>
-        <CommandEmpty>No fields found.</CommandEmpty>
-        <CommandGroup heading='Choose a field'>
+        <CommandEmpty>{t('dataQualityUi.noFields')}</CommandEmpty>
+        <CommandGroup heading={t('dataQualityUi.chooseField')}>
           {fields.map(field => (
             <CommandItem
               key={field.fieldPathKey}
@@ -105,7 +110,7 @@ function FieldStep({
               <span className='min-w-0 flex-1 truncate'>{field.label}</span>
               {field.checks.filter(check => check.isAdded).length > 0 && (
                 <span className='text-muted-foreground text-xs'>
-                  {field.checks.filter(check => check.isAdded).length} added
+                  {t('dataQualityUi.addedCount', { count: field.checks.filter(check => check.isAdded).length })}
                 </span>
               )}
             </CommandItem>
@@ -125,6 +130,8 @@ function CheckStep({
   onBack: () => void;
   onAdd: (ruleKey: string) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Command>
       <div className='flex items-center gap-2 border-b px-2 py-2'>
@@ -132,14 +139,14 @@ function CheckStep({
           type='button'
           variant='ghost'
           size='sm'
-          aria-label='Choose another field'
+          aria-label={t('dataQualityUi.chooseAnotherField')}
           onClick={onBack}
         >
           <ArrowLeft className='size-4' aria-hidden='true' />
         </Button>
         <div className='min-w-0'>
           <p className='truncate text-sm font-medium'>{field.label}</p>
-          <p className='text-muted-foreground text-xs'>Choose one check to add</p>
+          <p className='text-muted-foreground text-xs'>{t('dataQualityUi.chooseCheck')}</p>
         </div>
         {field.type && (
           <span className='bg-muted text-muted-foreground ml-auto rounded px-1.5 py-0.5 text-xs'>
@@ -167,7 +174,7 @@ function CheckStep({
               {check.isAdded && (
                 <span className='text-muted-foreground inline-flex items-center gap-1 text-xs'>
                   <Check className='size-3' aria-hidden='true' />
-                  Added
+                  {t('dataQualityUi.added')}
                 </span>
               )}
             </CommandItem>

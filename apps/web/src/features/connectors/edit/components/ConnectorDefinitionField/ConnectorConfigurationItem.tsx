@@ -20,6 +20,7 @@ import { useEffect } from 'react';
 import { RawBase64Icon } from '../../../../../shared/icons';
 import { unquoteIdentifier } from '../../utils/snowflake-identifier.utils';
 import { RedshiftConnectionType } from '../../../../data-storage/shared/model/types/credentials';
+import { useTranslation } from 'react-i18next';
 
 interface ConnectorConfigurationItemProps {
   configIndex: number;
@@ -39,6 +40,7 @@ export function ConnectorConfigurationItem({
   totalConfigurations,
   dataStorage,
 }: ConnectorConfigurationItemProps) {
+  const { t } = useTranslation();
   const dataStorageInfo = DataStorageTypeModel.getInfo(dataStorage.type);
   const { connectors, fetchAvailableConnectors } = useConnector();
 
@@ -55,20 +57,20 @@ export function ConnectorConfigurationItem({
   };
 
   const getConnectorSubtitle = () => {
-    const node = connectorDef.connector.source.node || 'No node selected';
+    const node = connectorDef.connector.source.node || t('connectorWizard.noNodeSelected');
     return (
       <div className='flex flex-wrap items-center gap-2'>
-        <span className='text-muted-foreground/75'>Data:</span>{' '}
+        <span className='text-muted-foreground/75'>{t('connectorWizard.data')}:</span>{' '}
         <span className='text-muted-foreground font-medium'>{node}</span>
         <span className='text-muted-foreground'>•</span>
         <Tooltip>
           <TooltipTrigger asChild>
             <span className='text-muted-foreground flex items-center gap-1 font-medium'>
-              <span>Edit config</span>
+              <span>{t('connectorWizard.editConfig')}</span>
               <ChevronRight className='h-3 w-3' />
             </span>
           </TooltipTrigger>
-          <TooltipContent>Edit connector configuration</TooltipContent>
+          <TooltipContent>{t('connectorWizard.editConfiguration')}</TooltipContent>
         </Tooltip>
       </div>
     );
@@ -101,16 +103,15 @@ export function ConnectorConfigurationItem({
 
         return (
           <div className='flex flex-wrap items-center gap-2'>
-            {formatLinkParam('Dataset', dataset, datasetLink)}
+            {formatLinkParam(t('connectorWizard.dataset'), dataset, datasetLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Table', table, getBigQueryTableUrl(projectId, dataset, table))}
+            {formatLinkParam(t('connectorWizard.table'), table, getBigQueryTableUrl(projectId, dataset, table))}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className='h-4 w-4' />
               </TooltipTrigger>
               <TooltipContent>
-                The dataset and table are automatically created during the first run of the data
-                mart, if they don't already exist
+                {t('connectorWizard.autoCreated', { items: t('connectorWizard.datasetTable') })}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -123,16 +124,15 @@ export function ConnectorConfigurationItem({
         const athenaConsoleLink = `https://console.aws.amazon.com/athena/home?region=${region}#/query-editor`;
         return (
           <div className='flex flex-wrap items-center gap-2'>
-            {formatLinkParam('Database', databaseName, athenaConsoleLink)}
+            {formatLinkParam(t('connectorWizard.database'), databaseName, athenaConsoleLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Table', table, athenaConsoleLink)}
+            {formatLinkParam(t('connectorWizard.table'), table, athenaConsoleLink)}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className='h-4 w-4' />
               </TooltipTrigger>
               <TooltipContent>
-                The database and table are automatically created during the first run of the data
-                mart, if they don't already exist
+                {t('connectorWizard.autoCreated', { items: t('connectorWizard.databaseTable') })}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -151,18 +151,19 @@ export function ConnectorConfigurationItem({
         const tableLink = `${snowflakeConsoleLink}/#/data/databases/${database}/schemas/${schema}/table/${table}`;
         return (
           <div className='flex flex-wrap items-center gap-2'>
-            {formatLinkParam('Database', database, databaseLink)}
+            {formatLinkParam(t('connectorWizard.database'), database, databaseLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Schema', unquoteIdentifier(schema), schemaLink)}
+            {formatLinkParam(t('connectorWizard.schema'), unquoteIdentifier(schema), schemaLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Table', unquoteIdentifier(table), tableLink)}
+            {formatLinkParam(t('connectorWizard.table'), unquoteIdentifier(table), tableLink)}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className='h-4 w-4' />
               </TooltipTrigger>
               <TooltipContent>
-                The database, schema and table are automatically created during the first run of the
-                data mart, if they don't already exist
+                {t('connectorWizard.autoCreated', {
+                  items: t('connectorWizard.databaseSchemaTable'),
+                })}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -186,20 +187,20 @@ export function ConnectorConfigurationItem({
 
         const connectionInfo =
           redshiftConfig.connectionType === RedshiftConnectionType.SERVERLESS
-            ? `Workgroup: ${redshiftConfig.workgroupName}`
-            : `Cluster: ${redshiftConfig.clusterIdentifier}`;
+            ? `${t('connectorWizard.workgroup')}: ${redshiftConfig.workgroupName}`
+            : `${t('connectorWizard.cluster')}: ${redshiftConfig.clusterIdentifier}`;
 
         const redshiftConsoleLink = getRedshiftQueryEditorUrl(redshiftConfig.region);
 
         return (
           <div className='flex flex-wrap items-center gap-2'>
             <span>
-              <span className='text-muted-foreground/75'>Region:</span>{' '}
+              <span className='text-muted-foreground/75'>{t('connectorWizard.region')}:</span>{' '}
               <span className='text-muted-foreground font-medium'>{redshiftConfig.region}</span>
             </span>
             <span className='text-muted-foreground'>•</span>
             <span>
-              <span className='text-muted-foreground/75'>Database:</span>{' '}
+              <span className='text-muted-foreground/75'>{t('connectorWizard.database')}:</span>{' '}
               <span className='text-muted-foreground font-medium'>{redshiftConfig.database}</span>
             </span>
             <span className='text-muted-foreground'>•</span>
@@ -210,16 +211,15 @@ export function ConnectorConfigurationItem({
               </span>
             </span>
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Schema', schema, redshiftConsoleLink)}
+            {formatLinkParam(t('connectorWizard.schema'), schema, redshiftConsoleLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Table', table, redshiftConsoleLink)}
+            {formatLinkParam(t('connectorWizard.table'), table, redshiftConsoleLink)}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className='h-4 w-4' />
               </TooltipTrigger>
               <TooltipContent>
-                The schema and table are automatically created during the first run of the data
-                mart, if they don't already exist
+                {t('connectorWizard.autoCreated', { items: t('connectorWizard.schemaTable') })}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -249,25 +249,26 @@ export function ConnectorConfigurationItem({
 
         return (
           <div className='flex flex-wrap items-center gap-2'>
-            {formatLinkParam('Catalog', catalog, databricksConsoleLink)}
+            {formatLinkParam(t('connectorWizard.catalog'), catalog, databricksConsoleLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Schema', schema, databricksConsoleLink)}
+            {formatLinkParam(t('connectorWizard.schema'), schema, databricksConsoleLink)}
             <span className='text-muted-foreground'>•</span>
-            {formatLinkParam('Table', table, databricksConsoleLink)}
+            {formatLinkParam(t('connectorWizard.table'), table, databricksConsoleLink)}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className='h-4 w-4' />
               </TooltipTrigger>
               <TooltipContent>
-                The catalog, schema and table are automatically created during the first run of the
-                data mart, if they don't already exist
+                {t('connectorWizard.autoCreated', {
+                  items: t('connectorWizard.catalogSchemaTable'),
+                })}
               </TooltipContent>
             </Tooltip>
           </div>
         );
       }
       default:
-        return 'Unknown storage type configuration';
+        return t('connectorWizard.unknownStorage');
     }
   };
 
@@ -297,7 +298,7 @@ export function ConnectorConfigurationItem({
           >
             <ListItemCard
               icon={getConnectorIcon(connectorDef.connector.source.name)}
-              title={connectorDef.connector.source.name || 'Connector'}
+              title={connectorDef.connector.source.name || t('connectorWizard.chooseConnector')}
               subtitle={getConnectorSubtitle()}
               className='bg-background hover:bg-muted min-h-[80px] cursor-pointer border-0 transition-colors hover:shadow-none'
             />
@@ -331,7 +332,7 @@ export function ConnectorConfigurationItem({
             </span>
           </TooltipTrigger>
           {!canRemoveConfiguration() && (
-            <TooltipContent>Remove last configuration only after adding a new one.</TooltipContent>
+          <TooltipContent>{t('connectorWizard.removeLastOnly')}</TooltipContent>
           )}
         </Tooltip>
       </div>

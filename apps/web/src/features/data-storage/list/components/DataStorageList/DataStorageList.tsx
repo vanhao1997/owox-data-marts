@@ -14,6 +14,7 @@ import {
   type DataStorageTableItem,
   getDataStorageColumns,
 } from '../DataStorageTable';
+import { useTranslation } from 'react-i18next';
 
 interface DataStorageListProps {
   initialTypeDialogOpen?: boolean;
@@ -24,6 +25,7 @@ export const DataStorageList = ({
   initialTypeDialogOpen = false,
   onTypeDialogClose,
 }: DataStorageListProps) => {
+  const { t } = useTranslation();
   const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(initialTypeDialogOpen);
   const [isCreatingDataStorage, setIsCreatingDataStorage] = useState(false);
 
@@ -79,12 +81,12 @@ export const DataStorageList = ({
       if (storage) {
         void handleEdit(deepLinkId);
       } else {
-        toast.error(`Storage not found by id ${deepLinkId}`);
+        toast.error(t('dataStorageList.notFound', 'Storage not found by id {{id}}', { id: deepLinkId }));
         removeIdParam();
       }
       hasAttemptedDeepLink.current = true;
     }
-  }, [loading, dataStorages, deepLinkId, removeIdParam, handleEdit]);
+  }, [loading, dataStorages, deepLinkId, removeIdParam, handleEdit, t]);
 
   useEffect(() => {
     setIsTypeDialogOpen(initialTypeDialogOpen);
@@ -235,6 +237,7 @@ export const DataStorageList = ({
     onEdit: handleEdit,
     onDelete: handleDelete,
     onPublishDrafts: handlePublishDraftsRequest,
+    t,
   });
 
   return (
@@ -273,7 +276,7 @@ export const DataStorageList = ({
         onOpenChange={open => {
           if (!open) setBlocked(null);
         }}
-        title='Cannot delete storage'
+        title={t('dataStorageList.cannotDelete', 'Cannot delete storage')}
         description={
           blocked ? (
             <span className='block space-y-2'>
@@ -290,25 +293,33 @@ export const DataStorageList = ({
                     setBlocked(null);
                   }}
                 >
-                  {blocked.publishedDataMartsCount + blocked.draftDataMartsCount} Data Mart
-                  {blocked.publishedDataMartsCount + blocked.draftDataMartsCount === 1 ? '' : 's'}
+                  {t('dataStorageList.referencedBy', '{{count}} Data Mart{{suffix}}', {
+                    count: blocked.publishedDataMartsCount + blocked.draftDataMartsCount,
+                    suffix:
+                      blocked.publishedDataMartsCount + blocked.draftDataMartsCount === 1 ? '' : 's',
+                  })}
                 </Link>
                 {blocked.draftDataMartsCount > 0 && blocked.publishedDataMartsCount > 0 ? (
                   <>
                     {' '}
-                    ({blocked.publishedDataMartsCount} published, {blocked.draftDataMartsCount}{' '}
-                    draft)
+                    {t('dataStorageList.publishedDraftSummary', '({{published}} published, {{draft}} draft)', {
+                      published: blocked.publishedDataMartsCount,
+                      draft: blocked.draftDataMartsCount,
+                    })}
                   </>
                 ) : null}
                 .
               </span>
               <span className='text-muted-foreground block'>
-                Detach or delete those Data Marts before deleting the storage.
+                {t(
+                  'dataStorageList.detachBeforeDelete',
+                  'Detach or delete those Data Marts before deleting the storage.'
+                )}
               </span>
             </span>
           ) : null
         }
-        confirmLabel='Got it'
+        confirmLabel={t('dataStorageList.gotIt', 'Got it')}
         variant='default'
         onConfirm={() => {
           setBlocked(null);
@@ -318,10 +329,13 @@ export const DataStorageList = ({
       <ConfirmationDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title='Delete Storage'
-        description='Are you sure you want to delete this storage? This action cannot be undone.'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('dataStorageList.deleteTitle', 'Delete Storage')}
+        description={t(
+          'dataStorageList.deleteDescription',
+          'Are you sure you want to delete this storage? This action cannot be undone.'
+        )}
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => {
           void handleConfirmDelete();
         }}
@@ -334,17 +348,22 @@ export const DataStorageList = ({
       <ConfirmationDialog
         open={publishDialogOpen}
         onOpenChange={setPublishDialogOpen}
-        title='Publish drafts'
+        title={t('dataStorageList.publishDraftsTitle', 'Publish drafts')}
         description={
           <span>
-            There are <strong>{String(storageToPublish?.draftDataMartsCount ?? 0)}</strong> data
-            mart draft
-            {storageToPublish?.draftDataMartsCount === 1 ? '' : 's'} available. We can publish them
-            now. Continue?
+            {t(
+              'dataStorageList.publishDraftsDescription',
+              'There are {{count}} data mart draft{{suffix}} available. We can publish {{pronoun}} now. Continue?',
+              {
+                count: storageToPublish?.draftDataMartsCount ?? 0,
+                suffix: storageToPublish?.draftDataMartsCount === 1 ? '' : 's',
+                pronoun: t('dataStorageList.publishPronoun', 'them'),
+              }
+            )}
           </span>
         }
-        confirmLabel='Publish'
-        cancelLabel='Not now'
+        confirmLabel={t('dataStorageList.publish', 'Publish')}
+        cancelLabel={t('dataStorageList.notNow', 'Not now')}
         onConfirm={() => {
           handleConfirmPublishDrafts();
         }}

@@ -12,7 +12,8 @@ import type { DataMartReport } from '../model/types/data-mart-report';
 import { ReportStatusEnum } from '../enums';
 import { useReport } from '../model';
 import { RunUndoToast } from './RunUndoToast';
-import { pullBasedRunHint } from '../../../../data-destination/shared/enums';
+import { DataDestinationType, pullBasedRunHint } from '../../../../data-destination/shared/enums';
+import { useTranslation } from 'react-i18next';
 
 const GRACE_PERIOD_MS = 3000;
 
@@ -22,6 +23,7 @@ interface ReportQuickRunCellProps {
 }
 
 export function ReportQuickRunCell({ report, onRunSuccess }: ReportQuickRunCellProps) {
+  const { t } = useTranslation();
   const canRun = report.canRun;
   const [isRunning, setIsRunning] = useState(report.lastRunStatus === ReportStatusEnum.RUNNING);
   const [isPending, setIsPending] = useState(false);
@@ -110,11 +112,17 @@ export function ReportQuickRunCell({ report, onRunSuccess }: ReportQuickRunCellP
   // Disabled here is not a missing permission: nobody can start such a run, so the button says
   // what to do instead. Same sentence as the dropdown item, from the same place.
   const pullRunHint = pullBasedRunHint(report.dataDestination.type);
+  const localizedPullRunHint =
+    report.dataDestination.type === DataDestinationType.EXCEL
+      ? t('reportsUi.pullRunHintExcel', 'Refresh it from The P2PDigital add-in in Excel')
+      : report.dataDestination.type === DataDestinationType.LOOKER_STUDIO
+        ? t('reportsUi.pullRunHintDestination', 'The destination reads this report itself')
+        : pullRunHint;
   const tooltipText = isPending
-    ? 'Starting soon…'
+    ? t('reportsUi.startingSoon', 'Starting soon…')
     : isRunning || isOptimisticRunning
-      ? 'Report is running…'
-      : (pullRunHint ?? 'Run report');
+      ? t('reportsUi.reportRunning', 'Report is running…')
+      : (localizedPullRunHint ?? t('reportActions.run', 'Run report'));
 
   return (
     <TooltipProvider>
@@ -131,7 +139,7 @@ export function ReportQuickRunCell({ report, onRunSuccess }: ReportQuickRunCellP
                 variant='ghost'
                 className='dm-card-table-body-row-actionbtn cursor-pointer transition-all disabled:opacity-30'
                 disabled={!canRun || isActive}
-                aria-label={isActive ? tooltipText : (pullRunHint ?? `Run report: ${report.title}`)}
+                aria-label={isActive ? tooltipText : (localizedPullRunHint ?? `${t('reportActions.run', 'Run report')}: ${report.title}`)}
               >
                 {isPending ? (
                   <Loader2 className='h-4 w-4 animate-spin' aria-hidden='true' />

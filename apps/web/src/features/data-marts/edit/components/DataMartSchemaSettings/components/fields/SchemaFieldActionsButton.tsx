@@ -9,6 +9,7 @@ import {
 import { type Row } from '@tanstack/react-table';
 import { Eye, EyeOff, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ConfirmationDialog } from '../../../../../../../shared/components/ConfirmationDialog';
 
 /**
@@ -40,6 +41,7 @@ export function SchemaFieldActionsButton<TData>({
   isHiddenForReporting,
   onToggleHiddenForReporting,
 }: SchemaFieldActionsButtonProps<TData>) {
+  const { t } = useTranslation();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const handleDeleteConfirm = () => {
@@ -61,7 +63,7 @@ export function SchemaFieldActionsButton<TData>({
           <Button
             variant='ghost'
             className='dm-card-table-body-row-actionbtn opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:opacity-100'
-            aria-label='Row actions'
+            aria-label={t('common.actions')}
           >
             <MoreHorizontal className='dm-card-table-body-row-actionbtn-icon' />
           </Button>
@@ -75,7 +77,7 @@ export function SchemaFieldActionsButton<TData>({
               }}
             >
               <Plus className='mr-2 h-4 w-4' />
-              Add nested field
+              {t('schemaSettings.addNestedField')}
             </DropdownMenuItem>
           )}
 
@@ -89,12 +91,12 @@ export function SchemaFieldActionsButton<TData>({
               {isHiddenForReporting ? (
                 <>
                   <Eye className='mr-2 h-4 w-4' />
-                  Show in reports
+                  {t('schemaSettings.showInReports')}
                 </>
               ) : (
                 <>
                   <EyeOff className='mr-2 h-4 w-4' />
-                  Hide from reports
+                  {t('schemaSettings.hideFromReports')}
                 </>
               )}
             </DropdownMenuItem>
@@ -109,7 +111,7 @@ export function SchemaFieldActionsButton<TData>({
               }}
             >
               <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
-              <span className='text-red-600'>Delete field</span>
+              <span className='text-red-600'>{t('schemaSettings.deleteField')}</span>
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
@@ -118,10 +120,10 @@ export function SchemaFieldActionsButton<TData>({
       <ConfirmationDialog
         open={isDeleteConfirmOpen}
         onOpenChange={setIsDeleteConfirmOpen}
-        title='Delete field'
-        description='Are you sure you want to delete this field?'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('schemaSettings.deleteField')}
+        description={t('schemaSettings.deleteFieldConfirm')}
+        confirmLabel={t('common.delete')}
+        cancelLabel={t('common.cancel')}
         onConfirm={handleDeleteConfirm}
         variant='destructive'
       />

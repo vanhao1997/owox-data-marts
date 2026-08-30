@@ -2,19 +2,21 @@ import type { Control } from 'react-hook-form';
 import { type DataMartDefinitionFormData } from '../../../model/schema/data-mart-definition.schema.ts';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@owox/ui/components/form';
 import { DataMartCodeEditor } from './DataMartCodeEditor.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface SqlDefinitionFieldProps {
   control: Control<DataMartDefinitionFormData>;
 }
 
 export function SqlDefinitionField({ control }: SqlDefinitionFieldProps) {
+  const { t } = useTranslation();
   return (
     <FormField
       control={control}
       name='definition.sqlQuery'
       render={({ field }) => (
         <FormItem className='dm-card-block'>
-          <FormLabel className='text-foreground'>SQL Query</FormLabel>
+          <FormLabel className='text-foreground'>{t('dataMartDefinitionType.sqlQuery', 'SQL query')}</FormLabel>
           <FormControl>
             <DataMartCodeEditor
               value={{ sqlQuery: field.value }}

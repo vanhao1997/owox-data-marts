@@ -1,4 +1,5 @@
 import { useCallback, useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@owox/ui/components/hover-card';
 import { UserAvatar, UserAvatarSize } from '../../../../shared/components/UserAvatar';
 import { generateInitials } from '../../../../shared/utils';
@@ -77,16 +78,21 @@ export function MembersHoverCard({
   members,
   loader,
   maxVisible,
-  loadingText = 'Loading…',
-  emptyText = 'No members found',
-  errorText = 'Could not load members',
-  unknownLabel = 'Unknown',
+  loadingText,
+  emptyText,
+  errorText,
+  unknownLabel,
   openDelay = 150,
   closeDelay = 100,
   side = 'top',
   align = 'center',
   contentClassName = 'max-h-80 w-64 overflow-y-auto p-3',
 }: MembersHoverCardProps) {
+  const { t } = useTranslation();
+  const resolvedLoadingText = loadingText ?? t('common.loading');
+  const resolvedEmptyText = emptyText ?? t('membersPage.noMembersFound');
+  const resolvedErrorText = errorText ?? t('membersPage.loadFailed');
+  const resolvedUnknownLabel = unknownLabel ?? t('common.unknown');
   const [loadState, setLoadState] = useState<LoadState>({ status: 'idle' });
 
   const handleOpenChange = useCallback(
@@ -118,12 +124,12 @@ export function MembersHoverCard({
   const body = (() => {
     if (resolvedMembers === null) {
       if (loadState.status === 'error') {
-        return <span className='text-muted-foreground text-xs'>{errorText}</span>;
+        return <span className='text-muted-foreground text-xs'>{resolvedErrorText}</span>;
       }
-      return <span className='text-muted-foreground text-xs'>{loadingText}</span>;
+      return <span className='text-muted-foreground text-xs'>{resolvedLoadingText}</span>;
     }
     if (resolvedMembers.length === 0) {
-      return <span className='text-muted-foreground text-xs'>{emptyText}</span>;
+      return <span className='text-muted-foreground text-xs'>{resolvedEmptyText}</span>;
     }
     const visible =
       maxVisible !== undefined ? resolvedMembers.slice(0, maxVisible) : resolvedMembers;
@@ -131,7 +137,7 @@ export function MembersHoverCard({
     return (
       <div className='flex flex-col gap-1.5'>
         {visible.map(m => {
-          const displayName = m.displayName ?? m.email ?? unknownLabel;
+          const displayName = m.displayName ?? m.email ?? resolvedUnknownLabel;
           const initials = generateInitials(m.displayName, m.email);
           return (
             <div key={m.id} className='flex min-w-0 items-center gap-2'>
@@ -151,7 +157,7 @@ export function MembersHoverCard({
           );
         })}
         {overflow > 0 && (
-          <span className='text-muted-foreground pt-0.5 text-xs'>and {overflow} more</span>
+          <span className='text-muted-foreground pt-0.5 text-xs'>{t('membersPage.andMore', { count: overflow })}</span>
         )}
       </div>
     );

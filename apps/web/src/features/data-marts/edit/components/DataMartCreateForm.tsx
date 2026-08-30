@@ -23,6 +23,7 @@ import type { DataStorageList } from '../../../data-storage/shared/model/types/d
 import { DataStorageTypeModel } from '../../../data-storage/shared/types/data-storage-type.model.ts';
 import { type DataMart, type DataMartFormData, dataMartSchema, useDataMartForm } from '../model';
 import { containsNonBmpCharacters, LEGACY_TITLE_ERROR } from '../../shared';
+import { useTranslation } from 'react-i18next';
 
 interface DataMartFormProps {
   initialData?: {
@@ -47,6 +48,7 @@ function StorageTypeIcon({
 }
 
 export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps) {
+  const { t } = useTranslation();
   const { handleCreate, isSubmitting, serverError } = useDataMartForm();
   const {
     dataStorages,
@@ -132,11 +134,11 @@ export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps
       ...sortedMappedStorages,
       {
         value: CREATE_NEW_STORAGE_VALUE,
-        label: 'Create new storage',
+        label: t('createDataMartPage.createNewStorage'),
         separator: true,
       },
     ];
-  }, [dataStorages]);
+  }, [dataStorages, t]);
   return (
     <>
       <Form {...form}>
@@ -156,11 +158,11 @@ export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps
               name='title'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>{t('createDataMartPage.titleLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       id='title'
-                      placeholder='Enter title'
+                      placeholder={t('createDataMartPage.titlePlaceholder')}
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -175,7 +177,7 @@ export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps
               name='storageId'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Storage</FormLabel>
+                  <FormLabel>{t('createDataMartPage.storageLabel')}</FormLabel>
                   <FormControl>
                     <Combobox
                       options={storageOptions}
@@ -187,8 +189,12 @@ export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps
                           field.onChange(value);
                         }
                       }}
-                      placeholder={loadingStorages ? 'Loading...' : 'Select a storage'}
-                      emptyMessage='No storages found'
+                      placeholder={
+                        loadingStorages
+                          ? t('createDataMartPage.loadingStorage')
+                          : t('createDataMartPage.selectStorage')
+                      }
+                      emptyMessage={t('createDataMartPage.noStoragesFound')}
                       disabled={isSubmitting || loadingStorages}
                       className='w-full'
                       renderLabel={option =>
@@ -222,7 +228,7 @@ export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps
             />
           </FormLayout>
           <FormActions variant='light'>
-            <Button type='submit'>Create Data Mart</Button>
+            <Button type='submit'>{t('createDataMartPage.createButton')}</Button>
             <Button
               variant='outline'
               type='button'
@@ -230,7 +236,7 @@ export function DataMartCreateForm({ initialData, onSuccess }: DataMartFormProps
                 window.history.back();
               }}
             >
-              Go back
+              {t('createDataMartPage.goBack')}
             </Button>
           </FormActions>
         </AppForm>

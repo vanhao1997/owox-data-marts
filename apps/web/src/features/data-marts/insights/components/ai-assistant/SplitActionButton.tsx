@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@owox/ui/components/dropdown-menu';
+import { useTranslation } from 'react-i18next';
 
 interface SplitActionButtonProps {
   label: string;
@@ -20,6 +21,7 @@ export function SplitActionButton({
   onApplyOnly,
   disabled,
 }: SplitActionButtonProps) {
+  const { t } = useTranslation();
   return (
     <div className='group bg-background hover:bg-accent flex items-center overflow-hidden rounded-md border transition-colors'>
       <Button
@@ -31,7 +33,7 @@ export function SplitActionButton({
         title={label}
         aria-label={label}
       >
-        Apply &amp; Run
+        {t('insightsUi.applyRun', 'Apply & Run')}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -47,7 +49,7 @@ export function SplitActionButton({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuItem onClick={onApplyOnly}>Apply only</DropdownMenuItem>
+          <DropdownMenuItem onClick={onApplyOnly}>{t('insightsUi.applyOnly', 'Apply only')}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

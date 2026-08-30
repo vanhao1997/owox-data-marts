@@ -18,6 +18,7 @@ import { MultiSelect } from '@owox/ui/components/common/multi-select';
 import { timezoneService } from '../../../../../services';
 import { Alert, AlertDescription, AlertTitle } from '@owox/ui/components/alert';
 import { Combobox } from '../../../../../shared/components/Combobox/combobox';
+import { useTranslation } from 'react-i18next';
 import {
   type ScheduleConfig,
   WEEKDAYS,
@@ -56,7 +57,7 @@ interface SchedulePreset {
 
 const MONTH_DAYS = Array.from({ length: 31 }, (_, i) => ({
   value: i + 1,
-  label: `${String(i + 1)}${i === 0 ? 'st' : i === 1 ? 'nd' : i === 2 ? 'rd' : 'th'}`,
+  label: String(i + 1),
 }));
 
 const MINUTE_INTERVALS = [5, 10, 15, 30];
@@ -99,13 +100,14 @@ const ScheduleTypeField: FC<ScheduleTypeFieldProps> = ({
   onPresetSelect,
   disabled,
 }) => {
+  const { t } = useTranslation();
   const [flashPreset, setFlashPreset] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   return (
     <div className='space-y-2'>
       <div className='flex items-center justify-between'>
-        <Label>Type</Label>
+        <Label>{t('scheduleConfig.type', 'Type')}</Label>
         {/* Quick presets */}
         {!disabled && (
           <div className='flex gap-1'>
@@ -134,7 +136,11 @@ const ScheduleTypeField: FC<ScheduleTypeFieldProps> = ({
                     flashPreset === preset.label ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                   } `}
                 />
-                {preset.label}
+                {preset.label === 'Weekdays 9:00'
+                  ? t('scheduleConfig.weekdaysPreset', preset.label)
+                  : preset.label === 'Every hour'
+                    ? t('scheduleConfig.everyHourPreset', preset.label)
+                    : t('scheduleConfig.everySixHoursPreset', preset.label)}
               </kbd>
             ))}
           </div>
@@ -151,10 +157,10 @@ const ScheduleTypeField: FC<ScheduleTypeFieldProps> = ({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='daily'>Daily</SelectItem>
-          <SelectItem value='weekly'>Weekly</SelectItem>
-          <SelectItem value='monthly'>Monthly</SelectItem>
-          <SelectItem value='interval'>Interval</SelectItem>
+          <SelectItem value='daily'>{t('scheduleConfig.daily', 'Daily')}</SelectItem>
+          <SelectItem value='weekly'>{t('scheduleConfig.weekly', 'Weekly')}</SelectItem>
+          <SelectItem value='monthly'>{t('scheduleConfig.monthly', 'Monthly')}</SelectItem>
+          <SelectItem value='interval'>{t('scheduleConfig.interval', 'Interval')}</SelectItem>
           {/*<SelectItem value='custom'>Custom</SelectItem>*/}
         </SelectContent>
       </Select>
@@ -169,9 +175,10 @@ interface TimeFieldProps {
 }
 
 const TimeField: FC<TimeFieldProps> = ({ value, onChange, disabled }) => {
+  const { t } = useTranslation();
   return (
     <div className='space-y-2'>
-      <Label>Time</Label>
+      <Label>{t('scheduleConfig.time', 'Time')}</Label>
       <div className='flex items-center gap-2'>
         <Input
           className={'w-24'}
@@ -195,16 +202,17 @@ interface TimezoneFieldProps {
 }
 
 const TimezoneField: FC<TimezoneFieldProps> = ({ value, onChange, disabled, timezones }) => {
+  const { t } = useTranslation();
   return (
     <div className='w-full space-y-2'>
-      <Label>Timezone</Label>
+      <Label>{t('scheduleConfig.timezone', 'Timezone')}</Label>
       <div className='flex items-center gap-2'>
         <Combobox
           options={timezones}
           value={value}
           onValueChange={onChange}
-          placeholder='Select timezone'
-          emptyMessage='No timezones found'
+          placeholder={t('scheduleConfig.selectTimezone', 'Select timezone')}
+          emptyMessage={t('scheduleConfig.noTimezones', 'No timezones found')}
           disabled={disabled}
           className='w-full'
         />
@@ -220,15 +228,22 @@ interface WeekdaysFieldProps {
 }
 
 const WeekdaysField: FC<WeekdaysFieldProps> = ({ value, onChange, disabled }) => {
+  const { t } = useTranslation();
   return (
     <div className='space-y-2'>
-      <Label>Days of Week</Label>
+      <Label>{t('scheduleConfig.daysOfWeek', 'Days of Week')}</Label>
       <div className={disabled ? 'pointer-events-none' : ''}>
         <MultiSelect
-          options={WEEKDAYS}
+          options={WEEKDAYS.map(day => ({
+            ...day,
+            label: t(
+              `scheduleConfig.weekday${day.value}`,
+              day.label
+            ),
+          }))}
           selected={value}
           onSelectionChange={onChange}
-          placeholder='Select days...'
+          placeholder={t('scheduleConfig.selectDays', 'Select days...')}
           maxDisplayItems={3}
         />
       </div>
@@ -243,15 +258,26 @@ interface MonthDaysFieldProps {
 }
 
 const MonthDaysField: FC<MonthDaysFieldProps> = ({ value, onChange, disabled }) => {
+  const { t } = useTranslation();
   return (
     <div className='space-y-2'>
-      <Label>Days of Month</Label>
+      <Label>{t('scheduleConfig.daysOfMonth', 'Days of Month')}</Label>
       <div className={disabled ? 'pointer-events-none' : ''}>
         <MultiSelect
-          options={MONTH_DAYS}
+          options={MONTH_DAYS.map(day => ({
+            ...day,
+            label:
+              day.value === 1
+                ? t('scheduleDescription.ordinal1', '1st')
+                : day.value === 2
+                  ? t('scheduleDescription.ordinal2', '2nd')
+                  : day.value === 3
+                    ? t('scheduleDescription.ordinal3', '3rd')
+                    : t('scheduleDescription.ordinalOther', '{{day}}th', { day: day.value }),
+          }))}
           selected={value}
           onSelectionChange={onChange}
-          placeholder='Select days...'
+          placeholder={t('scheduleConfig.selectDays', 'Select days...')}
           maxDisplayItems={4}
         />
       </div>
@@ -274,10 +300,11 @@ const IntervalField: FC<IntervalFieldProps> = ({
   onValueChange,
   disabled,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className='grid grid-cols-2 gap-3'>
       <div className='space-y-2'>
-        <Label>Type</Label>
+        <Label>{t('scheduleConfig.type', 'Type')}</Label>
         <Select
           value={intervalType}
           onValueChange={(type: 'minutes' | 'hours') => {
@@ -289,14 +316,14 @@ const IntervalField: FC<IntervalFieldProps> = ({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='minutes'>Minutes</SelectItem>
-            <SelectItem value='hours'>Hours</SelectItem>
+            <SelectItem value='minutes'>{t('scheduleConfig.minutes', 'Minutes')}</SelectItem>
+            <SelectItem value='hours'>{t('scheduleConfig.hours', 'Hours')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className='space-y-2'>
-        <Label>Every</Label>
+        <Label>{t('scheduleConfig.every', 'Every')}</Label>
         <Select
           value={intervalValue.toString()}
           onValueChange={value => {
@@ -310,7 +337,7 @@ const IntervalField: FC<IntervalFieldProps> = ({
           <SelectContent>
             {(intervalType === 'minutes' ? MINUTE_INTERVALS : HOUR_INTERVALS).map(interval => (
               <SelectItem key={interval} value={interval.toString()}>
-                {interval} {intervalType === 'minutes' ? 'min' : 'hr'}
+                {interval} {intervalType === 'minutes' ? t('scheduleConfig.minAbbr', 'min') : t('scheduleConfig.hrAbbr', 'hr')}
               </SelectItem>
             ))}
           </SelectContent>
@@ -327,9 +354,10 @@ interface CustomCronFieldProps {
 }
 
 const CustomCronField: FC<CustomCronFieldProps> = ({ value, onChange, disabled }) => {
+  const { t } = useTranslation();
   return (
     <div className='space-y-1'>
-      <Label className='text-sm'>Cron Expression</Label>
+      <Label className='text-sm'>{t('scheduleConfig.cronExpression', 'Cron Expression')}</Label>
       <Input
         value={value}
         onChange={e => {
@@ -339,7 +367,9 @@ const CustomCronField: FC<CustomCronFieldProps> = ({ value, onChange, disabled }
         className='h-9 font-mono text-sm'
         disabled={disabled}
       />
-      <p className='text-muted-foreground text-xs'>Format: minute hour day month day-of-week</p>
+      <p className='text-muted-foreground text-xs'>
+        {t('scheduleConfig.cronFormat', 'Format: minute hour day month day-of-week')}
+      </p>
     </div>
   );
 };
@@ -354,6 +384,7 @@ export function ScheduleConfig({
   showSaveButton = false,
   hideEnableSwitch = false,
 }: ScheduleConfigProps) {
+  const { t } = useTranslation();
   const [isEnabled, setIsEnabled] = useState(enabled);
   const [currentTimezone, setCurrentTimezone] = useState(propTimezone ?? getBrowserTimezone());
   const [isPreviewExpanded, setIsPreviewExpanded] = useState(false);
@@ -501,7 +532,9 @@ export function ScheduleConfig({
                 onCheckedChange={handleEnabledChange}
               />
               <Label htmlFor='schedule-enabled' className='cursor-pointer text-sm font-normal'>
-                {isEnabled ? 'Enabled' : 'Disabled'}
+                {isEnabled
+                  ? t('scheduleConfig.enabled', 'Enabled')
+                  : t('scheduleConfig.disabled', 'Disabled')}
               </Label>
             </div>
           </div>
@@ -618,7 +651,7 @@ export function ScheduleConfig({
               >
                 <div className='flex items-center gap-2'>
                   <Settings className='h-4 w-4' />
-                  <span className='text-sm font-medium'>Preview</span>
+                  <span className='text-sm font-medium'>{t('scheduleConfig.preview', 'Preview')}</span>
                 </div>
                 {isPreviewExpanded ? (
                   <ChevronUp className='text-muted-foreground h-4 w-4' />
@@ -631,28 +664,30 @@ export function ScheduleConfig({
                 <>
                   <div className='grid gap-4'>
                     <div className='flex items-center justify-between'>
-                      <span className='text-muted-foreground text-xs'>Status:</span>
+                      <span className='text-muted-foreground text-xs'>{t('scheduleConfig.status', 'Status:')}</span>
                       <Badge variant={isEnabled ? 'default' : 'secondary'} className='text-xs'>
-                        {isEnabled ? 'Enabled' : 'Disabled'}
+                        {isEnabled
+                          ? t('scheduleConfig.enabled', 'Enabled')
+                          : t('scheduleConfig.disabled', 'Disabled')}
                       </Badge>
                     </div>
 
                     <div className='flex items-center justify-between'>
-                      <span className='text-muted-foreground text-xs'>Cron:</span>
+                      <span className='text-muted-foreground text-xs'>{t('scheduleConfig.cron', 'Cron:')}</span>
                       <Badge variant='secondary' className='font-mono text-xs'>
                         {cronExpression}
                       </Badge>
                     </div>
 
                     <div className='flex items-center justify-between'>
-                      <span className='text-muted-foreground text-xs'>Timezone:</span>
+                      <span className='text-muted-foreground text-xs'>{t('scheduleConfig.timezone', 'Timezone:')}</span>
                       <Badge variant='outline' className='text-xs'>
                         {currentTimezone}
                       </Badge>
                     </div>
 
                     <div className='flex items-start justify-between gap-2'>
-                      <span className='text-muted-foreground text-xs'>Schedule:</span>
+                      <span className='text-muted-foreground text-xs'>{t('scheduleConfig.schedule', 'Schedule:')}</span>
                       <span className='flex-1 text-right text-xs'>{nextRun}</span>
                     </div>
                   </div>
@@ -660,10 +695,13 @@ export function ScheduleConfig({
                   {isEnabled && needsTimezone && currentTimezone !== getBrowserTimezone() && (
                     <Alert className={'border-amber-200 bg-amber-50'}>
                       <AlertCircle className='h-4 w-4' />
-                      <AlertTitle>Time Zone</AlertTitle>
+                      <AlertTitle>{t('scheduleConfig.timeZone', 'Time Zone')}</AlertTitle>
                       <AlertDescription>
-                        Schedule runs in {currentTimezone} (not your local {getBrowserTimezone()}{' '}
-                        time). Execution time may differ from expected.
+                        {t(
+                          'scheduleConfig.timeZoneWarning',
+                          'Schedule runs in {{timezone}} (not your local {{localTimezone}} time). Execution time may differ from expected.',
+                          { timezone: currentTimezone, localTimezone: getBrowserTimezone() }
+                        )}
                       </AlertDescription>
                     </Alert>
                   )}
@@ -675,7 +713,7 @@ export function ScheduleConfig({
 
         {showSaveButton && (
           <Button className='w-full' disabled={!isEnabled}>
-            Save Schedule
+            {t('scheduleConfig.saveSchedule', 'Save Schedule')}
           </Button>
         )}
       </div>

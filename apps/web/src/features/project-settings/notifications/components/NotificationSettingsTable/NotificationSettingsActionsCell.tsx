@@ -7,6 +7,7 @@ import {
 } from '@owox/ui/components/dropdown-menu';
 import { MoreHorizontal, Pencil } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { NotificationSettingsItem } from '../../types';
 
 interface NotificationSettingsActionsCellProps {
@@ -18,6 +19,7 @@ export const NotificationSettingsActionsCell = ({
   setting,
   onEdit,
 }: NotificationSettingsActionsCellProps) => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -29,7 +31,7 @@ export const NotificationSettingsActionsCell = ({
             className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${
               isMenuOpen ? 'opacity-100' : 'group-hover:opacity-100'
             }`}
-            aria-label='Open menu'
+            aria-label={t('common.openMenu')}
             onClick={e => {
               e.stopPropagation();
             }}
@@ -46,7 +48,7 @@ export const NotificationSettingsActionsCell = ({
             }}
           >
             <Pencil className='h-4 w-4' aria-hidden />
-            <span>Edit settings</span>
+            <span>{t('notificationsPage.edit')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

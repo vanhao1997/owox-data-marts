@@ -24,11 +24,12 @@ export function ProjectMenuContent({ onClose, restricted = false }: ProjectMenuC
 }
 
 function RestrictedProjectMenuContent() {
+  const { t } = useTranslation();
   return (
     <DropdownMenuContent align="start" side="right" className="w-56">
       <SwitchProjectMenu
         autoLoad
-        emptyMessage="No other projects available"
+        emptyMessage={t('projectMenu.noOtherProjects', 'No other projects available')}
         excludeCurrentProject
         showSeparator={false}
       />

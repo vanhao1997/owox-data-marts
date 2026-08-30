@@ -67,6 +67,7 @@ import { RelationshipAccordionItem } from './RelationshipAccordionItem';
 import { TargetDataMartPicker } from './TargetDataMartPicker';
 import { useRelationshipDefinitionTypes } from './useRelationshipDefinitionTypes';
 import { useTransientRelationships } from './useTransientRelationships';
+import { useTranslation } from 'react-i18next';
 
 // Load React Flow and the graph renderer only when the user switches to graph
 // view so the default table path keeps the main bundle small.
@@ -141,6 +142,7 @@ function buildSourceList(
 export function DataMartRelationshipsContent({
   onRelationshipsChanged,
 }: DataMartRelationshipsContentProps) {
+  const { t } = useTranslation();
   const { dataMart, syncDataMartFromResponse, refreshDataMart } = useDataMartContext();
   const queryClient = useQueryClient();
 
@@ -194,11 +196,11 @@ export function DataMartRelationshipsContent({
       setRelationshipGraph(graph);
     } catch {
       if (loadRelationshipsRequestIdRef.current !== requestId) return;
-      toast.error('Failed to load relationships');
+      toast.error(t('dataMartRelationships.failedLoad', 'Failed to load relationships'));
     } finally {
       if (loadRelationshipsRequestIdRef.current === requestId) setIsLoading(false);
     }
-  }, [dataMartId]);
+  }, [dataMartId, t]);
 
   const relationships = useMemo<DataMartRelationship[]>(() => {
     if (!relationshipGraph) return [];
@@ -375,20 +377,20 @@ export function DataMartRelationshipsContent({
         await dataMartRelationshipService.deleteRelationship(dataMartId, id, {
           skipLoadingIndicator: true,
         });
-        toast.success('Relationship deleted');
+        toast.success(t('dataMartRelationships.relationshipDeleted', 'Relationship deleted'));
         void loadRelationships();
         invalidateBlendableSchema();
         onRelationshipsChanged?.();
       } catch {
-        toast.error('Failed to delete relationship');
+        toast.error(t('dataMartRelationships.failedDelete', 'Failed to delete relationship'));
       }
     },
-    [dataMartId, loadRelationships, invalidateBlendableSchema, onRelationshipsChanged]
+    [dataMartId, loadRelationships, invalidateBlendableSchema, onRelationshipsChanged, t]
   );
 
   const handleRelationshipUpdated = useCallback(
     (updated: DataMartRelationship) => {
-      toast.success('Relationship updated');
+      toast.success(t('dataMartRelationships.relationshipUpdated', 'Relationship updated'));
       const prevTargetAlias = relationships.find(r => r.id === updated.id)?.targetAlias;
       // Rename cascades paths in blendedFieldsConfig server-side; refetch to avoid overwriting it on next save.
       if (prevTargetAlias !== undefined && prevTargetAlias !== updated.targetAlias) {
@@ -405,6 +407,7 @@ export function DataMartRelationshipsContent({
       refreshDataMart,
       invalidateBlendableSchema,
       onRelationshipsChanged,
+      t,
     ]
   );
 
@@ -423,14 +426,14 @@ export function DataMartRelationshipsContent({
 
   const handleCreated = useCallback(
     (newRelationship: DataMartRelationship) => {
-      toast.success('Relationship added');
+      toast.success(t('dataMartRelationships.relationshipAdded', 'Relationship added'));
       setNewlyCreatedId(newRelationship.id);
       setIsAddingNew(false);
       void loadRelationships();
       invalidateBlendableSchema();
       onRelationshipsChanged?.();
     },
-    [loadRelationships, invalidateBlendableSchema, onRelationshipsChanged]
+    [loadRelationships, invalidateBlendableSchema, onRelationshipsChanged, t]
   );
 
   const updateSourceConfig = useCallback(
@@ -515,12 +518,12 @@ export function DataMartRelationshipsContent({
       <div className='flex min-w-0 flex-wrap items-center gap-2 pb-4'>
         <SearchInput
           id='search-relationships'
-          placeholder='Search data marts'
+          placeholder={t('dataMartRelationships.search', 'Search data marts')}
           value={searchInput}
           onChange={setSearchInput}
           debounceTime={0}
           className='border-muted dark:border-muted/50 rounded-md border bg-white pl-8 text-sm dark:bg-white/4 dark:hover:bg-white/8'
-          aria-label='Search data marts'
+          aria-label={t('dataMartRelationships.search', 'Search data marts')}
         />
         <Select
           value={statusFilter}
@@ -528,13 +531,17 @@ export function DataMartRelationshipsContent({
             handleStatusFilterChange(value as RelationshipStatusFilter);
           }}
         >
-          <SelectTrigger className='w-[180px] min-w-[150px]' aria-label='Status'>
+          <SelectTrigger className='w-[180px] min-w-[150px]' aria-label={t('dataMartRelationships.status', 'Status')}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {RELATIONSHIP_STATUS_FILTER_OPTIONS.map(option => (
               <SelectItem key={option.value} value={option.value}>
-                {option.label}
+                {option.value === 'all'
+                  ? t('dataMartRelationships.allStatuses', 'All statuses')
+                  : option.value === 'PUBLISHED'
+                    ? t('dataMartRelationships.publishedOnly', 'Published only')
+                    : t('dataMartRelationships.draftOnly', 'Draft only')}
               </SelectItem>
             ))}
           </SelectContent>
@@ -545,12 +552,12 @@ export function DataMartRelationshipsContent({
             handleShowLoopedChange(value === 'show');
           }}
         >
-          <SelectTrigger className='w-[220px] min-w-[180px]' aria-label='Looped data marts'>
+          <SelectTrigger className='w-[220px] min-w-[180px]' aria-label={t('dataMartRelationships.loopedDataMarts', 'Looped data marts')}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='hide'>Hide looped data marts</SelectItem>
-            <SelectItem value='show'>Show looped data marts</SelectItem>
+            <SelectItem value='hide'>{t('dataMartRelationships.hideLooped', 'Hide looped data marts')}</SelectItem>
+            <SelectItem value='show'>{t('dataMartRelationships.showLooped', 'Show looped data marts')}</SelectItem>
           </SelectContent>
         </Select>
         <div className='ml-auto flex items-center gap-2'>
@@ -567,13 +574,13 @@ export function DataMartRelationshipsContent({
             }}
           >
             <TabsList>
-              <TabsTrigger value='table' title='Table view'>
+              <TabsTrigger value='table' title={t('dataMartRelationships.tableView', 'Table view')}>
                 <List className='h-4 w-4' />
-                List
+                {t('dataMartRelationships.list', 'List')}
               </TabsTrigger>
-              <TabsTrigger value='graph' title='Diagram view'>
+              <TabsTrigger value='graph' title={t('dataMartRelationships.diagramView', 'Diagram view')}>
                 <Network className='h-4 w-4' />
-                Graph
+                {t('dataMartRelationships.graph', 'Graph')}
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -629,7 +636,7 @@ export function DataMartRelationshipsContent({
     if (filteredRows.length === 0) {
       return (
         <div className='text-muted-foreground px-4 py-6 text-sm'>
-          No relationships match your search or filters.
+          {t('dataMartRelationships.noMatch', 'No relationships match your search or filters.')}
         </div>
       );
     }
@@ -679,9 +686,9 @@ export function DataMartRelationshipsContent({
             <EmptyMedia variant='icon'>
               <Network />
             </EmptyMedia>
-            <EmptyTitle>No joined data marts yet</EmptyTitle>
+            <EmptyTitle>{t('dataMartRelationships.emptyTitle', 'No joined data marts yet')}</EmptyTitle>
             <EmptyDescription>
-              Join a data mart to extend this one with fields from related sources.
+              {t('dataMartRelationships.emptyDescription', 'Join a data mart to extend this one with fields from related sources.')}
             </EmptyDescription>
           </EmptyHeader>
           {isAddingNew ? (
@@ -703,7 +710,7 @@ export function DataMartRelationshipsContent({
               className='mt-4'
             >
               <Plus className='h-4 w-4' />
-              Join Data Mart
+              {t('dataMartRelationships.joinDataMart', 'Join Data Mart')}
             </Button>
           )}
         </Empty>
@@ -736,7 +743,7 @@ export function DataMartRelationshipsContent({
               className='h-12 w-full'
             >
               <Plus className='h-4 w-4' />
-              Join Data Mart
+              {t('dataMartRelationships.joinDataMart', 'Join Data Mart')}
             </Button>
           )}
         </div>
@@ -750,9 +757,9 @@ export function DataMartRelationshipsContent({
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={Link2}
-            tooltip='Business users can add columns from joinable data marts directly into their spreadsheet reports. No hallucinations - row counts remain unchanged'
+            tooltip={t('dataMartRelationships.joinableTooltip', 'Business users can add columns from joinable data marts directly into their spreadsheet reports. No hallucinations - row counts remain unchanged')}
           >
-            Joinable Data Marts
+            {t('dataMartRelationships.joinableTitle', 'Joinable Data Marts')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>{renderContent()}</CollapsibleCardContent>
@@ -765,7 +772,7 @@ export function DataMartRelationshipsContent({
           showCloseButton={false}
         >
           <DialogHeader className='flex-row items-center justify-between border-b px-6 py-4'>
-            <DialogTitle>Relationship Diagram</DialogTitle>
+            <DialogTitle>{t('dataMartRelationships.diagramTitle', 'Relationship Diagram')}</DialogTitle>
             <Button
               variant='ghost'
               size='sm'
@@ -773,7 +780,7 @@ export function DataMartRelationshipsContent({
                 setIsFullscreen(false);
               }}
             >
-              Close
+              {t('dataMartRelationships.close', 'Close')}
             </Button>
           </DialogHeader>
           {isFullscreen && (

@@ -5,38 +5,37 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 const StorageTypeSnowflakeDescription: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='snowflake-setup'>
-        <AccordionTrigger>How do I get started with Snowflake?</AccordionTrigger>
+        <AccordionTrigger>{t('storageHelp.snowflake.title')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            To use Snowflake as your storage provider, you'll need an active Snowflake account with
-            appropriate permissions.
+            {t('storageHelp.snowflake.intro')}
           </p>
-          <p className='mb-2'>Here's how to get started:</p>
+          <p className='mb-2'>{t('storageHelp.snowflake.stepsIntro')}</p>
           <ol className='list-inside list-decimal space-y-2 text-sm'>
             <li>
-              Sign up for a{' '}
+              {t('storageHelp.snowflake.signupPrefix')}{' '}
               <ExternalAnchor className='underline' href='https://signup.snowflake.com/'>
-                Snowflake account
+                {t('storageHelp.snowflake.accountLink')}
               </ExternalAnchor>{' '}
-              if you don't have one yet.
+              {t('storageHelp.snowflake.accountSuffix')}
             </li>
             <li>
-              Make sure you have the necessary privileges to create and access databases, schemas,
-              and warehouses.
+              {t('storageHelp.snowflake.privileges')}
             </li>
             <li>
-              Choose your authentication method: Username & PAT (Programmatic access token) for
-              quick setup, or Key Pair authentication for better security.
+              {t('storageHelp.snowflake.auth')}
             </li>
-            <li>Fill in the connection details below (account identifier and warehouse).</li>
+            <li>{t('storageHelp.snowflake.connection')}</li>
             <li>
-              You can access tables using the full path format: database.schema.table (similar to
-              BigQuery and Athena).
+              {t('storageHelp.snowflake.path')}
             </li>
           </ol>
         </AccordionContent>

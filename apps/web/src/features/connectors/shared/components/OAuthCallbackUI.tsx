@@ -4,15 +4,18 @@ interface OAuthCallbackUIProps {
 }
 
 export function OAuthCallbackUI({ status, errorMessage }: OAuthCallbackUIProps) {
+  const { t } = useTranslation();
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-50'>
       <div className='max-w-md rounded-lg bg-white p-8 shadow-lg'>
         {status === 'processing' && (
           <div className='text-center'>
             <div className='mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black'></div>
-            <h2 className='text-lg font-semibold text-gray-900'>Processing authentication...</h2>
+            <h2 className='text-lg font-semibold text-gray-900'>
+              {t('googleOAuth.callback.processing', 'Processing authentication...')}
+            </h2>
             <p className='mt-2 text-sm text-gray-600'>
-              Please wait while we complete the connection.
+              {t('googleOAuth.callback.waiting', 'Please wait while we complete the connection.')}
             </p>
           </div>
         )}
@@ -34,8 +37,12 @@ export function OAuthCallbackUI({ status, errorMessage }: OAuthCallbackUIProps) 
                 />
               </svg>
             </div>
-            <h2 className='text-lg font-semibold text-gray-900'>Authentication successful!</h2>
-            <p className='mt-2 text-sm text-gray-600'>This window will close automatically.</p>
+            <h2 className='text-lg font-semibold text-gray-900'>
+              {t('googleOAuth.callback.success', 'Authentication successful!')}
+            </h2>
+            <p className='mt-2 text-sm text-gray-600'>
+              {t('googleOAuth.callback.closeAutomatically', 'This window will close automatically.')}
+            </p>
           </div>
         )}
 
@@ -56,7 +63,9 @@ export function OAuthCallbackUI({ status, errorMessage }: OAuthCallbackUIProps) 
                 />
               </svg>
             </div>
-            <h2 className='text-lg font-semibold text-gray-900'>Authentication failed</h2>
+            <h2 className='text-lg font-semibold text-gray-900'>
+              {t('googleOAuth.callback.failed', 'Authentication failed')}
+            </h2>
             <p className='mt-2 text-sm text-gray-600'>{errorMessage}</p>
             <button
               onClick={() => {
@@ -64,7 +73,7 @@ export function OAuthCallbackUI({ status, errorMessage }: OAuthCallbackUIProps) 
               }}
               className='mt-4 rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800'
             >
-              Close Window
+              {t('common.close', 'Close')}
             </button>
           </div>
         )}
@@ -72,3 +81,4 @@ export function OAuthCallbackUI({ status, errorMessage }: OAuthCallbackUIProps) 
     </div>
   );
 }
+import { useTranslation } from 'react-i18next';

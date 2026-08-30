@@ -29,6 +29,7 @@ import TriggerTypeChangeOptionDescription from './FormDescriptions/TriggerTypeCh
 import ReportChangingDescription from './FormDescriptions/ReportChangingDescription.tsx';
 import ReportSelectionDescription from './FormDescriptions/ReportSelectionDescription.tsx';
 import { Button } from '@owox/ui/components/button';
+import { useTranslation } from 'react-i18next';
 
 interface ScheduledTriggerFormProps {
   initialData?: ScheduledTriggerFormData;
@@ -47,6 +48,7 @@ export function ScheduledTriggerForm({
   onCancel,
   onDirtyChange,
 }: ScheduledTriggerFormProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { form, handleTypeChange, handleSubmit, isDirty } = useScheduledTriggerForm({
@@ -82,8 +84,8 @@ export function ScheduledTriggerForm({
             name='type'
             render={({ field }) => (
               <FormItem>
-                <FormLabel tooltip='Choose what you want this trigger to run'>
-                  Trigger Type
+                <FormLabel tooltip={t('triggerForm.triggerTypeTooltip', 'Choose what you want this trigger to run')}>
+                  {t('triggerForm.triggerType', 'Trigger Type')}
                 </FormLabel>
                 <Select
                   onValueChange={value => {
@@ -95,16 +97,16 @@ export function ScheduledTriggerForm({
                 >
                   <FormControl>
                     <SelectTrigger className={'w-full'}>
-                      <SelectValue placeholder='Select trigger type' />
+                      <SelectValue placeholder={t('triggerForm.selectTriggerType', 'Select trigger type')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value={ScheduledTriggerType.REPORT_RUN}>Report Run</SelectItem>
+                    <SelectItem value={ScheduledTriggerType.REPORT_RUN}>{t('triggerForm.reportRun', 'Report Run')}</SelectItem>
                     <SelectItem value={ScheduledTriggerType.CONNECTOR_RUN}>
-                      Connector Run
+                      {t('triggerForm.connectorRun', 'Connector Run')}
                     </SelectItem>
                     <SelectItem value={ScheduledTriggerType.DATA_QUALITY_RUN}>
-                      Data Quality Run
+                      {t('triggerForm.qualityRun', 'Data Quality Run')}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -127,8 +129,8 @@ export function ScheduledTriggerForm({
               name='triggerConfig.reportId'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Select the report that will be run by this trigger'>
-                    Report
+                  <FormLabel tooltip={t('triggerForm.reportTooltip', 'Select the report that will be run by this trigger')}>
+                    {t('triggerForm.report', 'Report')}
                   </FormLabel>
                   <FormControl>
                     <ReportsProvider>
@@ -173,16 +175,16 @@ export function ScheduledTriggerForm({
             variant='default'
             type='submit'
             className='w-full'
-            aria-label={initialData ? 'Save changes' : 'Create trigger'}
+            aria-label={initialData ? t('triggerForm.saveChanges', 'Save changes') : t('triggerForm.create', 'Create trigger')}
             disabled={!isDirty || isSubmitting}
           >
             {isSubmitting
               ? initialData
-                ? 'Saving...'
-                : 'Creating...'
+                ? t('triggerForm.saving', 'Saving...')
+                : t('triggerForm.creating', 'Creating...')
               : initialData
-                ? 'Save changes'
-                : 'Create trigger'}
+                ? t('triggerForm.saveChanges', 'Save changes')
+                : t('triggerForm.create', 'Create trigger')}
           </Button>
           {onCancel && (
             <Button
@@ -190,9 +192,9 @@ export function ScheduledTriggerForm({
               type='button'
               onClick={onCancel}
               className='w-full'
-              aria-label='Cancel'
+              aria-label={t('triggerForm.cancel', 'Cancel')}
             >
-              Cancel
+              {t('triggerForm.cancel', 'Cancel')}
             </Button>
           )}
         </FormActions>

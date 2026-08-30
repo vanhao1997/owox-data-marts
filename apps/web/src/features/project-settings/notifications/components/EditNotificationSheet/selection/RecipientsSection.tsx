@@ -9,6 +9,7 @@ import { RecipientsSelector } from './RecipientsSelector';
 import { FieldItem, FieldLabel, FieldDescription } from '../form/FormField';
 import type { ProjectMember } from '../../../types';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 interface RecipientsSectionProps {
   members: ProjectMember[];
@@ -25,11 +26,12 @@ export function RecipientsSection({
   isLoading,
   disabled,
 }: RecipientsSectionProps) {
+  const { t } = useTranslation();
   return (
-    <FormSection title='Recipients'>
+    <FormSection title={t('notificationsPage.recipients', 'Recipients')}>
       <FieldItem>
-        <FieldLabel tooltip='Select team members who should receive notifications'>
-          Team members
+        <FieldLabel tooltip={t('notificationsPage.recipientsTooltip', 'Select team members who should receive notifications')}>
+          {t('notificationsPage.teamMembers', 'Team members')}
         </FieldLabel>
         <RecipientsSelector
           members={members}
@@ -41,15 +43,14 @@ export function RecipientsSection({
         <FieldDescription>
           <Accordion variant='common' type='single' collapsible>
             <AccordionItem value='recipients-info'>
-              <AccordionTrigger>How to add new recipients to this notification?</AccordionTrigger>
+              <AccordionTrigger>{t('notificationsPage.addRecipientsQuestion', 'How to add new recipients to this notification?')}</AccordionTrigger>
               <AccordionContent>
                 <p className='mb-2'>
-                  Only project members can receive notifications. To add new recipients, first
-                  invite them to the project through{' '}
+                  {t('notificationsPage.addRecipientsDescription', 'Only project members can receive notifications. To add new recipients, first invite them to the project through')}{' '}
                   <ExternalAnchor href='https://platform.p2pdigital.vn/ui/p/none/settings/members'>
-                    Project Settings → Members
+                    {t('notificationsPage.projectSettingsMembers', 'Project Settings → Members')}
                   </ExternalAnchor>{' '}
-                  page.
+                  {` ${t('notificationsPage.page', 'page')}.`}
                 </p>
               </AccordionContent>
             </AccordionItem>

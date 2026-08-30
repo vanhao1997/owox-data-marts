@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../../shared/components/Button';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
 import { useProjectRoute } from '../../../../../shared/hooks/useProjectRoute';
@@ -126,6 +127,7 @@ export function RelationshipAccordionItem({
   onHideForReportingChange,
   onFieldOverrideChange,
 }: RelationshipAccordionItemProps) {
+  const { t } = useTranslation();
   const { scope } = useProjectRoute();
   const rel = row.relationship;
   const isTransient = row.depth >= 2;
@@ -278,16 +280,24 @@ export function RelationshipAccordionItem({
                 {/* Fields badge */}
                 {!row.isCycleStub && (
                   <Badge variant='secondary' className='shrink-0 text-xs'>
-                    {visibleCount} {visibleCount === 1 ? 'field' : 'fields'}
+                    {visibleCount}{' '}
+                    {t(
+                      visibleCount === 1
+                        ? 'dataMartRelationships.field'
+                        : 'dataMartRelationships.fields',
+                      visibleCount === 1 ? 'field' : 'fields'
+                    )}
                   </Badge>
                 )}
 
-                {rel.targetDataMart.status === 'DRAFT' && <WarningBadge>Draft</WarningBadge>}
+                {rel.targetDataMart.status === 'DRAFT' && (
+                  <WarningBadge>{t('dataMartRelationships.draft', 'Draft')}</WarningBadge>
+                )}
                 {rel.joinConditions.length === 0 && (
-                  <WarningBadge>Join not configured</WarningBadge>
+                  <WarningBadge>{t('dataMartRelationships.joinNotConfigured', 'Join not configured')}</WarningBadge>
                 )}
                 {row.isBlocked && rel.targetDataMart.status !== 'DRAFT' && (
-                  <WarningBadge>Blocked</WarningBadge>
+                  <WarningBadge>{t('dataMartRelationships.blocked', 'Blocked')}</WarningBadge>
                 )}
                 {isMissingPrimaryKeyWarning(
                   rel.targetDataMart.hasPrimaryKey,
@@ -298,7 +308,7 @@ export function RelationshipAccordionItem({
                   !row.isCycleStub && (
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <AttentionBadge>No primary key</AttentionBadge>
+                        <AttentionBadge>{t('dataMartRelationships.noPrimaryKey', 'No primary key')}</AttentionBadge>
                       </TooltipTrigger>
                       <TooltipContent side='top' className='max-w-xs'>
                         {MISSING_PRIMARY_KEY_TOOLTIP}
@@ -308,7 +318,7 @@ export function RelationshipAccordionItem({
                 {row.isCycleStub && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <WarningBadge>Loop</WarningBadge>
+                      <WarningBadge>{t('dataMartRelationships.loop', 'Loop')}</WarningBadge>
                     </TooltipTrigger>
                     <TooltipContent side='top' className='max-w-xs'>
                       {CYCLE_STUB_TOOLTIP}
@@ -325,7 +335,9 @@ export function RelationshipAccordionItem({
                     e.stopPropagation();
                   }}
                 >
-                  <span className='text-muted-foreground text-xs'>Allow for reporting</span>
+                  <span className='text-muted-foreground text-xs'>
+                    {t('dataMartRelationships.allowReporting', 'Allow for reporting')}
+                  </span>
                   <Switch
                     checked={source?.isIncluded ?? true}
                     onCheckedChange={checked => {
@@ -357,7 +369,7 @@ export function RelationshipAccordionItem({
                         variant='ghost'
                         size='sm'
                         className='h-7 w-7 cursor-pointer p-0'
-                        aria-label='More actions'
+                        aria-label={t('dataMartRelationships.moreActions', 'More actions')}
                       >
                         <MoreHorizontal className='h-4 w-4' />
                       </Button>
@@ -532,10 +544,13 @@ export function RelationshipAccordionItem({
         onOpenChange={open => {
           if (!open) setIsConfirmDeleteOpen(false);
         }}
-        title='Delete Relationship'
-        description='Are you sure you want to delete this relationship? This action cannot be undone.'
-        confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
-        cancelLabel='Cancel'
+        title={t('dataMartRelationships.deleteTitle', 'Delete Relationship')}
+        description={t(
+          'dataMartRelationships.deleteDescription',
+          'Are you sure you want to delete this relationship? This action cannot be undone.'
+        )}
+        confirmLabel={isDeleting ? 'Deleting...' : t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         variant='destructive'
         onConfirm={() => {
           void handleDeleteConfirm();

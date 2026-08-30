@@ -2,6 +2,7 @@ import { Textarea } from '@owox/ui/components/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { ExternalLink, Info } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { Button } from '../../../../../shared/components/Button';
 import { useProjectRoute } from '../../../../../shared/hooks/useProjectRoute';
@@ -28,6 +29,7 @@ export function JoinDescriptionForm({
   inheritedFrom,
   onSaved,
 }: JoinDescriptionFormProps) {
+  const { t } = useTranslation();
   const { scope } = useProjectRoute();
 
   const savedValue = relationship.description ?? '';
@@ -154,7 +156,7 @@ export function JoinDescriptionForm({
             }}
           >
             <ExternalLink className='size-3.5' />
-            <span className='max-w-[200px] truncate'>Open {inheritedFrom.title}</span>
+            <span className='max-w-[200px] truncate'>{t('common.open')} {inheritedFrom.title}</span>
           </Button>
         </div>
       )}

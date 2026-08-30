@@ -3,6 +3,7 @@ import { Badge } from '@owox/ui/components/badge';
 import { Button } from '@owox/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { cn } from '@owox/ui/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface OutputSettingsButtonProps {
   active: boolean;
@@ -19,6 +20,8 @@ export function OutputSettingsButton({
   count,
   hasDisconnectedControls = false,
 }: OutputSettingsButtonProps) {
+  const { t } = useTranslation();
+  const outputControlsLabel = t('reportColumnPicker.outputControls', 'Output controls');
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -26,7 +29,7 @@ export function OutputSettingsButton({
           type='button'
           variant={open ? 'secondary' : 'ghost'}
           size='sm'
-          aria-label='Output controls'
+          aria-label={outputControlsLabel}
           aria-expanded={open}
           onClick={onClick}
           className='relative h-7 w-7'
@@ -36,7 +39,9 @@ export function OutputSettingsButton({
             <Badge
               variant={hasDisconnectedControls ? 'destructive' : 'default'}
               aria-label={
-                hasDisconnectedControls ? 'Disconnected output controls' : 'Output controls count'
+                hasDisconnectedControls
+                  ? t('reportColumnPicker.disconnectedOutputControls', 'Disconnected output controls')
+                  : t('reportColumnPicker.outputControlsCount', 'Output controls count')
               }
               className='pointer-events-none absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[8px] leading-none'
             >
@@ -45,7 +50,7 @@ export function OutputSettingsButton({
           )}
         </Button>
       </TooltipTrigger>
-      <TooltipContent>Output controls</TooltipContent>
+      <TooltipContent>{outputControlsLabel}</TooltipContent>
     </Tooltip>
   );
 }

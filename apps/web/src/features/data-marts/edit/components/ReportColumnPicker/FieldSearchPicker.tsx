@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@owox/ui/components/popover';
@@ -56,9 +57,11 @@ interface FieldSearchPickerProps {
 export function FieldSearchPicker({
   items,
   placeholder,
-  searchPlaceholder = 'Search fields…',
+  searchPlaceholder,
   onSelect,
 }: FieldSearchPickerProps) {
+  const { t } = useTranslation();
+  const resolvedSearchPlaceholder = searchPlaceholder ?? t('reportColumnPicker.searchFields');
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
@@ -76,9 +79,9 @@ export function FieldSearchPicker({
       </PopoverTrigger>
       <PopoverContent align='start' className='w-[var(--radix-popover-trigger-width)] p-0'>
         <Command filter={commandFilter}>
-          <CommandInput placeholder={searchPlaceholder} className='h-8' />
+          <CommandInput placeholder={resolvedSearchPlaceholder} className='h-8' />
           <CommandList>
-            <CommandEmpty>No fields found.</CommandEmpty>
+            <CommandEmpty>{t('reportColumnPicker.noFields')}</CommandEmpty>
             {items.map(item => {
               const content = (
                 <span className='flex min-w-0 flex-1 flex-col'>

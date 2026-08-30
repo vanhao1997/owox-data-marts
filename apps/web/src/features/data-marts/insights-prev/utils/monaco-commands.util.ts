@@ -1,4 +1,5 @@
 import type * as monaco from 'monaco-editor';
+import i18n from '../../../../i18n';
 
 interface SlashCommand {
   label: string;
@@ -6,11 +7,14 @@ interface SlashCommand {
   documentation: string;
 }
 
-const allSlashCommands: SlashCommand[] = [
+const getSlashCommands = (): SlashCommand[] => [
   {
-    label: 'New prompt',
+    label: i18n.t('insightsUi.newPrompt', 'New prompt'),
     insertText: '{{#prompt}}\n$0\n{{/prompt}}',
-    documentation: 'Insert a {{#prompt}} template for generative queries',
+    documentation: i18n.t(
+      'insightsUi.newPromptDescription',
+      'Insert a {{#prompt}} template for generative queries'
+    ),
   },
 ];
 
@@ -92,7 +96,7 @@ export function registerSlashCommandProvider(
 
         const suggestions: monaco.languages.CompletionItem[] = [];
 
-        allSlashCommands.forEach((command, index) => {
+        getSlashCommands().forEach((command, index) => {
           if (command.label.startsWith(commandText)) {
             suggestions.push({
               label: command.label,
@@ -111,14 +115,19 @@ export function registerSlashCommandProvider(
           }
         });
 
+        const copyTemplateLabel = i18n.t('insightsUi.copyTemplate', 'Copy template…');
+        const copyTemplateDetail = i18n.t(
+          'insightsUi.copyTemplateDetail',
+          'Copy template from an existing Insight'
+        );
         suggestions.push({
-          label: 'Copy template…',
+          label: copyTemplateLabel,
           kind: monaco.languages.CompletionItemKind.Reference,
-          detail: 'Copy template from an existing Insight',
+          detail: copyTemplateDetail,
           insertText: '',
           range: range,
           additionalTextEdits: [removeSlashEdit],
-          command: { id: COPY_TEMPLATE_COMMAND_ID, title: 'Copy template…' },
+          command: { id: COPY_TEMPLATE_COMMAND_ID, title: copyTemplateLabel },
           sortText: '999_copy_template',
         });
 

@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from '@owox/ui/components/select';
 import { Label } from '@owox/ui/components/label';
+import { useTranslation } from 'react-i18next';
 
 interface DataMartDefinitionTypeSelectorProps {
   initialType?: DataMartDefinitionType | null;
@@ -37,6 +38,7 @@ export function DataMartDefinitionTypeSelector({
   excludedTypes,
   savedType,
 }: DataMartDefinitionTypeSelectorProps) {
+  const { t } = useTranslation();
   const [selectedType, setSelectedType] = useState<DataMartDefinitionType | null>(
     initialType ?? null
   );
@@ -55,28 +57,28 @@ export function DataMartDefinitionTypeSelector({
   const allTypeOptions: TypeOption[] = [
     {
       type: DataMartDefinitionType.SQL,
-      label: 'SQL',
-      description: 'SQL query',
+      label: t('dataMartDefinitionType.sql', 'SQL'),
+      description: t('dataMartDefinitionType.sqlQuery', 'SQL query'),
     },
     {
       type: DataMartDefinitionType.TABLE,
-      label: 'Table',
-      description: 'Existing table',
+      label: t('dataMartDefinitionType.table', 'Table'),
+      description: t('dataMartDefinitionType.existingTable', 'Existing table'),
     },
     {
       type: DataMartDefinitionType.VIEW,
-      label: 'View',
-      description: 'Existing view',
+      label: t('dataMartDefinitionType.view', 'View'),
+      description: t('dataMartDefinitionType.existingView', 'Existing view'),
     },
     {
       type: DataMartDefinitionType.TABLE_PATTERN,
-      label: 'Pattern',
-      description: 'Table pattern',
+      label: t('dataMartDefinitionType.pattern', 'Pattern'),
+      description: t('dataMartDefinitionType.tablePattern', 'Table pattern'),
     },
     {
       type: DataMartDefinitionType.CONNECTOR,
-      label: 'Connector',
-      description: 'Data import from Source to Storage',
+      label: t('dataMartDefinitionType.connector', 'Connector'),
+      description: t('dataMartDefinitionType.dataImport', 'Data import from Source to Storage'),
     },
   ];
 
@@ -84,7 +86,7 @@ export function DataMartDefinitionTypeSelector({
 
   return (
     <div className='dm-card-block'>
-      <Label className='text-foreground'>Definition Type</Label>
+      <Label className='text-foreground'>{t('dataMartDefinitionType.label', 'Definition type')}</Label>
       <div className='space-y-2'>
         <Select
           value={selectedType ?? ''}
@@ -92,8 +94,8 @@ export function DataMartDefinitionTypeSelector({
             handleTypeChange(value as DataMartDefinitionType);
           }}
         >
-          <SelectTrigger className='dm-card-formcontrol w-full' aria-label='Definition Type'>
-            <SelectValue placeholder='Select definition type'>
+          <SelectTrigger className='dm-card-formcontrol w-full' aria-label={t('dataMartDefinitionType.label', 'Definition type')}>
+            <SelectValue placeholder={t('dataMartDefinitionType.select', 'Select definition type')}>
               {selectedType && allTypeOptions.find(opt => opt.type === selectedType)?.label}
             </SelectValue>
           </SelectTrigger>
@@ -104,7 +106,7 @@ export function DataMartDefinitionTypeSelector({
                   {option.label}
                   <span className='text-muted-foreground/80 ml-2'>{option.description}</span>
                   {savedType === option.type && (
-                    <span className='text-muted-foreground/60 ml-2'>(current)</span>
+                    <span className='text-muted-foreground/60 ml-2'>({t('dataMartDefinitionType.current', 'current')})</span>
                   )}
                 </SelectItem>
               ))}

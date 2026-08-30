@@ -7,6 +7,7 @@ import {
 import { CircleCheck, XCircle, Loader2, CircleDashed } from 'lucide-react';
 import { cn } from '@owox/ui/lib/utils';
 import { ReportStatusEnum } from '../../../shared/enums/report-status.enum';
+import { useTranslation } from 'react-i18next';
 
 interface StatusIconProps {
   status: ReportStatusEnum | null;
@@ -49,12 +50,20 @@ const fallbackStatusConfig = {
 } as const;
 
 export function StatusIcon({ status, error, className }: StatusIconProps) {
+  const { t } = useTranslation();
   if (!status) return null;
   const config =
     (statusConfig as Partial<Record<ReportStatusEnum, (typeof statusConfig)[ReportStatusEnum]>>)[
       status
     ] ?? fallbackStatusConfig;
-  const { icon: Icon, color, label } = config;
+  const { icon: Icon, color } = config;
+  const label = {
+    [ReportStatusEnum.SUCCESS]: t('reportStatus.success', 'Success'),
+    [ReportStatusEnum.ERROR]: t('reportStatus.fail', 'Fail'),
+    [ReportStatusEnum.RUNNING]: t('reportStatus.inProgress', 'In progress'),
+    [ReportStatusEnum.CANCELLED]: t('reportStatus.cancelled', 'Cancelled'),
+    [ReportStatusEnum.RESTRICTED]: t('reportStatus.restricted', 'Restricted'),
+  }[status];
 
   // Generate unique ID for tooltip
   const tooltipId = `status-tooltip-${status}-${error ? 'error' : 'normal'}`;

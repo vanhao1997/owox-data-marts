@@ -11,6 +11,7 @@ import { Combobox } from '../../../../shared/components/Combobox/combobox';
 import type { DataStorageListItem } from '../../../data-storage/shared/model/types/data-storage-list';
 import { DataStorageTypeModel } from '../../../data-storage/shared/types/data-storage-type.model';
 import type { CanvasRelFilter, CanvasStatusFilter } from '../model/graph/filter-canvas-data';
+import { useTranslation } from 'react-i18next';
 
 interface ModelCanvasToolbarProps {
   storages: DataStorageListItem[];
@@ -27,6 +28,7 @@ interface ModelCanvasToolbarProps {
 }
 
 export function ModelCanvasToolbar(props: ModelCanvasToolbarProps) {
+  const { t } = useTranslation();
   const { storageOptions, storageIcons } = useMemo(() => {
     const sorted = [...props.storages].sort((a, b) => a.title.localeCompare(b.title));
     return {
@@ -40,13 +42,14 @@ export function ModelCanvasToolbar(props: ModelCanvasToolbarProps) {
   return (
     <div className='flex min-w-0 flex-nowrap items-center gap-2 pb-4'>
       {props.actions}
-      <label className='contents' aria-label='Storage'>
+      <label className='contents' aria-label={t('modelCanvasPage.selectStorage')}>
         <Combobox
           options={storageOptions}
           value={props.storageId ?? ''}
           onValueChange={props.onStorageChange}
-          placeholder='Select storage'
-          emptyMessage='No storages found'
+          placeholder={t('modelCanvasPage.selectStorage')}
+          emptyMessage={t('modelCanvasPage.noStoragesFound')}
+          aria-label={t('modelCanvasPage.storageLabel')}
           className='w-[300px] min-w-[220px] shrink'
           renderLabel={option => {
             const Icon = storageIcons.get(option.value);
@@ -65,13 +68,13 @@ export function ModelCanvasToolbar(props: ModelCanvasToolbarProps) {
           props.onStatusChange(value as CanvasStatusFilter);
         }}
       >
-        <SelectTrigger className='w-[180px] min-w-[150px]' aria-label='Status'>
+        <SelectTrigger className='w-[180px] min-w-[150px]' aria-label={t('modelCanvasPage.status')}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='published'>Published only</SelectItem>
-          <SelectItem value='draft'>Draft only</SelectItem>
-          <SelectItem value='all'>All statuses</SelectItem>
+          <SelectItem value='published'>{t('modelCanvasPage.publishedOnly')}</SelectItem>
+          <SelectItem value='draft'>{t('modelCanvasPage.draftOnly')}</SelectItem>
+          <SelectItem value='all'>{t('modelCanvasPage.allStatuses')}</SelectItem>
         </SelectContent>
       </Select>
       <Select
@@ -80,21 +83,24 @@ export function ModelCanvasToolbar(props: ModelCanvasToolbarProps) {
           props.onRelChange(value as CanvasRelFilter);
         }}
       >
-        <SelectTrigger className='w-[220px] min-w-[180px]' aria-label='Relationships'>
+        <SelectTrigger
+          className='w-[220px] min-w-[180px]'
+          aria-label={t('modelCanvasPage.relationships')}
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='connected'>With relationships only</SelectItem>
-          <SelectItem value='all'>All data marts</SelectItem>
+          <SelectItem value='connected'>{t('modelCanvasPage.withRelationshipsOnly')}</SelectItem>
+          <SelectItem value='all'>{t('modelCanvasPage.allDataMarts')}</SelectItem>
         </SelectContent>
       </Select>
       <div className='ml-auto w-[240px] min-w-[180px] shrink [&>div]:w-full'>
         <SearchInput
           id='model-canvas-search'
-          placeholder='Search data marts…'
+          placeholder={t('modelCanvasPage.searchDataMarts')}
           value={props.searchQuery}
           onChange={props.onSearchChange}
-          aria-label='Search data marts'
+          aria-label={t('modelCanvasPage.searchLabel')}
         />
       </div>
     </div>

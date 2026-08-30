@@ -11,6 +11,7 @@ import { ChevronDown } from 'lucide-react';
 import { ReportFormMode } from '../../../shared';
 import { useRef, useEffect } from 'react';
 import type { RefObject } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface ReportFormActionsProps {
   mode: ReportFormMode;
@@ -39,6 +40,7 @@ export const ReportFormActions = ({
   onSubmit,
   onCancel,
 }: ReportFormActionsProps) => {
+  const { t } = useTranslation();
   // Guards against double-submit during the window between the first click and
   // the parent updating isSubmitting to true (async resolver latency).
   const submitPendingRef = useRef(false);
@@ -58,16 +60,16 @@ export const ReportFormActions = ({
   const primaryLabel =
     mode === ReportFormMode.CREATE
       ? canRunAfterSave
-        ? 'Create & Run report'
-        : 'Create report'
-      : 'Save changes to report';
+        ? t('reportsUi.createAndRunReport', 'Tạo và chạy báo cáo')
+        : t('reportsUi.createReport', 'Tạo báo cáo')
+      : t('reportsUi.saveChangesToReport', 'Lưu thay đổi báo cáo');
 
   const dropdownItemLabel =
     mode === ReportFormMode.CREATE
-      ? 'Create new report'
+      ? t('reportsUi.createNewReport', 'Tạo báo cáo mới')
       : isDirty || triggersDirty || ownersDirty
-        ? 'Save & Run report'
-        : 'Run report';
+        ? t('reportsUi.saveAndRunReport', 'Lưu và chạy báo cáo')
+        : t('reportActions.run', 'Run report');
 
   return (
     <FormActions>
@@ -99,7 +101,7 @@ export const ReportFormActions = ({
                 variant='default'
                 type='button'
                 disabled={disabledPrimary}
-                aria-label='More actions'
+                aria-label={t('reportsUi.moreActions', 'Thao tác khác')}
                 className='group'
               >
                 <ChevronDown
@@ -128,7 +130,7 @@ export const ReportFormActions = ({
 
       {onCancel && (
         <Button variant='outline' type='button' onClick={onCancel} disabled={isSubmitting}>
-          Cancel
+          {t('common.cancel', 'Cancel')}
         </Button>
       )}
     </FormActions>

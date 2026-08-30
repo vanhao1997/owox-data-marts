@@ -17,6 +17,7 @@ import { MembersSettingsProvider } from '../../features/project-settings/members
 import { MembershipRequestSheet } from '../../features/project-settings/members/components/MembershipRequestSheet/MembershipRequestSheet';
 import { useTombstonedCollection } from '../../features/project-settings/members/model/useTombstonedCollection';
 import type { PendingProjectInvitation } from '../../features/project-members/services/project-members.service';
+import { useTranslation } from 'react-i18next';
 
 interface TabLink {
   name: string;
@@ -36,6 +37,7 @@ interface TabLink {
  * another. Tabs that do not need this data simply ignore the provider.
  */
 export function ProjectSettingsPage() {
+  const { t } = useTranslation();
   const isAdmin = useIsAdmin();
   const { flags } = useFlags();
   const isOwoxIdpProvider = checkVisible('IDP_PROVIDER', ['owox-better-auth'], flags);
@@ -85,12 +87,14 @@ export function ProjectSettingsPage() {
       // Without a catch the page renders empty arrays + loading=false, which
       // is indistinguishable from "this project really has no members /
       // contexts". Surface the error so the admin knows to retry.
-      setError(err instanceof Error ? err.message : 'Failed to load project data');
+      setError(
+        err instanceof Error ? err.message : t('projectSettingsPage.loadFailed', 'Failed to load project data')
+      );
     } finally {
       setLoading(false);
       setLoadingRequests(false);
     }
-  }, [isAdmin, memberTombstones, requestTombstones]);
+  }, [isAdmin, memberTombstones, requestTombstones, t]);
 
   useEffect(() => {
     void loadData();
@@ -135,38 +139,40 @@ export function ProjectSettingsPage() {
         );
         if (refreshed.magicLink) {
           await navigator.clipboard.writeText(refreshed.magicLink);
-          toast.success('New invitation link copied to clipboard');
+          toast.success(t('projectSettingsPage.newInvitationCopied', 'New invitation link copied to clipboard'));
         }
         await loadData();
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Failed to resend invitation');
+        toast.error(err instanceof Error ? err.message : t('projectSettingsPage.resendFailed', 'Failed to resend invitation'));
       }
     },
-    [loadData]
+    [loadData, t]
   );
 
   const handleCopyInvitation = useCallback(async (invitation: PendingProjectInvitation) => {
     if (!invitation.magicLink) return;
     try {
       await navigator.clipboard.writeText(invitation.magicLink);
-      toast.success('Invitation link copied to clipboard');
+      toast.success(t('projectSettingsPage.invitationCopied', 'Invitation link copied to clipboard'));
     } catch {
-      toast.error('Failed to copy invitation link');
+      toast.error(t('projectSettingsPage.copyInvitationFailed', 'Failed to copy invitation link'));
     }
-  }, []);
+  }, [t]);
 
   const navigation: TabLink[] = [
-    { name: 'Overview', path: '.', end: true },
-    { name: 'Members', path: 'members', end: false },
-    { name: 'Contexts', path: 'contexts', end: false },
+    { name: t('projectSettingsPage.tabs.overview', 'Overview'), path: '.', end: true },
+    { name: t('projectSettingsPage.tabs.members', 'Members'), path: 'members', end: false },
+    { name: t('projectSettingsPage.tabs.contexts', 'Contexts'), path: 'contexts', end: false },
     ...(isOwoxIdpProvider
       ? [
-          { name: 'Credit consumption', path: 'credit', end: false },
-          { name: 'Subscription', path: 'subscription', end: false },
+          { name: t('projectSettingsPage.tabs.credit', 'Credit consumption'), path: 'credit', end: false },
+          { name: t('projectSettingsPage.tabs.subscription', 'Subscription'), path: 'subscription', end: false },
         ]
       : []),
-    ...(licenseKeysEnabled ? [{ name: 'License keys', path: 'license-keys', end: false }] : []),
-    { name: 'Notifications', path: 'notifications', end: false },
+    ...(licenseKeysEnabled
+      ? [{ name: t('projectSettingsPage.tabs.licenseKeys', 'License keys'), path: 'license-keys', end: false }]
+      : []),
+    { name: t('projectSettingsPage.tabs.notifications', 'Notifications'), path: 'notifications', end: false },
   ];
 
   // Stabilize the context value object so consumers do not re-render every
@@ -209,12 +215,12 @@ export function ProjectSettingsPage() {
     <MembersSettingsProvider value={providerValue}>
       <div className='min-w-[600px] px-12 py-6'>
         <div className='mb-4 flex items-center gap-4'>
-          <span className='text-2xl font-medium'>Project settings</span>
+          <span className='text-2xl font-medium'>{t('projectSettingsPage.title', 'Project settings')}</span>
         </div>
 
         <nav
           className='no-scrollbar -mb-px flex gap-2 overflow-x-auto border-b whitespace-nowrap'
-          aria-label='Tabs'
+          aria-label={t('projectSettingsPage.tabsLabel', 'Tabs')}
           role='tablist'
         >
           {navigation.map(item => (
@@ -239,7 +245,7 @@ export function ProjectSettingsPage() {
         {error !== null && (
           <Alert variant='destructive' className='mt-4'>
             <AlertCircle className='h-4 w-4' />
-            <AlertTitle>Could not load project data</AlertTitle>
+            <AlertTitle>{t('projectSettingsPage.loadFailed', 'Could not load project data')}</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -247,31 +253,31 @@ export function ProjectSettingsPage() {
         <div className='pt-4'>
           {isAdmin && pendingInvitations.length > 0 && (
             <div className='mb-4 rounded-md border p-3 text-sm'>
-              <div className='mb-2 font-medium'>Pending invitations</div>
+              <div className='mb-2 font-medium'>{t('projectSettingsPage.pendingInvitations', 'Pending invitations')}</div>
               {pendingInvitations.map(invitation => (
                 <div
                   key={invitation.invitationId ?? invitation.email}
                   className='flex items-center justify-between border-t py-2'
                 >
                   <span>
-                    {invitation.email} · {invitation.role} · expires{' '}
+                    {invitation.email} · {invitation.role} · {t('projectSettingsPage.expires', 'expires')}{' '}
                     {invitation.expiresAt
                       ? new Date(invitation.expiresAt).toLocaleDateString()
-                      : 'soon'}
+                      : t('projectSettingsPage.soon', 'soon')}
                   </span>
                   <div className='flex gap-2'>
                     <button
                       className='text-primary underline'
                       onClick={() => void handleResendInvitation(invitation)}
                     >
-                      Resend
+                      {t('projectSettingsPage.resend', 'Resend')}
                     </button>
                     {invitation.magicLink && (
                       <button
                         className='text-primary underline'
                         onClick={() => void handleCopyInvitation(invitation)}
                       >
-                        Copy link
+                        {t('projectSettingsPage.copyLink', 'Copy link')}
                       </button>
                     )}
                     <button
@@ -282,7 +288,7 @@ export function ProjectSettingsPage() {
                           .then(() => loadData())
                       }
                     >
-                      Revoke
+                      {t('projectSettingsPage.revoke', 'Revoke')}
                     </button>
                   </div>
                 </div>

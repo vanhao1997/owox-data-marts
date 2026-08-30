@@ -124,17 +124,17 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
   return (
     <>
       {/* Connection Settings */}
-      <FormSection title='Connection Settings'>
+      <FormSection title='Cài đặt kết nối'>
         <FormField
           control={form.control}
           name='config.projectId'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Enter the ID of your Google Cloud project where BigQuery usage will be billed'>
-                Project ID
+              <FormLabel tooltip='Nhập mã dự án Google Cloud nơi chi phí BigQuery sẽ được tính'>
+                Mã dự án
               </FormLabel>
               <FormControl>
-                <Input {...field} placeholder='Enter a Project Id' />
+                <Input {...field} placeholder='Nhập mã dự án' />
               </FormControl>
               <FormDescription>
                 <GoogleBigQueryProjectIdDescription />
@@ -148,16 +148,16 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
           name='config.location'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Choose the same region where your BigQuery data is stored to ensure queries work correctly'>
-                Location
+              <FormLabel tooltip='Chọn cùng khu vực nơi dữ liệu BigQuery đang được lưu để truy vấn hoạt động đúng'>
+                Vị trí
               </FormLabel>
               <FormControl>
                 <Combobox
                   options={googleBigQueryLocationOptions}
                   value={field.value}
                   onValueChange={field.onChange}
-                  placeholder='Select a location'
-                  emptyMessage='No locations found'
+                  placeholder='Chọn vị trí'
+                  emptyMessage='Không tìm thấy vị trí nào'
                   className='w-full'
                 />
               </FormControl>
@@ -189,7 +189,7 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
             {isOAuthAvailable && (
               <FormItem>
                 <div className='flex items-center justify-between'>
-                  <FormLabel>Authentication Method</FormLabel>
+                  <FormLabel>Phương thức xác thực</FormLabel>
                   <Tabs
                     value={authMethod}
                     onValueChange={v => {
@@ -197,8 +197,8 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
                     }}
                   >
                     <TabsList>
-                      <TabsTrigger value='oauth'>Connect with Google</TabsTrigger>
-                      <TabsTrigger value='service-account'>Service Account JSON</TabsTrigger>
+                      <TabsTrigger value='oauth'>Kết nối với Google</TabsTrigger>
+                      <TabsTrigger value='service-account'>JSON tài khoản dịch vụ</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
@@ -215,8 +215,8 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
                 render={() => (
                   <FormItem>
                     <div className='mb-4 flex items-center justify-between'>
-                      <FormLabel tooltip='Authorize Owox to access your BigQuery datasets'>
-                        Connect with Google OAuth
+                      <FormLabel tooltip='Cho phép Owox truy cập các tập dữ liệu BigQuery của bạn'>
+                        Kết nối bằng Google OAuth
                       </FormLabel>
                     </div>
                     <GoogleOAuthConnectButton
@@ -242,18 +242,18 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <div className='flex items-center justify-between'>
-                      <FormLabel tooltip='Paste a JSON key from a service account that has access to the selected storage provider'>
-                        Service Account
+                      <FormLabel tooltip='Dán khóa JSON từ tài khoản dịch vụ có quyền truy cập vào nhà cung cấp kho lưu trữ đã chọn'>
+                        Tài khoản dịch vụ
                       </FormLabel>
                       {!isEditing && serviceAccountValue && (
-                        <Button variant='ghost' size='sm' onClick={handleEdit} type='button'>
-                          Edit
-                        </Button>
+                          <Button variant='ghost' size='sm' onClick={handleEdit} type='button'>
+                            Sửa
+                          </Button>
                       )}
                       {isEditing && (
-                        <Button variant='ghost' size='sm' onClick={handleCancel} type='button'>
-                          Cancel
-                        </Button>
+                          <Button variant='ghost' size='sm' onClick={handleCancel} type='button'>
+                            Hủy
+                          </Button>
                       )}
                     </div>
                     <FormControl>
@@ -261,11 +261,11 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
                         <FieldWithActions
                           value={serviceAccountLink.email}
                           actions={[
-                            { type: 'copy', tooltip: 'Copy email' },
+                            { type: 'copy', tooltip: 'Sao chép email' },
                             {
                               type: 'external-link',
                               href: serviceAccountLink.url,
-                              tooltip: 'Open details',
+                              tooltip: 'Mở chi tiết',
                             },
                           ]}
                         />
@@ -274,7 +274,7 @@ export const GoogleBigQueryFields = ({ form }: GoogleBigQueryFieldsProps) => {
                           {...field}
                           className='min-h-[150px] font-mono'
                           rows={8}
-                          placeholder='Paste your service account JSON here or drag & drop the file'
+                          placeholder='Dán JSON tài khoản dịch vụ vào đây hoặc kéo thả tệp'
                           onFileRead={content => {
                             form.setValue('credentials.serviceAccount', content, {
                               shouldDirty: true,

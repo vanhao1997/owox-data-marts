@@ -2,18 +2,18 @@
   "brand": {
     "name": "P2PDigital",
     "productName": "P2PDigital Data Marts",
-    "tagline": "P2PDigital Data Marts — Connectors miễn phí, mã nguồn mở cho Data Analysts"
+    "tagline": "P2PDigital Data Marts — Trình kết nối miễn phí, mã nguồn mở cho chuyên viên phân tích dữ liệu"
   },
   "sidebar": {
-    "dataMarts": "Data Marts",
-    "models": "Models",
-    "reports": "Reports",
-    "insights": "Insights",
-    "triggers": "Triggers",
+    "dataMarts": "Data Mart",
+    "models": "Mô hình",
+    "reports": "Báo cáo",
+    "insights": "Phân tích chuyên sâu",
+    "triggers": "Lịch chạy",
     "runHistory": "Lịch sử chạy",
-    "storages": "Storages",
-    "destinations": "Destinations",
-    "plugins": "Plugins",
+    "storages": "Kho lưu trữ",
+    "destinations": "Điểm đến",
+    "plugins": "Tiện ích",
     "accessRequired": "Yêu cầu quyền truy cập",
     "waitingForAccess": "Đang chờ quyền truy cập dự án",
     "requestAccess": "Yêu cầu quyền truy cập để sử dụng mục này"
@@ -27,14 +27,16 @@
     "noResults": "Không tìm thấy kết quả.",
     "searching": "Đang tìm kiếm…",
     "failed": "Tìm kiếm thất bại.",
-    "hint": "Nhập từ khóa để tìm kiếm Data Marts, Storages và Destinations.",
+    "hint": "Nhập từ khóa để tìm kiếm Data Mart, kho lưu trữ và điểm đến.",
+    "unsupportedResults": "Một số kết quả không thể hiển thị.",
     "labelDataMart": "Data Mart",
-    "labelStorage": "Storage",
-    "labelDestination": "Destination"
+    "labelStorage": "Kho lưu trữ",
+    "labelDestination": "Điểm đến"
   },
   "projectMenu": {
     "switchProject": "Chuyển dự án",
     "searchProject": "Tìm kiếm dự án...",
+    "projectsList": "Danh sách dự án",
     "loadingProjects": "Đang tải danh sách dự án...",
     "unableToLoad": "Không thể tải danh sách dự án. Vui lòng thử lại.",
     "retry": "Thử lại",
@@ -45,7 +47,7 @@
     "overview": "Tổng quan",
     "members": "Thành viên",
     "contexts": "Ngữ cảnh",
-    "creditConsumption": "Tiêu thụ credit",
+    "creditConsumption": "Mức tiêu thụ tín dụng",
     "subscription": "Gói dịch vụ",
     "licenseKeys": "Mã bản quyền",
     "notifications": "Thông báo",
@@ -57,6 +59,10 @@
     "license": "Giấy phép",
     "owoxBi": "P2PDigital BI"
   },
+  "projectRedirect": {
+    "auth": "Đang xác thực...",
+    "notFound": "Không tìm thấy dự án"
+  },
   "userMenu": {
     "appearance": "Giao diện",
     "system": "Hệ thống",
@@ -66,6 +72,7 @@
     "language": "Ngôn ngữ"
   },
   "helpMenu": {
+    "title": "Trợ giúp",
     "whatsNew": "Có gì mới",
     "getToKnow": "Tìm hiểu P2PDigital",
     "documentation": "Tài liệu",
@@ -73,62 +80,74 @@
     "gettingStarted": "Bắt đầu với Data Marts",
     "sqlToSheets": "SQL sang Google Sheets trong vài phút",
     "dataStudioSetup": "Thiết lập Data Studio",
-    "bigQuerySetup": "Hoàn tất thiết lập BigQuery storage để publish Data Marts",
-    "insightsVideo": "Insights: cách nhận báo cáo tự động từ câu hỏi",
-    "emailReports": "Email reports: cách gửi báo cáo qua email",
-    "onlineChat": "Chat trực tuyến"
+    "bigQuerySetup": "Hoàn tất thiết lập kho BigQuery để xuất bản Data Mart",
+    "insightsVideo": "Phân tích chuyên sâu: nhận báo cáo tự động từ câu hỏi",
+    "emailReports": "Báo cáo email: gửi báo cáo qua email",
+    "onlineChat": "Chat trực tuyến",
+    "triggerSubtitle": "Trò chuyện, tài liệu, video"
   },
   "setupChecklist": {
-    "createStorage": "Tạo storage",
-    "createStorageDesc": "Storage là kết nối đến data warehouse của bạn (BigQuery, Snowflake, v.v.). Cần thiết để tạo và chạy Data Marts.",
-    "storageCreated": "Đã tạo storage",
+    "createStorage": "Tạo kho lưu trữ",
+    "createStorageDesc": "Kho lưu trữ là kết nối đến kho dữ liệu của bạn (BigQuery, Snowflake, v.v.). Cần thiết để tạo và chạy Data Mart.",
+    "storageCreated": "Đã tạo kho lưu trữ",
     "createDraftDataMart": "Tạo Data Mart nháp",
     "createDraftDataMartDesc": "Data Mart xác định dữ liệu cần thu thập hoặc chuyển đổi.",
     "draftDataMartCreated": "Đã tạo Data Mart nháp",
-    "publishDataMart": "Publish Data Mart",
-    "publishDataMartDesc": "Publish Data Mart để sử dụng cho Reports và Triggers.",
-    "dataMartPublished": "Đã publish Data Mart",
-    "createFirstDestination": "Tạo destination đầu tiên",
-    "createFirstDestinationDesc": "Destinations là nơi báo cáo được gửi đến — Google Sheets, Data Studio, Email, và nhiều hơn nữa.",
-    "destinationCreated": "Đã tạo destination",
-    "createReport": "Tạo report",
-    "createReportDesc": "Mở trang Data Mart, vào tab Destinations và tạo report cho destination hiện có.",
-    "reportCreated": "Đã tạo report",
-    "runReport": "Chạy report",
-    "runReportDesc": "Chạy report ít nhất một lần để tạo kết quả.",
-    "reportRunSuccess": "Chạy report thành công",
+    "publishDataMart": "Xuất bản Data Mart",
+    "publishDataMartDesc": "Xuất bản Data Mart để sử dụng cho báo cáo và lịch chạy.",
+    "dataMartPublished": "Đã xuất bản Data Mart",
+    "createFirstDestination": "Tạo điểm đến đầu tiên",
+    "createFirstDestinationDesc": "Điểm đến là nơi báo cáo được gửi đến - Google Sheets, Data Studio, Email và nhiều nơi khác.",
+    "destinationCreated": "Đã tạo điểm đến",
+    "createReport": "Tạo báo cáo",
+    "createReportDesc": "Mở trang Data Mart, vào tab Điểm đến và tạo báo cáo cho điểm đến hiện có.",
+    "reportCreated": "Đã tạo báo cáo",
+    "runReport": "Chạy báo cáo",
+    "runReportDesc": "Chạy báo cáo ít nhất một lần để tạo kết quả.",
+    "reportRunSuccess": "Chạy báo cáo thành công",
     "inviteTeammates": "Mời đồng đội",
     "inviteTeammatesDesc": "Mời đồng đội cộng tác trong P2PDigital.",
     "teammatesInvited": "Đã mời đồng đội",
-    "createGoogleSheetsDestination": "Tạo Destination - Google Sheets",
-    "createGoogleSheetsDestinationDesc": "Tạo destination để gửi báo cáo đến Google Sheets.",
-    "googleSheetsDestinationCreated": "Đã tạo Google Sheets destination",
-    "installGoogleSheetsExtension": "Cài đặt Google Sheets Extension",
-    "installGoogleSheetsExtensionDesc": "Cài đặt extension P2PDigital Data Marts từ Google Workspace Marketplace để chạy report trực tiếp trong Sheets.",
-    "extensionInstalled": "Đã cài đặt extension",
-    "createRunReportFromExtension": "Tạo & Chạy Report từ Extension",
-    "createRunReportFromExtensionDesc": "Mở Google Sheets, khởi chạy sidebar extension, tạo report và chạy để xem dữ liệu.",
-    "reportCreatedFromExtension": "Đã tạo và chạy report từ extension",
-    "groupCreateStorage": "Tạo storage đầu tiên",
-    "groupCreateStorageDesc": "Kết nối data warehouse để bắt đầu làm việc với P2PDigital.",
-    "groupPublishDataMart": "Publish Data Mart đầu tiên",
-    "groupPublishDataMartDesc": "Thiết lập storage credentials, tạo và publish Data Mart đầu tiên.",
-    "groupGetData": "Lấy dữ liệu cho report",
-    "groupGetDataDesc": "Tạo destination, report và chạy để nhận kết quả.",
+    "createGoogleSheetsDestination": "Tạo điểm đến Google Sheets",
+    "createGoogleSheetsDestinationDesc": "Tạo điểm đến để gửi báo cáo đến Google Sheets.",
+    "googleSheetsDestinationCreated": "Đã tạo điểm đến Google Sheets",
+    "installGoogleSheetsExtension": "Cài đặt tiện ích Google Sheets",
+    "installGoogleSheetsExtensionDesc": "Cài đặt tiện ích P2PDigital Data Marts từ Google Workspace Marketplace để chạy báo cáo trực tiếp trong Sheets.",
+    "extensionInstalled": "Đã cài đặt tiện ích",
+    "createRunReportFromExtension": "Tạo và chạy báo cáo từ tiện ích",
+    "createRunReportFromExtensionDesc": "Mở Google Sheets, khởi chạy thanh bên tiện ích, tạo báo cáo và chạy để xem dữ liệu.",
+    "reportCreatedFromExtension": "Đã tạo và chạy báo cáo từ tiện ích",
+    "groupCreateStorage": "Tạo kho lưu trữ đầu tiên",
+    "groupCreateStorageDesc": "Kết nối kho dữ liệu để bắt đầu làm việc với P2PDigital.",
+    "groupPublishDataMart": "Xuất bản Data Mart đầu tiên",
+    "groupPublishDataMartDesc": "Thiết lập thông tin xác thực kho, tạo và xuất bản Data Mart đầu tiên.",
+    "groupGetData": "Lấy dữ liệu cho báo cáo",
+    "groupGetDataDesc": "Tạo điểm đến, báo cáo và chạy để nhận kết quả.",
     "groupGoogleSheets": "Kích hoạt Google Sheets",
-    "groupGoogleSheetsDesc": "Cho phép team tạo report và thêm cột trong Google Sheets mà không cần SQL.",
+    "groupGoogleSheetsDesc": "Cho phép nhóm tạo báo cáo và thêm cột trong Google Sheets mà không cần SQL.",
     "groupInviteTeammates": "Mời đồng đội",
     "groupInviteTeammatesDesc": "Mời đồng đội cộng tác trong P2PDigital.",
-    "chooseAndPublish": "Chọn Data Mart và publish",
-    "chooseAndCreateReport": "Chọn Data Mart và tạo report",
+    "chooseAndPublish": "Chọn Data Mart và xuất bản",
+    "chooseAndCreateReport": "Chọn Data Mart và tạo báo cáo",
     "chooseAndRun": "Chọn Data Mart và chạy",
-    "createGoogleSheetsBtn": "Tạo Google Sheets destination",
-    "installExtension": "Cài đặt extension",
-    "goToGoogleSheets": "Đến Google Sheets"
+    "createGoogleSheetsBtn": "Tạo điểm đến Google Sheets",
+    "installExtension": "Cài đặt tiện ích",
+    "goToGoogleSheets": "Đến Google Sheets",
+    "completedTitle": "Bạn đã hoàn thành xuất sắc!",
+    "completedSubtitle": "Dữ liệu đã sẵn sàng. Hãy tiếp tục khám phá.",
+    "progressAria": "Tiến độ thiết lập: đã hoàn thành {{completed}}/{{total}} bước",
+    "progressTooltip": "Tìm hiểu P2PDigital — đã hoàn thành {{percentage}}%"
+  },
+  "authGuard": {
+    "accessDenied": "Truy cập bị từ chối",
+    "accessDeniedDescription": "Bạn không có quyền truy cập nội dung này.",
+    "authenticationRequired": "Yêu cầu xác thực",
+    "signInRequired": "Bạn cần đăng nhập để truy cập trang này.",
+    "signIn": "Đăng nhập"
   },
   "about": {
     "title": "Về P2PDigital",
-    "description": "P2PDigital Data Marts — Connectors miễn phí, mã nguồn mở cho Data Analysts"
+    "description": "P2PDigital Data Marts — Trình kết nối miễn phí, mã nguồn mở cho chuyên viên phân tích dữ liệu"
   },
   "common": {
     "project": "Dự án",
@@ -142,41 +161,1523 @@
     "close": "Đóng",
     "loading": "Đang tải...",
     "search": "Tìm kiếm",
+    "select": "Chọn...",
+    "copy": "Sao chép",
+    "publish": "Xuất bản",
     "actions": "Thao tác",
     "view": "Xem",
+    "open": "Mở",
     "back": "Quay lại",
     "title": "Tiêu đề",
+    "updated": "Cập nhật",
     "status": "Trạng thái",
     "createdAt": "Ngày tạo",
     "updatedAt": "Cập nhật lần cuối",
     "createdBy": "Người tạo",
+    "error": "Lỗi",
     "type": "Loại",
     "name": "Tên",
     "description": "Mô tả",
+    "value": "Giá trị",
+    "configuration": "Cấu hình",
+    "enabled": "Đã bật",
+    "saving": "Đang lưu...",
+    "helpInformation": "Thông tin trợ giúp",
+    "done": "Xong",
     "active": "Hoạt động",
     "draft": "Bản nháp",
-    "published": "Đã publish",
+    "published": "Đã xuất bản",
     "archived": "Đã lưu trữ",
     "yes": "Có",
     "no": "Không",
-    "unknown": "Chưa xác định"
+    "unknown": "Chưa xác định",
+    "notAssigned": "Chưa phân công",
+    "filters": "Bộ lọc",
+    "retry": "Thử lại",
+    "loadingApplication": "Đang tải ứng dụng...",
+    "failedLoadAppFlags": "Không thể tải cờ cấu hình ứng dụng"
+    ,"openMenu": "Mở menu",
+    "viewDetails": "Xem chi tiết",
+    "publishDrafts": "Xuất bản bản nháp",
+    "copyJsonConfig": "Sao chép cấu hình JSON",
+    "rotateSecretKey": "Đổi khóa bí mật",
+    "deleteDataMart": "Xóa Data Mart",
+    "deleteDataMartDescription": "Bạn có chắc chắn muốn xóa \"{{title}}\"? Thao tác này không thể hoàn tác.",
+    "legacyDataMartWarning": "Xóa Data Mart này cũng khiến nó không còn khả dụng trong tiện ích Google Sheets.",
+    "general": "Chung",
+    "optional": "không bắt buộc"
+    ,"apply": "Áp dụng"
+    ,"never": "Chưa bao giờ"
+    ,"expired": "Đã hết hạn"
+    ,"expiresSoon": "Sắp hết hạn"
+    ,"noPermission": "Bạn không có quyền thực hiện thao tác này. Hãy yêu cầu quản trị viên dự án cấp quyền."
+    ,"moreOptions": "Tùy chọn khác"
+  },
+  "authentication": {
+    "authentication": "Xác thực",
+    "copiedFrom": "Thông tin xác thực sẽ được sao chép từ",
+    "copiedFromAnother": "Thông tin xác thực được sao chép từ mục khác",
+    "clearSource": "Xóa lựa chọn nguồn",
+    "whatAreCopied": "Thông tin xác thực được sao chép là gì?",
+    "copiedDescription": "Khi sao chép thông tin xác thực, các chi tiết xác thực (như khóa API, tài khoản dịch vụ hoặc mã truy cập) từ {{itemType}} hiện có sẽ được dùng lại cho mục này. Bạn không cần nhập lại thủ công. Thông tin được sao chép lúc lưu — các thay đổi sau này ở {{itemType}} gốc không ảnh hưởng đến bản sao này."
+  },
+  "markdownEditor": {
+    "markdown": "Markdown",
+    "preview": "Xem trước",
+    "nothingToPreview": "Chưa có nội dung để xem trước"
+  },
+  "table": {
+    "dragToResize": "Kéo để đổi kích thước. Nhấp đúp để đặt lại chiều rộng",
+    "noData": "Không tìm thấy dữ liệu",
+    "rowsPerPage": "Số dòng mỗi trang",
+    "selectedRow": "dòng đã chọn",
+    "selectedRows": "dòng đã chọn",
+    "row": "dòng",
+    "rows": "dòng",
+    "of": "trên",
+    "firstPage": "Đến trang đầu",
+    "previousPage": "Đến trang trước",
+    "nextPage": "Đến trang sau",
+    "lastPage": "Đến trang cuối",
+    "sortedAscending": "đang sắp xếp tăng dần",
+    "sortedDescending": "đang sắp xếp giảm dần",
+    "notSorted": "chưa sắp xếp",
+    "sortAriaLabel": "{{label}} - {{state}}. Nhấp để sắp xếp.",
+    "toggleColumns": "Ẩn/hiện cột",
+    "toggleColumn": "Ẩn/hiện cột {{label}}"
+  },
+  "tableFilters": {
+    "title": "Bộ lọc",
+    "description": "Lọc bảng để thu hẹp dữ liệu",
+    "apply": "Áp dụng bộ lọc",
+    "clearAll": "Xóa tất cả",
+    "and": "VÀ",
+    "selectField": "Chọn trường",
+    "condition": "Điều kiện",
+    "selectCondition": "Chọn điều kiện",
+    "newFilter": "Thêm bộ lọc",
+    "noOptions": "Không có tùy chọn",
+    "operators": {
+      "eq": "là",
+      "neq": "không phải",
+      "contains": "chứa",
+      "notContains": "không chứa"
+    }
+  },
+  "storageTableColumns": {
+    "health": "Tình trạng",
+    "owners": "Người phụ trách",
+    "publishedDataMarts": "Data Mart đã xuất bản",
+    "draftDataMarts": "Data Mart bản nháp",
+    "use": "Sử dụng"
+  },
+  "destinationTableColumns": {
+    "owners": "Người phụ trách",
+    "use": "Sử dụng"
+  },
+  "storageHelp": {
+    "athena": {
+      "title": "Làm cách nào để kích hoạt API Athena?",
+      "intro": "AWS Athena là dịch vụ truy vấn tương tác không máy chủ. Để sử dụng, bạn cần kích hoạt Athena trong tài khoản AWS.",
+      "stepsIntro": "Cách kích hoạt Athena:",
+      "open": "Mở",
+      "console": "bảng điều khiển AWS Athena",
+      "signIn": "và đăng nhập tài khoản AWS.",
+      "resultLocation": "Nếu chưa từng dùng Athena, bạn có thể cần thiết lập vị trí lưu kết quả truy vấn (một bucket S3).",
+      "ready": "Bạn có thể bắt đầu chạy truy vấn ngay sau khi thiết lập."
+    },
+    "bigQuery": {
+      "title": "Làm cách nào để bật API BigQuery?",
+      "intro": "Để chạy truy vấn và xử lý dữ liệu trong Google BigQuery, bạn cần bật",
+      "apiLink": "API BigQuery",
+      "projectSuffix": "trong dự án Google Cloud.",
+      "stepsIntro": "Cách thực hiện:",
+      "openLink": "Mở liên kết phía trên và đảm bảo đã chọn đúng dự án.",
+      "enablePrefix": "Nếu API chưa được bật, hãy nhấp",
+      "enable": "Bật",
+      "alreadyEnabled": "Nếu API đã bật, bạn sẽ thấy bảng điều khiển API — như vậy là được."
+    },
+    "redshift": {
+      "title": "AWS Redshift là gì?",
+      "intro": "Amazon Redshift là kho dữ liệu đám mây nhanh, được quản lý toàn diện, giúp phân tích dữ liệu bằng SQL tiêu chuẩn và các công cụ thông minh nghiệp vụ hiện có trở nên đơn giản, tiết kiệm chi phí.",
+      "options": "Redshift hỗ trợ hai tùy chọn triển khai:",
+      "serverlessLabel": "Redshift không máy chủ",
+      "serverlessText": "Tự động mở rộng năng lực tính toán và bạn chỉ trả phí cho phần đã dùng",
+      "provisionedLabel": "Cụm được cấp phát",
+      "provisionedText": "Cụm truyền thống, nơi bạn cấp phát và quản lý các nút tính toán",
+      "learnMore": "Tìm hiểu thêm trong",
+      "documentation": "tài liệu AWS Redshift"
+    },
+    "snowflake": {
+      "title": "Làm cách nào để bắt đầu với Snowflake?",
+      "intro": "Để dùng Snowflake làm kho lưu trữ, bạn cần một tài khoản Snowflake đang hoạt động với các quyền phù hợp.",
+      "stepsIntro": "Cách bắt đầu:",
+      "signupPrefix": "Đăng ký",
+      "accountLink": "tài khoản Snowflake",
+      "accountSuffix": "nếu bạn chưa có.",
+      "privileges": "Đảm bảo bạn có quyền cần thiết để tạo và truy cập cơ sở dữ liệu, lược đồ và warehouse.",
+      "auth": "Chọn phương thức xác thực: Username & PAT (mã thông báo truy cập theo chương trình) để thiết lập nhanh, hoặc xác thực bằng cặp khóa để bảo mật hơn.",
+      "connection": "Điền thông tin kết nối bên dưới (mã định danh tài khoản và warehouse).",
+      "path": "Bạn có thể truy cập bảng bằng định dạng đường dẫn đầy đủ: database.schema.table (tương tự BigQuery và Athena)."
+    },
+    "databricks": {
+      "title": "Làm cách nào để bắt đầu với Databricks?",
+      "intro": "Databricks là nền tảng phân tích dữ liệu hợp nhất xây dựng trên Apache Spark. Nền tảng cung cấp kiến trúc lakehouse kết hợp ưu điểm của data lake và kho dữ liệu.",
+      "connection": "Để kết nối P2PDigital với Databricks, bạn cần URL workspace, đường dẫn HTTP của SQL warehouse và Personal Access Token để xác thực.",
+      "learnMore": "Tìm hiểu thêm trong",
+      "documentation": "tài liệu Databricks của P2PDigital"
+    },
+    "legacyBigQuery": {
+      "title": "Loại kho lưu trữ này là gì?",
+      "intro": "Loại kho hệ thống này được tự động tạo để duy trì khả năng tương thích với",
+      "extension": "tiện ích P2PDigital",
+      "suffix": "cho Google Sheets. Không thể tự thêm hoặc xóa kho này.",
+      "titleQuestion": "Tại sao tôi không thể đổi tiêu đề?",
+      "titleFixed": "Tiêu đề được cố định và không thể thay đổi.",
+      "separateStoragePrefix": "Một kho hệ thống riêng được tạo cho mỗi dự án GCP để duy trì khả năng tương thích với",
+      "separateStorageSuffix": "cho Google Sheets. Tiêu đề kho tự động khớp với mã dự án.",
+      "contactSupport": "Nếu cần kho cho dự án khác, hãy liên hệ bộ phận hỗ trợ."
+    }
+  },
+  "connectorRun": {
+    "manualRun": "Chạy thủ công",
+    "stateInfo": "Thông tin trạng thái",
+    "connectorState": "Trạng thái trình kết nối",
+    "noState": "Chưa có trạng thái",
+    "createdAt": "Tạo lúc {{createdAt}}",
+    "configurationState": "Trạng thái trình kết nối cho cấu hình #{{index}}",
+    "noSpecification": "Không tìm thấy đặc tả trình kết nối",
+    "runType": "Loại lượt chạy",
+    "runTypeTooltip": "Chọn cách tải dữ liệu: cập nhật tăng dần hoặc tải lại toàn bộ một khoảng thời gian",
+    "incrementalLoad": "Tải tăng dần",
+    "manualBackfill": "Tải lại (khoảng thời gian tùy chỉnh)",
+    "manualBackfillDescription": "Tải lại toàn bộ dữ liệu trong một khoảng thời gian từ nguồn, thay thế các bản ghi hiện có trong khoảng đó. Dùng khi cần sửa hoặc cập nhật dữ liệu lịch sử.",
+    "incrementalDescription": "Chỉ thêm các bản ghi mới hoặc được cập nhật kể từ lượt chạy trước, dựa trên trạng thái hiện tại của Data Mart. Phù hợp để cập nhật dữ liệu mà không tải lại phần đã có.",
+    "runConfiguration": "Cấu hình lượt chạy",
+    "stateQuestion": "Trạng thái trình kết nối là gì?",
+    "stateDescription": "Trạng thái trình kết nối lưu dữ liệu nội bộ giữa các lượt chạy và tự động cập nhật sau mỗi lần thực thi. Dữ liệu này giúp theo dõi tiến độ và đảm bảo xử lý nhất quán giữa các lượt chạy.",
+    "stateIncrementalDescription": "Trạng thái trình kết nối chỉ có với trình kết nối hỗ trợ lượt chạy tăng dần, giúp thêm bản ghi mới hoặc cập nhật kể từ lượt chạy trước mà không tải lại dữ liệu hiện có."
+  },
+  "connectorWizard": {
+    "selectDataFor": "Chọn dữ liệu cho {{connector}}",
+    "selectData": "Chọn dữ liệu",
+    "noNodesFor": "Không tìm thấy node nào cho {{connector}}",
+    "noNodes": "Không tìm thấy node nào",
+    "noFields": "Không tìm thấy trường nào",
+    "connectorIncomplete": "Trình kết nối này có thể chưa được triển khai đầy đủ hoặc đang gặp vấn đề khác.",
+    "missingData": "Thiếu dữ liệu?",
+    "needFields": "Cần trường dữ liệu?",
+    "readMore": "Đọc thêm",
+    "tableName": "Tên bảng",
+    "description": "Mô tả",
+    "chooseConnector": "Chọn trình kết nối",
+    "loadFailed": "Không thể tải các trình kết nối. Vui lòng thử lại.",
+    "noAvailable": "Không có trình kết nối khả dụng",
+    "askAdministrator": "Hãy nhờ quản trị viên cấu hình trình kết nối.",
+    "askTeammate": "— Nhờ người có quyền truy cập hỗ trợ",
+    "learnMore": "Tìm hiểu thêm về trình kết nối",
+    "setup": "Thiết lập trình kết nối",
+    "searchField": "Tìm kiếm trường",
+    "fields": "trường",
+    "field": "trường",
+    "columns": "cột",
+    "column": "cột",
+    "type": "Loại",
+    "sortFields": "Sắp xếp trường",
+    "original": "Ban đầu",
+    "selectedFields": "Đã chọn {{selected}}/{{total}} {{itemLabel}} cho dữ liệu \"{{field}}\"",
+    "dataLevelRequired": "Các trường bắt buộc phụ thuộc vào Data Level. Data Level hiện tại:",
+    "keepsSelected": "P2PDigital giữ các trường {{fields}} đã chọn để các dòng được gộp đúng.",
+    "changeDataLevel": "Nếu cần, hãy đổi Data Level trong cài đặt trình kết nối trước khi chọn trường.",
+    "uniqueKey": "Khóa duy nhất",
+    "noMatch": "Không có trường nào khớp với \"{{query}}\"",
+    "needAnother": "Cần thêm {{item}}?",
+    "editConfig": "Sửa cấu hình",
+    "editConfiguration": "Sửa cấu hình trình kết nối",
+    "noNodeSelected": "Chưa chọn node",
+    "data": "Dữ liệu",
+    "dataset": "Dataset",
+    "table": "Bảng",
+    "database": "Cơ sở dữ liệu",
+    "schema": "Lược đồ",
+    "catalog": "Catalog",
+    "region": "Khu vực",
+    "autoCreated": "{{items}} sẽ tự động được tạo trong lần chạy Data Mart đầu tiên nếu chưa tồn tại",
+    "datasetTable": "Dataset và bảng",
+    "databaseTable": "Cơ sở dữ liệu và bảng",
+    "databaseSchemaTable": "Cơ sở dữ liệu, lược đồ và bảng",
+    "schemaTable": "Lược đồ và bảng",
+    "catalogSchemaTable": "Catalog, lược đồ và bảng",
+    "removeLastOnly": "Chỉ xóa được cấu hình cuối sau khi đã thêm cấu hình mới.",
+    "workgroup": "Workgroup",
+    "cluster": "Cluster",
+    "unknownStorage": "Cấu hình loại kho lưu trữ chưa xác định"
+  },
+  "reportColumnPicker": {
+    "closeSearch": "Đóng tìm kiếm",
+    "searchColumns": "Tìm kiếm cột",
+    "searchFields": "Tìm kiếm trường…",
+    "noFields": "Không tìm thấy trường nào.",
+    "deleteFilter": "Xóa bộ lọc",
+    "deleteSlice": "Xóa lát cắt",
+    "removeFilter": "Xóa bộ lọc",
+    "removeSlice": "Xóa lát cắt",
+    "activeFilters": "Bộ lọc đang áp dụng",
+    "activeSlices": "Lát cắt đang áp dụng",
+    "valueRequired": "Giá trị là bắt buộc",
+    "cancel": "Hủy",
+    "add": "Thêm",
+    "apply": "Áp dụng",
+    "aggregations": "Phép tổng hợp",
+    "aggregationsCount": "Số phép tổng hợp",
+    "aggregationsGrouping": "Phép tổng hợp và nhóm",
+    "outputControls": "Điều khiển đầu ra",
+    "disconnectedOutputControls": "Điều khiển đầu ra mất kết nối",
+    "outputControlsCount": "Số điều khiển đầu ra",
+    "groupByBucket": "Nhóm theo khoảng thời gian",
+    "noBucket": "Không nhóm theo khoảng",
+    "clearBucket": "Xóa nhóm theo khoảng",
+    "timeZoneOptional": "Múi giờ (không bắt buộc)",
+    "timeZone": "Múi giờ",
+    "noConversion": "Không chuyển đổi",
+    "orAggregateBy": "Hoặc tổng hợp theo",
+    "aggregateBy": "Tổng hợp theo",
+    "filters": "Bộ lọc",
+    "filtersHelp": "Bộ lọc thu hẹp kết quả cuối — áp dụng cho SELECT sau tất cả JOIN. Dùng lát cắt bên dưới để thu hẹp Data Mart được nối trước khi JOIN.",
+    "slices": "Lát cắt",
+    "slicesHelp": "Lát cắt là bộ lọc trước phép nối: thu hẹp Data Mart được nối bên trong truy vấn con trước JOIN để giảm số dòng lấy vào.\n\nVì các phép nối là LEFT JOIN, lát cắt không làm giảm số dòng trong kết quả cuối — các dòng của Data Mart chính không còn khớp vẫn đi qua với giá trị NULL ở cột nối. Để loại bỏ các dòng đó khỏi đầu ra, hãy thêm Bộ lọc cho cột nối ở trên.",
+    "sort": "Sắp xếp",
+    "sortHelp": "Sắp xếp các dòng trong kết quả cuối. Kéo để đổi thứ tự ưu tiên; hỗ trợ nhiều cột.",
+    "limit": "Giới hạn",
+    "limitHelp": "Giới hạn số dòng trả về. Áp dụng sau cùng, sau bộ lọc và sắp xếp. Để trống nếu không muốn giới hạn.",
+    "addSlice": "Thêm lát cắt",
+    "addFilter": "Thêm bộ lọc",
+    "addSort": "Thêm tiêu chí sắp xếp",
+    "addAggregation": "Thêm phép tổng hợp",
+    "noJoinedFilterableColumns": "Không có cột nối nào có thể lọc.",
+    "noMoreFilterableColumns": "Không còn cột nào có thể lọc.",
+    "noAggregatableColumns": "Không có cột nào có thể tổng hợp.",
+    "allColumnsSorted": "Tất cả cột đã chọn đã được sắp xếp.",
+    "rows": "dòng",
+    "aggregationsHelp": "Chọn hàm tổng hợp hoặc khoảng thời gian cho các cột báo cáo đã chọn."
+    ,"aggregationColumnUnavailable": "Cột này không thể tổng hợp nữa. Hãy xóa quy tắc hoặc khôi phục cột."
+    ,"columnNotFound": "Không tìm thấy cột trong lược đồ"
+    ,"editDisabledColumnMissing": "Không thể chỉnh sửa — cột không có trong lược đồ"
+    ,"editAggregation": "Chỉnh sửa phép tổng hợp"
+    ,"dateColumnUnavailable": "Cột này không còn là cột ngày/giờ. Hãy xóa quy tắc hoặc khôi phục cột."
+    ,"aggregatedBy": "tổng hợp theo"
+    ,"groupedBy": "nhóm theo"
+    ,"editDateBucket": "Chỉnh sửa khoảng ngày"
+  },
+  "healthStatus": {
+    "noRunsLast30": "Không có lượt chạy trong 30 ngày qua",
+    "allSucceeded": "Tất cả lượt chạy gần đây đều thành công",
+    "mixedResults": "Kết quả hỗn hợp trong 30 ngày qua",
+    "allFailed": "Tất cả lượt chạy gần đây đều thất bại",
+    "inProgress": "Một số lượt chạy đang thực hiện",
+    "loading": "Đang tải trạng thái lượt chạy...",
+    "hoverToLoad": "Di chuột để tải trạng thái lượt chạy",
+    "draftUnavailable": "Data Mart nháp chưa thể chạy. Hãy xuất bản để kích hoạt lượt chạy.",
+    "recentHistory": "Lịch sử lượt chạy gần đây trong 30 ngày qua",
+    "connectorRun": "Lượt chạy trình kết nối",
+    "reportRun": "Lượt chạy báo cáo",
+    "insightRun": "Lượt chạy phân tích",
+    "noRuns": "Chưa có lượt chạy",
+    "viewFullHistory": "Xem toàn bộ lịch sử chạy"
+  },
+  "logsUi": {
+    "noLogs": "Không tìm thấy nhật ký"
+  },
+  "schemaUi": {
+    "fieldsFiltering": "Lọc trường",
+    "fieldsFilteringHelp": "Tìm kiếm và lọc các trường được cung cấp cho báo cáo từ Data Mart này.",
+    "searchFields": "Tìm kiếm trường",
+    "all": "Tất cả",
+    "visible": "Hiển thị",
+    "hidden": "Đã ẩn",
+    "name": "Tên",
+    "alias": "Bí danh",
+    "type": "Loại",
+    "dedup": "Khử trùng lặp",
+    "available": "khả dụng",
+    "fieldNameSource": "Tên trường trong Data Mart nguồn",
+    "fieldNameOutput": "Tên trường trong lược đồ đầu ra",
+    "alternativeName": "Tên thay thế cho trường",
+    "descriptionHelp": "Thông tin chi tiết về trường",
+    "dataType": "Kiểu dữ liệu của trường",
+    "hiddenFromReports": "Ẩn khỏi báo cáo",
+    "fieldNameRequired": "Tên trường là bắt buộc",
+    "availableAggregations": "Các phép tổng hợp khả dụng",
+    "availableAggregationsFor": "Các phép tổng hợp của {{name}}",
+    "availableAggregationsAria": "Các phép tổng hợp khả dụng",
+    "availableAggregationsHelp": "Các phép tổng hợp khả dụng — những hàm báo cáo có thể áp dụng cho trường này. Mặc định theo kiểu dữ liệu; xóa hết để không cho phép tổng hợp.",
+    "primaryKeyHelp": "Trường này thuộc Khóa chính đầu ra",
+    "generateAliases": "Tạo bí danh cho tất cả trường",
+    "generateFieldAliases": "Tạo bí danh trường",
+    "generateDescriptions": "Tạo mô tả cho tất cả trường",
+    "generateFieldDescriptions": "Tạo mô tả trường",
+    "rowActions": "Thao tác dòng",
+    "showInReports": "Hiện trong báo cáo",
+    "hideFromReports": "Ẩn khỏi báo cáo",
+    "noMatch": "Không có trường nào khớp với bộ lọc hiện tại",
+    "mode": "Chế độ",
+    "collapseNested": "Thu gọn trường lồng nhau",
+    "expandNested": "Mở rộng trường lồng nhau"
+    ,"dedupHelp": "Tổng hợp khử trùng lặp — thu gọn trường đã nối còn một dòng cho mỗi khóa nối để phép nối không nhân số dòng."
+    ,"availableAfterJoin": "Các phép tổng hợp khả dụng — những hàm báo cáo có thể áp dụng cho trường này sau phép nối."
+    ,"noFieldsCurrentFilter": "Không có trường nào khớp với bộ lọc hiện tại"
+  },
+  "sqlValidator": {
+    "validating": "Đang xác thực...",
+    "startTyping": "Nhập truy vấn để bắt đầu",
+    "valid": "Mã SQL hợp lệ",
+    "estimatedVolume": "Đây là dung lượng ước tính và có thể khác giá trị thực tế"
+  },
+  "dataQualityUi": {
+    "addChecks": "Thêm kiểm tra",
+    "addFieldCheck": "Thêm kiểm tra trường",
+    "searchFields": "Tìm kiếm trường…",
+    "noFields": "Không tìm thấy trường nào.",
+    "chooseField": "Chọn một trường",
+    "addedCount": "Đã thêm {{count}}",
+    "chooseAnotherField": "Chọn trường khác",
+    "chooseCheck": "Chọn một kiểm tra để thêm",
+    "added": "Đã thêm",
+    "fieldChecks": "Kiểm tra trường",
+    "noFieldChecks": "Chưa cấu hình kiểm tra trường nào.",
+    "enabledCount": "{{count}} đã bật",
+    "addCheckTo": "Thêm kiểm tra cho {{field}}",
+    "violationCount": "{{count}} vi phạm",
+    "violationCount_one": "{{count}} vi phạm",
+    "violationCount_other": "{{count}} vi phạm",
+    "executionError": "Lỗi thực thi — kiểm tra này chưa chạy",
+    "executionErrorLabel": "Lỗi thực thi",
+    "executionErrorShort": "lỗi thực thi",
+    "examples": "Ví dụ",
+    "failed": "Không đạt",
+    "passed": "Đạt",
+    "notApplicable": "Không áp dụng",
+    "enableRule": "Bật {{title}}",
+    "aboutRule": "Thông tin về {{title}}",
+    "notApplicableReason": "Kiểm tra này không áp dụng.",
+    "severity": "Mức độ nghiêm trọng",
+    "severityFor": "Mức độ nghiêm trọng của {{title}}",
+    "thresholdPercent": "Ngưỡng, %",
+    "nullRateThreshold": "Ngưỡng tỷ lệ giá trị rỗng",
+    "thresholdHours": "Ngưỡng, giờ",
+    "freshnessThreshold": "Ngưỡng độ mới dữ liệu theo giờ cho {{scope}}",
+    "severities": { "error": "Lỗi", "warning": "Cảnh báo", "notice": "Thông báo" },
+    "loadFailed": "Không thể tải Chất lượng dữ liệu",
+    "refreshLater": "Hãy làm mới trang hoặc thử lại sau.",
+    "resultsLoadFailed": "Không thể tải kết quả kiểm tra",
+    "resultsLoadDescription": "Tóm tắt lượt chạy vẫn khả dụng nhưng báo cáo chi tiết không thể tải."
+    ,"checks": "Kiểm tra chất lượng dữ liệu"
+    ,"criticalFinding": "phát hiện nghiêm trọng"
+    ,"warningFinding": "phát hiện cảnh báo"
+    ,"noticeFinding": "phát hiện thông báo"
+    ,"terminalResults": "Kết quả cuối sẽ khả dụng sau khi lượt chạy hoàn tất."
+    ,"passedCount": "{{count}} đạt"
+    ,"notApplicableCount": "{{count}} không áp dụng"
+    ,"openFor": "Mở Chất lượng dữ liệu cho {{title}}: {{status}}{{details}}"
+    ,"checksFor": "Kiểm tra chất lượng dữ liệu cho {{title}}"
+    ,"queued": "Đang chờ"
+    ,"started": "Đã bắt đầu"
+    ,"lastChecked": "Kiểm tra lần cuối"
   },
   "dataMartsPage": {
-    "title": "Data Marts",
+    "title": "Data Mart",
     "checkingQuality": "Đang kiểm tra chất lượng dữ liệu",
-    "createDataMart": "Tạo Data Mart mới"
+    "createDataMart": "Tạo Data Mart mới",
+    "emptyTitle": "Xây dựng Data Mart đầu tiên",
+    "emptySubtitle": "Data Mart là thành phần cốt lõi của phân tích tự phục vụ - giúp nhà phân tích kiểm soát dữ liệu và người dùng nghiệp vụ chủ động khai thác. Hãy kết nối nguồn dữ liệu hoặc truy vấn dữ liệu đã có trong kho lưu trữ để bắt đầu.",
+    "connectDataSource": "Kết nối nguồn dữ liệu",
+    "useExistingData": "Dùng SQL, bảng có sẵn hoặc bắt đầu từ đầu",
+    "watchDemo": "Xem video hướng dẫn 2 phút",
+    "coreConcepts": "Khái niệm cốt lõi",
+    "otherConnector": "Trình kết nối khác",
+    "sqlQuery": "Truy vấn SQL",
+    "existingTable": "Bảng có sẵn",
+    "blankDataMart": "Data Mart trống",
+    "viewRuns": "Xem lượt chạy",
+    "selectAllRows": "Chọn tất cả dòng trên trang này",
+    "selectRow": "Chọn dòng",
+    "tableAriaLabel": "Bảng Data Mart",
+    "importButtonTitle": "Nhập Data Mart từ tài nguyên trong kho lưu trữ",
+    "importButton": "Nhập…",
+    "bigQueryPromoTitle": "Dùng bảng hoặc view BigQuery có sẵn",
+    "bigQueryPromoDescription": "Tự động tạo nhiều Data Mart từ tài nguyên BigQuery trong vài giây",
+    "bigQueryPromoPrimaryAction": "Tạo nhiều Data Mart...",
+    "bigQueryPromoSecondaryAction": "Tạo từ một bảng"
   },
-  "storagesPage": {
-    "title": "Storages",
-    "emptyTitle": "Kết nối data warehouse của bạn",
-    "emptySubtitle": "Tập trung quyền truy cập vào dữ liệu thô bằng cách kết nối data warehouse để xây dựng Data Marts và báo cáo.",
-    "newStorage": "Storage mới"
+  "dataMartEmptyState": {
+    "illustrationLabel": "Minh họa tạo Data Mart",
+    "title": "Xây dựng Data Mart đầu tiên",
+    "subtitle": "Data Mart là thành phần cốt lõi của phân tích tự phục vụ - giúp nhà phân tích kiểm soát dữ liệu và người dùng nghiệp vụ chủ động khai thác. Hãy kết nối nguồn dữ liệu hoặc truy vấn dữ liệu đã có trong kho lưu trữ để bắt đầu",
+    "connectSource": "Kết nối nguồn dữ liệu",
+    "otherOptions": "Dùng SQL, bảng có sẵn hoặc bắt đầu từ đầu",
+    "watchDemo": "Xem video hướng dẫn 2 phút",
+    "coreConcepts": "Khái niệm cốt lõi"
+  },
+  "dataMartPresets": {
+    "facebook": { "title": "Facebook Ads", "datamartTitle": "Data Mart Facebook Ads" },
+    "facebookPages": { "title": "Facebook Fanpage", "datamartTitle": "Data Mart Facebook Fanpage" },
+    "linkedin": { "title": "LinkedIn Ads", "datamartTitle": "Data Mart LinkedIn Ads" },
+    "tiktok": { "title": "TikTok Ads", "datamartTitle": "Data Mart TikTok Ads" },
+    "microsoft": { "title": "Microsoft Ads", "datamartTitle": "Data Mart Microsoft Ads" },
+    "otherConnector": { "title": "Trình kết nối khác", "datamartTitle": "Data Mart dựa trên trình kết nối" },
+    "sqlQuery": { "title": "Truy vấn SQL", "datamartTitle": "Data Mart dựa trên SQL" },
+    "existingTable": { "title": "Bảng có sẵn", "datamartTitle": "Data Mart dựa trên bảng" },
+    "blankDataMart": { "title": "Data Mart trống", "datamartTitle": "Data Mart mới" }
+  },
+  "modelCanvasPage": {
+    "title": "Mô hình",
+    "checkingQuality": "Đang kiểm tra chất lượng dữ liệu",
+    "selectStorage": "Chọn kho lưu trữ",
+    "storageLabel": "Kho lưu trữ",
+    "noStoragesFound": "Không tìm thấy kho lưu trữ",
+    "status": "Trạng thái",
+    "publishedOnly": "Chỉ bản đã xuất bản",
+    "draftOnly": "Chỉ bản nháp",
+    "allStatuses": "Tất cả trạng thái",
+    "relationships": "Mối quan hệ",
+    "withRelationshipsOnly": "Chỉ có mối quan hệ",
+    "allDataMarts": "Tất cả Data Mart",
+    "searchDataMarts": "Tìm Data Mart...",
+    "searchLabel": "Tìm Data Mart",
+    "noStoragesAvailable": "Chưa có kho lưu trữ",
+    "selectStorageToView": "Chọn kho lưu trữ để xem mô hình dữ liệu",
+    "noDataMartsInStorage": "Kho lưu trữ này chưa có Data Mart",
+    "noDataMartsMatchFilters": "Không có Data Mart phù hợp với bộ lọc hiện tại",
+    "failedToLoadStorages": "Không thể tải kho lưu trữ",
+    "retryLoadingStorages": "Tải lại kho lưu trữ",
+    "failedToLoadModel": "Không thể tải mô hình dữ liệu"
+  },
+  "dataMartTableColumns": {
+    "inputSource": "Nguồn dữ liệu",
+    "storage": "Kho lưu trữ",
+    "triggers": "Lịch chạy",
+    "reports": "Báo cáo",
+    "healthStatus": "Tình trạng",
+    "businessOwner": "Phụ trách nghiệp vụ",
+    "technicalOwner": "Phụ trách kỹ thuật",
+    "contexts": "Ngữ cảnh",
+    "dataLastUpdated": "Dữ liệu cập nhật lần cuối",
+    "definition": "Định nghĩa",
+    "storageType": "Loại kho",
+    "storageTitle": "Tên kho",
+    "otherNotConnector": "Khác (không phải trình kết nối)",
+    "sharedForReporting": "Chia sẻ cho báo cáo",
+    "sharedForMaintenance": "Chia sẻ cho bảo trì",
+    "sharedForReportingAndMaintenance": "Chia sẻ cho báo cáo và bảo trì",
+    "notShared": "Không chia sẻ"
+  },
+  "dataMartDefinitionType": {
+    "label": "Loại định nghĩa",
+    "sql": "SQL",
+    "sqlQuery": "Truy vấn SQL",
+    "table": "Bảng",
+    "existingTable": "Bảng có sẵn",
+    "view": "Chế độ xem",
+    "existingView": "Chế độ xem có sẵn",
+    "pattern": "Mẫu bảng",
+    "tablePattern": "Mẫu bảng",
+    "connector": "Trình kết nối",
+    "dataImport": "Nhập dữ liệu từ nguồn vào kho lưu trữ",
+    "select": "Chọn loại định nghĩa",
+    "current": "hiện tại",
+    "openInStorageConsole": "Mở trong bảng điều khiển kho lưu trữ"
+  },
+  "canvasSettings": {
+    "title": "Cài đặt canvas",
+    "view": "Chế độ xem",
+    "cardViewMode": "Chế độ xem thẻ",
+    "layoutAlgorithm": "Thuật toán bố cục",
+    "showJoinFields": "Hiện trường nối",
+    "objectLabels": "Nhãn đối tượng",
+    "objectLabelsHelp": "Đánh dấu nội dung muốn hiện trên mọi đối tượng — bỏ đánh dấu để ẩn.",
+    "showEverything": "Đánh dấu tất cả — hiện mọi nội dung",
+    "titleOnly": "Bỏ đánh dấu tất cả — chỉ hiện tiêu đề",
+    "inputSource": "Nguồn dữ liệu",
+    "inputSourceHelp": "Huy hiệu nguồn (VIEW / TABLE / SQL / PATTERN / CONNECTOR) và dải màu đi kèm",
+    "fieldCount": "Số trường",
+    "fieldCountHelp": "Số trường hiển thị trên mỗi đối tượng",
+    "statusDot": "Chấm trạng thái",
+    "statusDotHelp": "Chấm trạng thái đã xuất bản/nháp trong tiêu đề thẻ",
+    "viewModes": { "compact": "Thu gọn", "erd": "Chi tiết" },
+    "directions": { "horizontal": "Ngang", "vertical": "Dọc" }
+  },
+  "dataLastUpdated": {
+    "checkingShort": "đang kiểm tra…",
+    "ariaLabel": "Dữ liệu cập nhật lần cuối của {{title}}: {{label}}",
+    "checking": "Đang kiểm tra dữ liệu cập nhật lần cuối…",
+    "notChecked": "Dữ liệu cập nhật lần cuối chưa được kiểm tra. Hãy mở Thao tác → Kiểm tra dữ liệu cập nhật lần cuối để đo các Data Mart đang hiển thị."
+  },
+  "owners": {
+    "title": "Người phụ trách",
+    "addOwner": "Thêm người phụ trách",
+    "search": "Tìm theo tên hoặc email...",
+    "noMembersMatch": "Không có thành viên nào khớp với \"{{query}}\"",
+    "noMembers": "Không tìm thấy thành viên dự án",
+    "addMembers": "Thêm thành viên vào dự án",
+    "userNoLongerMember": "Người dùng này không còn là thành viên của dự án",
+    "someNoLongerMembers": "Một số người phụ trách không còn là thành viên của dự án",
+    "removedUser": "Người dùng đã bị xóa"
+  },
+  "dataMartDataSetup": {
+    "storage": "Kho lưu trữ",
+    "storageTooltip": "Cấu hình nơi lưu trữ dữ liệu",
+    "inputSource": "Nguồn dữ liệu",
+    "inputSourceTooltip": "Cấu hình cách trích xuất dữ liệu từ kho dữ liệu",
+    "outputSchema": "Lược đồ đầu ra",
+    "outputSchemaTooltip": "Cấu hình lược đồ đầu ra của Data Mart"
+  },
+  "dataMartRunHistory": {
+    "title": "Lịch sử chạy",
+    "tooltip": "Xem toàn bộ lượt chạy Data Mart cùng nhật ký và lỗi chi tiết"
+  },
+  "runHistory": {
+    "structured": "Có cấu trúc",
+    "raw": "Thô",
+    "configuration": "Cấu hình",
+    "searchLogs": "Tìm trong nhật ký...",
+    "downloadJson": "JSON",
+    "errorOutput": "Đầu ra lỗi",
+    "warnings": "Cảnh báo",
+    "standardOutput": "Đầu ra chuẩn",
+    "startedAt": "Bắt đầu lúc",
+    "finishedAt": "Kết thúc lúc",
+    "duration": "Thời lượng",
+    "runId": "Mã lượt chạy",
+    "diagnostics": "Chẩn đoán lượt chạy",
+    "downloadDiagnostics": "Tải JSON chẩn đoán",
+    "cancelRun": "Hủy lượt chạy",
+    "cancelling": "Đang hủy",
+    "cancelRunQuestion": "Hủy lượt chạy?",
+    "cancelQualityDescription": "Thao tác này dừng lượt kiểm tra chất lượng dữ liệu giữa các bước. Kết quả đã hoàn tất vẫn được giữ lại.",
+    "cancelDescription": "Thao tác này yêu cầu hủy và dừng lượt chạy nếu vẫn đang thực hiện. Hủy lượt chạy có thể tạo dữ liệu chưa hoàn chỉnh.",
+    "keepRunning": "Tiếp tục chạy",
+    "status": {
+      "running": "Đang chạy",
+      "success": "Thành công",
+      "failed": "Thất bại",
+      "cancelled": "Đã hủy",
+      "interrupted": "Bị gián đoạn",
+      "pending": "Đang chờ",
+      "restricted": "Bị hạn chế",
+      "unknown": "Chưa xác định"
+    }
+  },
+  "dataQualityWorkspace": {
+    "configurationSaved": "Đã lưu cấu hình chất lượng dữ liệu",
+    "queuing": "Đang xếp hàng",
+    "run": "Chạy",
+    "qualityRunQueued": "Đã xếp hàng lượt kiểm tra chất lượng",
+    "configurationSavedAndQueued": "Đã lưu cấu hình và xếp hàng lượt kiểm tra chất lượng",
+    "qualityRunCancellationRequested": "Đã yêu cầu hủy lượt kiểm tra chất lượng",
+    "all": "Tất cả",
+    "needsAttention": "Cần chú ý",
+    "passed": "Đạt",
+    "notApplicable": "Không áp dụng",
+    "readOnlyTitle": "Quyền chỉ đọc",
+    "readOnlyDescription": "Bạn chỉ có quyền xem. Bạn có thể xem cấu hình và báo cáo, nhưng cần vai trò Người dùng kỹ thuật để chỉnh sửa và chạy kiểm tra.",
+    "checksTooltip": "Chọn các kiểm tra chạy cùng nhau trên Data Mart này",
+    "checksConfiguration": "Cấu hình kiểm tra",
+    "tableChecks": "Kiểm tra bảng",
+    "relationshipChecks": "Kiểm tra mối quan hệ",
+    "unsavedChanges": "Thay đổi cấu hình chưa lưu",
+    "discard": "Bỏ thay đổi",
+    "saveAndRun": "Lưu và chạy",
+    "latestReport": "Báo cáo gần nhất",
+    "viewInRunHistory": "Xem trong lịch sử chạy",
+    "filterResults": "Lọc kết quả kiểm tra",
+    "noChecks": "Không có kiểm tra nào cho phạm vi này."
+  },
+  "dataMartOverview": {
+    "description": "Mô tả",
+    "descriptionTooltip": "Mô tả Data Mart này",
+    "ownership": "Quyền phụ trách",
+    "ownershipTooltip": "Xác định người phụ trách và duy trì Data Mart này",
+    "technicalOwner": "Phụ trách kỹ thuật",
+    "businessOwner": "Phụ trách nghiệp vụ",
+    "sharing": "Chia sẻ",
+    "sharingTooltip": "Kiểm soát ai có thể xem và làm việc với Data Mart này",
+    "sharedForMaintenance": "Chia sẻ cho bảo trì",
+    "sharedForReporting": "Chia sẻ cho báo cáo",
+    "contexts": "Ngữ cảnh",
+    "contextsTooltip": "Các ngữ cảnh nghiệp vụ được gán cho Data Mart này",
+    "details": "Chi tiết",
+    "detailsTooltip": "Siêu dữ liệu và thông tin bổ sung",
+    "createdOn": "Ngày tạo",
+    "dataLastUpdated": "Dữ liệu cập nhật lần cuối",
+    "createdBy": "Người tạo",
+    "helpInformation": "Thông tin trợ giúp",
+    "technicalOwnerHelp": "Phụ trách nguồn dữ liệu và lược đồ",
+    "technicalOwnerQuestion": "Phụ trách kỹ thuật là gì?",
+    "technicalOwnerIntro": "Phụ trách kỹ thuật chịu trách nhiệm trực tiếp về việc duy trì Data Mart này.",
+    "technicalOwnerPermissions": "Khi vai trò của người phụ trách là Người dùng kỹ thuật hoặc Quản trị viên dự án, họ có thể chỉnh sửa, xóa Data Mart, cấu hình chia sẻ và quản lý lịch chạy, báo cáo cùng các lịch chạy báo cáo lồng nhau - bất kể cài đặt chia sẻ.",
+    "technicalOwnerBusinessUser": "Gán Phụ trách kỹ thuật cho Người dùng nghiệp vụ chỉ lưu thông tin gán, chưa cấp quyền bảo trì cho đến khi vai trò thay đổi.",
+    "businessOwnerHelp": "Phụ trách yêu cầu nghiệp vụ",
+    "businessOwnerQuestion": "Phụ trách nghiệp vụ là gì?",
+    "businessOwnerIntro": "Phụ trách nghiệp vụ chịu trách nhiệm trực tiếp về nhu cầu báo cáo của Data Mart này.",
+    "businessOwnerPermissions": "Người phụ trách nghiệp vụ có thể thấy Data Mart trong danh mục, mở, dùng để lập báo cáo và xem lịch chạy, báo cáo cùng các lịch chạy báo cáo lồng nhau - bất kể cài đặt chia sẻ.",
+    "businessOwnerRestrictions": "Vai trò này không cấp quyền chỉnh sửa, xóa, quản lý chia sẻ, bảo trì lịch chạy hoặc thay đổi người phụ trách.",
+    "maintenanceDescription": "Người dùng kỹ thuật có thể chỉnh sửa, xóa và quản lý lịch chạy của Data Mart này",
+    "maintenanceQuestion": "\"Chia sẻ cho bảo trì\" nghĩa là gì?",
+    "maintenanceEnabled": "Khi bật, Người dùng kỹ thuật không phải người phụ trách có thể chỉnh sửa định nghĩa Data Mart, xóa Data Mart và quản lý lịch chạy.",
+    "maintenanceBusinessUsers": "Người dùng nghiệp vụ không bị ảnh hưởng bởi cài đặt này.",
+    "reportingDescription": "Tất cả thành viên dự án có thể xem Data Mart này và tạo báo cáo",
+    "reportingQuestion": "\"Chia sẻ cho báo cáo\" nghĩa là gì?",
+    "reportingEnabled": "Khi bật, tất cả thành viên dự án (Người dùng kỹ thuật và Người dùng nghiệp vụ) có thể xem Data Mart trong danh mục và dùng để tạo báo cáo.",
+    "reportingOwners": "Người phụ trách luôn có quyền truy cập bất kể cài đặt này.",
+    "contextsQuestion": "Ngữ cảnh là gì?",
+    "contextsIntro": "Ngữ cảnh là các miền nghiệp vụ (ví dụ: Tiếp thị, Tài chính, Bán hàng) dùng để nhóm Data Mart, kho lưu trữ và điểm đến.",
+    "contextsAccess": "Ngữ cảnh cũng kiểm soát quyền truy cập: thành viên bị giới hạn phạm vi vai trò vào một số ngữ cảnh chỉ thấy các tài nguyên được gán vào những ngữ cảnh đó.",
+    "contextsAssign": "Gán một hoặc nhiều ngữ cảnh để Data Mart này hiển thị cho đúng người.",
+    "createdOnHelp": "Thời điểm Data Mart này được tạo",
+    "dataLastUpdatedHelp": "Thời điểm các bảng nguồn của Data Mart thay đổi lần cuối trong kho - không phải khoảng thời gian dữ liệu bao phủ",
+    "checkLastUpdated": "Kiểm tra cập nhật dữ liệu ngay",
+    "checkNow": "Kiểm tra ngay",
+    "createdByHelp": "Người đã tạo Data Mart này",
+    "toasts": {
+      "sharingUpdated": "Đã cập nhật chia sẻ",
+      "contextsUpdated": "Đã cập nhật ngữ cảnh"
+    },
+    "errors": {
+      "checkLastUpdated": "Không thể kiểm tra thời điểm cập nhật dữ liệu",
+      "updateSharing": "Không thể cập nhật chia sẻ",
+      "updateContexts": "Không thể cập nhật ngữ cảnh"
+    }
+  },
+  "dataMartRelationships": {
+    "search": "Tìm kiếm Data Mart",
+    "status": "Trạng thái",
+    "loopedDataMarts": "Data Mart tạo vòng lặp",
+    "hideLooped": "Ẩn Data Mart tạo vòng lặp",
+    "showLooped": "Hiện Data Mart tạo vòng lặp",
+    "tableView": "Chế độ xem bảng",
+    "diagramView": "Chế độ xem sơ đồ",
+    "list": "Danh sách",
+    "graph": "Sơ đồ",
+    "noMatch": "Không có mối quan hệ nào khớp với tìm kiếm hoặc bộ lọc.",
+    "emptyTitle": "Chưa có Data Mart liên kết",
+    "emptyDescription": "Liên kết một Data Mart để bổ sung các trường từ nguồn liên quan.",
+    "joinDataMart": "Liên kết Data Mart",
+    "joinableTitle": "Data Mart có thể liên kết",
+    "joinableTooltip": "Người dùng nghiệp vụ có thể thêm cột từ Data Mart có thể liên kết trực tiếp vào báo cáo bảng tính. Không thay đổi số dòng.",
+    "diagramTitle": "Sơ đồ mối quan hệ",
+    "close": "Đóng",
+    "failedLoad": "Không thể tải mối quan hệ",
+    "relationshipAdded": "Đã thêm mối quan hệ",
+    "relationshipUpdated": "Đã cập nhật mối quan hệ",
+    "relationshipDeleted": "Đã xóa mối quan hệ",
+    "failedAdd": "Không thể thêm mối quan hệ",
+    "failedUpdate": "Không thể cập nhật mối quan hệ",
+    "failedDelete": "Không thể xóa mối quan hệ",
+    "deleteTitle": "Xóa mối quan hệ",
+    "deleteDescription": "Bạn có chắc chắn muốn xóa mối quan hệ này? Thao tác này không thể hoàn tác.",
+    "draft": "Bản nháp",
+    "joinNotConfigured": "Chưa cấu hình liên kết",
+    "blocked": "Bị chặn",
+    "noPrimaryKey": "Không có khóa chính",
+    "loop": "Vòng lặp",
+    "allowReporting": "Cho phép lập báo cáo",
+    "moreActions": "Thao tác khác",
+    "cancel": "Hủy",
+    "pickerLoading": "Đang tải...",
+    "pickerAdding": "Đang thêm...",
+    "pickerSearch": "Tìm kiếm Data Mart",
+    "by": "bởi",
+    "sqlAlias": "Bí danh SQL",
+    "addJoinField": "Thêm trường liên kết",
+    "sourceField": "Trường nguồn",
+    "relatedField": "Trường liên quan",
+    "selectField": "Chọn trường...",
+    "removeJoinCondition": "Xóa điều kiện liên kết",
+    "typeMismatch": "Không khớp kiểu: nguồn là {{source}}, đích là {{target}}",
+    "aliasPlaceholder": "ví dụ: orders",
+    "aliasTooltip": "Tên nội bộ dùng khi tạo SQL JOIN cho Data Mart này (ví dụ: orders_customer_id). Không hiển thị trong đầu ra.",
+    "joinFields": "Trường liên kết",
+    "joinFieldsTooltip": "Xác định cách ghép các dòng giữa nguồn và Data Mart liên quan."
+    ,"allStatuses": "Tất cả trạng thái",
+    "publishedOnly": "Chỉ đã xuất bản",
+    "draftOnly": "Chỉ bản nháp",
+    "field": "trường",
+    "fields": "trường"
+  },
+  "scheduleConfig": {
+    "type": "Loại",
+    "daily": "Hàng ngày",
+    "weekly": "Hàng tuần",
+    "monthly": "Hàng tháng",
+    "interval": "Theo chu kỳ",
+    "time": "Thời gian",
+    "timezone": "Múi giờ",
+    "selectTimezone": "Chọn múi giờ",
+    "noTimezones": "Không tìm thấy múi giờ",
+    "daysOfWeek": "Các ngày trong tuần",
+    "daysOfMonth": "Các ngày trong tháng",
+    "selectDays": "Chọn ngày...",
+    "minutes": "Phút",
+    "hours": "Giờ",
+    "every": "Mỗi",
+    "cronExpression": "Biểu thức Cron",
+    "cronFormat": "Định dạng: phút giờ ngày tháng thứ-trong-tuần",
+    "enabled": "Đã bật",
+    "disabled": "Đã tắt",
+    "preview": "Xem trước",
+    "status": "Trạng thái:",
+    "cron": "Cron:",
+    "schedule": "Lịch:",
+    "timeZone": "Múi giờ",
+    "timeZoneWarning": "Lịch chạy theo {{timezone}} (không phải giờ địa phương {{localTimezone}}). Thời điểm thực thi có thể khác dự kiến.",
+    "saveSchedule": "Lưu lịch",
+    "weekdaysPreset": "Các ngày trong tuần lúc 9:00",
+    "everyHourPreset": "Mỗi giờ",
+    "everySixHoursPreset": "Mỗi 6 giờ"
+    ,"weekday0": "Chủ nhật",
+    "weekday1": "Thứ hai",
+    "weekday2": "Thứ ba",
+    "weekday3": "Thứ tư",
+    "weekday4": "Thứ năm",
+    "weekday5": "Thứ sáu",
+    "weekday6": "Thứ bảy",
+    "minAbbr": "phút",
+    "hrAbbr": "giờ"
+  },
+  "scheduleDescription": {
+    "disabled": "Lịch chạy đã tắt",
+    "daily": "Hàng ngày lúc {{time}}",
+    "weekly": "Hàng tuần vào {{days}} lúc {{time}}",
+    "monthly": "Hàng tháng vào ngày {{days}} lúc {{time}}",
+    "everyMinutes": "Mỗi {{count}} phút",
+    "everyHours": "Mỗi {{count}} giờ",
+    "custom": "Lịch tùy chỉnh",
+    "and": "và",
+    "ordinal1": "mùng 1",
+    "ordinal2": "mùng 2",
+    "ordinal3": "mùng 3",
+    "ordinalOther": "ngày {{day}}"
+  },
+  "scheduledTriggerForm": {
+    "selectReport": "Chọn báo cáo",
+    "noReports": "Chưa có báo cáo nào",
+    "createInDestination": "Tạo báo cáo trong tab Điểm đến"
+  },
+  "triggerForm": {
+    "triggerType": "Loại lịch chạy",
+    "triggerTypeTooltip": "Chọn nội dung lịch chạy sẽ thực hiện",
+    "selectTriggerType": "Chọn loại lịch chạy",
+    "reportRun": "Chạy báo cáo",
+    "connectorRun": "Chạy trình kết nối",
+    "qualityRun": "Kiểm tra chất lượng dữ liệu",
+    "report": "Báo cáo",
+    "reportTooltip": "Chọn báo cáo mà lịch chạy sẽ thực hiện",
+    "saving": "Đang lưu...",
+    "creating": "Đang tạo...",
+    "saveChanges": "Lưu thay đổi",
+    "create": "Tạo lịch chạy",
+    "cancel": "Hủy",
+    "edit": "Chỉnh sửa lịch chạy",
+    "delete": "Xóa lịch chạy",
+    "deleteTitle": "Xóa lịch chạy theo lịch",
+    "deleteDescription": "Bạn có chắc chắn muốn xóa lịch chạy này? Thao tác này không thể hoàn tác.",
+    "openMenu": "Mở menu"
+  },
+  "scheduledTriggerUi": {
+    "neverRun": "Chưa chạy",
+    "notScheduled": "Chưa lên lịch",
+    "enabled": "Đã bật",
+    "disabled": "Đã tắt",
+    "report": "Báo cáo",
+    "connector": "Trình kết nối",
+    "qualityChecks": "Kiểm tra chất lượng dữ liệu",
+    "reportRun": "Chạy báo cáo",
+    "connectorRun": "Chạy trình kết nối",
+    "qualityRun": "Kiểm tra chất lượng dữ liệu",
+    "columns": {
+      "triggerType": "Loại lịch chạy",
+      "runTarget": "Đối tượng chạy",
+      "schedule": "Lịch chạy",
+      "nextRun": "Lần chạy tiếp theo",
+      "lastRun": "Lần chạy gần nhất",
+      "triggerStatus": "Trạng thái lịch chạy",
+      "createdBy": "Người tạo"
+    }
+  },
+  "timeTriggerAnnouncement": {
+    "title": "Lịch chạy theo thời gian",
+    "description": "Thiết lập lượt chạy tự động trong tab Lịch chạy sau khi lưu và xuất bản Data Mart này."
+  },
+  "reportActions": {
+    "neverRun": "Chưa chạy",
+    "notAssigned": "Chưa phân công",
+    "running": "Đang chạy báo cáo...",
+    "run": "Chạy báo cáo",
+    "edit": "Chỉnh sửa báo cáo",
+    "reconnecting": "Đang kết nối lại…",
+    "reconnect": "Kết nối lại và chạy",
+    "delete": "Xóa báo cáo",
+    "deleteTitle": "Xóa báo cáo",
+    "deleteDescription": "Bạn có chắc chắn muốn xóa \"{{title}}\"? Thao tác này không thể hoàn tác.",
+    "openDocument": "Mở tài liệu",
+    "lastRunStatus": "Trạng thái chạy gần nhất:",
+    "lastRunDate": "Ngày chạy gần nhất:",
+    "errorMessage": "Thông báo lỗi:",
+    "totalRuns": "Tổng số lượt chạy:"
+  },
+  "reportsUi": {
+    "newReport": "Báo cáo mới",
+    "addNewReport": "Thêm báo cáo mới",
+    "createFirstForDestination": "Tạo báo cáo đầu tiên cho điểm đến này",
+    "createFirstFromExcelAddin": "Tạo báo cáo đầu tiên từ tiện ích P2PDigital trong Excel",
+    "publishToCreateTitle": "Xuất bản Data Mart để tạo báo cáo?",
+    "completeSetupTitle": "Hoàn tất thiết lập Data Mart trước",
+    "publishToCreateDescription": "Chỉ Data Mart đã xuất bản mới có thể tạo báo cáo. Biểu mẫu báo cáo mới sẽ mở sau khi xuất bản hoàn tất.",
+    "beforeCreateSingleSetup": "Trước khi tạo báo cáo, {{action}}.",
+    "beforeCreateMultipleSetup": "Cần hoàn tất các thiết lập sau trước khi tạo báo cáo:",
+    "cancel": "Hủy",
+    "publishing": "Đang xuất bản…",
+    "publishAndCreate": "Xuất bản và tạo báo cáo",
+    "openDataSetup": "Mở thiết lập dữ liệu",
+    "inviteHint": "— Cấp quyền tự phục vụ báo cáo trên Google Sheets cho người dùng nghiệp vụ",
+    "learnSheetsDestination": "Tìm hiểu thêm về điểm đến Google Sheets",
+    "lastModified": "Cập nhật lần cuối",
+    "unnamedReport": "Báo cáo chưa đặt tên",
+    "noRuns": "Chưa có lượt chạy",
+    "runSingular": "lượt chạy",
+    "runPlural": "lượt chạy",
+    "since": "từ",
+    "openInGoogleSheets": "Mở trong Google Sheets",
+    "startingSoon": "Sắp bắt đầu…",
+    "reportRunning": "Báo cáo đang chạy…"
+    ,"pullRunHintExcel": "Làm mới từ tiện ích P2PDigital trong Excel"
+    ,"pullRunHintDestination": "Điểm đến tự đọc báo cáo này"
+    ,"actionsForReport": "Thao tác cho báo cáo: {{title}}"
+    ,"reconnectSheetAndRun": "Kết nối lại trang tính và chạy báo cáo: {{title}}"
+    ,"deleteReportAria": "Xóa báo cáo: {{title}}"
+    ,"reconnectFailed": "Không thể kết nối lại trang tính"
+    ,"general": "Thông tin chung"
+    ,"template": "Mẫu"
+    ,"sendingConditions": "Điều kiện gửi"
+    ,"reportColumns": "Cột báo cáo"
+    ,"reportColumnsTooltip": "Chọn các cột cần đưa vào báo cáo"
+    ,"automateRuns": "Tự động chạy báo cáo"
+    ,"ownership": "Quyền phụ trách"
+    ,"details": "Chi tiết"
+    ,"owners": "Người phụ trách"
+    ,"ownersTooltip": "Thành viên phụ trách báo cáo này"
+    ,"createdBy": "Người tạo"
+    ,"createdAt": "Ngày tạo"
+    ,"unknown": "Chưa xác định"
+    ,"noDestinations": "Không có điểm đến"
+    ,"createDestinationFirst": "Bạn cần tạo Điểm đến trước khi tạo báo cáo."
+    ,"goDestinations": "Đến điểm đến"
+    ,"shareDocumentWith": "Chia sẻ tài liệu với"
+    ,"shareDocumentTooltip": "Chia sẻ Google Sheet với email này để cho phép ghi dữ liệu"
+    ,"titleTooltip": "Đặt tiêu đề thể hiện mục đích của báo cáo"
+    ,"selectDestinationTooltip": "Chọn một điểm đến hiện có"
+    ,"subjectTooltip": "Thêm tiêu đề ngắn gọn, rõ ràng cho báo cáo"
+    ,"createNew": "+ Tạo mới"
+    ,"message": "Nội dung"
+    ,"edit": "Chỉnh sửa"
+    ,"preview": "Xem trước"
+    ,"viewSource": "Xem nguồn"
+    ,"noInsights": "Chưa có phân tích chuyên sâu"
+    ,"openInsight": "Mở phân tích chuyên sâu"
+    ,"cacheConfiguration": "Cấu hình bộ nhớ đệm"
+    ,"cacheTooltip": "Khoảng thời gian kết quả truy vấn được phục vụ từ bộ nhớ đệm của kho, tránh chạy lại"
+    ,"title": "Tiêu đề"
+    ,"destination": "Điểm đến"
+    ,"selectDestination": "Chọn điểm đến"
+    ,"reportTitlePlaceholder": "Nhập tiêu đề báo cáo"
+    ,"subject": "Tiêu đề email"
+    ,"subjectPlaceholder": "Nhập tiêu đề tin nhắn"
+    ,"custom": "Tùy chỉnh"
+    ,"insight": "Phân tích chuyên sâu"
+    ,"createInsight": "Tạo phân tích chuyên sâu"
+    ,"selectInsight": "Chọn phân tích chuyên sâu"
+    ,"selectedInsight": "Phân tích chuyên sâu đã chọn"
+    ,"noInsightSelected": "Chưa chọn phân tích chuyên sâu"
+    ,"noInsightAvailable": "Chưa có phân tích chuyên sâu khả dụng"
+    ,"insightSourceDescription": "Tạo một phân tích chuyên sâu để dùng làm nguồn cho nội dung báo cáo."
+    ,"insightWillRun": "Phân tích chuyên sâu sẽ được dùng khi báo cáo chạy"
+    ,"dataMartRunResults": "Kết quả chạy Data Mart"
+    ,"dataMartRunResultsTooltip": "Xác định khi nào báo cáo được gửi dựa trên kết quả chạy Data Mart"
+    ,"cacheLifetime": "Thời gian lưu bộ nhớ đệm"
+    ,"selectCacheTime": "Chọn thời gian lưu bộ nhớ đệm"
+    ,"minutes": "{{count}} phút"
+    ,"hours": "{{count}} giờ"
+    ,"createReport": "Tạo báo cáo"
+    ,"report": "Báo cáo"
+    ,"createReportSheetTitle": "Tạo báo cáo"
+    ,"editReportSheetTitle": "Chỉnh sửa báo cáo"
+    ,"createReportSheetDescription": "Điền thông tin để tạo báo cáo mới"
+    ,"editReportSheetDescription": "Cập nhật thông tin của báo cáo hiện có"
+    ,"lookerCreateDescription": "Thiết lập Data Mart làm nguồn dữ liệu"
+    ,"lookerEditDescription": "Cập nhật thông tin kết nối"
+    ,"copyLinkToReport": "Sao chép liên kết tới báo cáo này"
+    ,"reportCreatedToast": "Đã tạo báo cáo"
+    ,"viewItInDestinations": "Bạn có thể xem trong trang Điểm đến"
+    ,"createAndRunReport": "Tạo và chạy báo cáo"
+    ,"saveChangesToReport": "Lưu thay đổi báo cáo"
+    ,"createNewReport": "Tạo báo cáo mới"
+    ,"saveAndRunReport": "Lưu và chạy báo cáo"
+    ,"saveChanges": "Lưu thay đổi"
+    ,"moreActions": "Thao tác khác"
+    ,"creating": "Đang tạo..."
+    ,"saving": "Đang lưu..."
+  },
+  "reportTable": {
+    "title": "Tiêu đề",
+    "lastRunDate": "Ngày chạy gần nhất",
+    "lastRunStatus": "Trạng thái chạy gần nhất",
+    "createdBy": "Người tạo",
+    "owners": "Người phụ trách"
+  },
+  "reportStatus": {
+    "success": "Thành công",
+    "fail": "Thất bại",
+    "inProgress": "Đang thực hiện",
+    "cancelled": "Đã hủy",
+    "restricted": "Bị hạn chế",
+    "unknown": "Chưa xác định"
+  },
+  "insightsUi": {
+    "rowActions": "Thao tác phân tích chuyên sâu",
+    "loadingHistory": "Đang tải lịch sử trò chuyện...",
+    "noChats": "Chưa có cuộc trò chuyện nào.",
+    "rename": "Đổi tên",
+    "delete": "Xóa",
+    "applyRun": "Áp dụng và chạy",
+    "applyOnly": "Chỉ áp dụng",
+    "applyChangesAction": "Áp dụng thay đổi cho nguồn",
+    "createAttachAction": "Tạo và gắn nguồn",
+    "reuseSourceAction": "Tái sử dụng nguồn",
+    "applyTemplateEditAction": "Áp dụng thay đổi mẫu",
+    "noArtifacts": "Chưa có tác vụ dữ liệu nào",
+    "artifactDescription": "Tác vụ dữ liệu là các truy vấn SQL lấy dữ liệu từ Data Mart của bạn",
+    "addArtifact": "Tác vụ dữ liệu",
+    "title": "Tiêu đề",
+    "insertTemplate": "Chèn vào mẫu",
+    "copyArtifactId": "Sao chép mã tác vụ dữ liệu vào bộ nhớ tạm",
+    "copiedArtifactId": "Đã sao chép mã tác vụ dữ liệu vào bộ nhớ tạm",
+    "deleteArtifactTitle": "Xóa tác vụ dữ liệu",
+    "deleteArtifactDescription": "Bạn có chắc chắn muốn xóa tác vụ dữ liệu \"{{title}}\"? Thao tác này không thể hoàn tác.",
+    "sqlRequired": "Bắt buộc nhập truy vấn SQL",
+    "validatingSql": "Đang xác thực SQL…",
+    "validSql": "SQL hợp lệ",
+    "configureArtifact": "Cấu hình tác vụ dữ liệu cho phân tích chuyên sâu.",
+    "visibleTitle": "Tiêu đề hiển thị",
+    "sqlEditor": "Trình chỉnh sửa SQL",
+    "loadError": "Không thể tải phân tích chuyên sâu",
+    "created": "Đã tạo phân tích chuyên sâu",
+    "createFailed": "Không thể tạo phân tích chuyên sâu",
+    "runCancelled": "Lượt chạy phân tích chuyên sâu đã bị hủy",
+    "runFailed": "Lượt chạy phân tích chuyên sâu thất bại",
+    "runCompleted": "Lượt chạy phân tích chuyên sâu đã hoàn tất",
+    "checkRunFailed": "Không thể kiểm tra trạng thái lượt chạy phân tích chuyên sâu",
+    "saved": "Đã lưu phân tích chuyên sâu",
+    "saveFailed": "Không thể lưu phân tích chuyên sâu",
+    "startRunFailed": "Không thể bắt đầu lượt chạy phân tích chuyên sâu",
+    "cancelled": "Đã hủy lượt chạy",
+    "cancelFailed": "Không thể hủy lượt chạy",
+    "deleted": "Đã xóa phân tích chuyên sâu",
+    "deleteFailed": "Không thể xóa phân tích chuyên sâu",
+    "errors": {
+      "loadProject": "Không thể tải các phân tích chuyên sâu của Data Mart",
+      "delete": "Không thể xóa phân tích chuyên sâu"
+    },
+    "delete": {
+      "title": "Xóa phân tích chuyên sâu",
+      "description": "Bạn có chắc chắn muốn xóa phân tích chuyên sâu này? Thao tác này không thể hoàn tác."
+    },
+    "titleUpdated": "Đã cập nhật tiêu đề",
+    "unsavedChanges": "Thay đổi chưa lưu",
+    "save": "Lưu",
+    "running": "Đang chạy…",
+    "runInsight": "Chạy phân tích chuyên sâu",
+    "sendSchedule": "Gửi và lên lịch",
+    "cancelInsightRun": "Hủy lượt chạy phân tích chuyên sâu",
+    "deleteInsight": "Xóa phân tích chuyên sâu",
+    "expandAiAssistant": "Mở rộng Trợ lý AI",
+    "aiAssistant": "Trợ lý AI",
+    "newChat": "Cuộc trò chuyện mới",
+    "backToChat": "Quay lại trò chuyện",
+    "chatHistory": "Lịch sử trò chuyện",
+    "hide": "Ẩn",
+    "expandPreview": "Mở rộng phần xem trước",
+    "noDataMartContext": "Không có ngữ cảnh Data Mart.",
+    "insight": "Phân tích chuyên sâu",
+    "reportsCount": "{{count}} báo cáo",
+    "noReports": "Chưa có báo cáo",
+    "noReportsConfigured": "Chưa có báo cáo nào được cấu hình cho phân tích chuyên sâu này",
+    "reportsTooltipSingular": "Phân tích chuyên sâu này được dùng trong 1 báo cáo ({{types}})",
+    "reportsTooltipPlural": "Phân tích chuyên sâu này được dùng trong {{count}} báo cáo ({{types}})",
+    "dataArtifactsCount": "Tác vụ dữ liệu ({{count}}/5)",
+    "lastRunFailed": "Lượt chạy gần nhất thất bại",
+    "copied": "Đã sao chép!",
+    "copyFailed": "Không thể sao chép vào bộ nhớ tạm",
+    "copyMarkdown": "Sao chép Markdown",
+    "readyToExplore": "Sẵn sàng khám phá dữ liệu?",
+    "runToUncover": "Chạy phân tích chuyên sâu để khám phá câu chuyện phía sau dữ liệu!",
+    "deleteInsightDescription": "Thao tác này không thể hoàn tác. Xóa phân tích chuyên sâu này?",
+    "reportDeleted": "Đã xóa báo cáo",
+    "reportDeleteFailed": "Không thể xóa báo cáo",
+    "reportRunFailed": "Không thể chạy báo cáo",
+    "loadingReports": "Đang tải báo cáo...",
+    "scheduleTitle": "Lên lịch phân tích chuyên sâu",
+    "scheduleDescription": "Tự động gửi đến các điểm đến của bạn",
+    "newReport": "Báo cáo mới",
+    "createReportTooltip": "Tạo báo cáo mới cho phân tích chuyên sâu này",
+    "runReport": "Chạy báo cáo",
+    "edit": "Chỉnh sửa",
+    "lastRun": "Lượt chạy gần nhất:",
+    "never": "Chưa bao giờ",
+    "deleteReportTitle": "Xóa báo cáo",
+    "notFound": "Không tìm thấy phân tích chuyên sâu",
+    "notFoundDescription": "Phân tích chuyên sâu bạn tìm kiếm không tồn tại hoặc không thể tải",
+    "untitled": "Phân tích chuyên sâu chưa đặt tên",
+    "editorPlaceholder": "Nhập / để xem các lệnh khả dụng...",
+    "publishBeforeRun": "Để chạy phân tích chuyên sâu, trước tiên hãy xuất bản Data Mart",
+    "saveAndRun": "Lưu và chạy phân tích chuyên sâu",
+    "scheduleAfterPublish": "Bạn chỉ có thể lên lịch và gửi báo cáo sau khi xuất bản Data Mart",
+    "scheduleDescription": "Bạn có thể lên lịch chạy phân tích chuyên sâu vào thời điểm cụ thể hoặc gửi đến người nhận",
+    "templateEmpty": "Mẫu phân tích chuyên sâu đang trống",
+    "pressSlashCommands": "Nhấn '/' để xem các lệnh",
+    "searchInsights": "Tìm kiếm phân tích chuyên sâu…",
+    "noInsightsYet": "Chưa có phân tích chuyên sâu. Hãy tạo trên tab Phân tích chuyên sâu, sau đó bạn có thể sao chép mẫu vào báo cáo email.",
+    "copyTemplate": "Sao chép mẫu…",
+    "copyTemplateDetail": "Sao chép mẫu từ một phân tích chuyên sâu hiện có",
+    "newPrompt": "Lời nhắc mới",
+    "newPromptDescription": "Chèn mẫu {{#prompt}} cho các truy vấn sinh nội dung",
+    "deleteReportDescription": "Bạn có chắc chắn muốn xóa báo cáo này? Thao tác này không thể hoàn tác.",
+    "insightPlural": "Phân tích chuyên sâu",
+    "lastRunColumn": "Lượt chạy gần nhất",
+    "generateWithAi": "Tạo phân tích chuyên sâu bằng AI",
+    "blankInsight": "Phân tích chuyên sâu trống",
+    "insightReportsTitle": "Báo cáo phân tích chuyên sâu",
+    "manageReportsDescription": "Quản lý các báo cáo liên kết với phân tích chuyên sâu này",
+    "loadingInsights": "Đang tải phân tích chuyên sâu…",
+    "firstInsightTitle": "Tạo phân tích chuyên sâu đầu tiên",
+    "firstInsightDescription": "Tạo phân tích chuyên sâu để xây dựng báo cáo theo lịch và gửi đến các kênh bạn muốn (Email, Slack, v.v.)",
+    "newInsight": "Phân tích chuyên sâu mới",
+    "noInsightsFound": "Không tìm thấy phân tích chuyên sâu nào.",
+    "deleteInsightTitle": "Xóa phân tích chuyên sâu",
+    "deleteInsightConfirm": "Bạn có chắc chắn muốn xóa phân tích chuyên sâu này? Thao tác này không thể hoàn tác.",
+    "manageTooltip": "Quản lý và xem lại các phân tích chuyên sâu",
+    "titleCannotEmpty": "Tiêu đề không được để trống",
+    "chatRenamed": "Đã đổi tên cuộc trò chuyện",
+    "chatDeleted": "Đã xóa cuộc trò chuyện",
+    "noMessages": "Chưa có tin nhắn. Hãy bắt đầu trò chuyện!",
+    "sourceNotFound": "Hãy chỉ định khóa nguồn hiện có từ mẫu này.",
+    "ambiguousSource": "Không tìm thấy nguồn phù hợp rõ ràng. Hãy dùng Tạo và gắn nguồn để tiếp tục.",
+    "processing": "đang xử lý...",
+    "askQuestion": "Đặt câu hỏi về dữ liệu của bạn…",
+    "deleteChatTitle": "Xóa cuộc trò chuyện",
+    "deleteChatDescription": "Bạn có chắc chắn muốn xóa phiên trò chuyện này? Thao tác này không thể hoàn tác.",
+    "reason": "Lý do:",
+    "generatedSql": "SQL đã tạo",
+    "applied": "Đã áp dụng",
+    "artifactDeleted": "Đã xóa tác vụ dữ liệu",
+    "artifactDeleteFailed": "Không thể xóa tác vụ dữ liệu",
+    "previewResults": "Xem trước kết quả ({{count}} dòng)",
+    "updateArtifact": "Cập nhật tác vụ dữ liệu",
+    "createArtifact": "Tạo tác vụ dữ liệu",
+    "cancel": "Hủy",
+    "configureArtifactText": "Cấu hình tác vụ dữ liệu cho phân tích chuyên sâu.",
+    "heading": "Tiêu đề",
+    "headingLevel": "Cấp tiêu đề",
+    "hHeading": "Tiêu đề H{{level}} {{level}}",
+    "bold": "Đậm",
+    "italic": "Nghiêng",
+    "link": "Liên kết",
+    "bulletList": "Danh sách dấu đầu dòng",
+    "numberedList": "Danh sách đánh số",
+    "taskList": "Danh sách công việc",
+    "quote": "Trích dẫn",
+    "codeBlock": "Khối mã",
+    "table": "Bảng",
+    "slashCommands": "Lệnh gạch chéo",
+    "markdownDescription": "Trình chỉnh sửa này sử dụng định dạng Markdown.",
+    "learnMore": "Tìm hiểu thêm",
+    "expandToolbar": "Mở rộng thanh công cụ",
+    "collapseToolbar": "Thu gọn thanh công cụ",
+    "reportPrefill": "Báo cáo: {{title}}",
+    "newReportPrefill": "Báo cáo mới",
+    "insightPrefill": "Phân tích chuyên sâu: {{title}}",
+    "insightReportPrefill": "Báo cáo phân tích chuyên sâu",
+    "loader": {
+      "initializing": "Đang khởi tạo phân tích...",
+      "connecting": "Đang kết nối đến nguồn dữ liệu...",
+      "mapping": "Đang lập bản đồ mối quan hệ dữ liệu...",
+      "exploring": "Đang khám phá cấu trúc tập dữ liệu...",
+      "scanning": "Đang quét các trường dữ liệu...",
+      "analyzing": "Đang phân tích mẫu dữ liệu...",
+      "selecting": "Đang chọn hướng phân tích tối ưu...",
+      "aggregating": "Đang chuẩn bị bảng tổng hợp...",
+      "building": "Đang xây dựng mô hình trực quan...",
+      "finalizing": "Đang hoàn thiện kết quả phân tích...",
+      "validating": "Đang xác thực tính nhất quán của trường...",
+      "missing": "Đang kiểm tra giá trị thiếu...",
+      "anomalies": "Đang phát hiện bất thường trong dữ liệu...",
+      "crossReferencing": "Đang đối chiếu các nguồn dữ liệu...",
+      "verifying": "Đang xác minh kết quả tổng hợp...",
+      "relationships": "Đang đảm bảo mối quan hệ dữ liệu chính xác...",
+      "refining": "Đang tinh chỉnh tham số mô hình trực quan...",
+      "integrity": "Đang xác nhận tính toàn vẹn dữ liệu...",
+      "preparing": "Đang chuẩn bị kết quả cuối cho phân tích...",
+      "quality": "Đang thực hiện kiểm tra chất lượng cuối..."
+    }
+    ,"createArtifactTitle": "Tác vụ dữ liệu mới"
+    ,"editArtifactTitle": "Chỉnh sửa tác vụ dữ liệu"
+    ,"addArtifactTitle": "Thêm tác vụ dữ liệu"
+    ,"id": "Mã"
+    ,"idRequired": "Bắt buộc nhập mã"
+    ,"keyPattern": "Chỉ cho phép chữ cái, chữ số và dấu gạch dưới"
+    ,"idTooltip": "Nhập mã duy nhất dùng để tham chiếu nguồn này trong mẫu phân tích chuyên sâu. Không thể thay đổi sau khi tạo."
+    ,"titleRequired": "Bắt buộc nhập tiêu đề"
+    ,"titleTooltip": "Nhập tiêu đề dễ hiểu cho nguồn dữ liệu này."
+    ,"visibleTitlePlaceholder": "Tiêu đề hiển thị"
+    ,"sqlQueryLabel": "Truy vấn SQL"
+    ,"sqlQueryTooltip": "Viết truy vấn SQL để lấy dữ liệu. Bạn có thể dùng các tham số đã định nghĩa trong mẫu."
+    ,"preview": "Xem trước"
+    ,"noColumns": "Không có cột nào được trả về"
+    ,"estimatedVolume": "Đây là dung lượng ước tính và có thể khác giá trị thực tế"
+    ,"invalidSql": "SQL không hợp lệ"
+    ,"artifactUpdated": "Đã cập nhật tác vụ dữ liệu"
+    ,"artifactCreated": "Đã tạo tác vụ dữ liệu"
+    ,"saveArtifactFailed": "Không thể lưu tác vụ dữ liệu"
+    ,"artifactsCount": "Tác vụ dữ liệu ({{count}}/5)"
+    ,"dataArtifact": "Tác vụ dữ liệu"
+    ,"actions": "Thao tác"
+    ,"loading": "Đang tải..."
+    ,"deleteChat": "Xóa cuộc trò chuyện"
+    ,"headingAction": "Tiêu đề"
+    ,"markdownLearnMore": "Tìm hiểu thêm"
+  },
+  "reportsEmptyDestinations": {
+    "analyzeTitle": "Phân tích dữ liệu trong Google Sheets",
+    "ready": "Sẵn sàng lập báo cáo?",
+    "description": "Truy cập dữ liệu trực tiếp trong Sheets — chọn cột và tạo báo cáo mà không cần SQL hay xuất CSV.",
+    "connectSheets": "Kết nối Google Sheets",
+    "viewDestinations": "Xem tất cả điểm đến",
+    "headline": "Google Sheets, Data Studio, Email… và nhiều công cụ khác!",
+    "createDestination": "Để biến dữ liệu thành báo cáo bằng công cụ yêu thích, hãy tạo Điểm đến trước.",
+    "goDestinations": "Đến điểm đến",
+    "learnMore": "Tìm hiểu thêm về điểm đến Google Sheets"
+  },
+  "dataMartStatus": {
+    "draft": "Bản nháp",
+    "draftDescription": "Data Mart đang ở chế độ nháp và chưa được xuất bản",
+    "published": "Đã xuất bản",
+    "publishedDescription": "Data Mart đã được xuất bản và sẵn sàng sử dụng"
+  },
+  "createDataMartPage": {
+    "title": "Tạo Data Mart",
+    "titleLabel": "Tiêu đề",
+    "titlePlaceholder": "Nhập tiêu đề",
+    "storageLabel": "Kho lưu trữ",
+    "loadingStorage": "Đang tải...",
+    "selectStorage": "Chọn kho lưu trữ",
+    "noStoragesFound": "Không tìm thấy kho lưu trữ",
+    "createNewStorage": "Tạo kho lưu trữ mới",
+    "createButton": "Tạo Data Mart",
+    "goBack": "Quay lại"
   },
   "destinationsPage": {
-    "title": "Destinations",
-    "emptyTitle": "Chưa có destination nào được thiết lập",
-    "emptySubtitle": "Tạo destination để gửi kết quả báo cáo đến Google Sheets, Looker Studio, Email, v.v.",
-    "newDestination": "Destination mới"
+    "title": "Điểm đến",
+    "emptyTitle": "Kết nối công cụ báo cáo",
+    "emptySubtitle": "Kết nối công cụ báo cáo để gửi dữ liệu Data Mart đến dashboard và báo cáo.",
+    "newDestination": "Tạo điểm đến mới",
+    "inviteHint": "- Chưa biết nên kết nối điểm đến nào? Hãy nhờ người có quyền truy cập hỗ trợ",
+    "learnMore": "Tìm hiểu thêm về điểm đến"
+  },
+  "dataStorageList": {
+    "notFound": "Không tìm thấy kho lưu trữ với mã {{id}}",
+    "cannotDelete": "Không thể xóa kho lưu trữ",
+    "referencedBy": "{{count}} Data Mart{{suffix}}",
+    "publishedDraftSummary": "({{published}} đã xuất bản, {{draft}} bản nháp)",
+    "detachBeforeDelete": "Hãy ngắt liên kết hoặc xóa các Data Mart đó trước khi xóa kho lưu trữ.",
+    "deleteTitle": "Xóa kho lưu trữ",
+    "deleteDescription": "Bạn có chắc chắn muốn xóa kho lưu trữ này? Thao tác này không thể hoàn tác.",
+    "publishDraftsTitle": "Xuất bản bản nháp",
+    "publishDraftsDescription": "Có {{count}} Data Mart bản nháp{{suffix}} sẵn sàng. Có thể xuất bản {{pronoun}} ngay. Tiếp tục?",
+    "publishPronoun": "các Data Mart này",
+    "publish": "Xuất bản",
+    "notNow": "Để sau",
+    "gotIt": "Đã hiểu"
+  },
+  "dataStorageDetails": {
+    "title": "Chi tiết kho lưu trữ",
+    "description": "Xem thông tin chi tiết về kho lưu trữ này.",
+    "notAvailable": "Không có thông tin kho lưu trữ.",
+    "modified": "Cập nhật"
+  },
+  "storageTypeDialog": {
+    "title": "Kho lưu trữ mới",
+    "description": "Chọn loại kho lưu trữ bạn muốn tạo",
+    "comingSoon": "Sắp ra mắt"
+  },
+  "storageHealth": {
+    "validating": "Đang kiểm tra quyền truy cập kho lưu trữ...",
+    "valid": "Đã xác thực quyền truy cập kho lưu trữ",
+    "validTooltip": "Quyền truy cập kho lưu trữ hợp lệ",
+    "invalid": "Xác thực quyền truy cập thất bại",
+    "unconfigured": "Hoàn tất thiết lập để kích hoạt kho lưu trữ",
+    "reauthRequired": "Không thể làm mới quyền Google. Hãy kết nối lại kho lưu trữ để khôi phục quyền truy cập.",
+    "reconnect": "Kết nối lại kho lưu trữ",
+    "validationTitle": "Xác thực kho lưu trữ",
+    "validationResult": "Kết quả xác thực kho lưu trữ",
+    "compactInvalid": "Không thể truy cập kho lưu trữ. Kiểm tra cài đặt kho lưu trữ."
+  },
+  "bulkCreateFromStorage": {
+    "title": "Nhập Data Mart từ kho lưu trữ",
+    "description": "Chọn tối đa {{count}} bảng hoặc view — mỗi mục sẽ trở thành một Data Mart mới.",
+    "storage": "Kho lưu trữ",
+    "loading": "Đang tải…",
+    "noBigQueryStorages": "Không có kho Google BigQuery khả dụng",
+    "selectStorage": "Chọn kho lưu trữ",
+    "browseResources": "Duyệt tài nguyên",
+    "pickStorage": "Chọn kho lưu trữ dữ liệu ở trên để duyệt bảng và view.",
+    "selectedResources": "Tài nguyên đã chọn",
+    "limitReached": "Đã đạt giới hạn, hãy bỏ một mục để chọn thêm",
+    "tickResources": "Đánh dấu tài nguyên trong cây ở trên để thêm vào đây.",
+    "selectionsAppear": "Các lựa chọn sẽ xuất hiện ở đây sau khi bạn bắt đầu đánh dấu tài nguyên.",
+    "finishStorageSetup": "Hoàn tất thiết lập kho lưu trữ",
+    "finishStorageSetupTitle": "Mở cấu hình kho lưu trữ để sửa thông tin xác thực hoặc quyền",
+    "created": "Đã tạo {{count}} Data Mart",
+    "failed": "Không thể tạo {{count}} Data Mart. Hãy kiểm tra và thử lại.",
+    "creating": "Đang tạo {{done}} / {{total}}…",
+    "creatingSingle": "Đang tạo…",
+    "createSelected": "Tạo {{count}} Data Mart",
+    "create": "Tạo Data Mart",
+    "removeResource": "Bỏ chọn {{name}}"
+  },
+  "redshiftForm": {
+    "region": "Khu vực",
+    "regionTooltip": "Nhập khu vực AWS nơi dịch vụ Redshift của bạn đang hoạt động",
+    "regionPlaceholder": "Nhập khu vực",
+    "serverless": "Serverless",
+    "provisioned": "Provisioned",
+    "workgroupName": "Tên workgroup",
+    "workgroupNameTooltip": "Tên workgroup cho Redshift Serverless",
+    "workgroupNamePlaceholder": "Nhập tên workgroup",
+    "clusterIdentifier": "Mã định danh cluster",
+    "clusterIdentifierTooltip": "Mã định danh cluster cho Redshift provisioned",
+    "clusterIdentifierPlaceholder": "Nhập mã định danh cluster",
+    "database": "Cơ sở dữ liệu",
+    "databaseTooltip": "Tên cơ sở dữ liệu cần kết nối",
+    "databasePlaceholder": "Nhập tên cơ sở dữ liệu",
+    "accessKeyId": "Access Key ID",
+    "accessKeyIdTooltip": "AWS Access Key ID dùng để xác thực",
+    "accessKeyIdPlaceholder": "Nhập access key id",
+    "secretAccessKey": "Secret Access Key",
+    "secretAccessKeyTooltip": "AWS Secret Access Key dùng để xác thực",
+    "secretAccessKeyPlaceholder": "Nhập secret access key"
+  },
+  "googleChat": {
+    "deliveryMethod": "Phương thức gửi",
+    "incomingWebhook": "Webhook đến",
+    "channelEmail": "Email kênh",
+    "webhookUrlLabel": "URL webhook đến của Google Chat",
+    "webhookHelp": "Dán URL webhook đến được sao chép từ mục Ứng dụng và tiện ích tích hợp trong không gian Google Chat của bạn.",
+    "configuredPlaceholder": "Webhook đã cấu hình — dán URL mới để thay thế",
+    "emailFieldTitle": "Nhập danh sách email kênh Google Chat",
+    "deliveryMethodDescription": {
+      "webhookTitle": "Webhook đến gửi như thế nào?",
+      "emailTitle": "Email kênh gửi như thế nào?",
+      "webhookText": "Gửi báo cáo trực tiếp đến không gian dưới dạng tin nhắn Google Chat đã định dạng.",
+      "emailText": "Gửi báo cáo qua email đến địa chỉ của không gian Google Chat. Báo cáo hiển thị dưới dạng thẻ email trong không gian."
+    },
+    "channelEmailDescription": {
+      "title": "Làm cách nào để lấy địa chỉ email không gian Google Chat?",
+      "openSpace": "Mở không gian cần dùng trong Google Chat trên máy tính.",
+      "spaceSettings": "Nhấp vào tên không gian, sau đó chọn Cài đặt không gian.",
+      "generateEmail": "Trong mục Email, nhấp Tạo email nếu không gian chưa có địa chỉ.",
+      "copyAddress": "Sao chép địa chỉ email không gian và dán vào phía trên.",
+      "managersOnly": "Chỉ người quản lý không gian mới có thể tạo địa chỉ email.",
+      "seeGuide": "Xem",
+      "guide": "hướng dẫn email Google Chat",
+      "forDetails": "để biết thêm chi tiết."
+    },
+    "webhookDescription": {
+      "title": "Làm cách nào để lấy URL webhook đến?",
+      "openSpace": "Mở không gian cần dùng trong Google Chat trên máy tính.",
+      "appsIntegrations": "Nhấp vào tên không gian, sau đó chọn Ứng dụng và tiện ích tích hợp.",
+      "addWebhooks": "Nhấp Thêm webhook, nhập tên và lưu webhook.",
+      "copyLink": "Mở menu webhook, chọn Sao chép liên kết và dán URL vào phía trên.",
+      "warning": "Nếu không thể thêm webhook, quản trị viên Google Workspace có thể đã tắt tùy chọn này. Hãy giữ bí mật URL webhook.",
+      "seeGuide": "Xem",
+      "guide": "hướng dẫn webhook Google Chat",
+      "forDetails": "để biết thêm chi tiết."
+    }
+  },
+  "dataDestinationList": {
+    "notFound": "Không tìm thấy điểm đến với mã {{id}}",
+    "cannotDelete": "Không thể xóa điểm đến",
+    "referencedReports": "{{reports}} báo cáo",
+    "acrossDataMarts": "trên {{dataMarts}} Data Mart{{dataMartSuffix}}.",
+    "referencedBy": "{{reports}} báo cáo{{reportSuffix}} trên {{dataMarts}} Data Mart{{dataMartSuffix}}.",
+    "removeBeforeDelete": "Hãy xóa hoặc đổi điểm đến của các báo cáo đó trước khi xóa điểm đến này.",
+    "deleteTitle": "Xóa điểm đến",
+    "deleteDescription": "Bạn có chắc chắn muốn xóa điểm đến này? Thao tác này không thể hoàn tác.",
+    "rotateTitle": "Đổi khóa bí mật",
+    "rotateDescription": "Việc đổi khóa bí mật sẽ vô hiệu hóa khóa trước đó",
+    "newConfigCopied": "Cấu hình JSON mới đã được sao chép vào bộ nhớ tạm",
+    "afterRotation": "Sau khi đổi khóa, bạn cần:",
+    "newConfigStep": "Cấu hình JSON mới sẽ tự động được sao chép vào bộ nhớ tạm",
+    "connectorStep": "Mở trình kết nối Data Studio",
+    "updateConfigStep": "Cập nhật cấu hình bằng JSON mới",
+    "saveChangesStep": "Lưu thay đổi để khôi phục quyền truy cập Data Mart",
+    "rotateQuestion": "Bạn có chắc chắn muốn đổi khóa bí mật?",
+    "rotateKey": "Đổi khóa",
+    "gotIt": "Đã hiểu"
+  },
+  "storagesPage": {
+    "title": "Kho lưu trữ",
+    "emptyTitle": "Kết nối kho dữ liệu",
+    "emptySubtitle": "Tập trung quyền truy cập dữ liệu thô bằng cách kết nối kho dữ liệu để xây dựng Data Mart và báo cáo.",
+    "newStorage": "Tạo kho lưu trữ mới",
+    "inviteHint": "- Chưa biết nên kết nối kho nào? Hãy nhờ người có quyền truy cập hỗ trợ",
+    "learnMore": "Tìm hiểu thêm về kho lưu trữ"
+  },
+  "configDialogs": {
+    "destinationTitle": "Cấu hình điểm đến",
+    "destinationDescription": "Tùy chỉnh cài đặt cho điểm đến",
+    "storageTitle": "Cấu hình nhà cung cấp kho lưu trữ",
+    "storageDescription": "Tùy chỉnh cài đặt cho nhà cung cấp kho lưu trữ"
+  },
+  "formCommon": {
+    "general": "Thông tin chung",
+    "connectionSettings": "Cài đặt kết nối",
+    "titleTooltipStorage": "Đặt tên kho lưu trữ để làm rõ mục đích",
+    "titleTooltipDestination": "Đặt tên điểm đến để làm rõ mục đích",
+    "storageTitlePlaceholder": "Tiêu đề kho lưu trữ",
+    "destinationTitlePlaceholder": "Nhập tiêu đề",
+    "storageType": "Loại kho lưu trữ",
+    "destinationType": "Loại điểm đến",
+    "selectStorageType": "Chọn loại kho lưu trữ",
+    "selectDestinationType": "Chọn loại điểm đến",
+    "ownership": "Quyền phụ trách",
+    "owners": "Người phụ trách",
+    "contexts": "Ngữ cảnh",
+    "sharing": "Chia sẻ",
+    "details": "Chi tiết",
+    "createdBy": "Người tạo",
+    "createdAt": "Ngày tạo",
+    "unknown": "Chưa xác định",
+    "sharedForUse": "Chia sẻ để sử dụng",
+    "sharedForMaintenance": "Chia sẻ để bảo trì",
+    "assigned": "Đã gán",
+    "save": "Lưu",
+    "cancel": "Hủy"
+  },
+  "destinationForm": {
+    "emailList": "Danh sách email",
+    "emailPlaceholder": "Nhập email, phân tách bằng dấu phẩy, dấu chấm phẩy hoặc xuống dòng",
+    "userEmailsTitle": "Nhập danh sách email người nhận",
+    "slackChannelEmailsTitle": "Nhập danh sách email kênh Slack",
+    "microsoftTeamsChannelEmailsTitle": "Nhập danh sách email kênh Microsoft Teams"
+  },
+  "destinationHelp": {
+    "googleSheetsAuth": {
+      "title": "Nên chọn phương thức xác thực nào?",
+      "intro": "Google Sheets hỗ trợ hai phương thức xác thực:",
+      "oauthLabel": "Kết nối với Google (OAuth):",
+      "oauthText": "Cách nhanh nhất để bắt đầu. Đăng nhập bằng tài khoản Google và cấp quyền truy cập Google Sheets chỉ với vài bước. Phù hợp với hầu hết người dùng.",
+      "serviceAccountLabel": "JSON tài khoản dịch vụ:",
+      "serviceAccountText": "Sử dụng khóa tài khoản dịch vụ Google Cloud để xác thực giữa các máy chủ. Khuyến nghị khi cần truy cập tự động không cần tài khoản Google cá nhân hoặc tổ chức yêu cầu dùng tài khoản dịch vụ để tuân thủ quy định."
+    },
+    "googleSheetsOAuth": {
+      "title": "Những quyền nào sẽ được yêu cầu?",
+      "intro": "Khi bạn kết nối với Google, P2PDigital sẽ yêu cầu các quyền sau:",
+      "sheetsPermission": "— đọc và ghi vào các bảng tính được dùng làm điểm đến dữ liệu.",
+      "profileLabel": "Thông tin hồ sơ cơ bản",
+      "profilePermission": "— tên và email của bạn để nhận diện tài khoản đã kết nối.",
+      "revokeIntro": "P2PDigital chỉ truy cập các bảng tính bạn cấu hình rõ ràng làm điểm đến. Bạn có thể thu hồi quyền bất kỳ lúc nào trong",
+      "accountSettings": "cài đặt Tài khoản Google"
+    },
+    "googleSheetsServiceAccount": {
+      "title": "Làm cách nào để lấy khóa JSON tài khoản dịch vụ?",
+      "intro": "Để lấy khóa JSON, bạn cần tạo hoặc dùng tài khoản dịch vụ hiện có trong Google Cloud.",
+      "stepsIntro": "Các bước thực hiện:",
+      "goTo": "Mở",
+      "console": "Google Cloud Console",
+      "openIam": "Mở",
+      "iamPath": "IAM và Quản trị viên → Tài khoản dịch vụ",
+      "createOrSelect": "Tạo tài khoản dịch vụ mới hoặc chọn tài khoản hiện có.",
+      "openKeys": "Mở trang Tài khoản dịch vụ, chuyển tới thẻ",
+      "keys": "Khóa",
+      "click": ", nhấp",
+      "addKey": "Thêm khóa",
+      "selectCreate": "và chọn",
+      "createKey": "Tạo khóa mới",
+      "choose": "Chọn định dạng",
+      "formatAndClick": "và nhấp",
+      "create": "Tạo",
+      "paste": "Mở tệp đã tải xuống, sao chép toàn bộ nội dung và dán vào trường phía trên."
+    },
+    "common": {
+      "destinations": "Điểm đến",
+      "moreDetails": "Để biết thêm chi tiết, hãy đọc",
+      "documentation": "tài liệu P2PDigital",
+      "learnMore": "Tìm hiểu thêm"
+    },
+    "email": {
+      "title": "Làm cách nào để bắt đầu gửi Email?",
+      "setup": "Để gửi báo cáo qua email, trước tiên hãy cấu hình điểm đến",
+      "setupAfterEmail": "trong biểu mẫu này (thêm tiêu đề và chỉ định địa chỉ người nhận). Sau đó, mở trang Data Mart, vào thẻ",
+      "setupEnd": "và tạo báo cáo trong khối Email.",
+      "delivery": "Trong cài đặt báo cáo, thêm tiêu đề, nội dung và điều kiện gửi. Báo cáo được tạo sẽ được P2PDigital Data Marts gửi tới các địa chỉ đã chọn dưới dạng văn bản có định dạng."
+    },
+    "slack": {
+      "title": "Làm cách nào để bắt đầu gửi tới Slack?",
+      "setup": "Để gửi báo cáo tới Slack, trước tiên hãy cấu hình điểm đến",
+      "setupAfterSlack": "trong biểu mẫu này (thêm tiêu đề và chỉ định địa chỉ người nhận). Sau đó, mở trang Data Mart, vào thẻ",
+      "setupEnd": "và tạo báo cáo trong khối Slack.",
+      "delivery": "Trong cài đặt báo cáo, thêm tiêu đề, nội dung và điều kiện gửi. Báo cáo được tạo sẽ được P2PDigital Data Marts gửi tới kênh đã chọn dưới dạng tin nhắn."
+    },
+    "microsoftTeams": {
+      "title": "Làm cách nào để bắt đầu gửi tới Microsoft Teams?",
+      "setup": "Để gửi báo cáo tới Microsoft Teams, trước tiên hãy cấu hình điểm đến",
+      "setupAfterTeams": "trong biểu mẫu này (thêm tiêu đề và chỉ định địa chỉ người nhận). Sau đó, mở trang Data Mart, vào thẻ",
+      "setupEnd": "và tạo báo cáo trong khối Microsoft Teams.",
+      "delivery": "Trong cài đặt báo cáo, thêm tiêu đề, nội dung và điều kiện gửi. Báo cáo được tạo sẽ được P2PDigital Data Marts gửi tới kênh đã chọn dưới dạng tin nhắn."
+    },
+    "excel": {
+      "title": "Làm cách nào để kết nối với Microsoft Excel?",
+      "setup": "Không cần thiết lập gì ở đây. Tiện ích P2PDigital cho Excel sẽ tự tạo điểm đến này khi bạn lần đầu tạo báo cáo từ một sổ làm việc.",
+      "credentials": "Khác với các điểm đến khác, điểm đến này không lưu thông tin xác thực: tiện ích đọc dữ liệu bằng quyền truy cập P2PDigital của bạn và ghi vào trang tính đang mở."
+    },
+    "lookerStudio": {
+      "title": "Làm cách nào để kết nối với Data Studio?",
+      "setup": "Để gửi dữ liệu tới Data Studio, bạn cần cung cấp URL triển khai mà",
+      "connector": "trình kết nối Data Studio",
+      "setupEnd": "sẽ dùng để truy cập dữ liệu của bạn.",
+      "security": "Đảm bảo URL triển khai có thể truy cập từ Internet và được bảo mật đúng cách."
+    },
+    "odata": {
+      "title": "Làm cách nào để dùng OData?",
+      "description": "OData (Open Data Protocol) là tiêu chuẩn OASIS được ISO/IEC phê duyệt, định nghĩa các thông lệ tốt để xây dựng và sử dụng API RESTful.",
+      "comingSoon": "Tính năng này sắp ra mắt."
+    },
+    "googleChat": {
+      "title": "Làm cách nào để bắt đầu gửi tới Google Chat?",
+      "choose": "Chọn",
+      "webhookText": "để gửi báo cáo trực tiếp tới không gian dưới dạng tin nhắn Google Chat đã định dạng, hoặc",
+      "emailText": "để gửi qua email tới địa chỉ của không gian Chat. Với webhook, hãy mở",
+      "appsText": "trong không gian cần dùng, thêm webhook đến và dán URL vào đây. Hãy giữ bí mật URL.",
+      "reportSetup": "Sau đó, tạo báo cáo từ thẻ",
+      "reportSetupEnd": "của Data Mart và cấu hình tiêu đề, nội dung cùng điều kiện gửi."
+    }
+  },
+  "errorBoundary": {
+    "title": "Đã xảy ra lỗi",
+    "subtitleRoot": "Ứng dụng gặp sự cố bất ngờ. Đừng lo - dữ liệu của bạn vẫn an toàn. Hãy tải lại trang hoặc quay về trang chủ.",
+    "subtitleLayout": "Ứng dụng gặp sự cố bất ngờ. Đừng lo - dữ liệu của bạn vẫn an toàn. Hãy chuyển sang mục khác hoặc về trang chủ.",
+    "home": "Về trang chủ",
+    "reload": "Tải lại trang",
+    "details": "Chi tiết lỗi"
   },
   "projectsPage": {
     "title": "Dự án",
@@ -199,8 +1700,474 @@
     "createButton": "Tạo mã API",
     "infoNote": "Mã API cá nhân dành cho thành viên của bạn trong dự án này. Các mã này đại diện cho bạn — không phải cho toàn bộ dự án.",
     "revokeTitle": "Thu hồi mã API",
+    "revokeButton": "Thu hồi",
     "revokeConfirm": "Bạn có chắc chắn muốn thu hồi",
-    "revokeWarning": "Thao tác này không thể hoàn tác. Mọi tích hợp sử dụng mã này sẽ ngừng hoạt động ngay lập tức."
+    "revokeWarning": "Thao tác này không thể hoàn tác. Mọi tích hợp sử dụng mã này sẽ ngừng hoạt động ngay lập tức.",
+    "form": {
+      "title": "Tạo mã API",
+      "description": "Tạo mã API cá nhân cho các công cụ và quy trình tự động bên ngoài.",
+      "createFailed": "Không thể tạo mã API",
+      "nameHelp": "Nhãn dễ nhận biết để bạn xác định mã này sau này.",
+      "namePlaceholder": "ví dụ: Tác vụ nhập CI",
+      "nameQuestion": "Nên đặt tên mã thế nào?",
+      "nameAnswer": "Đặt tên mô tả nơi hoặc cách mã được sử dụng, ví dụ \"quy trình CI\" hoặc \"trình kết nối Looker Studio\". Tên rõ ràng giúp kiểm tra và thu hồi mã dễ hơn.",
+      "expiresHelp": "Ngày UTC tùy chọn, sau đó mã sẽ ngừng hoạt động.",
+      "expiresLabel": "Ngày hết hạn (tùy chọn)",
+      "expiresQuestion": "Điều gì xảy ra nếu để trống?",
+      "expiresAnswer": "Nếu không đặt ngày hết hạn, mã sẽ tiếp tục hoạt động vô thời hạn cho đến khi bạn thu hồi thủ công. Nên đặt ngày hết hạn cho các tích hợp tạm thời hoặc khi chính sách bảo mật yêu cầu đổi mã định kỳ."
+    },
+    "table": {
+      "copyId": "Sao chép mã API",
+      "idCopied": "Đã sao chép mã API",
+      "expires": "Hết hạn",
+      "lastAuthenticated": "Xác thực gần nhất",
+      "never": "Chưa bao giờ",
+      "editName": "Đổi tên"
+    },
+    "edit": {
+      "title": "Chi tiết mã API",
+      "description": "Quản lý mã API này và xem chi tiết tích hợp.",
+      "nameUpdated": "Đã cập nhật tên mã API",
+      "nameUpdateFailed": "Không thể cập nhật tên mã API",
+      "nameHelp": "Nhãn dễ nhận biết để xác định mã API này.",
+      "idHelp": "Mã định danh không bí mật dùng trong trạng thái, nhật ký, hỗ trợ và gỡ lỗi.",
+      "expiresHelp": "Ngày UTC mã API ngừng hoạt động. \"Chưa bao giờ\" nghĩa là mã không tự hết hạn.",
+      "created": "Đã tạo",
+      "createdHelp": "Thời điểm mã API được tạo.",
+      "lastAuthenticatedHelp": "Lần xác thực thành công gần nhất bằng mã API này.",
+      "credentials": "Thông tin xác thực",
+      "keyHelp": "Mã API đầy đủ chỉ hiển thị một lần. Hãy lưu trữ an toàn.",
+      "unavailableNotice": "Mã API chỉ hiển thị một lần trong hộp thoại tạo. Nếu không còn mã, hãy tạo mã mới và thu hồi mã này.",
+      "dangerZone": "Vùng nguy hiểm",
+      "revokeTitle": "Thu hồi mã API này",
+      "revokeDescription": "Dừng các lần xác thực trong tương lai bằng mã này. Thao tác không thể hoàn tác.",
+      "revokeButton": "Thu hồi mã API"
+    }
+  },
+  "licenseKeysPage": {
+    "loadError": "Không thể tải mã bản quyền",
+    "emptyTitle": "Dự án này chưa có mã bản quyền",
+    "emptySubtitle": "Tạo mã để một bản triển khai có thể chạy báo cáo và tính phí vào dự án này.",
+    "createButton": "Tạo mã bản quyền",
+    "infoNote": "Mã bản quyền cho phép một nguồn triển khai duy nhất chạy báo cáo và tính phí vào dự án này. Để đổi mã, hãy tạo mã mới, cập nhật bản triển khai rồi thu hồi mã cũ.",
+    "revokeTitle": "Thu hồi mã bản quyền",
+    "revokeConfirm": "Bạn có chắc chắn muốn thu hồi",
+    "revokeWarning": "Thao tác này không thể hoàn tác. Bản triển khai đang dùng mã này sẽ ngừng chạy báo cáo ngay lập tức.",
+    "revokeButton": "Thu hồi",
+    "table": {
+      "copyId": "Sao chép mã bản quyền",
+      "idCopied": "Đã sao chép mã bản quyền",
+      "copyOrigin": "Sao chép nguồn công khai",
+      "originCopied": "Đã sao chép nguồn công khai",
+      "copyFailed": "Không thể sao chép",
+      "origin": "Nguồn công khai",
+      "expires": "Hết hạn",
+      "lastActivity": "Hoạt động gần nhất",
+      "never": "Chưa bao giờ",
+      "licenseKeyId": "ID mã bản quyền",
+      "licenseKeyIdTooltip": "Mã định danh không bí mật dùng trong nhật ký, hỗ trợ và gỡ lỗi.",
+      "originTooltip": "Địa chỉ bản triển khai mà mã này cấp quyền. Mã chỉ hoạt động tại địa chỉ này.",
+      "expiresTooltip": "Ngày mã bản quyền này ngừng cấp quyền chạy báo cáo.",
+      "created": "Ngày tạo",
+      "createdTooltip": "Thời điểm mã bản quyền được tạo.",
+      "lastActivityTooltip": "Lần gần nhất mã bản quyền được bản triển khai tự quản lý sử dụng thành công.",
+      "copyValue": "Sao chép {{label}}",
+      "valueCopied": "Đã sao chép {{label}}",
+      "copyValueFailed": "Không thể sao chép {{label}}"
+    },
+    "createTitle": "Tạo mã bản quyền",
+    "createDescription": "Cấp quyền chạy báo cáo cho một bản triển khai và tính phí vào dự án này.",
+    "createFailed": "Không thể tạo mã bản quyền",
+    "nameTooltip": "Nhãn dễ nhận biết để xác định mã này về sau.",
+    "nameHelpQuestion": "Nên đặt tên mã như thế nào?",
+    "nameHelpDescription": "Đặt tên để nhận diện bản triển khai mà mã này thuộc về, ví dụ \"Production\" hoặc \"Staging\". Nhờ đó việc kiểm tra và thu hồi mã sau này dễ dàng hơn.",
+    "originTooltip": "Địa chỉ cung cấp bản triển khai được cấp phép.",
+    "originHelpQuestion": "Nên dùng origin nào?",
+    "originHelpDescription": "Dùng PUBLIC_ORIGIN của bản triển khai, hoặc http://localhost:3000 khi phát triển cục bộ. Nếu chuyển bản triển khai, hãy tạo mã mới và thu hồi mã này.",
+    "nameUpdated": "Đã cập nhật tên mã bản quyền",
+    "nameUpdateFailed": "Không thể cập nhật tên mã bản quyền",
+    "editTitle": "Chi tiết mã bản quyền",
+    "editDescription": "Quản lý mã bản quyền này và xem lại bản triển khai mà mã cấp quyền.",
+    "credentials": "Thông tin xác thực",
+    "keyLabel": "Mã bản quyền",
+    "keyTooltip": "Mã bản quyền đã ký chỉ hiển thị một lần. Hãy lưu trữ an toàn.",
+    "unavailableNotice": "Mã bản quyền chỉ hiển thị một lần ngay sau khi tạo. Nếu không còn mã, hãy tạo mã mới và thu hồi mã này.",
+    "dangerZone": "Vùng nguy hiểm",
+    "revokeDescription": "Bản triển khai đang dùng mã sẽ ngừng chạy báo cáo ngay lập tức. Thao tác này không thể hoàn tác.",
+    "expiredNotice": "Mã bản quyền này đã hết hạn. Các lượt chạy báo cáo trên bản triển khai bị hạn chế.",
+    "expiringSoonNotice": "Mã bản quyền này sẽ hết hạn trong 30 ngày. Hãy tạo mã mới và thu hồi mã này để duy trì việc chạy báo cáo.",
+    "revealTitle": "Đã tạo mã bản quyền",
+    "revealDescriptionPrefix": "Đặt giá trị này làm",
+    "revealDescriptionMiddle": "trên bản triển khai tại",
+    "revealNotice": "Hãy sao chép mã bản quyền ngay. Bạn sẽ không thể xem lại mã.",
+    "revealConfirm": "Tôi đã lưu mã bản quyền",
+    "validation": {
+      "nameRequired": "Bắt buộc nhập tên",
+      "nameTooLong": "Tên không được dài quá 255 ký tự",
+      "originRequired": "Bắt buộc nhập nguồn công khai",
+      "originTooLong": "Nguồn công khai không được dài quá 255 ký tự",
+      "originInvalid": "Nhập địa chỉ đầy đủ bắt đầu bằng http hoặc https, ví dụ https://data-marts.example.com"
+    }
+  },
+  "notificationsPage": {
+    "title": "Cài đặt thông báo",
+    "edit": "Chỉnh sửa cài đặt",
+    "tableLabel": "Bảng cài đặt thông báo",
+    "empty": "Không tìm thấy cài đặt thông báo",
+    "recipients": "Người nhận",
+    "groupingDelay": "Độ trễ gom nhóm",
+    "settingsSaved": "Đã lưu cài đặt",
+    "settingsUpdated": "Đã cập nhật cài đặt thông báo.",
+    "saveFailed": "Không thể lưu cài đặt",
+    "testWebhookFailed": "Không thể gửi webhook thử nghiệm",
+    "editTitle": "Chỉnh sửa thông báo",
+    "editDescription": "Cập nhật cài đặt thông báo",
+    "titleTooltip": "Tên thông báo này. Không thể chỉnh sửa với thông báo định sẵn của dịch vụ",
+    "notificationTitle": "Tiêu đề thông báo",
+    "enabledTooltip": "Bật hoặc tắt thông báo này",
+    "enabledDescription": "Khi bật, thông báo sẽ được gửi đến người nhận đã chọn khi có sự kiện xảy ra. Thông báo email được gộp theo cài đặt độ trễ.",
+    "howItWorks": "Cách hoạt động?",
+    "delay": "Độ trễ",
+    "groupingTooltip": "Chọn thời gian chờ trước khi gửi email đã gộp",
+    "groupingMultiple": "Gộp nhiều thông báo",
+    "howGroupingWorks": "Gộp hoạt động như thế nào?",
+    "groupingDescription": "Nếu nhiều thông báo được kích hoạt trong khoảng thời gian này, chúng sẽ được gửi trong một email để hộp thư gọn gàng. Chỉ thông báo email được gộp.",
+    "webhook": "Webhook",
+    "webhookTooltip": "Nhập URL nhận thông báo webhook",
+    "webhookUrl": "URL webhook",
+    "test": "Thử nghiệm",
+    "testSuccess": "Đã gửi webhook thử nghiệm thành công",
+    "howWebhooksWork": "Webhook hoạt động như thế nào?",
+    "webhookDescription": "Webhook gửi thông báo theo thời gian thực trực tiếp đến endpoint của bạn. Payload yêu cầu chứa thông tin sự kiện ở định dạng JSON.",
+    "recipientsTooltip": "Chọn thành viên nhóm sẽ nhận thông báo",
+    "teamMembers": "Thành viên nhóm",
+    "addRecipientsQuestion": "Làm cách nào thêm người nhận cho thông báo này?",
+    "addRecipientsDescription": "Chỉ thành viên dự án mới có thể nhận thông báo. Để thêm người nhận, trước tiên hãy mời họ vào dự án qua",
+    "projectSettingsMembers": "Cài đặt dự án → Thành viên",
+    "page": "trang"
+  },
+  "contextsPage": {
+    "addTitle": "Thêm ngữ cảnh",
+    "addDescription": "Tạo ngữ cảnh theo miền nghiệp vụ và tùy chọn phân công thành viên.",
+    "created": "Đã tạo ngữ cảnh",
+    "createFailed": "Không thể tạo ngữ cảnh",
+    "nameTooltip": "Nhãn miền nghiệp vụ hiển thị trên tài nguyên",
+    "descriptionTooltip": "Giúp thành viên hiểu tài nguyên nào thuộc ngữ cảnh này",
+    "descriptionPlaceholder": "Ngữ cảnh này đại diện cho điều gì",
+    "whatIsContext": "Ngữ cảnh là gì?",
+    "whatIsContextDescription": "Ngữ cảnh là nhãn theo miền nghiệp vụ (ví dụ: Tiếp thị, Tài chính) mà bạn có thể gắn vào Data Mart, kho lưu trữ, điểm đến và thành viên. Thành viên không phải quản trị viên có phạm vi \"Các ngữ cảnh đã chọn\" chỉ có thể truy cập tài nguyên chia sẻ ít nhất một ngữ cảnh với họ.",
+    "assignMembers": "Phân công thành viên",
+    "assignMembersTooltip": "Thành viên bạn chọn sẽ được cấp quyền truy cập tài nguyên gắn với ngữ cảnh này",
+    "configureTitle": "Cấu hình ngữ cảnh",
+    "configureDescription": "Tùy chỉnh cài đặt cho ngữ cảnh này",
+    "adminOnlyHint": "Bạn cần vai trò Quản trị viên dự án để quản lý ngữ cảnh.",
+    "noMembers": "Chưa có thành viên dự án để gán.",
+    "lockedMembersQuestion": "Tại sao một số thành viên bị khóa?",
+    "lockedMembersAnswer": "Quản trị viên và thành viên có phạm vi toàn dự án đã nhìn thấy mọi tài nguyên, bất kể gán ngữ cảnh. Họ xuất hiện ở đây để nhắc bạn, nhưng không thể thay đổi thành viên ngữ cảnh từ màn hình này — hãy điều chỉnh phạm vi vai trò trong Cài đặt dự án → Thành viên.",
+    "lastModified": "Cập nhật lần cuối"
+  },
+  "membersPage": {
+    "title": "Thành viên",
+    "adminOnlyHint": "Bạn cần vai trò Quản trị viên dự án để quản lý thành viên.",
+    "remove": "Xóa khỏi dự án",
+    "role": "Vai trò",
+    "scope": "Phạm vi",
+    "selected": "Đã chọn",
+    "entireProject": "Toàn bộ dự án",
+    "accessRequests": "Yêu cầu truy cập",
+    "approvedRequest": "Đã phê duyệt yêu cầu từ {{email}}",
+    "approveFailed": "Không thể phê duyệt yêu cầu",
+    "declinedRequest": "Đã từ chối yêu cầu từ {{email}}",
+    "declineFailed": "Không thể từ chối yêu cầu",
+    "membershipRequest": "Yêu cầu tham gia",
+    "membershipRequestDescription": "Chọn vai trò, phạm vi và ngữ cảnh cuối cùng, sau đó phê duyệt hoặc từ chối.",
+    "requester": "Người yêu cầu",
+    "identity": "Danh tính",
+    "identityTooltip": "Tên hiển thị và email của người yêu cầu",
+    "requestedDate": "Ngày yêu cầu",
+    "approve": "Phê duyệt yêu cầu",
+    "decline": "Từ chối yêu cầu",
+    "declineConfirm": "Từ chối",
+    "declineTitle": "Từ chối yêu cầu tham gia",
+    "declineDescription": "Bạn có chắc chắn muốn từ chối yêu cầu từ",
+    "declineNotified": "Người này sẽ được thông báo rằng yêu cầu đã bị từ chối."
+    ,"magicLinkCopied": "Đã sao chép liên kết đăng nhập một lần vào bộ nhớ tạm"
+    ,"magicLinkCopyFailed": "Không thể sao chép. Hãy chọn liên kết và sao chép thủ công."
+    ,"invitationSent": "Đã gửi email mời tới {{email}}"
+    ,"invitationFailed": "Không thể gửi lời mời"
+    ,"invitationLinkReady": "Liên kết lời mời đã sẵn sàng"
+    ,"invitationLinkDescription": "Chia sẻ liên kết đăng nhập một lần này với người được mời qua bất kỳ kênh nào (email, Slack, v.v.)."
+    ,"invitee": "Người được mời"
+    ,"willJoinAs": "Sẽ tham gia với vai trò"
+    ,"oneTimeLink": "Liên kết dùng một lần"
+    ,"copyInvitationLink": "Sao chép liên kết lời mời"
+    ,"singleUse": "Dùng một lần"
+    ,"expiresAt": "Hết hạn"
+    ,"copiedToClipboard": "Đã sao chép vào bộ nhớ tạm"
+    ,"inviteTitle": "Mời thành viên"
+    ,"inviteDescription": "Gửi lời mời qua email. Thành viên sẽ nhận liên kết để tham gia dự án."
+    ,"emailTooltip": "Địa chỉ email của thành viên"
+    ,"email": "Email"
+    ,"sendInvitation": "Gửi lời mời"
+    ,"tableLabel": "Bảng thành viên dự án"
+    ,"searchByName": "Tìm theo tên"
+    ,"noMembersFound": "Không tìm thấy thành viên"
+    ,"loadFailed": "Không thể tải danh sách thành viên"
+    ,"andMore": "và {{count}} người khác"
+    ,"access": "Quyền truy cập"
+    ,"contexts": "Ngữ cảnh"
+    ,"roleScope": "Phạm vi vai trò"
+    ,"selectedContextsOnly": "Chỉ các ngữ cảnh đã chọn"
+    ,"assignContextsOptional": "Gán cho ngữ cảnh (không bắt buộc)"
+    ,"roleTooltip": "Vai trò dự án được cấp cho thành viên này"
+    ,"scopeTooltip": "Kiểm soát tài nguyên thành viên này có thể xem theo mặc định"
+    ,"contextsTooltip": "Các ngữ cảnh thành viên này có thể xem"
+    ,"contextsAssignedTooltip": "Các ngữ cảnh được gán cho thành viên — kiểm soát khả năng hiển thị khi phạm vi là \"Các ngữ cảnh đã chọn\""
+    ,"assignedContexts": "Ngữ cảnh được gán"
+    ,"adminAccessDescription": "Quản trị viên dự án có quyền truy cập toàn dự án. Phạm vi và gán ngữ cảnh không áp dụng."
+    ,"settingsUpdated": "Đã cập nhật cài đặt thành viên"
+    ,"saveFailed": "Không thể lưu"
+    ,"configureTitle": "Cấu hình thành viên"
+    ,"configureDescription": "Tùy chỉnh vai trò, phạm vi và ngữ cảnh cho thành viên này"
+    ,"defaultRoleTitle": "Vai trò và phạm vi mặc định"
+    ,"defaultRoleDescription": "Cấu hình mặc định cho thành viên mới tự động tham gia dự án này"
+    ,"context": "ngữ cảnh"
+    ,"contextsLower": "ngữ cảnh"
+    ,"staleContexts": "{{count}} {{contextWord}} đã lưu không còn khả dụng và sẽ bị xóa khi lưu."
+    ,"roleHelp": {
+      "question": "Nên chọn vai trò nào?",
+      "businessUser": "có thể xem Data Mart và báo cáo được chia sẻ, tạo báo cáo cho Data Mart được chia sẻ để báo cáo, quản lý báo cáo do mình sở hữu (chỉnh sửa, xóa, đổi người phụ trách), quản lý lịch chạy báo cáo của mình và dùng điểm đến được chia sẻ. Không thể tạo, chỉnh sửa hoặc xóa Data Mart, lịch chạy Data Mart hay kho lưu trữ.",
+      "technicalUser": "có mọi quyền của Người dùng nghiệp vụ, đồng thời có thể tạo, chỉnh sửa và xóa Data Mart, lịch chạy Data Mart và kho lưu trữ; chỉnh sửa và xóa báo cáo trong toàn dự án; đổi người phụ trách báo cáo; quản lý lịch chạy báo cáo trong toàn dự án.",
+      "projectAdmin": "có mọi quyền của Người dùng kỹ thuật, đồng thời quản lý thành viên dự án, thanh toán và các cài đặt chung của dự án như tiêu đề dự án."
+    },
+    "scopeHelp": {
+      "question": "Các phạm vi có ý nghĩa gì?",
+      "entireProject": "thành viên có thể xem mọi tài nguyên được chia sẻ trong dự án (tuân theo quy tắc vai trò và quyền sở hữu).",
+      "selectedContextsLabel": "Chỉ các ngữ cảnh đã chọn",
+      "selectedContexts": "thành viên chỉ thấy tài nguyên nếu tài nguyên đó chia sẻ ít nhất một ngữ cảnh được gán, hoặc thành viên là người sở hữu. Chọn tùy chọn này mà không chọn ngữ cảnh nào là trạng thái \"không có quyền truy cập được chia sẻ\" hợp lệ."
+    },
+    "contextHelp": {
+      "question": "Ngữ cảnh là gì?",
+      "description": "Ngữ cảnh là các miền nghiệp vụ (ví dụ: Tiếp thị, Tài chính, Bán hàng) dùng để nhóm kho lưu trữ, điểm đến và Data Mart. Khi phạm vi vai trò của thành viên này là Các ngữ cảnh đã chọn, họ chỉ thấy tài nguyên được gán ít nhất một ngữ cảnh đã chọn (quyền sở hữu vẫn được ưu tiên). Với phạm vi Toàn bộ dự án, các gán này không có tác dụng."
+    }
+  },
+  "userProvisioning": {
+    "mainProject": "dự án chính",
+    "projectLevelAccess": "Quyền truy cập cấp dự án",
+    "manualAccessRequest": "Yêu cầu truy cập thủ công",
+    "mustRequestAccess": "Thành viên mới phải yêu cầu quyền truy cập trước khi tham gia dự án này.",
+    "visitMainProject": "Để quản lý việc cấp quyền tự động cho tổ chức {{organization}}, hãy truy cập dự án chính",
+    "updated": "Đã cập nhật cài đặt cấp quyền người dùng",
+    "updateFailed": "Không thể cập nhật cài đặt cấp quyền người dùng",
+    "organizationTooltip": "Kiểm soát cách thành viên mới từ miền tổ chức '{{organization}}' tham gia dự án '{{project}}'",
+    "organizationSettings": "Cài đặt quyền truy cập cấp tổ chức",
+    "automaticLabel": "Tự động thêm thành viên mới vào dự án '{{project}}'",
+    "automaticDescription": "Thành viên mới thuộc miền tổ chức '{{organization}}' sẽ tự động được thêm vào dự án này với vai trò và phạm vi mặc định",
+    "selectedContexts": "Các ngữ cảnh đã chọn",
+    "manualDescription": "Thành viên mới phải yêu cầu quyền truy cập trước khi tham gia. Quản trị viên dự án có thể phê duyệt hoặc từ chối yêu cầu thủ công",
+    "discard": "Bỏ thay đổi"
+  },
+  "pluginsPage": {
+    "title": "Tiện ích",
+    "publish": "Đăng tiện ích",
+    "moreActions": "Thao tác khác với tiện ích",
+    "history": "Lịch sử cài đặt",
+    "loading": "Đang tải…",
+    "notFound": "Không tìm thấy tiện ích",
+    "you": "Bạn",
+    "reinstalling": "Đang cài đặt lại…",
+    "installing": "Đang cài đặt…",
+    "reinstall": "Cài đặt lại",
+    "shareWithProject": "Chia sẻ với dự án",
+    "unpublishProject": "Hủy đăng khỏi dự án",
+    "unpublishMember": "Hủy đăng cho tôi",
+    "uninstall": "Gỡ cài đặt",
+    "tabs": "Các tab",
+    "overview": "Tổng quan",
+    "descriptionTooltip": "Mô tả của nhà phát hành về tiện ích này",
+    "noDescription": "Tiện ích này chưa có mô tả.",
+    "sourceTooltip": "Nguồn của tiện ích và phiên bản hiện tại",
+    "source": "Nguồn",
+    "author": "Tác giả",
+    "authorHint": "Tài khoản GitHub quản lý các bản phát hành sau này",
+    "repository": "Kho mã",
+    "repositoryHint": "Danh tính tiện ích là kho mã này",
+    "repositoryUnavailable": "Liên kết kho mã không khả dụng",
+    "privateRepository": "Kho mã riêng tư",
+    "version": "Phiên bản",
+    "noEligibleRelease": "Không có bản phát hành phù hợp",
+    "checkNow": "Kiểm tra ngay",
+    "detailsTooltip": "Bản cài đặt tiện ích của bạn",
+    "details": "Chi tiết",
+    "installedBy": "Người cài đặt",
+    "installedByHint": "Bản cài đặt là cá nhân và không được chia sẻ",
+    "installedAt": "Cài đặt lúc",
+    "installedAtHint": "Thời điểm bạn cài đặt hoặc khôi phục gần nhất",
+    "notInstalledHere": "Bạn chưa cài đặt tiện ích này trong dự án.",
+    "unpublishNote": "Hủy đăng chỉ xóa danh sách. Không ai bị gỡ cài đặt; người đã cài vẫn giữ tiện ích, và đăng lại sẽ khôi phục danh sách này thay vì tạo bản thứ hai.",
+    "back": "Quay lại tiện ích",
+    "historyEmptyTitle": "Chưa có tiện ích nào được cài đặt",
+    "historyEmptySubtitle": "Các tiện ích bạn cài đặt hoặc gỡ bỏ đều được lưu tại đây, kể cả tiện ích không còn được đăng.",
+    "installed": "Đã cài đặt",
+    "removed": "Đã gỡ bỏ",
+    "installedOn": "Cài đặt {{date}}",
+    "removedOn": "Gỡ bỏ {{date}}",
+    "restore": "Khôi phục",
+    "settings": "Cài đặt",
+    "install": "Cài đặt",
+    "installNamed": "Cài đặt {{name}}",
+    "openSettings": "Mở cài đặt {{name}}",
+    "unavailable": "Không khả dụng",
+    "byOwner": "bởi",
+    "search": "Tìm tiện ích",
+    "filterLabel": "Lọc tiện ích",
+    "sortLabel": "Sắp xếp tiện ích",
+    "emptyTitle": "Thêm tiện ích đầu tiên",
+    "emptySubtitle": "Mở rộng P2PDigital Data Marts bằng các tiện ích từ kho GitHub. Đăng tiện ích sẽ hiển thị tiện ích ở đây; mỗi thành viên vẫn tự cài đặt.",
+    "noMatches": "Không có tiện ích phù hợp với tìm kiếm hoặc bộ lọc.",
+    "filters": {
+      "all": "Tất cả tiện ích",
+      "installed": "Đã cài đặt",
+      "notInstalled": "Chưa cài đặt",
+      "project": "Có sẵn trong dự án",
+      "forMe": "Chỉ dành cho tôi"
+    },
+    "sort": {
+      "default": "Mặc định",
+      "newest": "Mới nhất",
+      "alphabetical": "A–Z"
+    },
+    "publishForm": {
+      "title": "Đăng tiện ích",
+      "description": "Đăng tiện ích để mọi người tìm thấy; thao tác này không cài đặt tiện ích cho bất kỳ ai.",
+      "repository": "Kho GitHub",
+      "repositoryHelp": "Nhập URL hoặc owner/name. Phiên bản tiện ích được lấy từ các bản phát hành GitHub.",
+      "repositoryQuestion": "Kho nào có thể đăng?",
+      "repositoryRules": "Kho phải có plugin.json ở thư mục gốc và ít nhất một bản phát hành với thẻ MAJOR.MINOR.PATCH, có thể có tiền tố v. Bản phát hành thử và metadata bản dựng bị bỏ qua vì phiên bản hợp lệ cao nhất sẽ thành phiên bản hiện tại cho mọi người cùng lúc và không ai có thể ghim phiên bản cũ.",
+      "repositoryIdentity": "Kho — không phải tên kho — là danh tính của tiện ích. Đổi tên hoặc chuyển kho vẫn giữ nguyên tiện ích; hai kho luôn là hai tiện ích, kể cả nội dung giống hệt nhau.",
+      "repositoryAccess": "Kho công khai hoạt động ngay. Với kho riêng tư, trước tiên phải cài P2PDigital Data Marts GitHub App vào kho — hãy đăng một lần và P2PDigital sẽ hiển thị liên kết chính xác để cấp quyền.",
+      "audience": "Ai có thể tìm thấy?",
+      "scopeQuestion": "Mỗi tùy chọn có tác dụng gì?",
+      "scopeOnlyMe": "Chỉ tôi. Tiện ích xuất hiện trong Thư viện của bạn, không xuất hiện với người khác. Mọi thành viên dự án đều có thể dùng và không cần phê duyệt.",
+      "scopeProject": "Mọi người trong dự án. Tất cả thành viên dự án sẽ thấy tiện ích trong Thư viện. Chỉ Quản trị viên dự án mới chọn được tùy chọn này.",
+      "scopePublishOnly": "Dù chọn tùy chọn nào, đăng chỉ làm tiện ích có thể được tìm thấy; không cài đặt cho ai. Mỗi thành viên vẫn tự cài đặt, và hủy đăng chỉ xóa danh sách chứ không gỡ cài đặt.",
+      "scopeIndependent": "Các cấp độ độc lập, nên cùng một tiện ích có thể được đăng ở cả hai cấp nhưng chỉ hiển thị một lần. Bạn có thể mở rộng danh sách cá nhân cho cả dự án từ trang riêng của tiện ích.",
+      "grantAccess": "Cấp quyền P2PDigital Data Marts truy cập kho này",
+      "thenPublish": ", sau đó đăng lại.",
+      "publishing": "Đang đăng…",
+      "publish": "Đăng",
+      "scopes": {
+        "deployment": "Mọi người trong bản triển khai",
+        "project": "Mọi người trong dự án",
+        "member": "Chỉ tôi"
+      }
+    },
+    "runtime": {
+      "loading": "Đang tải…",
+      "suspended": "Tạm thời không khả dụng",
+      "openFailed": "Không thể mở tiện ích này",
+      "suspendedDescription": "Quản trị viên đã tạm dừng tiện ích trên toàn bộ bản triển khai. Cài đặt của bạn vẫn nguyên vẹn và sẽ hoạt động lại khi tiện ích được tiếp tục.",
+      "openFailedDescription": "Tiện ích có thể đã bị xóa hoặc bạn không còn quyền truy cập.",
+      "handshakeFailed": "Tiện ích không hoàn tất kết nối với P2PDigital. Hãy tải lại trang để thử lại và báo cho nhà phát hành nếu lỗi tiếp diễn.",
+      "back": "Quay lại tiện ích"
+    }
+  },
+  "googleOAuth": {
+    "connecting": "Đang kết nối...",
+    "authenticatedAs": "Đã xác thực với",
+    "googleAccount": "Tài khoản Google",
+    "connectWithGoogle": "Kết nối với Google",
+    "errors": {
+      "noAuthorizationCode": "Không nhận được mã ủy quyền từ Google",
+      "invalidState": "Mã trạng thái không hợp lệ. Vui lòng thử lại.",
+      "connectFailed": "Không thể kết nối tài khoản Google. Vui lòng thử lại.",
+      "popupBlocked": "Cửa sổ bật lên đã bị chặn. Hãy cho phép cửa sổ bật lên cho trang này rồi thử lại.",
+      "startFailed": "Không thể bắt đầu kết nối OAuth. Vui lòng thử lại."
+    },
+    "callback": {
+      "authenticationFailed": "Xác thực thất bại: {{error}}. Bạn có thể đóng cửa sổ này.",
+      "missingCode": "Thiếu mã ủy quyền. Bạn có thể đóng cửa sổ này và thử lại.",
+      "openerUnavailable": "Không còn cửa sổ đã bắt đầu kết nối. Hãy đóng cửa sổ này và thử kết nối lại.",
+      "completing": "Đang hoàn tất kết nối...",
+      "processing": "Đang xử lý xác thực...",
+      "waiting": "Vui lòng chờ trong khi hoàn tất kết nối.",
+      "success": "Xác thực thành công!",
+      "closeAutomatically": "Cửa sổ này sẽ tự động đóng.",
+      "failed": "Xác thực thất bại"
+    }
+  },
+  "googleSheetsConnectPage": {
+    "title": "Kết nối Google Sheets",
+    "subtitle": "Cấp quyền cho tài khoản Google để tạo điểm đến này.",
+    "oauthUnavailable": "P2PDigital chưa cấu hình Google OAuth nên không thể dùng trang kết nối nhanh này. Hãy nhờ quản trị viên cấu hình Google OAuth hoặc tự tạo điểm đến Google Sheets trong ứng dụng web P2PDigital (Điểm đến → Thêm điểm đến) bằng khóa tài khoản dịch vụ.",
+    "titleRequired": "Tiêu đề là bắt buộc.",
+    "createFailed": "Không thể tạo điểm đến. Vui lòng thử lại.",
+    "titleHelp": "Đặt tên điểm đến để làm rõ mục đích",
+    "oauthHelp": "Cấp quyền P2PDigital truy cập Google Sheets của bạn",
+    "connectOAuth": "Kết nối bằng Google OAuth",
+    "authenticatedEmail": "Email đã xác thực",
+    "creating": "Đang tạo điểm đến Google Sheets…",
+    "createdSuccess": "Đã tạo điểm đến Google Sheets thành công.",
+    "closeAndReturn": "Bạn có thể đóng tab này và quay lại cuộc trò chuyện để tiếp tục."
+  },
+  "legacyStorageNotice": {
+    "title": "Hoàn tất thiết lập kho BigQuery để xuất bản Data Mart",
+    "actionRequired": "Cần thực hiện",
+    "createdWith": "Các Data Mart được tạo bằng",
+    "extensionSuffix": "(tiện ích Google Sheets) được liệt kê bên dưới ở trạng thái",
+    "statusSuffix": ".",
+    "instructions": "Để quản lý Data Mart tại một nơi, nhận phân tích chuyên sâu và đồng bộ dữ liệu tới nhiều điểm đến, hãy hoàn tất các bước sau:",
+    "storage": "một kho lưu trữ",
+    "grantAccess": "Cấp quyền",
+    "bigQuerySuffix": "cho Google BigQuery (được tiện ích P2PDigital sử dụng)",
+    "publishSuffix": "của bạn",
+    "watchVideo": "Xem video (30 giây)",
+    "viewGuide": "Xem hướng dẫn thiết lập"
+  },
+  "requestAccessPage": {
+    "title": "Yêu cầu quyền truy cập dự án",
+    "requestFailed": "Không thể yêu cầu quyền truy cập",
+    "createProjectFailed": "Không thể tạo dự án",
+    "loadErrorTitle": "Không thể tải yêu cầu truy cập",
+    "actionFailedTitle": "Thao tác thất bại",
+    "account": "Tài khoản",
+    "project": "Dự án",
+    "organization": "Tổ chức",
+    "submittedTitle": "Đã gửi yêu cầu truy cập",
+    "requestedRole": "Vai trò yêu cầu",
+    "creating": "Đang tạo...",
+    "createNewProject": "Tạo dự án mới",
+    "submitting": "Đang gửi...",
+    "requestAccess": "Yêu cầu quyền truy cập",
+    "roles": {
+      "viewer": "Người dùng nghiệp vụ",
+      "editor": "Người dùng kỹ thuật",
+      "admin": "Quản trị viên dự án"
+    }
+  },
+  "projectSettingsPage": {
+    "title": "Cài đặt dự án",
+    "tabsLabel": "Các tab",
+    "loadFailed": "Không thể tải dữ liệu dự án",
+    "pendingInvitations": "Lời mời đang chờ",
+    "expires": "hết hạn",
+    "soon": "sắp tới",
+    "resend": "Gửi lại",
+    "copyLink": "Sao chép liên kết",
+    "revoke": "Thu hồi",
+    "newInvitationCopied": "Đã sao chép liên kết lời mời mới vào bộ nhớ tạm",
+    "invitationCopied": "Đã sao chép liên kết lời mời vào bộ nhớ tạm",
+    "copyInvitationFailed": "Không thể sao chép liên kết lời mời",
+    "resendFailed": "Không thể gửi lại lời mời",
+    "tabs": {
+      "overview": "Tổng quan",
+      "members": "Thành viên",
+      "contexts": "Ngữ cảnh",
+      "credit": "Mức tiêu thụ tín dụng",
+      "subscription": "Gói dịch vụ",
+      "licenseKeys": "Mã bản quyền",
+      "notifications": "Thông báo"
+    }
   },
   "notFoundPage": {
     "title": "Lạc vào miền dữ liệu 404",
@@ -214,16 +2181,16 @@
   },
   "emptyStates": {
     "triggers": {
-      "title": "Chưa có trigger nào",
-      "description": "Các Trigger được tạo trong Data Mart sẽ xuất hiện ở đây cùng lịch trình, mục tiêu và trạng thái."
+      "title": "Chưa có lịch chạy nào",
+      "description": "Các lịch chạy được tạo trong Data Mart sẽ xuất hiện ở đây cùng lịch trình, mục tiêu và trạng thái."
     },
     "reports": {
-      "title": "Chưa có report nào",
-      "description": "Các Report được cấu hình trong Data Mart sẽ xuất hiện ở đây cùng destination, trạng thái chạy và thao tác."
+      "title": "Chưa có báo cáo nào",
+      "description": "Các báo cáo được cấu hình trong Data Mart sẽ xuất hiện ở đây cùng điểm đến, trạng thái chạy và thao tác."
     },
     "insights": {
-      "title": "Chưa có insight nào",
-      "description": "Các Insight được tạo từ dữ liệu Data Mart sẽ xuất hiện ở đây cùng chi tiết cập nhật và thao tác."
+      "title": "Chưa có phân tích chuyên sâu nào",
+      "description": "Các phân tích chuyên sâu được tạo từ dữ liệu Data Mart sẽ xuất hiện ở đây cùng thông tin cập nhật và thao tác."
     },
     "runs": {
       "title": "Chưa có lượt chạy nào",
@@ -235,17 +2202,209 @@
     "tabs": {
       "dataSetup": "Thiết lập dữ liệu",
       "overview": "Tổng quan",
-      "quality": "Chất lượng",
-      "insights": "Insights",
-      "reports": "Báo cáo",
-      "triggers": "Triggers",
+      "quality": "Chất lượng dữ liệu",
+      "insights": "Phân tích chuyên sâu",
+      "reports": "Điểm đến",
+      "triggers": "Lịch chạy",
       "runHistory": "Lịch sử chạy"
     },
-    "publish": "Publish",
-    "publishing": "Đang publish...",
-    "published": "Đã publish",
+    "publish": "Xuất bản",
+    "publishing": "Đang xuất bản...",
+    "published": "Đã xuất bản",
     "runNow": "Chạy ngay",
+    "noRunsFound": "Chưa có lượt chạy nào cho Data Mart này",
+    "backToList": "Quay lại danh sách Data Mart",
+    "generateTitleWithAI": "Tạo tiêu đề bằng AI",
+    "publishAndRun": "Xuất bản và chạy Data Mart",
+    "publishDataMart": "Xuất bản Data Mart",
+    "publishAndStartLoading": "Xuất bản và bắt đầu tải dữ liệu",
+    "publishToEnableSchedules": "Xuất bản để bật báo cáo và lịch chạy",
+    "storageIncomplete": "Cấu hình kho lưu trữ chưa hoàn tất",
     "deleteDataMart": "Xóa Data Mart",
-    "deleteConfirm": "Bạn có chắc chắn muốn xóa Data Mart này? Thao tác này không thể hoàn tác."
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa Data Mart này? Thao tác này không thể hoàn tác.",
+    "publishedReadyForScheduledRuns": "Data Mart đã xuất bản đã sẵn sàng cho lịch chạy",
+    "draftNotAvailableForScheduledRuns": "Data Mart nháp chưa thể chạy theo lịch. Hãy xuất bản để bật lịch chạy.",
+    "completeFollowingSteps": "Vui lòng hoàn tất các bước sau:",
+    "manualRun": "Chạy thủ công...",
+    "manualRunPublishedOnly": "Chỉ Data Mart đã xuất bản mới có thể chạy thủ công.",
+    "waitCurrentRun": "Vui lòng chờ lượt chạy hiện tại hoàn tất."
+  },
+  "schemaSettings": {
+    "notFound": "Lỗi: Không tìm thấy Data Mart",
+    "fixCalculated": "Hãy sửa các trường tính toán này rồi lưu lại:",
+    "savedWarnings": "Đã lưu — hãy xem lại:",
+    "discard": "Bỏ thay đổi",
+    "searchFields": "Tìm trường",
+    "generateMetadata": "Tạo bí danh và mô tả cho tất cả trường",
+    "refreshSchema": "Làm mới schema",
+    "addCalculatedField": "Thêm trường tính toán",
+    "addField": "Thêm trường",
+    "addNestedField": "Thêm trường lồng nhau",
+    "showInReports": "Hiển thị trong báo cáo",
+    "hideFromReports": "Ẩn khỏi báo cáo",
+    "deleteField": "Xóa trường",
+    "deleteFieldConfirm": "Bạn có chắc chắn muốn xóa trường này?",
+    "editFields": "Chỉnh sửa trường ({{count}})"
+  },
+  "inputSourceChange": {
+    "title": "Đổi nguồn dữ liệu từ {{from}} sang {{to}}?",
+    "description": "Data Mart này vẫn giữ các mối quan hệ, báo cáo và metadata trường. Các trường không có trong nguồn mới sẽ được đánh dấu là mất kết nối và những nội dung dùng chúng cần được kiểm tra.",
+    "checking": "Đang kiểm tra các thành phần phụ thuộc Data Mart này…",
+    "failed": "Không thể kiểm tra các thành phần phụ thuộc Data Mart này. Bạn vẫn có thể tiếp tục hoặc",
+    "retry": "thử lại",
+    "dependants": "{{dependants}} đang phụ thuộc Data Mart này.",
+    "none": "Chưa có thành phần nào khác phụ thuộc Data Mart này.",
+    "confirm": "Đổi nguồn dữ liệu",
+    "relationships": "{{count}} mối quan hệ",
+    "relationships_one": "{{count}} mối quan hệ",
+    "relationships_other": "{{count}} mối quan hệ",
+    "reports": "{{count}} báo cáo",
+    "reports_one": "{{count}} báo cáo",
+    "reports_other": "{{count}} báo cáo",
+    "types": {
+      "table": "Bảng",
+      "view": "View",
+      "pattern": "Mẫu",
+      "connector": "Trình kết nối"
+    }
+  },
+  "scheduledTriggers": {
+    "delete": "Xóa lịch chạy",
+    "nextRun": "Lượt chạy tiếp theo",
+    "deleteQuestion": "Xóa lịch chạy?",
+    "timeTitle": "Lịch chạy theo thời gian",
+    "timeTooltip": "Lịch chạy theo thời gian cho phép bạn lên lịch chạy Data Mart vào các thời điểm cụ thể",
+    "add": "Thêm lịch chạy mới",
+    "new": "Lịch chạy mới",
+    "editTitle": "Chỉnh sửa lịch chạy",
+    "editDescription": "Cấu hình chạy tự động cho báo cáo, trình kết nối hoặc kiểm tra chất lượng dữ liệu."
+  },
+  "runHistoryConfig": {
+    "noData": "Không có dữ liệu cấu hình cho lượt chạy này",
+    "configuration": "Cấu hình",
+    "executedSql": "SQL đã thực thi",
+    "reportDefinition": "Định nghĩa báo cáo",
+    "outputControls": "Điều khiển đầu ra",
+    "insightDefinition": "Định nghĩa phân tích chuyên sâu",
+    "insightTemplateDefinition": "Định nghĩa mẫu phân tích chuyên sâu",
+    "dataParameters": "Tham số dữ liệu",
+    "mcpQuery": "Truy vấn MCP"
+  },
+  "runHistoryQuality": {
+    "loadFailed": "Không thể tải chi tiết lượt chạy này. Lịch sử còn lại không bị ảnh hưởng.",
+    "overview": "Tổng quan lượt chạy",
+    "started": "Bắt đầu",
+    "finished": "Hoàn tất",
+    "duration": "Thời lượng",
+    "configuration": "Cấu hình",
+    "inProgress": "Lượt chạy vẫn đang thực hiện. Kết quả đã lưu sẽ tự động cập nhật.",
+    "endedEarly": "Lượt chạy kết thúc sớm. Các kết quả hoàn tất trước khi dừng vẫn được giữ lại.",
+    "checkResults": "Kết quả kiểm tra",
+    "noResults": "Không có kết quả kiểm tra nào được lưu cho lượt chạy này.",
+    "snapshot": "Ảnh chụp lượt chạy",
+    "enabled": "Đã bật {{count}}",
+    "definitionType": "Loại định nghĩa",
+    "configuredChecks": "Các kiểm tra đã cấu hình",
+    "viewRawJson": "Xem JSON thô"
+  },
+  "storageResourcePicker": {
+    "changeSelection": "Đổi lựa chọn",
+    "selectFromStorage": "Chọn từ kho lưu trữ",
+    "title": "Chọn {{resource}}",
+    "description": "Chọn namespace để xem tất cả {{resources}} mà kho lưu trữ có quyền truy cập. Chọn một mục để điền Tên đầy đủ.",
+    "labels": { "view": "view", "table_pattern": "mẫu bảng", "table": "bảng" },
+    "plurals": { "view": "view", "table_pattern": "các mẫu bảng", "table": "các bảng" }
+  },
+  "generatedSql": {
+    "failedLoad": "Không thể tải SQL đã tạo",
+    "copied": "Đã sao chép SQL vào bộ nhớ tạm",
+    "copyFailed": "Không thể sao chép SQL",
+    "dataMartCreated": "Đã tạo Data Mart từ báo cáo",
+    "createFailed": "Không thể tạo Data Mart từ báo cáo",
+    "previewNamed": "Xem trước SQL: {{title}}",
+    "preview": "Xem trước SQL",
+    "reportSql": "SQL của báo cáo",
+    "generating": "Đang tạo SQL...",
+    "copyToClipboard": "Sao chép vào bộ nhớ tạm",
+    "copyAsDataMart": "Sao chép thành Data Mart"
+  },
+  "secureJson": {
+    "maskLock": "Che và khóa",
+    "maskLockHelp": "Che dữ liệu nhạy cảm và khóa chỉnh sửa",
+    "showEdit": "Hiện và sửa",
+    "showEditHelp": "Hiện dữ liệu nhạy cảm và cho phép chỉnh sửa",
+    "copied": "Đã sao chép!",
+    "copyHelp": "Sao chép nội dung vào bộ nhớ tạm",
+    "lockedContent": "Nội dung đang bị khóa ở chế độ che. Nhấp vào biểu tượng con mắt để bật chỉnh sửa."
+  },
+  "dataMartBulkActions": {
+    "actions": "Thao tác",
+    "canvasActionsTitle": "Thao tác cho toàn bộ Data Mart đang hiển thị theo bộ lọc canvas",
+    "selectionActionsTitle": "Thao tác hàng loạt cho Data Mart đã chọn",
+    "publish": "Xuất bản",
+    "checkQuality": "Kiểm tra chất lượng",
+    "checkDataLastUpdated": "Kiểm tra dữ liệu cập nhật lần cuối",
+    "checkingDataLastUpdated": "Đang kiểm tra dữ liệu cập nhật lần cuối…",
+    "export": "Xuất",
+    "imageSvg": "Ảnh (SVG)",
+    "imagePng": "Ảnh (PNG)",
+    "json": "JSON",
+    "okf": "OKF (Markdown)",
+    "deleteSuccess": "Đã xóa {{count}} Data Mart",
+    "deleteFailed": "Không thể xóa {{count}} Data Mart. Vui lòng thử lại.",
+    "publishSuccess": "Đã xuất bản {{count}} Data Mart",
+    "publishFailed": "Không thể xuất bản {{count}} Data Mart. Vui lòng kiểm tra riêng.",
+    "deleteConfirmTitle": "Bạn chắc chắn muốn xóa?",
+    "deleteCanvasDescription": "Bạn sắp xóa {{count}} Data Mart đang hiển thị theo bộ lọc canvas hiện tại.",
+    "deleteSelectionDescription": "Bạn sắp xóa {{count}} Data Mart đã chọn.",
+    "legacyBigQueryWarning": "Một số Data Mart này cũng sẽ không còn khả dụng trong tiện ích Google Sheets vì đang dùng kho BigQuery cũ.",
+    "deleting": "Đang xóa...",
+    "publishConfirmTitle": "Xuất bản Data Mart nháp?",
+    "publishCanvasDescription": "Bạn sắp xuất bản {{count}} Data Mart nháp đang hiển thị theo bộ lọc canvas hiện tại.",
+    "publishSelectionDescription": "Bạn sắp xuất bản {{count}} Data Mart nháp đã chọn.",
+    "publishDescription": "Lược đồ sẽ được cập nhật và các Data Mart sẽ chuyển sang trạng thái Đã xuất bản.",
+    "publishing": "Đang xuất bản..."
+  },
+  "dataMartRunActivity": {
+    "runsInProgress": "Đang có lượt chạy",
+    "checkingDataQuality": "Đang kiểm tra chất lượng dữ liệu",
+    "updatingData": "Đang cập nhật dữ liệu",
+    "viewRuns": "Xem lượt chạy"
+  },
+  "dataQualityStatus": {
+    "neverRun": "Chưa chạy",
+    "allChecksDisabled": "Đã tắt tất cả kiểm tra",
+    "noApplicableChecks": "Không có kiểm tra phù hợp",
+    "queued": "Đang chờ",
+    "running": "Đang chạy",
+    "passed": "Đạt",
+    "issuesFound": "Phát hiện vấn đề",
+    "runFailed": "Chạy thất bại",
+    "restricted": "Bị hạn chế",
+    "cancelled": "Đã hủy"
+  },
+  "projectDataMartPages": {
+    "reportsTitle": "Báo cáo",
+    "insightsTitle": "Phân tích chuyên sâu",
+    "triggersTitle": "Lịch chạy",
+    "runsTitle": "Lịch sử chạy",
+    "reportLabel": "Báo cáo",
+    "insightLabel": "Phân tích chuyên sâu",
+    "updatedLabel": "Cập nhật",
+    "runStatusLabel": "Trạng thái chạy",
+    "lastRunLabel": "Lần chạy gần nhất",
+    "ownersLabel": "Người phụ trách",
+    "neverRun": "Chưa chạy",
+    "notAssigned": "Chưa phân công",
+    "triggerTypeLabel": "Loại lịch chạy",
+    "runTargetLabel": "Mục tiêu chạy",
+    "triggerStatusLabel": "Trạng thái lịch chạy",
+    "disabled": "Đã tắt",
+    "notScheduled": "Chưa lên lịch",
+    "noInsightsForAccessible": "Không có phân tích chuyên sâu nào trong các Data Mart bạn được truy cập",
+    "noTriggersForAccessible": "Không có lịch chạy nào trong các Data Mart bạn được truy cập",
+    "loadTriggersFailed": "Không thể tải các lịch chạy Data Mart",
+    "loadMore": "Tải thêm",
+    "loadingMore": "Đang tải..."
   }
 }

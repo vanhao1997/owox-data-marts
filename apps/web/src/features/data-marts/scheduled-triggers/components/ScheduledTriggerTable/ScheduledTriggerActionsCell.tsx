@@ -10,6 +10,7 @@ import {
 } from '@owox/ui/components/dropdown-menu';
 import type { ScheduledTrigger } from '../../model/scheduled-trigger.model';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
+import { useTranslation } from 'react-i18next';
 
 interface ScheduledTriggerActionsCellProps {
   trigger: ScheduledTrigger;
@@ -26,6 +27,7 @@ export function ScheduledTriggerActionsCell({
   canEdit = true,
   canDelete = true,
 }: ScheduledTriggerActionsCellProps) {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -50,7 +52,7 @@ export function ScheduledTriggerActionsCell({
           <Button
             variant='ghost'
             className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${isMenuOpen ? 'opacity-100' : 'group-hover:opacity-100'}`}
-            aria-label='Open menu'
+            aria-label={t('triggerForm.openMenu', 'Open menu')}
           >
             <MoreHorizontal className='dm-card-table-body-row-actionbtn-icon' />
           </Button>
@@ -63,7 +65,7 @@ export function ScheduledTriggerActionsCell({
               }}
             >
               <Pencil className='text-foreground h-4 w-4' aria-hidden='true' />
-              Edit trigger
+              {t('triggerForm.edit', 'Edit trigger')}
             </DropdownMenuItem>
           )}
           {canEdit && canDelete && <DropdownMenuSeparator />}
@@ -74,7 +76,7 @@ export function ScheduledTriggerActionsCell({
               }}
             >
               <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
-              <span className='text-red-600'>Delete trigger</span>
+              <span className='text-red-600'>{t('triggerForm.delete', 'Delete trigger')}</span>
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
@@ -83,10 +85,10 @@ export function ScheduledTriggerActionsCell({
       <ConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        title='Delete Scheduled Trigger'
-        description='Are you sure you want to delete this scheduled trigger? This action cannot be undone.'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('triggerForm.deleteTitle', 'Delete Scheduled Trigger')}
+        description={t('triggerForm.deleteDescription', 'Are you sure you want to delete this scheduled trigger? This action cannot be undone.')}
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('triggerForm.cancel', 'Cancel')}
         onConfirm={handleDelete}
         variant='destructive'
       />

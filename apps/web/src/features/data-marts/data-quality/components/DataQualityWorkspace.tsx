@@ -14,6 +14,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { extractApiError } from '../../../../app/api';
 import { Button } from '../../../../shared/components/Button';
 import {
@@ -96,6 +97,7 @@ export function DataQualityWorkspace({
   schemaFields = [],
   registerUnsavedGuard,
 }: DataQualityWorkspaceProps) {
+  const { t } = useTranslation();
   const {
     configResponse,
     activeRun,
@@ -177,8 +179,8 @@ export function DataQualityWorkspace({
     const current = draftRef.current;
     if (!current) return;
     if (!(await persistConfig(current))) return;
-    toast.success('Data Quality configuration saved');
-  }, [persistConfig]);
+    toast.success(t('dataQualityWorkspace.configurationSaved', 'Data Quality configuration saved'));
+  }, [persistConfig, t]);
 
   const handleDiscard = useCallback(() => {
     setEditor(current =>
@@ -223,8 +225,8 @@ export function DataQualityWorkspace({
     return (
       <Alert variant='destructive' data-testid='datamartTabQuality'>
         <AlertCircle />
-        <AlertTitle>Unable to load Data Quality</AlertTitle>
-        <AlertDescription>Refresh the page or try again later.</AlertDescription>
+        <AlertTitle>{t('dataQualityUi.loadFailed', 'Unable to load Data Quality')}</AlertTitle>
+        <AlertDescription>{t('dataQualityUi.refreshLater', 'Refresh the page or try again later.')}</AlertDescription>
       </Alert>
     );
   }
@@ -285,7 +287,9 @@ export function DataQualityWorkspace({
   const displayedCheckedAt = displayedSummaryIsActive
     ? null
     : (latestSummaryRun?.finishedAt ?? latestSummaryRun?.createdAt ?? null);
-  const runButtonLabel = isStarting ? 'Queuing' : 'Run';
+  const runButtonLabel = isStarting
+    ? t('dataQualityWorkspace.queuing', 'Queuing')
+    : t('dataQualityWorkspace.run', 'Run');
   const savedRunUnavailableReason = getRunUnavailableReason({
     canRun,
     isMutationBusy,
@@ -305,7 +309,7 @@ export function DataQualityWorkspace({
     try {
       await startRun();
       if (workspaceKeyRef.current !== workspaceKey) return;
-      toast.success('Quality run queued');
+      toast.success(t('dataQualityWorkspace.qualityRunQueued', 'Quality run queued'));
     } catch (error) {
       toast.error(getDataQualityErrorMessage(error, 'Failed to start quality run'));
     }
@@ -328,7 +332,12 @@ export function DataQualityWorkspace({
     try {
       await startRun(savedConfigResponse.configRevision);
       if (workspaceKeyRef.current !== workspaceKey) return;
-      toast.success('Configuration saved and quality run queued');
+      toast.success(
+        t(
+          'dataQualityWorkspace.configurationSavedAndQueued',
+          'Configuration saved and quality run queued'
+        )
+      );
     } catch (error) {
       const details = `: ${getDataQualityErrorMessage(error, 'Failed to start quality run')}`;
       toast.error(`Configuration saved, but the quality run was not started${details}`);
@@ -338,7 +347,12 @@ export function DataQualityWorkspace({
   const handleCancel = async () => {
     try {
       await cancelRun();
-      toast.success('Quality run cancellation requested');
+      toast.success(
+        t(
+          'dataQualityWorkspace.qualityRunCancellationRequested',
+          'Quality run cancellation requested'
+        )
+      );
     } catch (error) {
       toast.error(getDataQualityErrorMessage(error, 'Failed to cancel quality run'));
     }
@@ -346,21 +360,25 @@ export function DataQualityWorkspace({
 
   const sortedResults = latestRun ? sortDataQualityResults(latestRun.results) : [];
   const resultFilterOptions = [
-    { key: 'ALL' as const, label: 'All', count: sortedResults.length },
+    {
+      key: 'ALL' as const,
+      label: t('dataQualityWorkspace.all', 'All'),
+      count: sortedResults.length,
+    },
     {
       key: 'ISSUES' as const,
-      label: 'Needs attention',
+      label: t('dataQualityWorkspace.needsAttention', 'Needs attention'),
       count: sortedResults.filter(result => result.status === 'FAILED' || result.status === 'ERROR')
         .length,
     },
     {
       key: 'PASSED' as const,
-      label: 'Passed',
+      label: t('dataQualityWorkspace.passed', 'Passed'),
       count: sortedResults.filter(result => result.status === 'PASSED').length,
     },
     {
       key: 'NOT_APPLICABLE' as const,
-      label: 'Not applicable',
+      label: t('dataQualityWorkspace.notApplicable', 'Not applicable'),
       count: sortedResults.filter(result => result.status === 'NOT_APPLICABLE').length,
     },
   ];
@@ -393,7 +411,7 @@ export function DataQualityWorkspace({
               ) : (
                 <X className='size-4' aria-hidden='true' />
               )}
-              Cancel run
+              {t('runHistory.cancelRun', 'Cancel run')}
             </Button>
           ) : (
             <DisabledActionReason label='Run' reason={savedRunUnavailableReason}>
@@ -418,10 +436,12 @@ export function DataQualityWorkspace({
       {!canEdit && (
         <Alert>
           <AlertCircle />
-          <AlertTitle>Read-only access</AlertTitle>
+          <AlertTitle>{t('dataQualityWorkspace.readOnlyTitle', 'Read-only access')}</AlertTitle>
           <AlertDescription>
-            You have view-only access. You can browse the configuration and reports, but editing and
-            running checks requires the Editor role.
+            {t(
+              'dataQualityWorkspace.readOnlyDescription',
+              'You have view-only access. You can browse the configuration and reports, but editing and running checks requires the Editor role.'
+            )}
           </AlertDescription>
         </Alert>
       )}
@@ -430,15 +450,18 @@ export function DataQualityWorkspace({
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={ListChecks}
-            tooltip='Choose the checks that run together against this Data Mart'
+            tooltip={t(
+              'dataQualityWorkspace.checksTooltip',
+              'Choose the checks that run together against this Data Mart'
+            )}
           >
-            <h2>Checks configuration</h2>
+            <h2>{t('dataQualityWorkspace.checksConfiguration', 'Checks configuration')}</h2>
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
           <div className='space-y-6'>
             <RuleGroup
-              title='Table checks'
+              title={t('dataQualityWorkspace.tableChecks', 'Table checks')}
               rules={configResponse.effectiveConfig.rules.filter(
                 rule => rule.scope.type === 'DATA_MART'
               )}
@@ -471,7 +494,7 @@ export function DataQualityWorkspace({
               onChange={updateRule}
             />
             <RuleGroup
-              title='Relationship checks'
+              title={t('dataQualityWorkspace.relationshipChecks', 'Relationship checks')}
               rules={configResponse.effectiveConfig.rules.filter(
                 rule => rule.scope.type === 'RELATIONSHIP'
               )}
@@ -490,11 +513,13 @@ export function DataQualityWorkspace({
       {isDirty && (
         <div className='bg-background/95 sticky bottom-3 z-10 flex flex-wrap items-center gap-2 rounded-lg border p-3 shadow-lg backdrop-blur'>
           <div className='mr-auto min-w-0'>
-            <p className='text-sm font-medium'>Unsaved configuration changes</p>
+            <p className='text-sm font-medium'>
+              {t('dataQualityWorkspace.unsavedChanges', 'Unsaved configuration changes')}
+            </p>
           </div>
           <Button variant='ghost' disabled={isMutationBusy || !canEdit} onClick={handleDiscard}>
             <RotateCcw className='size-4' />
-            Discard
+            {t('dataQualityWorkspace.discard', 'Discard')}
           </Button>
           <Button
             variant='outline'
@@ -506,9 +531,12 @@ export function DataQualityWorkspace({
             }}
           >
             <Save className='size-4' />
-            Save
+            {t('common.save', 'Save')}
           </Button>
-          <DisabledActionReason label='Save & Run' reason={draftRunUnavailableReason}>
+          <DisabledActionReason
+            label={t('dataQualityWorkspace.saveAndRun', 'Save & Run')}
+            reason={draftRunUnavailableReason}
+          >
             <Button
               disabled={isMutationBusy || isRunActive || !canStartDraftConfig}
               onClick={() => {
@@ -520,7 +548,7 @@ export function DataQualityWorkspace({
               ) : (
                 <Play className='size-4' aria-hidden='true' />
               )}
-              Save & Run
+              {t('dataQualityWorkspace.saveAndRun', 'Save & Run')}
             </Button>
           </DisabledActionReason>
         </div>
@@ -535,7 +563,9 @@ export function DataQualityWorkspace({
                 tooltip='Review the latest Data Quality check results'
                 subtitle={`Last checked ${formatDateShort(latestRun.finishedAt ?? latestRun.createdAt)}`}
               >
-                <h2 id='quality-results-title'>Latest report</h2>
+                <h2 id='quality-results-title'>
+                  {t('dataQualityWorkspace.latestReport', 'Latest report')}
+                </h2>
               </CollapsibleCardHeaderTitle>
             </CollapsibleCardHeader>
             <CollapsibleCardContent>
@@ -547,12 +577,12 @@ export function DataQualityWorkspace({
                       className='hover:text-foreground font-medium hover:underline'
                       to={`/ui/${projectId}/data-marts/${dataMartId}/run-history`}
                     >
-                      View in Run History
+                      {t('dataQualityWorkspace.viewInRunHistory', 'View in Run History')}
                     </Link>
                   </p>
                   <div
                     className='ml-auto flex shrink-0 flex-wrap gap-1'
-                    aria-label='Filter check results'
+                    aria-label={t('dataQualityWorkspace.filterResults', 'Filter check results')}
                   >
                     {visibleResultFilterOptions.map(option => (
                       <Button
@@ -601,9 +631,12 @@ export function DataQualityWorkspace({
       {resultsError && (
         <Alert variant='destructive'>
           <AlertCircle />
-          <AlertTitle>Unable to load check results</AlertTitle>
+          <AlertTitle>{t('dataQualityUi.resultsLoadFailed', 'Unable to load check results')}</AlertTitle>
           <AlertDescription>
-            The run summary is available, but its detailed report failed to load.
+            {t(
+              'dataQualityUi.resultsLoadDescription',
+              'The run summary is available, but its detailed report failed to load.'
+            )}
           </AlertDescription>
         </Alert>
       )}
@@ -731,12 +764,13 @@ function RuleGroup({
   onChange,
   getScopePresentation,
 }: RuleGroupProps) {
+  const { t } = useTranslation();
   return (
     <section className='space-y-3'>
       <h3 className='text-sm font-semibold'>{title}</h3>
       {rules.length === 0 ? (
         <p className='bg-background text-muted-foreground rounded-md border border-dashed p-4 text-sm'>
-          No checks are available for this scope.
+          {t('dataQualityWorkspace.noChecks', 'No checks are available for this scope.')}
         </p>
       ) : (
         <div className='bg-background divide-y overflow-hidden rounded-lg border'>

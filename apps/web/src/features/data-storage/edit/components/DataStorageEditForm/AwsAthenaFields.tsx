@@ -49,17 +49,17 @@ export const AwsAthenaFields = ({ form }: AwsAthenaFieldsProps) => {
   return (
     <>
       {/* Connection Settings */}
-      <FormSection title='Connection Settings'>
+      <FormSection title='Cài đặt kết nối'>
         <FormField
           control={form.control}
           name='config.region'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Enter the AWS region where your Athena service is active'>
-                Region
+              <FormLabel tooltip='Nhập khu vực AWS nơi dịch vụ Athena của bạn đang hoạt động'>
+                Khu vực
               </FormLabel>
               <FormControl>
-                <Input {...field} placeholder='Enter a region' />
+                <Input {...field} placeholder='Nhập khu vực' />
               </FormControl>
               <FormDescription>
                 <AthenaRegionDescription />
@@ -73,11 +73,11 @@ export const AwsAthenaFields = ({ form }: AwsAthenaFieldsProps) => {
           name='config.outputBucket'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Specify the S3 bucket where Athena query results will be stored'>
-                Output Bucket
+              <FormLabel tooltip='Chỉ định bucket S3 nơi kết quả truy vấn Athena sẽ được lưu'>
+                Bucket đầu ra
               </FormLabel>
               <FormControl>
-                <Input {...field} placeholder='Enter an output bucket' />
+                <Input {...field} placeholder='Nhập bucket đầu ra' />
               </FormControl>
               <FormDescription>
                 <AthenaOutputBucketDescription />
@@ -109,11 +109,11 @@ export const AwsAthenaFields = ({ form }: AwsAthenaFieldsProps) => {
               name='credentials.accessKeyId'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Your AWS Access Key ID used for authentication'>
-                    Access Key ID
+                  <FormLabel tooltip='Mã AWS Access Key ID dùng để xác thực'>
+                    Mã Access Key ID
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='Enter an access key id' />
+                    <Input {...field} placeholder='Nhập mã access key id' />
                   </FormControl>
                   <FormDescription>
                     <AthenaAccessKeyIdDescription />
@@ -127,14 +127,14 @@ export const AwsAthenaFields = ({ form }: AwsAthenaFieldsProps) => {
               name='credentials.secretAccessKey'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Your AWS Secret Access Key used for authentication'>
-                    Secret Access Key
+                  <FormLabel tooltip='AWS Secret Access Key dùng để xác thực'>
+                    Mã Secret Access Key
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type='password'
-                      placeholder={maskedSecretValue || 'Enter a secret access key'}
+                      placeholder={maskedSecretValue || 'Nhập secret access key'}
                     />
                   </FormControl>
                   <FormDescription>

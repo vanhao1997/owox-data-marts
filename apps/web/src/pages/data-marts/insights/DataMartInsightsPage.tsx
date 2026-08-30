@@ -29,6 +29,7 @@ import { ConfirmationDialog } from '../../../shared/components/ConfirmationDialo
 import { ProjectDataMartEmptyState } from '../shared/ProjectDataMartEmptyState';
 import { ProjectDataMartTitleLink } from '../shared/ProjectDataMartTitleLink';
 import { formatDateShort, trackEvent } from '../../../utils';
+import { useTranslation } from 'react-i18next';
 
 const PROJECT_INSIGHTS_PAGE_SIZE = 15;
 const PROJECT_INSIGHTS_TABLE_ID = 'project-insights-table';
@@ -45,7 +46,8 @@ const projectInsightFilterAccessors: FilterAccessors<
 };
 
 function buildProjectInsightFilters(
-  data: ProjectInsightTemplateEntity[]
+  data: ProjectInsightTemplateEntity[],
+  t: (key: string) => string
 ): FilterConfigItem<ProjectInsightFilterKey>[] {
   const userLabelMapper = buildProjectTableUserLabelMapper(
     data.map(insight => insight.createdByUser)
@@ -54,21 +56,21 @@ function buildProjectInsightFilters(
   return [
     {
       id: 'dataMart',
-      label: 'Data Mart',
+      label: t('search.labelDataMart'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, projectInsightFilterAccessors.dataMart),
     },
     {
       id: 'insight',
-      label: 'Insight',
+      label: t('projectDataMartPages.insightLabel'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, projectInsightFilterAccessors.insight),
     },
     {
       id: 'createdBy',
-      label: 'Created By',
+      label: t('common.createdBy'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, projectInsightFilterAccessors.createdBy, {
@@ -79,6 +81,7 @@ function buildProjectInsightFilters(
 }
 
 export default function DataMartInsightsPage() {
+  const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const { scope } = useProjectRoute();
   const [insights, setInsights] = useState<ProjectInsightTemplateEntity[]>([]);
@@ -95,11 +98,14 @@ export default function DataMartInsightsPage() {
       const response = await insightTemplatesService.getProjectInsightTemplates();
       setInsights(mapProjectInsightTemplateListFromDto(response));
     } catch (caught) {
-      setError(extractApiError(caught).message ?? 'Failed to fetch Data Mart insights');
+      setError(
+        extractApiError(caught).message ??
+          t('insightsUi.errors.loadProject', 'Failed to fetch Data Mart insights')
+      );
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     void loadInsights();
@@ -124,7 +130,7 @@ export default function DataMartInsightsPage() {
         setInsights(currentInsights =>
           currentInsights.filter(insight => insight.id !== deletingInsight.id)
         );
-        toast.success('Insight deleted');
+        toast.success(t('insightsUi.toast.deleted', 'Insight deleted'));
       } catch {
         trackEvent({
           event: 'insight_error',
@@ -133,14 +139,14 @@ export default function DataMartInsightsPage() {
           label: deletingInsight.id,
           context: deletingInsight.dataMart.id,
         });
-        toast.error('Failed to delete insight');
+        toast.error(t('insightsUi.errors.delete', 'Failed to delete insight'));
       } finally {
         setDeletingInsight(null);
       }
     })();
-  }, [deletingInsight]);
+  }, [deletingInsight, t]);
 
-  const filtersConfig = useMemo(() => buildProjectInsightFilters(insights), [insights]);
+  const filtersConfig = useMemo(() => buildProjectInsightFilters(insights, t), [insights, t]);
 
   const { appliedState, apply, clear } = usePersistentFilters<ProjectInsightFilterKey>({
     projectId,
@@ -178,8 +184,10 @@ export default function DataMartInsightsPage() {
         id: 'dataMart',
         accessorFn: row => row.dataMart.title,
         size: 260,
-        meta: { title: 'Data Mart' },
-        header: ({ column }) => <SortableHeader column={column}>Data Mart</SortableHeader>,
+        meta: { title: t('search.labelDataMart') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('search.labelDataMart')}</SortableHeader>
+        ),
         cell: ({ row }) => (
           <ProjectDataMartTitleLink
             to={scope(`/data-marts/${row.original.dataMart.id}/insights-v2`)}
@@ -190,8 +198,10 @@ export default function DataMartInsightsPage() {
       {
         accessorKey: 'title',
         size: 320,
-        meta: { title: 'Insight' },
-        header: ({ column }) => <SortableHeader column={column}>Insight</SortableHeader>,
+        meta: { title: t('projectDataMartPages.insightLabel') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('projectDataMartPages.insightLabel')}</SortableHeader>
+        ),
         cell: ({ row }) => (
           <Link
             to={scope(`/data-marts/${row.original.dataMart.id}/insights-v2/${row.original.id}`)}
@@ -208,8 +218,10 @@ export default function DataMartInsightsPage() {
         accessorKey: 'modifiedAt',
         size: 180,
         sortDescFirst: true,
-        meta: { title: 'Updated' },
-        header: ({ column }) => <SortableHeader column={column}>Updated</SortableHeader>,
+        meta: { title: t('projectDataMartPages.updatedLabel') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('projectDataMartPages.updatedLabel')}</SortableHeader>
+        ),
         cell: ({ row }) => (
           <div className='text-muted-foreground'>{formatDateShort(row.original.modifiedAt)}</div>
         ),
@@ -218,8 +230,10 @@ export default function DataMartInsightsPage() {
         id: 'createdBy',
         accessorFn: row => row.createdByUser?.fullName ?? row.createdByUser?.email,
         size: 190,
-        meta: { title: 'Created By' },
-        header: ({ column }) => <SortableHeader column={column}>Created By</SortableHeader>,
+        meta: { title: t('common.createdBy') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('common.createdBy')}</SortableHeader>
+        ),
         cell: ({ row }) => {
           const user = row.original.createdByUser;
           if (!user) return <span className='text-muted-foreground'>-</span>;
@@ -244,7 +258,7 @@ export default function DataMartInsightsPage() {
           ) : null,
       },
     ],
-    [scope]
+    [scope, t]
   );
 
   const { table } = useBaseTable<ProjectInsightTemplateEntity>({
@@ -259,7 +273,7 @@ export default function DataMartInsightsPage() {
   return (
     <div className='dm-page' data-testid='dataMartInsightsPage'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>Insights</h1>
+        <h1 className='dm-page-header-title'>{t('projectDataMartPages.insightsTitle')}</h1>
       </header>
 
       <div className='dm-page-content'>
@@ -295,7 +309,7 @@ export default function DataMartInsightsPage() {
                   role='status'
                   aria-live='polite'
                 >
-                  No insights found for accessible Data Marts
+                  {t('projectDataMartPages.noInsightsForAccessible')}
                 </div>
               )}
             />
@@ -310,10 +324,10 @@ export default function DataMartInsightsPage() {
             setDeletingInsight(null);
           }
         }}
-        title='Delete insight'
-        description='Are you sure you want to delete this insight? This action cannot be undone.'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('insightsUi.delete.title', 'Delete insight')}
+        description={t('insightsUi.delete.description', 'Are you sure you want to delete this insight? This action cannot be undone.')}
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         variant='destructive'
         onConfirm={handleConfirmDelete}
       />

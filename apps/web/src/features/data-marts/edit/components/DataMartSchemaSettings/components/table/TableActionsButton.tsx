@@ -7,6 +7,7 @@ import {
 } from '@owox/ui/components/dropdown-menu';
 import { type ColumnMeta, type Table } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { TableSelectionCheckbox } from '../../../../../../../shared/components/Table';
 
@@ -29,6 +30,7 @@ interface TableActionsButtonProps<TData> {
  * Component that provides a dropdown menu for toggling column visibility in table headers
  */
 export function TableActionsButton<TData>({ table }: TableActionsButtonProps<TData>) {
+  const { t } = useTranslation();
   return (
     <div className='px-3 text-right'>
       <DropdownMenu>
@@ -36,7 +38,7 @@ export function TableActionsButton<TData>({ table }: TableActionsButtonProps<TDa
           <Button
             variant='ghost'
             className='dm-card-table-body-row-actionbtn'
-            aria-label='Toggle columns'
+            aria-label={t('table.toggleColumns', 'Toggle columns')}
           >
             <MoreHorizontal className='dm-card-table-body-row-actionbtn-icon' />
           </Button>
@@ -51,7 +53,11 @@ export function TableActionsButton<TData>({ table }: TableActionsButtonProps<TDa
                   <label className='flex items-center space-x-2'>
                     <TableSelectionCheckbox
                       checked={column.getIsVisible()}
-                      ariaLabel={`Toggle column ${column.columnDef.meta ? ((column.columnDef.meta as ExtendedColumnMeta<TData>).title ?? column.id) : column.id}`}
+                      ariaLabel={t('table.toggleColumn', 'Toggle column {{label}}', {
+                        label: column.columnDef.meta
+                          ? ((column.columnDef.meta as ExtendedColumnMeta<TData>).title ?? column.id)
+                          : column.id,
+                      })}
                       onClick={() => {
                         column.toggleVisibility(!column.getIsVisible());
                       }}

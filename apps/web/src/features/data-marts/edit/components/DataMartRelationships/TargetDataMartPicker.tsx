@@ -7,6 +7,7 @@ import { generateUniqueAlias, slugify } from '../../../../../utils/string-utils'
 import { dataMartService } from '../../../shared';
 import { dataMartRelationshipService } from '../../../shared/services/data-mart-relationship.service';
 import type { DataMartRelationship } from '../../../shared/types/relationship.types';
+import { useTranslation } from 'react-i18next';
 
 interface TargetDataMartPickerProps {
   dataMartId: string;
@@ -23,6 +24,7 @@ export function TargetDataMartPicker({
   onCreated,
   onCancel,
 }: TargetDataMartPickerProps) {
+  const { t } = useTranslation();
   const [availableDMs, setAvailableDMs] = useState<{ id: string; title: string }[]>([]);
   const [isLoadingDMs, setIsLoadingDMs] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -72,7 +74,7 @@ export function TargetDataMartPicker({
       );
       onCreated(created);
     } catch {
-      toast.error('Failed to add relationship');
+      toast.error(t('dataMartRelationships.failedAdd', 'Failed to add relationship'));
     } finally {
       setIsCreating(false);
     }
@@ -87,13 +89,19 @@ export function TargetDataMartPicker({
           onValueChange={v => {
             void handleSelect(v);
           }}
-          placeholder={isLoadingDMs ? 'Loading...' : isCreating ? 'Adding...' : 'Search data mart'}
+          placeholder={
+            isLoadingDMs
+              ? t('dataMartRelationships.pickerLoading', 'Loading...')
+              : isCreating
+                ? t('dataMartRelationships.pickerAdding', 'Adding...')
+                : t('dataMartRelationships.pickerSearch', 'Search data mart')
+          }
           disabled={isLoadingDMs || isCreating}
         />
       </div>
-      <Button type='button' variant='ghost' size='sm' onClick={onCancel} aria-label='Cancel'>
+      <Button type='button' variant='ghost' size='sm' onClick={onCancel} aria-label={t('dataMartRelationships.cancel', 'Cancel')}>
         <X className='h-4 w-4' />
-        Cancel
+        {t('dataMartRelationships.cancel', 'Cancel')}
       </Button>
     </div>
   );

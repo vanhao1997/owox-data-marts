@@ -29,6 +29,7 @@ import {
   DataMartRunTriggerType,
   DataMartRunType,
   DataMartStatus,
+  DataMartStatusModel,
   getRequiredSetupActions,
 } from '../../shared';
 import { useSchemaActualizeTrigger } from '../../shared/hooks/useSchemaActualizeTrigger';
@@ -119,8 +120,20 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
   );
   const isPublished = dataMartStatus.code === DataMartStatus.PUBLISHED;
   const isDraft = dataMartStatus.code === DataMartStatus.DRAFT;
+  const localizedDataMartStatus = dataMartStatus.code
+    ? DataMartStatusModel.getInfo(dataMartStatus.code)
+    : dataMartStatus;
   const hasActiveDataQualityRun = isDataQualityActivityState(dataQualitySummary?.state);
   const runActivityLabel = getDataMartRunActivityLabel(hasActiveRuns, hasActiveDataQualityRun);
+  const translatedRunActivityLabel = runActivityLabel
+    ? t(
+        runActivityLabel === 'Runs in progress'
+          ? 'dataMartRunActivity.runsInProgress'
+          : runActivityLabel === 'Checking data quality'
+            ? 'dataMartRunActivity.checkingDataQuality'
+            : 'dataMartRunActivity.updatingData'
+      )
+    : null;
   const schemaGuard = useSchemaUnsavedGuard();
 
   useRefreshDataMartAfterConnectorRun({
@@ -178,14 +191,14 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
 
   const navigation = [
     { name: t('dataMartDetails.tabs.overview', 'Overview'), path: 'overview' },
-    { name: 'Data Setup', path: 'data-setup' },
-    { name: 'Data Quality', path: 'quality' },
+    { name: t('dataMartDetails.tabs.dataSetup', 'Data setup'), path: 'data-setup' },
+    { name: t('dataMartDetails.tabs.quality', 'Data quality'), path: 'quality' },
     ...(shouldShowInsights
       ? [{ name: t('dataMartDetails.tabs.insights', 'Insights'), path: 'insights-v2' }]
       : []),
-    { name: 'Destinations', path: 'reports' },
+    { name: t('dataMartDetails.tabs.reports', 'Reports'), path: 'reports' },
     { name: t('dataMartDetails.tabs.triggers', 'Triggers'), path: 'triggers' },
-    { name: 'Run History', path: 'run-history' },
+    { name: t('dataMartDetails.tabs.runHistory', 'Run history'), path: 'run-history' },
   ];
 
   const handleTitleUpdate = useCallback(
@@ -251,12 +264,17 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
     async (payload: Record<string, unknown>) => {
       if (!dataMartId) return;
       if (!isPublished) {
-        toast.error('Manual run is only available for published Data Marts');
+        toast.error(
+          t(
+            'dataMartDetails.manualRunPublishedOnly',
+            'Chỉ Data Mart đã xuất bản mới có thể chạy thủ công.'
+          )
+        );
         return;
       }
       await runDataMart({ id: dataMartId, payload });
     },
-    [dataMartId, isPublished, runDataMart]
+    [dataMartId, isPublished, runDataMart, t]
   );
 
   // Show promo after the first successful manual connector run
@@ -324,10 +342,15 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
 
   // Config for publish button and tooltip based on data mart type
   const publishText = {
-    buttonLabel: isConnector ? 'Publish & Run Data Mart' : 'Publish Data Mart',
+    buttonLabel: isConnector
+      ? t('dataMartDetails.publishAndRun', 'Publish & Run Data Mart')
+      : t('dataMartDetails.publishDataMart', 'Publish Data Mart'),
     tooltipText: isConnector
-      ? 'Publish and start loading data'
-      : 'Publish to enable reports and scheduled runs',
+      ? t('dataMartDetails.publishAndStartLoading', 'Publish and start loading data')
+      : t(
+          'dataMartDetails.publishToEnableSchedules',
+          'Publish to enable reports and scheduled runs'
+        ),
   };
 
   // Config for connector run sheet
@@ -359,8 +382,8 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
             }}
             variant='ghost'
             className='mt-1 size-7 md:mt-0 md:size-8 lg:size-9'
-            aria-label='Back to Data Marts'
-            title='Back to Data Marts'
+            aria-label={t('dataMartDetails.backToList', 'Back to Data Marts')}
+            title={t('dataMartDetails.backToList', 'Back to Data Marts')}
           >
             <ArrowLeft className='h-4 w-4 lg:h-5 lg:w-5' />
           </Button>
@@ -381,7 +404,7 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
                         }}
                         isLoading={isGeneratingTitle}
                         disabled={!dataMartId || aiPendingScope !== null}
-                        tooltip='Generate title with AI'
+                        tooltip={t('dataMartDetails.generateTitleWithAI', 'Generate title with AI')}
                       />
                     )
                   : undefined
@@ -400,8 +423,8 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
           <div className='flex min-w-0 shrink-0 items-center gap-4'>
             <div className={cn('flex shrink-0 items-center gap-4', !canPublish ? 'md:pt-1' : '')}>
               <RunActivityIndicator
-                active={runActivityLabel !== null}
-                label={runActivityLabel ?? ''}
+                active={translatedRunActivityLabel !== null}
+                label={translatedRunActivityLabel ?? ''}
                 separator
                 onViewRuns={() => {
                   navigate(`/data-marts/${dataMartId}/run-history`);
@@ -414,14 +437,20 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
                       type={isPublished ? StatusTypeEnum.SUCCESS : StatusTypeEnum.NEUTRAL}
                       variant='subtle'
                     >
-                      {dataMartStatus.displayName}
+                      {localizedDataMartStatus.displayName}
                     </StatusLabel>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side='bottom'>
                   {isPublished
-                    ? 'Your published Data Mart is ready for scheduled runs'
-                    : 'Draft Data Mart is not available for scheduled runs. Publish it to activate scheduling.'}
+                    ? t(
+                        'dataMartDetails.publishedReadyForScheduledRuns',
+                        'Data Mart đã xuất bản đã sẵn sàng cho lịch chạy'
+                      )
+                    : t(
+                        'dataMartDetails.draftNotAvailableForScheduledRuns',
+                        'Data Mart nháp chưa thể chạy theo lịch. Hãy xuất bản để bật lịch chạy.'
+                      )}
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -464,7 +493,7 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
                 <TooltipContent side='bottom' className='max-w-sm'>
                   {!canPublish ? (
                     <>
-                      <p>Please complete the following steps:</p>
+                      <p>{t('dataMartDetails.completeFollowingSteps', 'Vui lòng hoàn tất các bước sau:')}</p>
                       <ul className='mt-1 list-disc space-y-0.5 pl-4 font-medium'>
                         {getRequiredSetupActions(dataMartValidationErrors).map(action => (
                           <li key={action}>{action}</li>
@@ -499,15 +528,21 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
                           }}
                         >
                           <Play className='text-foreground h-4 w-4' />
-                          <span>Manual Run...</span>
+                          <span>{t('dataMartDetails.manualRun', 'Chạy thủ công...')}</span>
                         </DropdownMenuItem>
                       </div>
                     </TooltipTrigger>
                     {(hasActiveRuns || isDraft) && (
                       <TooltipContent side='left'>
                         {hasActiveRuns
-                          ? 'Please wait for the current run to complete.'
-                          : 'Manual run is available only for published Data Marts.'}
+                          ? t(
+                              'dataMartDetails.waitCurrentRun',
+                              'Vui lòng chờ lượt chạy hiện tại hoàn tất.'
+                            )
+                          : t(
+                              'dataMartDetails.manualRunPublishedOnly',
+                              'Chỉ Data Mart đã xuất bản mới có thể chạy thủ công.'
+                            )}
                       </TooltipContent>
                     )}
                   </Tooltip>
@@ -595,25 +630,27 @@ export function DataMartDetails({ id }: DataMartDetailsProps) {
       <ConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        title='Delete Data Mart'
+        title={t('common.deleteDataMart', 'Xóa Data Mart')}
         description={
           <div className='mt-2 space-y-3'>
             <p className='break-words'>
-              Are you sure you want to delete "
-              <span className='font-semibold [overflow-wrap:anywhere]'>{dataMartTitle}</span>"? This
-              action cannot be undone.
+              {t('common.deleteDataMartDescription', 'Bạn có chắc chắn muốn xóa "{{title}}"? Thao tác này không thể hoàn tác.', {
+                title: dataMartTitle,
+              })}
             </p>
 
             {dataMart.storage.type === DataStorageType.LEGACY_GOOGLE_BIGQUERY && (
               <p className='text-destructive text-sm'>
-                Deleting this data mart will also make it unavailable in the Google Sheets
-                extension.
+                {t(
+                  'common.legacyDataMartWarning',
+                  'Xóa Data Mart này cũng khiến nó không còn khả dụng trong tiện ích Google Sheets.'
+                )}
               </p>
             )}
           </div>
         }
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         variant='destructive'
         onConfirm={() => {
           // Deleting destroys the whole data mart (schema included), so guarding

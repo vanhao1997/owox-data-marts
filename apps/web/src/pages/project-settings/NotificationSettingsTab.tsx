@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@owox/ui/components/alert';
 import { AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useProjectId } from '../../shared/hooks';
 import {
   useNotificationSettings,
@@ -20,6 +21,7 @@ import type {
  * tabs). The legacy /notifications route stays as-is for deep-linking.
  */
 export function NotificationSettingsTab() {
+  const { t } = useTranslation();
   const projectId = useProjectId();
   const { settings, error, updateSetting } = useNotificationSettings(projectId);
 
@@ -54,7 +56,7 @@ export function NotificationSettingsTab() {
     return (
       <Alert variant='destructive'>
         <AlertCircle className='h-4 w-4' />
-        <AlertTitle>Error</AlertTitle>
+        <AlertTitle>{t('common.error')}</AlertTitle>
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     );

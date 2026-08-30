@@ -13,6 +13,7 @@ import type {
   DataQualitySeverity,
   DataQualitySummaryState,
 } from '../types/data-quality-summary.types';
+import i18n from '../../../../i18n';
 
 export type DataQualityStatusTone =
   | 'neutral'
@@ -22,17 +23,7 @@ export type DataQualityStatusTone =
   | 'error'
   | 'notice';
 
-export type DataQualityStatusLabel =
-  | 'Never run'
-  | 'All checks disabled'
-  | 'No applicable checks'
-  | 'Queued'
-  | 'Running'
-  | 'Passed'
-  | 'Issues found'
-  | 'Run failed'
-  | 'Restricted'
-  | 'Cancelled';
+export type DataQualityStatusLabel = string;
 
 interface DataQualityVisualSummary {
   state: DataQualitySummaryState;
@@ -77,43 +68,78 @@ export function getDataQualityStatusVisual(
   summary: DataQualityVisualSummary
 ): DataQualityStatusVisual {
   if (summary.state === 'CANCELLED') {
-    return { icon: ShieldBan, isActive: false, label: 'Cancelled', tone: 'neutral' };
+    return {
+      icon: ShieldBan,
+      isActive: false,
+      label: i18n.t('dataQualityStatus.cancelled', 'Cancelled'),
+      tone: 'neutral',
+    };
   }
   if (hasNoApplicableChecks(summary)) {
     return {
       icon: ShieldMinus,
       isActive: false,
-      label: 'No applicable checks',
+      label: i18n.t('dataQualityStatus.noApplicableChecks', 'No applicable checks'),
       tone: 'neutral',
     };
   }
 
   switch (summary.state) {
     case 'NEVER_RUN':
-      return { icon: Shield, isActive: false, label: 'Never run', tone: 'neutral' };
+      return {
+        icon: Shield,
+        isActive: false,
+        label: i18n.t('dataQualityStatus.neverRun', 'Never run'),
+        tone: 'neutral',
+      };
     case 'ALL_DISABLED':
       return {
         icon: ShieldOff,
         isActive: false,
-        label: 'All checks disabled',
+        label: i18n.t('dataQualityStatus.allChecksDisabled', 'All checks disabled'),
         tone: 'neutral',
       };
     case 'QUEUED':
-      return { icon: LoaderCircle, isActive: true, label: 'Queued', tone: 'progress' };
+      return {
+        icon: LoaderCircle,
+        isActive: true,
+        label: i18n.t('dataQualityStatus.queued', 'Queued'),
+        tone: 'progress',
+      };
     case 'RUNNING':
-      return { icon: LoaderCircle, isActive: true, label: 'Running', tone: 'progress' };
+      return {
+        icon: LoaderCircle,
+        isActive: true,
+        label: i18n.t('dataQualityStatus.running', 'Running'),
+        tone: 'progress',
+      };
     case 'PASSED':
-      return { icon: ShieldCheck, isActive: false, label: 'Passed', tone: 'success' };
+      return {
+        icon: ShieldCheck,
+        isActive: false,
+        label: i18n.t('dataQualityStatus.passed', 'Passed'),
+        tone: 'success',
+      };
     case 'EXECUTION_FAILED':
-      return { icon: ShieldX, isActive: false, label: 'Run failed', tone: 'error' };
+      return {
+        icon: ShieldX,
+        isActive: false,
+        label: i18n.t('dataQualityStatus.runFailed', 'Run failed'),
+        tone: 'error',
+      };
     case 'RESTRICTED':
-      return { icon: ShieldBan, isActive: false, label: 'Restricted', tone: 'warning' };
+      return {
+        icon: ShieldBan,
+        isActive: false,
+        label: i18n.t('dataQualityStatus.restricted', 'Restricted'),
+        tone: 'warning',
+      };
     case 'ISSUES': {
       const severity = getHighestSeverity(summary);
       return {
         icon: ShieldAlert,
         isActive: false,
-        label: 'Issues found',
+        label: i18n.t('dataQualityStatus.issuesFound', 'Issues found'),
         tone: severity ?? 'warning',
       };
     }

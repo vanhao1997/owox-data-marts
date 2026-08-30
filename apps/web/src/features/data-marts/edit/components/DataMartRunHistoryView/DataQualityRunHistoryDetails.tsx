@@ -4,6 +4,7 @@ import { SkeletonList } from '@owox/ui/components/common/skeleton-list';
 import { cn } from '@owox/ui/lib/utils';
 import { ChevronDown, Clock3, FileJson2, Play, RotateCw } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Button } from '../../../../../shared/components/Button';
 import { formatDateShort, formatDuration } from '../../../../../utils/date-formatters';
@@ -34,6 +35,7 @@ export function DataQualityRunHistoryDetails({
   dataMartId,
   runId,
 }: DataQualityRunHistoryDetailsProps) {
+  const { t } = useTranslation();
   const { data, isLoading, isError, refetch } = useDataQualityRun(projectId, dataMartId, runId);
 
   if (isLoading) return <SkeletonList />;
@@ -41,7 +43,7 @@ export function DataQualityRunHistoryDetails({
     return (
       <div role='alert' className='border-destructive/40 bg-destructive/5 rounded-md border p-4'>
         <p className='text-sm font-medium'>
-          Couldn&apos;t load the details of this run. The rest of the history is unaffected.
+          {t('runHistoryQuality.loadFailed')}
         </p>
         <Button
           type='button'
@@ -53,7 +55,7 @@ export function DataQualityRunHistoryDetails({
           }}
         >
           <RotateCw className='size-4' aria-hidden='true' />
-          Retry
+          {t('common.retry')}
         </Button>
       </div>
     );
@@ -76,8 +78,8 @@ export function DataQualityRunHistoryDetails({
           )}
           <p>
             {isActive
-              ? 'This run is still in progress. Saved results update automatically.'
-              : 'This run ended early. Results completed before it stopped are preserved.'}
+              ? t('runHistoryQuality.inProgress')
+              : t('runHistoryQuality.endedEarly')}
           </p>
         </div>
       )}
@@ -86,11 +88,11 @@ export function DataQualityRunHistoryDetails({
 
       <section className='space-y-3' aria-labelledby={`quality-results-${runId}`}>
         <h4 id={`quality-results-${runId}`} className='font-semibold'>
-          Check results
+          {t('runHistoryQuality.checkResults')}
         </h4>
         {sortedResults.length === 0 ? (
           <p className='text-muted-foreground rounded-md border p-4 text-sm'>
-            No check results were saved for this run.
+            {t('runHistoryQuality.noResults')}
           </p>
         ) : (
           sortedResults.map(result => {
@@ -131,6 +133,7 @@ export function DataQualityRunHistoryDetails({
 }
 
 function RunOverview({ run }: { run: DataQualityRun }) {
+  const { t } = useTranslation();
   const duration =
     run.startedAt && run.finishedAt
       ? formatDuration(new Date(run.startedAt), new Date(run.finishedAt))
@@ -139,13 +142,13 @@ function RunOverview({ run }: { run: DataQualityRun }) {
   return (
     <section aria-labelledby={`quality-overview-${run.runId}`}>
       <h4 id={`quality-overview-${run.runId}`} className='mb-3 font-semibold'>
-        Run overview
+        {t('runHistoryQuality.overview')}
       </h4>
       <div className='grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3'>
-        <OverviewItem label='Started' value={formatDateShort(run.startedAt ?? run.createdAt)} />
-        <OverviewItem label='Finished' value={formatDateShort(run.finishedAt)} />
-        <OverviewItem label='Duration' value={duration} />
-        <OverviewItem label='Configuration' value={run.snapshot?.definitionType ?? '—'} />
+        <OverviewItem label={t('runHistoryQuality.started')} value={formatDateShort(run.startedAt ?? run.createdAt)} />
+        <OverviewItem label={t('runHistoryQuality.finished')} value={formatDateShort(run.finishedAt)} />
+        <OverviewItem label={t('runHistoryQuality.duration')} value={duration} />
+        <OverviewItem label={t('runHistoryQuality.configuration')} value={run.snapshot?.definitionType ?? '—'} />
       </div>
     </section>
   );
@@ -193,6 +196,7 @@ function RunSummary({ run }: { run: DataQualityRun }) {
 }
 
 function RunSnapshot({ snapshot }: { snapshot: DataQualityRunSnapshot }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isRawOpen, setIsRawOpen] = useState(false);
   const displayedSnapshot = getDisplayedSnapshot(snapshot);
@@ -202,7 +206,7 @@ function RunSnapshot({ snapshot }: { snapshot: DataQualityRunSnapshot }) {
     <section className='overflow-hidden rounded-md border'>
       <button
         type='button'
-        aria-label='Run snapshot'
+        aria-label={t('runHistoryQuality.snapshot')}
         aria-expanded={isOpen}
         className='hover:bg-muted/40 focus-visible:ring-ring flex w-full items-center gap-2 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset'
         onClick={() => {
@@ -210,8 +214,8 @@ function RunSnapshot({ snapshot }: { snapshot: DataQualityRunSnapshot }) {
         }}
       >
         <FileJson2 className='text-muted-foreground size-4' aria-hidden='true' />
-        <span className='flex-1 text-sm font-medium'>Run snapshot</span>
-        <span className='text-muted-foreground text-xs'>{enabledRules.length} enabled</span>
+        <span className='flex-1 text-sm font-medium'>{t('runHistoryQuality.snapshot')}</span>
+        <span className='text-muted-foreground text-xs'>{t('runHistoryQuality.enabled', { count: enabledRules.length })}</span>
         <ChevronDown
           className={cn(
             'text-muted-foreground size-4 transition-transform',
@@ -224,11 +228,11 @@ function RunSnapshot({ snapshot }: { snapshot: DataQualityRunSnapshot }) {
       {isOpen && (
         <div className='space-y-4 border-t p-4'>
           <div className='grid gap-3 sm:grid-cols-2'>
-            <SnapshotValue label='Definition type' value={snapshot.definitionType} />
+            <SnapshotValue label={t('runHistoryQuality.definitionType')} value={snapshot.definitionType} />
           </div>
 
           <div>
-            <p className='mb-2 text-sm font-medium'>Configured checks</p>
+            <p className='mb-2 text-sm font-medium'>{t('runHistoryQuality.configuredChecks')}</p>
             <div className='divide-y rounded-md border'>
               {enabledRules.map(rule => (
                 <div key={rule.key} className='flex flex-wrap items-center gap-2 px-3 py-2 text-sm'>
@@ -239,7 +243,7 @@ function RunSnapshot({ snapshot }: { snapshot: DataQualityRunSnapshot }) {
                   <Badge variant='outline' className='ml-auto'>
                     {rule.severity}
                   </Badge>
-                  <Badge variant='secondary'>Enabled</Badge>
+                  <Badge variant='secondary'>{t('common.active')}</Badge>
                 </div>
               ))}
             </div>
@@ -259,7 +263,7 @@ function RunSnapshot({ snapshot }: { snapshot: DataQualityRunSnapshot }) {
                 className={cn('size-4 transition-transform', isRawOpen && 'rotate-180')}
                 aria-hidden='true'
               />
-              View raw JSON
+              {t('runHistoryQuality.viewRawJson')}
             </Button>
             {isRawOpen && (
               <pre className='bg-muted mt-2 max-h-80 overflow-auto rounded-md p-3 text-xs whitespace-pre-wrap'>

@@ -18,6 +18,7 @@ import {
 } from './DataDestinationTableFilters.config';
 import { EmptyDataDestinationsState } from './EmptyDataDestinationsState';
 import { InviteTeammatesCard } from '../../../../../shared/components/InviteTeammatesCard';
+import { useTranslation } from 'react-i18next';
 
 interface DataDestinationTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -35,12 +36,13 @@ export function DataDestinationTable<TData, TValue>({
   onEdit,
   onOpenTypeDialog,
 }: DataDestinationTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const tableId = 'data-destinations-table';
 
   const filtersConfig = useMemo(
-    () => buildDataDestinationTableFilters(data as DataDestinationTableItem[]),
-    [data]
+    () => buildDataDestinationTableFilters(data as DataDestinationTableItem[], t),
+    [data, t]
   );
 
   const { appliedState, apply, clear } = usePersistentFilters<DataDestinationFilterKey>({
@@ -91,8 +93,8 @@ export function DataDestinationTable<TData, TValue>({
           <EmptyDataDestinationsState onOpenTypeDialog={onOpenTypeDialog} />
         </div>
         <InviteTeammatesCard
-          hint='— Not sure which destination to connect? Ask someone with access to help you'
-          docsLabel='Learn more about Destinations'
+          hint={t('destinationsPage.inviteHint')}
+          docsLabel={t('destinationsPage.learnMore')}
           docsHref='https://docs.p2pdigital.vn/docs/destinations/manage-destinations/'
         />
       </div>
@@ -105,7 +107,7 @@ export function DataDestinationTable<TData, TValue>({
         tableId={tableId}
         table={table}
         onRowClick={handleRowClick}
-        ariaLabel='Destinations table'
+        ariaLabel={t('destinationsPage.tableAriaLabel', 'Destinations table')}
         paginationProps={{ displaySelected: false }}
         renderToolbarLeft={() => (
           <>
@@ -118,13 +120,13 @@ export function DataDestinationTable<TData, TValue>({
             <TableColumnSearch
               table={table}
               columnId={DataDestinationColumnKey.TITLE}
-              placeholder='Search'
+              placeholder={t('search.button')}
             />
           </>
         )}
         renderToolbarRight={() => (
           <TableCTAButton data-testid='destCreateButton' onClick={onOpenTypeDialog}>
-            New Destination
+            {t('destinationsPage.newDestination')}
           </TableCTAButton>
         )}
       />

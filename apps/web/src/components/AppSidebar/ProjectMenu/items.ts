@@ -5,7 +5,7 @@ import { Gem, BadgeAlert, Scale, MessageCircle, Settings } from 'lucide-react';
 export const projectMenuItems: ProjectMenuItem[] = [
   {
     type: 'menu-item',
-    title: 'GitHub Community',
+    title: 'projectMenu.githubCommunity',
     href: 'https://github.com/p2pdigital/data-marts',
     icon: GitHubIcon,
     visible: { flagKey: 'MENU_GITHUB_COMMUNITY_VISIBLE', expectedValue: 'true' },
@@ -13,7 +13,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'menu-item',
-    title: 'Discover Upgrade Options',
+    title: 'projectMenu.discoverUpgradeOptions',
     href: 'https://www.p2pdigital.vn/pricing/?utm_source=app_p2pdigital_vn&utm_medium=community_edition&utm_campaign=pricing&utm_keyword=upgrade_options&utm_content=header_dropdown',
     icon: Gem,
     visible: { flagKey: 'MENU_UPGRADE_OPTIONS_VISIBLE', expectedValue: 'true' },
@@ -21,7 +21,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'project-settings-submenu',
-    title: 'Project settings',
+    title: 'projectMenu.projectSettings',
     href: '',
     icon: Settings,
     visible: true,
@@ -29,7 +29,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'menu-item',
-    title: 'Leave Feedback',
+    title: 'projectMenu.leaveFeedback',
     href: 'https://github.com/p2pdigital/data-marts/discussions',
     icon: MessageCircle,
     visible: { flagKey: 'MENU_FEEDBACK_VISIBLE', expectedValue: 'true' },
@@ -37,7 +37,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'menu-item',
-    title: 'Issues',
+    title: 'projectMenu.issues',
     href: 'https://github.com/p2pdigital/data-marts/issues',
     icon: BadgeAlert,
     visible: { flagKey: 'MENU_ISSUES_VISIBLE', expectedValue: 'true' },
@@ -45,7 +45,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'menu-item',
-    title: 'License',
+    title: 'projectMenu.license',
     href: 'https://github.com/p2pdigital/data-marts#License-1-ov-file',
     icon: Scale,
     visible: { flagKey: 'MENU_LICENSE_VISIBLE', expectedValue: 'true' },
@@ -53,7 +53,7 @@ export const projectMenuItems: ProjectMenuItem[] = [
   },
   {
     type: 'menu-item',
-    title: 'P2PDigital BI',
+    title: 'projectMenu.owoxBi',
     href: 'https://p2pdigital.vn/',
     icon: OWOXBIIcon,
     visible: { flagKey: 'MENU_OWOX_BI_VISIBLE', expectedValue: 'true' },

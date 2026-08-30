@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@owox/ui/components/button';
 import { Label } from '@owox/ui/components/label';
 import { Switch } from '@owox/ui/components/switch';
@@ -107,6 +108,7 @@ export const ReportSchedulesInlineList = forwardRef<
   ReportSchedulesInlineListHandle,
   ReportSchedulesInlineListProps
 >(({ dataMartId, reportId, onDirtyChange }, ref) => {
+  const { t } = useTranslation();
   const [items, setItems] = useState<ScheduleItem[]>([]);
   const [initialItems, setInitialItems] = useState<ScheduleItem[]>([]);
   const loadedRef = useRef(false);
@@ -275,7 +277,7 @@ export const ReportSchedulesInlineList = forwardRef<
                   variant='ghost'
                   size='sm'
                   type='button'
-                  aria-label='Delete trigger'
+                  aria-label={t('scheduledTriggers.delete')}
                   onClick={() => {
                     setDeleteIndex(idx);
                   }}
@@ -303,7 +305,7 @@ export const ReportSchedulesInlineList = forwardRef<
                 )}
                 {it.nextRun && (
                   <div>
-                    <span className='text-foreground/80 font-medium'>Next run: </span>
+                    <span className='text-foreground/80 font-medium'>{t('scheduledTriggers.nextRun')}: </span>
                     <RelativeTime date={new Date(it.nextRun)} />
                   </div>
                 )}
@@ -320,7 +322,7 @@ export const ReportSchedulesInlineList = forwardRef<
               >
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete trigger?</AlertDialogTitle>
+                    <AlertDialogTitle>{t('scheduledTriggers.deleteQuestion')}</AlertDialogTitle>
                     <AlertDialogDescription>
                       This action will remove this schedule from the report.
                     </AlertDialogDescription>
@@ -331,7 +333,7 @@ export const ReportSchedulesInlineList = forwardRef<
                         setDeleteIndex(null);
                       }}
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </AlertDialogCancel>
                     <AlertDialogAction
                       className='bg-red-600 hover:bg-red-700'
@@ -340,7 +342,7 @@ export const ReportSchedulesInlineList = forwardRef<
                         setDeleteIndex(null);
                       }}
                     >
-                      Delete
+                        {t('common.delete')}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

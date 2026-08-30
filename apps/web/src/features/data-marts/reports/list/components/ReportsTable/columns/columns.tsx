@@ -6,20 +6,31 @@ import { ReportActionsCell } from '../ReportActionsCell';
 import type { DataMartReport } from '../../../../shared/model/types/data-mart-report';
 import { ReportQuickRunCell } from '../../../../shared';
 import { ReportColumnKey } from './columnKeys';
-import { ReportColumnLabels } from './columnLabels';
 import { UserReference } from '../../../../../../../shared/components/UserReference';
 import { UserAvatarGroup } from '../../../../../../../shared/components/UserAvatarGroup/UserAvatarGroup';
 import { ReportsTableTitleCell } from '../ReportsTableTitleCell';
+import type { TFunction } from 'i18next';
 
 interface ReportTableColumnsProps {
   onDeleteSuccess?: () => void;
   onEditReport?: (report: DataMartReport) => void;
+  t?: TFunction;
 }
 
 export const getReportColumns = ({
   onDeleteSuccess,
   onEditReport,
-}: ReportTableColumnsProps = {}): ColumnDef<DataMartReport>[] => [
+  t: translate,
+}: ReportTableColumnsProps = {}): ColumnDef<DataMartReport>[] => {
+  const t = translate ?? ((_key: string, fallback: string) => fallback);
+  const labels = {
+    title: t('reportTable.title', 'Title'),
+    lastRunDate: t('reportTable.lastRunDate', 'Last Run Date'),
+    lastRunStatus: t('reportTable.lastRunStatus', 'Last Run Status'),
+    createdBy: t('reportTable.createdBy', 'Created By'),
+    owners: t('reportTable.owners', 'Owners'),
+  };
+  return [
   {
     id: 'quickRun',
     size: 40,
@@ -34,10 +45,10 @@ export const getReportColumns = ({
     size: 320,
     enableColumnFilter: true,
     meta: {
-      title: ReportColumnLabels[ReportColumnKey.TITLE],
+      title: labels.title,
     },
     header: ({ column }) => (
-      <SortableHeader column={column}>{ReportColumnLabels[ReportColumnKey.TITLE]}</SortableHeader>
+      <SortableHeader column={column}>{labels.title}</SortableHeader>
     ),
     cell: ({ row }) => <ReportsTableTitleCell report={row.original} />,
   },
@@ -45,18 +56,18 @@ export const getReportColumns = ({
     accessorKey: ReportColumnKey.LAST_RUN_DATE,
     size: 250,
     meta: {
-      title: ReportColumnLabels[ReportColumnKey.LAST_RUN_DATE],
+      title: labels.lastRunDate,
     },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ReportColumnLabels[ReportColumnKey.LAST_RUN_DATE]}
+        {labels.lastRunDate}
       </SortableHeader>
     ),
     cell: ({ row }) => {
       const lastRunTimestamp = row.original.lastRunDate;
       return (
         <div className='text-muted-foreground text-sm'>
-          {lastRunTimestamp ? <RelativeTime date={new Date(lastRunTimestamp)} /> : 'Never run'}
+          {lastRunTimestamp ? <RelativeTime date={new Date(lastRunTimestamp)} /> : t('reportActions.neverRun', 'Never run')}
         </div>
       );
     },
@@ -65,11 +76,11 @@ export const getReportColumns = ({
     accessorKey: ReportColumnKey.LAST_RUN_STATUS,
     size: 200,
     meta: {
-      title: ReportColumnLabels[ReportColumnKey.LAST_RUN_STATUS],
+      title: labels.lastRunStatus,
     },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ReportColumnLabels[ReportColumnKey.LAST_RUN_STATUS]}
+        {labels.lastRunStatus}
       </SortableHeader>
     ),
     cell: ({ row }) =>
@@ -87,11 +98,11 @@ export const getReportColumns = ({
     },
     size: 200,
     meta: {
-      title: ReportColumnLabels[ReportColumnKey.CREATED_BY],
+      title: labels.createdBy,
     },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {ReportColumnLabels[ReportColumnKey.CREATED_BY]}
+        {labels.createdBy}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -105,15 +116,15 @@ export const getReportColumns = ({
     accessorFn: row => (row.ownerUsers ?? []).map(u => u.fullName ?? u.email).join(', '),
     size: 200,
     meta: {
-      title: ReportColumnLabels[ReportColumnKey.OWNERS],
+      title: labels.owners,
     },
     header: ({ column }) => (
-      <SortableHeader column={column}>{ReportColumnLabels[ReportColumnKey.OWNERS]}</SortableHeader>
+      <SortableHeader column={column}>{labels.owners}</SortableHeader>
     ),
     cell: ({ row }) => {
       const users = row.original.ownerUsers ?? [];
       if (users.length === 0)
-        return <span className='text-muted-foreground text-sm'>Not assigned</span>;
+        return <span className='text-muted-foreground text-sm'>{t('reportActions.notAssigned', 'Not assigned')}</span>;
       if (users.length === 1) return <UserReference userProjection={users[0]} />;
       return <UserAvatarGroup users={users} />;
     },
@@ -127,4 +138,5 @@ export const getReportColumns = ({
       <ReportActionsCell row={row} onDeleteSuccess={onDeleteSuccess} onEditReport={onEditReport} />
     ),
   },
-];
+  ];
+};

@@ -17,6 +17,7 @@ import { RowAggregationIcon } from './RowAggregationIcon';
 import { resolveColumnAllowedAggregations } from '../../../shared/utils/aggregation-governance';
 import { applyAggregationDraft, bucketForColumn, functionsForColumn } from './aggregation-config';
 import { isDateType } from './output-controls-operators';
+import { useTranslation } from 'react-i18next';
 
 function SectionHeader({ title, info }: { title: string; info: string }) {
   return (
@@ -135,6 +136,7 @@ function AggregationSection({
   selectedColumns,
   onChange,
 }: AggregationSectionProps) {
+  const { t } = useTranslation();
   const [pendingColumn, setPendingColumn] = useState<AggregationDropdownColumn | null>(null);
   const columnByName = new Map(selectedColumns.map(c => [c.name, c]));
   // A column is "configured" once it carries an aggregate function OR a date bucket — both
@@ -156,7 +158,7 @@ function AggregationSection({
 
   return (
     <div data-slot='aggregation-settings-panel'>
-      <SectionHeader title='Aggregations' info={SECTION_INFO.aggregate} />
+      <SectionHeader title={t('reportColumnPicker.aggregations', 'Aggregations')} info={t('reportColumnPicker.aggregationsHelp', SECTION_INFO.aggregate)} />
       <div className='space-y-1'>
         {aggregations.map((rule, index) => {
           const col = columnByName.get(rule.column);
@@ -245,11 +247,11 @@ function AggregationSection({
             }}
           />
         ) : addableColumns.length === 0 ? (
-          <span className='text-muted-foreground text-xs'>No aggregatable columns.</span>
+          <span className='text-muted-foreground text-xs'>{t('reportColumnPicker.noAggregatableColumns', 'No aggregatable columns.')}</span>
         ) : (
           <FieldSearchPicker
             items={addableColumns.map(columnToPickerItem)}
-            placeholder='Add aggregation'
+            placeholder={t('reportColumnPicker.addAggregation', 'Add aggregation')}
             onSelect={name => {
               const column = addableColumns.find(c => c.name === name);
               if (column) setPendingColumn(column);

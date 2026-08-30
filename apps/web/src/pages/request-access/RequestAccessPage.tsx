@@ -20,11 +20,12 @@ import {
   userProvisioningService,
 } from '../../features/user-provisioning/services/user-provisioning.service';
 import { buildProjectPath } from '../../utils/path';
+import { useTranslation } from 'react-i18next';
 
-const ROLE_LABELS: Record<Role, string> = {
-  viewer: 'Business User',
-  editor: 'Technical User',
-  admin: 'Project Admin',
+const ROLE_LABEL_KEYS: Record<Role, string> = {
+  viewer: 'requestAccessPage.roles.viewer',
+  editor: 'requestAccessPage.roles.editor',
+  admin: 'requestAccessPage.roles.admin',
 };
 
 function SummaryItem({ label, value }: { label: string; value: string }) {
@@ -44,6 +45,8 @@ export function RequestAccessPage() {
   const [submitting, setSubmitting] = useState(false);
   const [creatingProject, setCreatingProject] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const roleLabel = (role: Role) => t(ROLE_LABEL_KEYS[role]);
 
   useEffect(() => {
     if (context) {
@@ -76,7 +79,9 @@ export function RequestAccessPage() {
       setSubmitted(await userProvisioningService.requestAccess(selectedRole));
       await refresh();
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Failed to request access');
+      setActionError(
+        err instanceof Error ? err.message : t('requestAccessPage.requestFailed', 'Failed to request access')
+      );
     } finally {
       setSubmitting(false);
     }
@@ -90,7 +95,9 @@ export function RequestAccessPage() {
       const redirect = buildProjectPath(project.projectId, '/data-marts');
       signIn({ projectId: project.projectId, redirect });
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Failed to create project');
+      setActionError(
+        err instanceof Error ? err.message : t('requestAccessPage.createProjectFailed', 'Failed to create project')
+      );
       setCreatingProject(false);
     }
   };
@@ -98,7 +105,9 @@ export function RequestAccessPage() {
   return (
     <div className='dm-page'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>Request project access</h1>
+        <h1 className='dm-page-header-title'>
+          {t('requestAccessPage.title', 'Request project access')}
+        </h1>
         {context && (
           <p className='text-muted-foreground mt-2 text-sm'>
             {[context.organization?.name, context.project.projectTitle].filter(Boolean).join(' · ')}
@@ -109,17 +118,17 @@ export function RequestAccessPage() {
       <div className='dm-page-content'>
         <div className='w-full max-w-3xl'>
           {error && (
-            <Alert variant='destructive' className='mb-4'>
-              <AlertCircle className='h-4 w-4' />
-              <AlertTitle>Could not load access request</AlertTitle>
+              <Alert variant='destructive' className='mb-4'>
+                <AlertCircle className='h-4 w-4' />
+              <AlertTitle>{t('requestAccessPage.loadErrorTitle', 'Could not load access request')}</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {actionError && (
-            <Alert variant='destructive' className='mb-4'>
-              <AlertCircle className='h-4 w-4' />
-              <AlertTitle>Action failed</AlertTitle>
+              <Alert variant='destructive' className='mb-4'>
+                <AlertCircle className='h-4 w-4' />
+              <AlertTitle>{t('requestAccessPage.actionFailedTitle', 'Action failed')}</AlertTitle>
               <AlertDescription>{actionError}</AlertDescription>
             </Alert>
           )}
@@ -128,10 +137,13 @@ export function RequestAccessPage() {
             <div className='dm-card flex flex-col gap-3'>
               <section className='dm-card-block'>
                 <dl className='grid gap-4 sm:grid-cols-3'>
-                  <SummaryItem label='Account' value={context.user.email} />
-                  <SummaryItem label='Project' value={context.project.projectTitle} />
+                  <SummaryItem label={t('requestAccessPage.account', 'Account')} value={context.user.email} />
+                  <SummaryItem label={t('requestAccessPage.project', 'Project')} value={context.project.projectTitle} />
                   {context.organization?.name && (
-                    <SummaryItem label='Organization' value={context.organization.name} />
+                    <SummaryItem
+                      label={t('requestAccessPage.organization', 'Organization')}
+                      value={context.organization.name}
+                    />
                   )}
                 </dl>
               </section>
@@ -144,20 +156,22 @@ export function RequestAccessPage() {
                     </span>
                     <div className='min-w-0 space-y-2'>
                       <div className='flex flex-wrap items-center gap-2'>
-                        <h2 className='text-sm font-medium'>Access request submitted</h2>
+                        <h2 className='text-sm font-medium'>
+                          {t('requestAccessPage.submittedTitle', 'Access request submitted')}
+                        </h2>
                         <Badge variant='secondary' className='capitalize'>
                           {submitted.request.status}
                         </Badge>
                       </div>
                       <p className='text-muted-foreground text-sm'>
-                        Requested role: {ROLE_LABELS[submitted.request.role]}
+                        {t('requestAccessPage.requestedRole', 'Requested role')}: {roleLabel(submitted.request.role)}
                       </p>
                     </div>
                   </div>
                 ) : (
                   <div className='space-y-2'>
                     <label className='text-sm font-medium' htmlFor='request-access-role'>
-                      Requested role
+                      {t('requestAccessPage.requestedRole', 'Requested role')}
                     </label>
                     <Select
                       value={selectedRole}
@@ -174,7 +188,7 @@ export function RequestAccessPage() {
                       <SelectContent>
                         {roleOptions.map(role => (
                           <SelectItem key={role} value={role}>
-                            {ROLE_LABELS[role]}
+                            {roleLabel(role)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -193,7 +207,9 @@ export function RequestAccessPage() {
                     disabled={creatingProject}
                   >
                     <Plus className='mr-2 h-4 w-4' />
-                    {creatingProject ? 'Creating...' : 'Create new project'}
+                    {creatingProject
+                      ? t('requestAccessPage.creating', 'Creating...')
+                      : t('requestAccessPage.createNewProject', 'Create new project')}
                   </Button>
                   {!submitted && (
                     <Button
@@ -203,7 +219,9 @@ export function RequestAccessPage() {
                       disabled={submitting}
                     >
                       <Send className='mr-2 h-4 w-4' />
-                      {submitting ? 'Submitting...' : 'Request access'}
+                      {submitting
+                        ? t('requestAccessPage.submitting', 'Submitting...')
+                        : t('requestAccessPage.requestAccess', 'Request access')}
                     </Button>
                   )}
                 </div>

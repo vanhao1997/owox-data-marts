@@ -2,6 +2,7 @@ import type { LogEntry } from './types';
 import { LogLevel } from './types';
 import { getDisplayType } from './utils';
 import { getLogLevelIcon, getLogLevelColor } from './icons';
+import { useTranslation } from 'react-i18next';
 
 interface StructuredLogsViewProps {
   logs: LogEntry[];
@@ -27,6 +28,7 @@ const renderMessage = (message: string) =>
   );
 
 export function StructuredLogsView({ logs }: StructuredLogsViewProps) {
+  const { t } = useTranslation();
   const handleStopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -41,7 +43,7 @@ export function StructuredLogsView({ logs }: StructuredLogsViewProps) {
   if (logs.length === 0) {
     return (
       <div className='bg-background border-border rounded-lg border'>
-        <div className='text-muted-foreground p-8 text-center text-sm'>No logs found</div>
+        <div className='text-muted-foreground p-8 text-center text-sm'>{t('logsUi.noLogs')}</div>
       </div>
     );
   }

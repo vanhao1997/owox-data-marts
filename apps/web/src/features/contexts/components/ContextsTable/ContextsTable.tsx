@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Row } from '@tanstack/react-table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { BaseTable, TableColumnSearch, TableCTAButton } from '../../../../shared/components/Table';
@@ -28,6 +29,7 @@ export function ContextsTable({
   onDeleteContext,
   onAddContext,
 }: ContextsTableProps) {
+  const { t } = useTranslation();
   const data: ContextsTableItem[] = useMemo(() => {
     const toProjection = (m: MemberWithScopeDto): UserProjection => ({
       userId: m.userId,
@@ -66,8 +68,8 @@ export function ContextsTable({
   }, [contexts, members]);
 
   const columns = useMemo(
-    () => getContextsColumns({ onEdit: onEditContext, onDelete: onDeleteContext, isAdmin }),
-    [onEditContext, onDeleteContext, isAdmin]
+    () => getContextsColumns({ onEdit: onEditContext, onDelete: onDeleteContext, isAdmin, t }),
+    [onEditContext, onDeleteContext, isAdmin, t]
   );
 
   const { table } = useBaseTable<ContextsTableItem>({

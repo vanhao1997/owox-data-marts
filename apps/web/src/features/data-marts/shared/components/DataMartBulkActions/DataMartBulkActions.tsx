@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { DataStorageType } from '../../../../data-storage';
 import { DataMartStatus } from '../../enums';
 import { RunDataQualityBatchDialog } from '../RunDataQualityBatchDialog';
@@ -47,13 +48,17 @@ export interface DataMartBulkActionTarget {
 
 export type DataMartCanvasExportFormat = 'svg' | 'png' | 'json' | 'okf';
 
-const EXPORT_ITEMS: { format: DataMartCanvasExportFormat; label: string; icon: typeof Download }[] =
-  [
-    { format: 'svg', label: 'Image (SVG)', icon: ImageIcon },
-    { format: 'png', label: 'Image (PNG)', icon: FileImage },
-    { format: 'json', label: 'JSON', icon: FileJson },
-    { format: 'okf', label: 'OKF (Markdown)', icon: FileText },
-  ];
+const EXPORT_ITEMS: {
+  format: DataMartCanvasExportFormat;
+  labelKey: string;
+  defaultLabel: string;
+  icon: typeof Download;
+}[] = [
+  { format: 'svg', labelKey: 'dataMartBulkActions.imageSvg', defaultLabel: 'Ảnh (SVG)', icon: ImageIcon },
+  { format: 'png', labelKey: 'dataMartBulkActions.imagePng', defaultLabel: 'Ảnh (PNG)', icon: FileImage },
+  { format: 'json', labelKey: 'dataMartBulkActions.json', defaultLabel: 'JSON', icon: FileJson },
+  { format: 'okf', labelKey: 'dataMartBulkActions.okf', defaultLabel: 'OKF (Markdown)', icon: FileText },
+];
 
 interface DataMartBulkActionsProps {
   dataMarts: DataMartBulkActionTarget[];
@@ -89,6 +94,7 @@ export function DataMartBulkActions({
   isCheckingDataLastUpdated = false,
   onExport,
 }: DataMartBulkActionsProps) {
+  const { t } = useTranslation();
   const [actionDataMarts, setActionDataMarts] = useState<DataMartBulkActionTarget[]>([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -126,15 +132,17 @@ export function DataMartBulkActions({
     }
 
     if (successCount > 0) {
-      toast.success(
-        `Successfully deleted ${String(successCount)} data mart${successCount === 1 ? '' : 's'}`
-      );
+      toast.success(t('dataMartBulkActions.deleteSuccess', 'Đã xóa {{count}} Data Mart', { count: successCount }));
     }
 
     const failedCount = actionDataMarts.length - successCount;
     if (failedCount > 0) {
       toast.error(
-        `Failed to delete ${String(failedCount)} data mart${failedCount === 1 ? '' : 's'}. Please try again.`
+        t(
+          'dataMartBulkActions.deleteFailed',
+          'Không thể xóa {{count}} Data Mart. Vui lòng thử lại.',
+          { count: failedCount }
+        )
       );
     }
 
@@ -161,7 +169,9 @@ export function DataMartBulkActions({
 
     if (successCount > 0) {
       toast.success(
-        `Successfully published ${String(successCount)} data mart${successCount === 1 ? '' : 's'}`,
+        t('dataMartBulkActions.publishSuccess', 'Đã xuất bản {{count}} Data Mart', {
+          count: successCount,
+        }),
         { duration: 10000 }
       );
     }
@@ -169,7 +179,11 @@ export function DataMartBulkActions({
     const failedCount = draftDataMarts.length - successCount;
     if (failedCount > 0) {
       toast.error(
-        `Failed to publish ${String(failedCount)} data mart${failedCount === 1 ? '' : 's'}. Please check ${failedCount === 1 ? 'it' : 'them'} independently.`,
+        t(
+          'dataMartBulkActions.publishFailed',
+          'Không thể xuất bản {{count}} Data Mart. Vui lòng kiểm tra riêng.',
+          { count: failedCount }
+        ),
         { duration: 10000 }
       );
     }
@@ -189,11 +203,17 @@ export function DataMartBulkActions({
             size='sm'
             title={
               targetScope === 'canvas'
-                ? 'Actions for all Data Marts shown by the current canvas filters'
-                : 'Bulk actions for selected data marts'
+                ? t(
+                    'dataMartBulkActions.canvasActionsTitle',
+                    'Thao tác cho toàn bộ Data Mart đang hiển thị theo bộ lọc canvas'
+                  )
+                : t(
+                    'dataMartBulkActions.selectionActionsTitle',
+                    'Thao tác hàng loạt cho Data Mart đã chọn'
+                  )
             }
           >
-            <span>Actions</span>
+            <span>{t('dataMartBulkActions.actions', 'Thao tác')}</span>
             <Badge
               variant='secondary'
               className='bg-muted text-muted-foreground rounded-full border-transparent px-1.5 py-0 text-xs'
@@ -212,7 +232,7 @@ export function DataMartBulkActions({
             }}
           >
             <CircleCheckBig aria-hidden='true' />
-            Publish
+            {t('dataMartBulkActions.publish', 'Xuất bản')}
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
@@ -222,7 +242,7 @@ export function DataMartBulkActions({
             data-testid='run-selected-data-quality'
           >
             <ShieldCheck aria-hidden='true' />
-            Check Quality
+            {t('dataMartBulkActions.checkQuality', 'Kiểm tra chất lượng')}
           </DropdownMenuItem>
           {onCheckDataLastUpdated && (
             <DropdownMenuItem
@@ -232,15 +252,21 @@ export function DataMartBulkActions({
             >
               <History aria-hidden='true' />
               {isCheckingDataLastUpdated
-                ? 'Checking Data Last Updated…'
-                : 'Check Data Last Updated'}
+                ? t(
+                    'dataMartBulkActions.checkingDataLastUpdated',
+                    'Đang kiểm tra dữ liệu cập nhật lần cuối…'
+                  )
+                : t(
+                    'dataMartBulkActions.checkDataLastUpdated',
+                    'Kiểm tra dữ liệu cập nhật lần cuối'
+                  )}
             </DropdownMenuItem>
           )}
           {onExport && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger data-testid='export-canvas' className='gap-2'>
                 <Download className='text-muted-foreground size-4 shrink-0' aria-hidden='true' />
-                Export
+                {t('dataMartBulkActions.export', 'Xuất')}
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
@@ -253,7 +279,7 @@ export function DataMartBulkActions({
                       }}
                     >
                       <item.icon aria-hidden='true' />
-                      {item.label}
+                      {t(item.labelKey, item.defaultLabel)}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuSubContent>
@@ -270,7 +296,7 @@ export function DataMartBulkActions({
             }}
           >
             <Trash2 aria-hidden='true' />
-            Delete
+            {t('common.delete', 'Delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -292,27 +318,31 @@ export function DataMartBulkActions({
       <AlertDialog open={showDeleteConfirmation} onOpenChange={setShowDeleteConfirmation}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('dataMartBulkActions.deleteConfirmTitle', 'Bạn chắc chắn muốn xóa?')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
               <span className='mt-2 block space-y-2'>
                 <span className='block'>
                   {targetScope === 'canvas'
-                    ? `You're about to delete all ${String(actionDataMarts.length)} data mart${actionDataMarts.length === 1 ? '' : 's'} shown by the current canvas filters.`
-                    : `You're about to delete ${String(actionDataMarts.length)} selected data mart${actionDataMarts.length === 1 ? '' : 's'}.`}
+                    ? t('dataMartBulkActions.deleteCanvasDescription', 'Bạn sắp xóa {{count}} Data Mart đang hiển thị theo bộ lọc canvas hiện tại.', { count: actionDataMarts.length })
+                    : t('dataMartBulkActions.deleteSelectionDescription', 'Bạn sắp xóa {{count}} Data Mart đã chọn.', { count: actionDataMarts.length })}
                 </span>
                 {actionDataMarts.some(
                   dataMart => dataMart.storageType === DataStorageType.LEGACY_GOOGLE_BIGQUERY
                 ) && (
                   <span className='text-destructive block'>
-                    Some of these Data Marts will also become unavailable in the Google Sheets
-                    extension because they use legacy BigQuery storage.
+                    {t(
+                      'dataMartBulkActions.legacyBigQueryWarning',
+                      'Một số Data Mart này cũng sẽ không còn khả dụng trong tiện ích Google Sheets vì đang dùng kho BigQuery cũ.'
+                    )}
                   </span>
                 )}
               </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 void handleBatchDelete();
@@ -320,7 +350,9 @@ export function DataMartBulkActions({
               disabled={isDeleting}
               className='bg-destructive hover:bg-destructive/90'
             >
-              {isDeleting ? 'Deleting...' : 'Delete'}
+              {isDeleting
+                ? t('dataMartBulkActions.deleting', 'Đang xóa...')
+                : t('common.delete', 'Delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -329,24 +361,39 @@ export function DataMartBulkActions({
       <AlertDialog open={showPublishConfirmation} onOpenChange={setShowPublishConfirmation}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Publish Draft Data Marts?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('dataMartBulkActions.publishConfirmTitle', 'Xuất bản Data Mart nháp?')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
               {targetScope === 'canvas'
-                ? `You're about to publish all ${String(draftDataMarts.length)} draft data mart${draftDataMarts.length === 1 ? '' : 's'} shown by the current canvas filters.`
-                : `You're about to publish ${String(draftDataMarts.length)} selected draft data mart${draftDataMarts.length === 1 ? '' : 's'}.`}
+                ? t(
+                    'dataMartBulkActions.publishCanvasDescription',
+                    'Bạn sắp xuất bản {{count}} Data Mart nháp đang hiển thị theo bộ lọc canvas hiện tại.',
+                    { count: draftDataMarts.length }
+                  )
+                : t(
+                    'dataMartBulkActions.publishSelectionDescription',
+                    'Bạn sắp xuất bản {{count}} Data Mart nháp đã chọn.',
+                    { count: draftDataMarts.length }
+                  )}
               <br />
-              Their schemas will be updated and they will become Published.
+              {t(
+                'dataMartBulkActions.publishDescription',
+                'Lược đồ sẽ được cập nhật và các Data Mart sẽ chuyển sang trạng thái Đã xuất bản.'
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPublishing}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPublishing}>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 void handleBatchPublish();
               }}
               disabled={isPublishing}
             >
-              {isPublishing ? 'Publishing...' : 'Publish'}
+              {isPublishing
+                ? t('dataMartBulkActions.publishing', 'Đang xuất bản...')
+                : t('dataMartBulkActions.publish', 'Xuất bản')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

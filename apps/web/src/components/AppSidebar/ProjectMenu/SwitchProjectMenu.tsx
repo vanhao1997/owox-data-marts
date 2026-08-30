@@ -155,7 +155,7 @@ function SwitchProjectMenuInner({
             >
               <Input
                 type='text'
-                placeholder='Search project...'
+                placeholder={t('projectMenu.searchProject', 'Search project...')}
                 value={searchQuery}
                 onChange={e => {
                   setSearchQuery(e.target.value);
@@ -187,7 +187,7 @@ function SwitchProjectMenuInner({
           <div
             id='project-list'
             role='listbox'
-            aria-label='Projects list'
+            aria-label={t('projectMenu.projectsList', 'Projects list')}
             data-testid='project-list'
             className='max-h-[400px] overflow-y-auto py-1'
           >
@@ -255,7 +255,7 @@ function SwitchProjectMenuInner({
                       {project.archived && (
                         <span className='text-muted-foreground ml-auto inline-flex items-center gap-1 text-xs'>
                           <LockKeyhole className='size-3' aria-hidden='true' />
-                          <span className='sr-only'>Read-only</span>
+                          <span className='sr-only'>{t('common.readOnly', 'Read-only')}</span>
                         </span>
                       )}
                     </NavLink>

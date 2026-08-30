@@ -21,6 +21,7 @@ import { GeneralSection } from './form/GeneralSection';
 import { RecipientsSection } from './selection/RecipientsSection';
 import { GroupingDelaySection } from './form/GroupingDelaySection';
 import { WebhookSection } from './form/WebhookSection';
+import { useTranslation } from 'react-i18next';
 
 interface EditNotificationSheetProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export function EditNotificationSheet({
   projectId,
   onSave,
 }: EditNotificationSheetProps) {
+  const { t } = useTranslation();
   const { members, isLoading: isLoadingMembers } = useProjectMembers(projectId);
   const { testWebhook, isTesting } = useTestWebhook(projectId);
 
@@ -74,18 +76,18 @@ export function EditNotificationSheet({
         webhookUrl: webhookUrl || null,
         groupingDelayCron,
       });
-      toast.success('Settings saved', {
-        description: 'Notification settings have been updated.',
+      toast.success(t('notificationsPage.settingsSaved', 'Settings saved'), {
+        description: t('notificationsPage.settingsUpdated', 'Notification settings have been updated.'),
       });
       onClose();
     } catch (error) {
-      toast.error('Error', {
-        description: error instanceof Error ? error.message : 'Failed to save settings',
+      toast.error(t('common.error', 'Error'), {
+        description: error instanceof Error ? error.message : t('notificationsPage.saveFailed', 'Failed to save settings'),
       });
     } finally {
       setIsSaving(false);
     }
-  }, [setting, enabled, selectedUserIds, webhookUrl, groupingDelayCron, onSave, onClose]);
+  }, [setting, enabled, selectedUserIds, webhookUrl, groupingDelayCron, onSave, onClose, t]);
 
   const handleWebhookUrlChange = useCallback((url: string) => {
     setWebhookUrl(url);
@@ -104,10 +106,10 @@ export function EditNotificationSheet({
       const serverMessage = (error as { response?: { data?: { message?: string } } }).response?.data
         ?.message;
       setWebhookTestError(
-        serverMessage ?? (error instanceof Error ? error.message : 'Failed to send test webhook')
+        serverMessage ?? (error instanceof Error ? error.message : t('notificationsPage.testWebhookFailed', 'Failed to send test webhook'))
       );
     }
-  }, [setting, webhookUrl, testWebhook]);
+  }, [setting, webhookUrl, testWebhook, t]);
 
   if (!setting) return null;
 
@@ -120,8 +122,8 @@ export function EditNotificationSheet({
     >
       <SheetContent data-testid='notifEditSheet'>
         <SheetHeader>
-          <SheetTitle>Edit notification</SheetTitle>
-          <SheetDescription>Update the notification settings</SheetDescription>
+          <SheetTitle>{t('notificationsPage.editTitle', 'Edit notification')}</SheetTitle>
+          <SheetDescription>{t('notificationsPage.editDescription', 'Update the notification settings')}</SheetDescription>
         </SheetHeader>
 
         <AppForm
@@ -165,10 +167,10 @@ export function EditNotificationSheet({
               {isSaving ? (
                 <>
                   <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                  Saving...
+                  {t('common.saving', 'Saving...')}
                 </>
               ) : (
-                'Save'
+                t('common.save', 'Save')
               )}
             </Button>
             <Button
@@ -178,7 +180,7 @@ export function EditNotificationSheet({
               onClick={onClose}
               disabled={isSaving}
             >
-              Cancel
+              {t('common.cancel', 'Cancel')}
             </Button>
           </FormActions>
         </AppForm>

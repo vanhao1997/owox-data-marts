@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Button } from '@owox/ui/components/button';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
 import { cn } from '@owox/ui/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 function getErrorResponse(error: unknown):
   | {
@@ -59,6 +60,7 @@ export function CancelRunButton({
   labelClassName = 'hidden sm:inline',
   isDataQuality = false,
 }: CancelRunButtonProps) {
+  const { t } = useTranslation();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
@@ -86,7 +88,7 @@ export function CancelRunButton({
       <Button
         variant={variant}
         size='sm'
-        aria-label='Cancel run'
+        aria-label={t('runHistory.cancelRun', 'Cancel run')}
         onClick={handleOpenConfirm}
         disabled={isCancelling}
         className={cn(
@@ -97,20 +99,28 @@ export function CancelRunButton({
         )}
       >
         <X className={iconClassName} />
-        <span className={labelClassName}>{isCancelling ? 'Cancelling' : 'Cancel'}</span>
+        <span className={labelClassName}>
+          {isCancelling ? t('runHistory.cancelling', 'Cancelling') : t('common.cancel', 'Cancel')}
+        </span>
       </Button>
 
       <ConfirmationDialog
         open={isConfirmOpen}
         onOpenChange={setIsConfirmOpen}
-        title='Cancel run?'
+        title={t('runHistory.cancelRunQuestion', 'Cancel run?')}
         description={
           isDataQuality
-            ? 'This stops the Data Quality run between checks. Results already completed will remain available.'
-            : 'This will request cancellation and stop the run if it is still in progress. Cancelling a run may result in incomplete data.'
+            ? t(
+                'runHistory.cancelQualityDescription',
+                'This stops the Data Quality run between checks. Results already completed will remain available.'
+              )
+            : t(
+                'runHistory.cancelDescription',
+                'This will request cancellation and stop the run if it is still in progress. Cancelling a run may result in incomplete data.'
+              )
         }
-        confirmLabel='Cancel run'
-        cancelLabel='Keep running'
+        confirmLabel={t('runHistory.cancelRun', 'Cancel run')}
+        cancelLabel={t('runHistory.keepRunning', 'Keep running')}
         confirmDisabled={isCancelling}
         onConfirm={() => {
           void handleConfirm();

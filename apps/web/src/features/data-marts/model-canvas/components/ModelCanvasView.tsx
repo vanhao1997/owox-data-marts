@@ -23,6 +23,7 @@ import { trackEvent } from '../../../../utils/data-layer';
 import { isDataQualityActivityState } from '../../shared/components/RunActivityIndicator';
 import { useDataQualitySummaries } from '../../data-quality/model/use-data-quality-workspace';
 import type { ModelCanvasData } from '../model/types';
+import { useTranslation } from 'react-i18next';
 
 const ModelCanvas = lazy(() => import('./ModelCanvas'));
 
@@ -53,6 +54,7 @@ interface ModelCanvasViewProps {
 }
 
 function ModelCanvasViewContent({ onActiveQualityRunChange }: ModelCanvasViewProps) {
+  const { t } = useTranslation();
   const { dataStorages, loading: loadingStorages, fetchDataStorages } = useDataStorage();
   const [storageLoadError, setStorageLoadError] = useState<unknown>(null);
   const [storageLoadPending, setStorageLoadPending] = useState(true);
@@ -303,34 +305,36 @@ function ModelCanvasViewContent({ onActiveQualityRunChange }: ModelCanvasViewPro
       {storageLoadError ? (
         <CanvasMessage role='alert'>
           <div className='flex flex-col items-center gap-3'>
-            <span>{extractErrorMessage(storageLoadError) ?? 'Failed to load storages'}</span>
+            <span>
+              {extractErrorMessage(storageLoadError) ?? t('modelCanvasPage.failedToLoadStorages')}
+            </span>
             <Button
               type='button'
               size='sm'
               variant='outline'
-              aria-label='Retry loading storages'
+              aria-label={t('modelCanvasPage.retryLoadingStorages')}
               onClick={() => {
                 void loadDataStorages();
               }}
             >
-              Retry
+              {t('modelCanvasPage.retryLoadingStorages')}
             </Button>
           </div>
         </CanvasMessage>
       ) : loadingStorages || storageLoadPending || isLoading ? (
         <SkeletonList />
       ) : dataStorages.length === 0 ? (
-        <CanvasMessage>No storages available</CanvasMessage>
+        <CanvasMessage>{t('modelCanvasPage.noStoragesAvailable')}</CanvasMessage>
       ) : !filters.storageId || !storageKnown ? (
-        <CanvasMessage>Select a storage to view its data model</CanvasMessage>
+        <CanvasMessage>{t('modelCanvasPage.selectStorageToView')}</CanvasMessage>
       ) : error ? (
         <CanvasMessage role='alert'>
-          {extractErrorMessage(error) ?? 'Failed to load the data model'}
+          {extractErrorMessage(error) ?? t('modelCanvasPage.failedToLoadModel')}
         </CanvasMessage>
       ) : !topology || topology.nodes.length === 0 ? (
-        <CanvasMessage>No data marts in this storage</CanvasMessage>
+        <CanvasMessage>{t('modelCanvasPage.noDataMartsInStorage')}</CanvasMessage>
       ) : !filteredTopology || filteredTopology.nodes.length === 0 ? (
-        <CanvasMessage>No data marts match the current filters</CanvasMessage>
+        <CanvasMessage>{t('modelCanvasPage.noDataMartsMatchFilters')}</CanvasMessage>
       ) : !filtered ? (
         <SkeletonList />
       ) : (

@@ -28,6 +28,7 @@ import { DataMartRunType } from '../../../shared';
 import { DataQualityRunHistoryDetails } from './DataQualityRunHistoryDetails';
 import { canCancelDataMartRun } from './cancellable-runs';
 import { CancelRunButton } from './CancelRunButton';
+import { useTranslation } from 'react-i18next';
 
 interface RunItemProps {
   run: DataMartRunItem;
@@ -60,6 +61,7 @@ export function RunItem({
   dataMartConnectorInfo,
   dataMartRef,
 }: RunItemProps) {
+  const { t } = useTranslation();
   const { copiedSection, handleCopy } = useClipboard();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const isDataQualityRun = run.type === DataMartRunType.DATA_QUALITY;
@@ -126,9 +128,9 @@ export function RunItem({
       </TooltipTrigger>
       <TooltipContent>
         <div className='space-y-1'>
-          <div>Started At: {tooltipContent.startedAt}</div>
-          <div>Finished At: {tooltipContent.finishedAt}</div>
-          {tooltipContent.duration && <div>Duration: {tooltipContent.duration}</div>}
+          <div>{t('runHistory.startedAt', 'Started at')}: {tooltipContent.startedAt}</div>
+          <div>{t('runHistory.finishedAt', 'Finished at')}: {tooltipContent.finishedAt}</div>
+          {tooltipContent.duration && <div>{t('runHistory.duration', 'Duration')}: {tooltipContent.duration}</div>}
         </div>
       </TooltipContent>
     </Tooltip>
@@ -182,7 +184,7 @@ export function RunItem({
                 <span className='truncate'>{dataMartRef.title}</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent>Open Data Mart</TooltipContent>
+            <TooltipContent>{t('runHistory.openDataMart', 'Open Data Mart')}</TooltipContent>
           </Tooltip>
         </div>
       )}
@@ -214,7 +216,7 @@ export function RunItem({
           data-testid='runLogView'
         >
           <div className='flex items-center'>
-            <h3 className='text-foreground mr-2 font-medium'>Run ID: {run.id}</h3>
+            <h3 className='text-foreground mr-2 font-medium'>{t('runHistory.runId', 'Run ID')}: {run.id}</h3>
             <CopyButton
               text={run.id}
               section='run-id'
@@ -249,13 +251,13 @@ export function RunItem({
                 <section className='space-y-3' aria-labelledby={`run-diagnostics-${run.id}`}>
                   <div className='flex items-center justify-between gap-3'>
                     <h3 id={`run-diagnostics-${run.id}`} className='font-medium'>
-                      Run diagnostics
+                      {t('runHistory.diagnostics', 'Run diagnostics')}
                     </h3>
                     <Button
                       type='button'
                       variant='outline'
                       size='sm'
-                      aria-label='Download diagnostics JSON'
+                      aria-label={t('runHistory.downloadDiagnostics', 'Download diagnostics JSON')}
                       onClick={event => {
                         event.stopPropagation();
                         downloadLogs(run);

@@ -6,6 +6,7 @@ import type { NotificationSettingsItem } from '../../types';
 import { SortableHeader } from '../../../../../shared/components/Table/SortableHeader';
 import { ToggleColumnsHeader } from '../../../../../shared/components/Table/ToggleColumnsHeader';
 import { NotificationSettingsActionsCell } from './NotificationSettingsActionsCell';
+import type { TFunction } from 'i18next';
 
 export enum NotificationSettingsColumnKey {
   TITLE = 'title',
@@ -33,12 +34,21 @@ function getGroupingDelayLabel(cronExpression: string): string {
 interface GetNotificationSettingsColumnsOptions {
   onToggleEnabled: (setting: NotificationSettingsItem, enabled: boolean) => void | Promise<void>;
   onEdit: (setting: NotificationSettingsItem) => void;
+  t: TFunction;
 }
 
 export function getNotificationSettingsColumns({
   onToggleEnabled,
   onEdit,
+  t,
 }: GetNotificationSettingsColumnsOptions): ColumnDef<NotificationSettingsItem>[] {
+  const labels = {
+    [NotificationSettingsColumnKey.TITLE]: t('common.title'),
+    [NotificationSettingsColumnKey.RECEIVERS]: t('notificationsPage.recipients'),
+    [NotificationSettingsColumnKey.WEBHOOK_URL]: 'Webhook URL',
+    [NotificationSettingsColumnKey.GROUPING_DELAY]: t('notificationsPage.groupingDelay'),
+    [NotificationSettingsColumnKey.ENABLED]: t('common.status'),
+  };
   return [
     {
       id: NotificationSettingsColumnKey.TITLE,
@@ -46,11 +56,11 @@ export function getNotificationSettingsColumns({
       size: 300,
       minSize: 150,
       meta: {
-        title: notificationSettingsColumnLabels[NotificationSettingsColumnKey.TITLE],
+        title: labels[NotificationSettingsColumnKey.TITLE],
       },
       header: ({ column }) => (
         <SortableHeader column={column}>
-          {notificationSettingsColumnLabels[NotificationSettingsColumnKey.TITLE]}
+          {labels[NotificationSettingsColumnKey.TITLE]}
         </SortableHeader>
       ),
       cell: ({ row }) => <span className='font-medium'>{row.original.title}</span>,
@@ -60,11 +70,11 @@ export function getNotificationSettingsColumns({
       accessorKey: 'receivers',
       size: 160,
       meta: {
-        title: notificationSettingsColumnLabels[NotificationSettingsColumnKey.RECEIVERS],
+        title: labels[NotificationSettingsColumnKey.RECEIVERS],
       },
       header: ({ column }) => (
         <SortableHeader column={column}>
-          {notificationSettingsColumnLabels[NotificationSettingsColumnKey.RECEIVERS]}
+          {labels[NotificationSettingsColumnKey.RECEIVERS]}
         </SortableHeader>
       ),
       cell: ({ row }) => <ReceiversAvatarGroup receivers={row.original.receivers} />,
@@ -74,11 +84,11 @@ export function getNotificationSettingsColumns({
       accessorKey: 'webhookUrl',
       size: 220,
       meta: {
-        title: notificationSettingsColumnLabels[NotificationSettingsColumnKey.WEBHOOK_URL],
+        title: labels[NotificationSettingsColumnKey.WEBHOOK_URL],
       },
       header: ({ column }) => (
         <SortableHeader column={column}>
-          {notificationSettingsColumnLabels[NotificationSettingsColumnKey.WEBHOOK_URL]}
+          {labels[NotificationSettingsColumnKey.WEBHOOK_URL]}
         </SortableHeader>
       ),
       cell: ({ row }) =>
@@ -95,11 +105,11 @@ export function getNotificationSettingsColumns({
       accessorKey: 'groupingDelayCron',
       size: 140,
       meta: {
-        title: notificationSettingsColumnLabels[NotificationSettingsColumnKey.GROUPING_DELAY],
+        title: labels[NotificationSettingsColumnKey.GROUPING_DELAY],
       },
       header: ({ column }) => (
         <SortableHeader column={column}>
-          {notificationSettingsColumnLabels[NotificationSettingsColumnKey.GROUPING_DELAY]}
+          {labels[NotificationSettingsColumnKey.GROUPING_DELAY]}
         </SortableHeader>
       ),
       cell: ({ row }) => (
@@ -113,11 +123,11 @@ export function getNotificationSettingsColumns({
       accessorKey: 'enabled',
       size: 80,
       meta: {
-        title: notificationSettingsColumnLabels[NotificationSettingsColumnKey.ENABLED],
+        title: labels[NotificationSettingsColumnKey.ENABLED],
       },
       header: ({ column }) => (
         <SortableHeader column={column}>
-          {notificationSettingsColumnLabels[NotificationSettingsColumnKey.ENABLED]}
+          {labels[NotificationSettingsColumnKey.ENABLED]}
         </SortableHeader>
       ),
       cell: ({ row }) => (

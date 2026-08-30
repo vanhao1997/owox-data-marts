@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { SkeletonText } from '@owox/ui/components/common/skeleton-text';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 
 function readThemeColors(): { bg: string; fg: string } {
   if (typeof window === 'undefined') return { bg: '#fff', fg: '#000' };
@@ -25,9 +26,13 @@ export function MarkdownEditorPreview({
   error = null,
   height = 240,
   className,
-  emptyState = <div className='text-muted-foreground text-sm'>Nothing to preview</div>,
+  emptyState,
 }: MarkdownEditorPreviewProps) {
+  const { t } = useTranslation();
   const { resolvedTheme } = useTheme();
+  const resolvedEmptyState = emptyState ?? (
+    <div className='text-muted-foreground text-sm'>{t('markdownEditor.nothingToPreview', 'Nothing to preview')}</div>
+  );
   const [colors, setColors] = useState(() => readThemeColors());
 
   useEffect(() => {
@@ -45,12 +50,12 @@ export function MarkdownEditorPreview({
       style={{ height }}
     >
       {loading && <SkeletonText />}
-      {!loading && error && <div className='text-destructive text-sm'>Error: {error}</div>}
-      {!loading && !error && !html && emptyState}
+      {!loading && error && <div className='text-destructive text-sm'>{t('common.error', 'Error')}: {error}</div>}
+      {!loading && !error && !html && resolvedEmptyState}
       {!loading && !error && !!html && (
         <iframe
           key={`${String(resolvedTheme)}-${colors.bg}-${colors.fg}`}
-          title='Markdown preview'
+          title={t('markdownEditor.preview', 'Markdown preview')}
           sandbox='allow-popups allow-popups-to-escape-sandbox'
           srcDoc={`<!doctype html>
             <html lang='en' style="background:${colors.bg};color:${colors.fg}">

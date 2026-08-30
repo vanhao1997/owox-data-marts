@@ -4,6 +4,7 @@ import type { ColumnDef, Row, Table } from '@tanstack/react-table';
 import { EyeOff, Sigma } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { SortingStrategy } from '@dnd-kit/sortable';
 import type { BaseSchemaField } from '../../../../shared/types/data-mart-schema.types';
 import { DataMartSchemaFieldStatus } from '../../../../shared/types/data-mart-schema.types';
@@ -175,6 +176,7 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
   schemaFields,
   onSaveCalculatedField,
 }: BaseSchemaTableProps<T>) {
+  const { t } = useTranslation();
   // Handler to update a field
   const updateField = useCallback(
     (index: number, updatedField: Partial<T>) => {
@@ -320,8 +322,8 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
           nameColumnHeader ??
           (() => (
             <Tooltip>
-              <TooltipTrigger className='cursor-default'>Name</TooltipTrigger>
-              <TooltipContent>Field name in the output schema</TooltipContent>
+              <TooltipTrigger className='cursor-default'>{t('schemaUi.name')}</TooltipTrigger>
+              <TooltipContent>{t('schemaUi.fieldNameOutput')}</TooltipContent>
             </Tooltip>
           )),
         size: 80,
@@ -335,7 +337,7 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
               onValueChange={value => {
                 updateField(row.index, { name: value } as Partial<T>);
               }}
-              placeholder={'Field name is required'}
+              placeholder={t('schemaUi.fieldNameRequired')}
               isBold={true}
               trailingContent={
                 row.original.isHiddenForReporting ? (
@@ -343,7 +345,7 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
                     <TooltipTrigger asChild>
                       <EyeOff className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
                     </TooltipTrigger>
-                    <TooltipContent>Hidden from reports</TooltipContent>
+                    <TooltipContent>{t('schemaUi.hiddenFromReports')}</TooltipContent>
                   </Tooltip>
                 ) : undefined
               }
@@ -392,7 +394,7 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
               aria-label='Available aggregations'
             >
               <Sigma className='h-3.5 w-3.5' />
-              available
+                    {t('schemaUi.available')}
             </TooltipTrigger>
             <TooltipContent>
               Available aggregations — functions a report may apply to this field. Defaults by type;
@@ -420,7 +422,9 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
               onChange={next => {
                 updateField(row.index, { allowedAggregations: next } as Partial<T>);
               }}
-              ariaLabel={`Aggregations for ${asString(row.getValue('name'))}`}
+              ariaLabel={t('schemaUi.availableAggregationsFor', 'Aggregations for {{name}}', {
+                name: asString(row.getValue('name')),
+              })}
             />
           );
         },
@@ -430,9 +434,9 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
         header: () => (
           <div className='group flex items-center gap-1'>
             <Tooltip>
-              <TooltipTrigger className='cursor-default'>Alias</TooltipTrigger>
+              <TooltipTrigger className='cursor-default'>{t('schemaUi.alias')}</TooltipTrigger>
 
-              <TooltipContent>Alternative name for the field</TooltipContent>
+              <TooltipContent>{t('schemaUi.alternativeName')}</TooltipContent>
             </Tooltip>
             {schemaToolbar.showAiHelper && (
               <div
@@ -475,9 +479,9 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
         header: () => (
           <div className='group flex items-center gap-1'>
             <Tooltip>
-              <TooltipTrigger className='cursor-default'>Description</TooltipTrigger>
+              <TooltipTrigger className='cursor-default'>{t('common.description')}</TooltipTrigger>
 
-              <TooltipContent>Detailed information about the field</TooltipContent>
+              <TooltipContent>{t('schemaUi.descriptionHelp')}</TooltipContent>
             </Tooltip>
             {schemaToolbar.showAiHelper && (
               <div
@@ -563,6 +567,7 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
       schemaToolbar.ai.loading.descriptions,
       schemaToolbar.ai.onGenerateAliases,
       schemaToolbar.ai.onGenerateDescriptions,
+      t,
     ]
   );
 
@@ -573,8 +578,8 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
       accessorKey: 'type',
       header: () => (
         <Tooltip>
-          <TooltipTrigger className='cursor-default pl-[12px]'>Type</TooltipTrigger>
-          <TooltipContent>Data type of the field</TooltipContent>
+          <TooltipTrigger className='cursor-default pl-[12px]'>{t('schemaUi.type')}</TooltipTrigger>
+          <TooltipContent>{t('schemaUi.dataType')}</TooltipContent>
         </Tooltip>
       ),
       size: 80,
@@ -645,7 +650,7 @@ export function BaseSchemaTable<T extends BaseSchemaField>({
       columns: result,
       formulaSpan: band.length > 0 ? ({ bandFor: bandForRow } satisfies RowCellSpan<T>) : undefined,
     };
-  }, [baseColumns, renderTypeCell, updateField, additionalColumns, renderFormulaCell]);
+  }, [baseColumns, renderTypeCell, updateField, additionalColumns, renderFormulaCell, t]);
 
   return (
     <SchemaTable

@@ -1,8 +1,7 @@
 import { CircleCheck, CircleDashed, TriangleAlert } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   DataStorageHealthStatus,
-  OAUTH_REAUTH_REQUIRED_STATUS_LABEL,
-  UNCONFIGURED_STATUS_LABEL,
 } from '../../services/data-storage-health-status.service';
 
 interface Props {
@@ -12,11 +11,12 @@ interface Props {
 }
 
 export function DataStorageHealthStatusView({ status, errorMessage, isLoading }: Props) {
+  const { t } = useTranslation();
   if (isLoading) {
     return (
       <div className='text-muted-foreground flex animate-pulse items-center gap-2 text-sm'>
         <CircleDashed className='size-4' />
-        <span>Validating storage access...</span>
+        <span>{t('storageHealth.validating')}</span>
       </div>
     );
   }
@@ -25,7 +25,7 @@ export function DataStorageHealthStatusView({ status, errorMessage, isLoading }:
     return (
       <div className='flex items-center gap-2 text-sm text-green-500'>
         <CircleCheck className='size-4' />
-        <span>Storage access validated</span>
+        <span>{t('storageHealth.valid')}</span>
       </div>
     );
   }
@@ -34,7 +34,7 @@ export function DataStorageHealthStatusView({ status, errorMessage, isLoading }:
     return (
       <div className='text-muted-foreground flex items-center gap-2 text-sm'>
         <CircleDashed className='size-4' />
-        <span>{UNCONFIGURED_STATUS_LABEL}</span>
+        <span>{t('storageHealth.unconfigured')}</span>
       </div>
     );
   }
@@ -43,7 +43,7 @@ export function DataStorageHealthStatusView({ status, errorMessage, isLoading }:
     return (
       <div className='flex items-center gap-2 text-sm text-red-500'>
         <TriangleAlert className='size-4' />
-        <span>{errorMessage ?? OAUTH_REAUTH_REQUIRED_STATUS_LABEL}</span>
+        <span>{errorMessage ?? t('storageHealth.reauthRequired')}</span>
       </div>
     );
   }
@@ -51,7 +51,7 @@ export function DataStorageHealthStatusView({ status, errorMessage, isLoading }:
   return (
     <div className='flex items-center gap-2 text-sm text-red-500'>
       <TriangleAlert className='size-4' />
-      <span>{errorMessage ?? 'Access validation failed'}</span>
+      <span>{errorMessage ?? t('storageHealth.invalid')}</span>
     </div>
   );
 }

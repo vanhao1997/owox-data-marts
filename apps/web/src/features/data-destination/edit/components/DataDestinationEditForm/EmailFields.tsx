@@ -9,13 +9,13 @@ import {
 import { Textarea } from '@owox/ui/components/textarea';
 import { type UseFormReturn, type Path, type FieldPathValue } from 'react-hook-form';
 import { type ReactNode, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { type DataDestinationFormData } from '../../../shared';
 
 const EMAILS_FIELD_PATH = 'credentials.to' as Path<DataDestinationFormData>;
 const EMAIL_SEPARATOR_REGEX = /[,;\n]/; // comma, semicolon, or newline
 const EMAILS_JOIN_SEPARATOR = ', ';
-const EMAILS_PLACEHOLDER_TEXT = 'Enter emails separated by comma, semicolon or newline';
-const DEFAULT_EMAILS_FIELD_TITLE = 'Emails list';
+const EMAILS_PLACEHOLDER_FALLBACK = 'Enter emails separated by comma, semicolon or newline';
 
 function parseEmails(raw: string): string[] {
   const seen = new Set<string>();
@@ -46,6 +46,7 @@ function updateEmailsValue(form: UseFormReturn<DataDestinationFormData>, emails:
 function EmailTextarea({
   field,
   form,
+  placeholder,
 }: {
   field: {
     name: string;
@@ -55,6 +56,7 @@ function EmailTextarea({
     onBlur: () => void;
   };
   form: UseFormReturn<DataDestinationFormData>;
+  placeholder: string;
 }) {
   // Initialize local value from form value
   const initialString = Array.isArray(field.value) ? formatEmails(field.value as string[]) : '';
@@ -98,20 +100,23 @@ function EmailTextarea({
       onChange={handleChange}
       className='min-h-[150px] font-mono'
       rows={8}
-      placeholder={EMAILS_PLACEHOLDER_TEXT}
+      placeholder={placeholder}
     />
   );
 }
 
 export function EmailFields({
   form,
-  emailsFieldTitle = DEFAULT_EMAILS_FIELD_TITLE, // default param instead of nullish coalescing
+  emailsFieldTitle,
   description,
 }: {
   form: UseFormReturn<DataDestinationFormData>;
   emailsFieldTitle?: string;
   description?: ReactNode;
 }) {
+  const { t } = useTranslation();
+  const placeholder = t('destinationForm.emailPlaceholder', EMAILS_PLACEHOLDER_FALLBACK);
+
   return (
     <FormField
       control={form.control}
@@ -119,10 +124,12 @@ export function EmailFields({
       render={({ field }) => (
         <FormItem>
           <div className='flex items-center justify-between'>
-            <FormLabel tooltip={EMAILS_PLACEHOLDER_TEXT}>{emailsFieldTitle}</FormLabel>
+          <FormLabel tooltip={placeholder}>
+            {emailsFieldTitle ?? t('destinationForm.emailList', 'Emails list')}
+          </FormLabel>
           </div>
           <FormControl>
-            <EmailTextarea field={field} form={form} />
+            <EmailTextarea field={field} form={form} placeholder={placeholder} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

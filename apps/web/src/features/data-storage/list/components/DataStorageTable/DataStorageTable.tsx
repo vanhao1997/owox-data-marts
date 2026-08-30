@@ -20,6 +20,7 @@ import {
 import { DataStorageTableFilters } from './DataStorageTableFilters';
 import { useParams } from 'react-router';
 import { InviteTeammatesCard } from '../../../../../shared/components/InviteTeammatesCard';
+import { useTranslation } from 'react-i18next';
 
 interface DataStorageTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,14 +37,15 @@ export function DataStorageTable<TData, TValue>({
   onEdit,
   onOpenTypeDialog,
 }: DataStorageTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedDataStorage] = useState<DataStorageTableItem | null>(null);
   const { projectId = '' } = useParams<{ projectId: string }>();
   const tableId = 'data-storage-table';
 
   const filtersConfig = useMemo(
-    () => buildDataStorageTableFilters(data as DataStorageTableItem[]),
-    [data]
+    () => buildDataStorageTableFilters(data as DataStorageTableItem[], t),
+    [data, t]
   );
 
   const { appliedState, apply, clear } = usePersistentFilters<DataStorageFilterKey>({
@@ -93,8 +95,8 @@ export function DataStorageTable<TData, TValue>({
           <EmptyDataStoragesState onOpenTypeDialog={onOpenTypeDialog} />
         </div>
         <InviteTeammatesCard
-          hint='— Not sure which storage to connect? Ask someone with access to help you'
-          docsLabel='Learn more about Storages'
+          hint={t('storagesPage.inviteHint')}
+          docsLabel={t('storagesPage.learnMore')}
           docsHref='https://docs.p2pdigital.vn/docs/storages/manage-storages/'
         />
       </div>
@@ -116,7 +118,7 @@ export function DataStorageTable<TData, TValue>({
         tableId={tableId}
         table={table}
         onRowClick={handleRowClick}
-        ariaLabel='Storages table'
+        ariaLabel={t('storagesPage.tableAriaLabel', 'Storages table')}
         paginationProps={{ displaySelected: false }}
         renderToolbarLeft={() => (
           <>
@@ -129,12 +131,12 @@ export function DataStorageTable<TData, TValue>({
             <TableColumnSearch
               table={table}
               columnId={DataStorageColumnKey.TITLE}
-              placeholder='Search'
+              placeholder={t('search.button')}
             />
           </>
         )}
         renderToolbarRight={() => (
-          <TableCTAButton onClick={onOpenTypeDialog}>New Storage</TableCTAButton>
+          <TableCTAButton onClick={onOpenTypeDialog}>{t('storagesPage.newStorage')}</TableCTAButton>
         )}
       />
     </div>

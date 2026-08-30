@@ -5,35 +5,36 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 export default function GoogleChatWebhookDescription() {
+  const { t } = useTranslation();
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='google-chat-webhook-details'>
-        <AccordionTrigger>How do I get an incoming webhook URL?</AccordionTrigger>
+        <AccordionTrigger>{t('googleChat.webhookDescription.title', 'How do I get an incoming webhook URL?')}</AccordionTrigger>
         <AccordionContent>
           <ol className='list-inside list-decimal space-y-2 text-sm'>
-            <li>Open the target space in Google Chat on a computer.</li>
+            <li>{t('googleChat.webhookDescription.openSpace', 'Open the target space in Google Chat on a computer.')}</li>
             <li>
-              Click the space name, then select <strong>Apps &amp; integrations</strong>.
+              {t('googleChat.webhookDescription.appsIntegrations', 'Click the space name, then select Apps & integrations.')}
             </li>
             <li>
-              Click <strong>Add webhooks</strong>, enter a name, and save the webhook.
+              {t('googleChat.webhookDescription.addWebhooks', 'Click Add webhooks, enter a name, and save the webhook.')}
             </li>
             <li>
-              Open the webhook's menu, select <strong>Copy link</strong>, and paste the URL above.
+              {t('googleChat.webhookDescription.copyLink', "Open the webhook's menu, select Copy link, and paste the URL above.")}
             </li>
           </ol>
           <p className='mt-2 text-sm'>
-            If you cannot add a webhook, your Google Workspace administrator might have disabled
-            this option. Keep the webhook URL secret.
+            {t('googleChat.webhookDescription.warning', 'If you cannot add a webhook, your Google Workspace administrator might have disabled this option. Keep the webhook URL secret.')}
           </p>
           <p className='mt-2 text-sm'>
-            See the{' '}
+            {t('googleChat.webhookDescription.seeGuide', 'See the')} {' '}
             <ExternalAnchor href='https://developers.google.com/workspace/chat/quickstart/webhooks'>
-              Google Chat webhook guide
+              {t('googleChat.webhookDescription.guide', 'Google Chat webhook guide')}
             </ExternalAnchor>{' '}
-            for more details.
+            {t('googleChat.webhookDescription.forDetails', 'for more details.')}
           </p>
         </AccordionContent>
       </AccordionItem>

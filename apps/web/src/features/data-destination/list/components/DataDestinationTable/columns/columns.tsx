@@ -4,7 +4,11 @@ import { DataDestinationType } from '../../../../shared';
 import { DataDestinationActionsCell } from '../DataDestinationActionsCell';
 import { SortableHeader, ToggleColumnsHeader } from '../../../../../../shared/components/Table';
 import { DataDestinationColumnKey } from './columnKeys';
-import { dataDestinationColumnLabels } from './columnLabels';
+import {
+  dataDestinationColumnLabels as defaultDataDestinationColumnLabels,
+  getDataDestinationColumnLabels,
+} from './columnLabels';
+import type { TFunction } from 'i18next';
 import { type UserProjection } from '../../../../../../shared/types';
 import { UserReference } from '../../../../../../shared/components/UserReference';
 import { UserAvatarGroup } from '../../../../../../shared/components/UserAvatarGroup/UserAvatarGroup';
@@ -28,13 +32,19 @@ interface DataDestinationColumnsProps {
   onEdit?: (id: string) => Promise<void>;
   onDelete?: (id: string) => void;
   onRotateSecretKey?: (id: string) => void;
+  t?: TFunction;
 }
 
 export const getDataDestinationColumns = ({
   onEdit,
   onDelete,
   onRotateSecretKey,
-}: DataDestinationColumnsProps = {}): ColumnDef<DataDestinationTableItem>[] => [
+  t,
+}: DataDestinationColumnsProps = {}): ColumnDef<DataDestinationTableItem>[] => {
+  const dataDestinationColumnLabels = t
+    ? getDataDestinationColumnLabels(t)
+    : defaultDataDestinationColumnLabels;
+  return [
   {
     accessorKey: DataDestinationColumnKey.TITLE,
     meta: {
@@ -133,7 +143,11 @@ export const getDataDestinationColumns = ({
     cell: ({ row }) => {
       const users = row.original.ownerUsers ?? [];
       if (users.length === 0)
-        return <span className='text-muted-foreground text-sm'>Not assigned</span>;
+        return (
+          <span className='text-muted-foreground text-sm'>
+            {t?.('common.notAssigned', 'Not assigned') ?? 'Not assigned'}
+          </span>
+        );
       if (users.length === 1) return <UserReference userProjection={users[0]} />;
       return <UserAvatarGroup users={users} />;
     },
@@ -170,4 +184,5 @@ export const getDataDestinationColumns = ({
       />
     ),
   },
-];
+  ];
+};

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@owox/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import {
@@ -9,7 +10,6 @@ import {
 } from '@owox/ui/components/dropdown-menu';
 import { MoreHorizontal, Trash2 } from 'lucide-react';
 import { useInsightsPermissions } from '../../hooks/useInsightsPermissions';
-import { NO_PERMISSION_MESSAGE } from '../../../../../app/permissions';
 
 interface ActionsCellProps {
   id: string;
@@ -17,6 +17,7 @@ interface ActionsCellProps {
 }
 
 export function InsightActionsCell({ id, onDelete }: ActionsCellProps) {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { canDelete } = useInsightsPermissions();
 
@@ -34,7 +35,7 @@ export function InsightActionsCell({ id, onDelete }: ActionsCellProps) {
             className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${
               isMenuOpen ? 'opacity-100' : 'group-hover:opacity-100'
             }`}
-            aria-label='Open menu'
+            aria-label={t('common.openMenu', 'Open menu')}
           >
             <MoreHorizontal className='dm-card-table-body-row-actionbtn-icon' />
           </Button>
@@ -50,11 +51,11 @@ export function InsightActionsCell({ id, onDelete }: ActionsCellProps) {
                   disabled={!canDelete}
                 >
                   <Trash2 className='h-4 w-4 text-red-600' />
-                  <span className='text-red-600'>Delete insight</span>
+                  <span className='text-red-600'>{t('insightsUi.deleteInsight', 'Delete insight')}</span>
                 </DropdownMenuItem>
               </div>
             </TooltipTrigger>
-            {!canDelete && <TooltipContent side='left'>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+            {!canDelete && <TooltipContent side='left'>{t('common.noPermission')}</TooltipContent>}
           </Tooltip>
         </DropdownMenuContent>
       </DropdownMenu>

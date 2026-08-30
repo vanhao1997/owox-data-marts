@@ -13,10 +13,12 @@ import type { ConnectorListItem } from '../../../features/connectors/shared/mode
 import { getConnectorInfoByName } from '../../../features/connectors/shared/utils';
 import { useProjectRoute } from '../../../shared/hooks';
 import { ProjectDataMartEmptyState } from '../shared/ProjectDataMartEmptyState';
+import { useTranslation } from 'react-i18next';
 
 const PROJECT_RUNS_PAGE_SIZE = 50;
 
 export default function DataMartRunsPage() {
+  const { t } = useTranslation();
   const { scope } = useProjectRoute();
   const [runs, setRuns] = useState<ProjectDataMartRunItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -158,7 +160,7 @@ export default function DataMartRunsPage() {
   return (
     <div className='dm-page' data-testid='dataMartRunsPage'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>Run History</h1>
+        <h1 className='dm-page-header-title'>{t('projectDataMartPages.runsTitle')}</h1>
       </header>
 
       <div className='dm-page-content'>
@@ -205,10 +207,10 @@ export default function DataMartRunsPage() {
                   {isLoadingMore ? (
                     <>
                       <RefreshCw className='h-4 w-4 animate-spin' />
-                      Loading...
+                      {t('projectDataMartPages.loadingMore')}
                     </>
                   ) : (
-                    'Load More'
+                    t('projectDataMartPages.loadMore')
                   )}
                 </Button>
               </div>

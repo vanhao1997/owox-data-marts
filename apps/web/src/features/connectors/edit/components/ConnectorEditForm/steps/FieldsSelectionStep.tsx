@@ -1,6 +1,7 @@
 import type { ConnectorFieldsResponseApiDto } from '../../../../shared/api/types/response';
 import { Search, KeyRound, ArrowDownZA, ArrowUpAZ, ArrowUpDown, Info, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   AppWizardStepSection,
   AppWizardStep,
@@ -43,9 +44,17 @@ export function FieldsSelectionStep({
   onFieldToggle,
   onSelectAllFields,
   itemLabel = 'fields',
-  searchPlaceholder = 'Search field',
+  searchPlaceholder,
   autoSelectDefaultFields = true,
 }: FieldsSelectionStepProps) {
+  const { t } = useTranslation();
+  const resolvedSearchPlaceholder = searchPlaceholder ?? t('connectorWizard.searchField');
+  const resolvedItemLabel =
+    itemLabel === 'fields'
+      ? t('connectorWizard.fields')
+      : itemLabel === 'columns'
+        ? t('connectorWizard.columns')
+        : itemLabel;
   const filterInputRef = useRef<HTMLInputElement>(null);
   const prevSelectedFieldRef = useRef<string | null>(null);
   const [filterText, setFilterText] = useState('');
@@ -180,10 +189,10 @@ export function FieldsSelectionStep({
         <StepperHeroBlock connector={connector} />
         <AppWizardStepHero
           icon={<Unplug size={56} strokeWidth={1} />}
-          title='No fields found'
-          subtitle='This connector might not be fully implemented yet or there could be other issues.'
+          title={t('connectorWizard.noFields')}
+          subtitle={t('connectorWizard.connectorIncomplete')}
         />
-        <OpenIssueLink label='Need fields?' />
+        <OpenIssueLink label={t('connectorWizard.needFields')} />
       </AppWizardStep>
     );
   }
@@ -194,10 +203,10 @@ export function FieldsSelectionStep({
         <StepperHeroBlock connector={connector} />
         <AppWizardStepHero
           icon={<Unplug size={56} strokeWidth={1} />}
-          title='No fields found'
-          subtitle='This connector might not be fully implemented yet or there could be other issues.'
+          title={t('connectorWizard.noFields')}
+          subtitle={t('connectorWizard.connectorIncomplete')}
         />
-        <OpenIssueLink label='Need fields?' />
+        <OpenIssueLink label={t('connectorWizard.needFields')} />
       </AppWizardStep>
     );
   }
@@ -218,7 +227,7 @@ export function FieldsSelectionStep({
             <input
               ref={filterInputRef}
               type='text'
-              placeholder={searchPlaceholder}
+              placeholder={resolvedSearchPlaceholder}
               value={filterText}
               onChange={e => {
                 setFilterText(e.target.value);
@@ -239,7 +248,7 @@ export function FieldsSelectionStep({
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' size='icon' aria-label='Sort fields'>
+              <Button variant='ghost' size='icon' aria-label={t('connectorWizard.sortFields')}>
                 {sortOrder === ConnectorFieldSortOrder.ASC && (
                   <ArrowUpAZ className='text-muted-foreground h-4 w-4' />
                 )}
@@ -274,7 +283,7 @@ export function FieldsSelectionStep({
                 }}
               >
                 <ArrowUpDown className='text-muted-foreground mr-2 h-4 w-4' />
-                Original
+                {t('connectorWizard.original')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -282,22 +291,27 @@ export function FieldsSelectionStep({
         {/* end: Search & Sorting */}
 
         <AppWizardStepSection
-          title={`Selected ${String(selectedTotalCount)} of ${String(availableFieldNames.length)} ${itemLabel} for "${selectedField}" data`}
+          title={t('connectorWizard.selectedFields', {
+            selected: selectedTotalCount,
+            total: availableFieldNames.length,
+            itemLabel: resolvedItemLabel,
+            field: selectedField,
+          })}
         >
           {showDataLevelFieldsTip && (
             <div className='border-border bg-muted/30 text-muted-foreground flex gap-3 rounded-md border px-3 py-2 text-sm'>
               <Info className='mt-0.5 h-4 w-4 shrink-0' aria-hidden='true' />
               <div className='space-y-1'>
                 <p>
-                  Required fields depend on Data Level. Current Data Level:{' '}
+                  {t('connectorWizard.dataLevelRequired')}{' '}
                   <span className='text-foreground font-medium'>{selectedDataLevel}</span>.
                 </p>
                 <p>
-                  P2PDigital keeps{' '}
-                  <span className='text-foreground font-medium'>{uniqueKeys.join(', ')}</span>{' '}
-                  selected so rows merge correctly.
+                  {t('connectorWizard.keepsSelected', {
+                    fields: uniqueKeys.join(', '),
+                  })}
                 </p>
-                <p>If needed, change Data Level in connector settings before selecting fields.</p>
+                <p>{t('connectorWizard.changeDataLevel')}</p>
               </div>
             </div>
           )}
@@ -323,16 +337,18 @@ export function FieldsSelectionStep({
                     <div className='flex flex-col gap-2 py-1'>
                       {isUniqueKey && (
                         <p className='flex items-center gap-2'>
-                          <span className='font-semibold'>Unique key</span>{' '}
+                          <span className='font-semibold'>{t('connectorWizard.uniqueKey')}</span>{' '}
                           <KeyRound className='text-secondary h-3 w-3' />
                         </p>
                       )}
                       <p>
-                        <span className='font-semibold'>Type:</span> {field.type}
+                        <span className='font-semibold'>{t('connectorWizard.type')}:</span>{' '}
+                        {field.type}
                       </p>
                       {field.description && (
                         <p>
-                          <span className='font-semibold'>Description:</span> {field.description}
+                          <span className='font-semibold'>{t('connectorWizard.description')}:</span>{' '}
+                          {field.description}
                         </p>
                       )}
                     </div>
@@ -347,12 +363,16 @@ export function FieldsSelectionStep({
             })}
             {filteredFields.length === 0 && filterText && (
               <div className='text-muted-foreground p-8 text-center text-sm'>
-                No fields match "{filterText}"
+                {t('connectorWizard.noMatch', { query: filterText })}
               </div>
             )}
           </AppWizardStepCards>
 
-          <OpenIssueLink label={`Need another ${itemLabel === 'columns' ? 'column' : 'field'}?`} />
+          <OpenIssueLink
+            label={t('connectorWizard.needAnother', {
+              item: itemLabel === 'columns' ? t('connectorWizard.column') : t('connectorWizard.field'),
+            })}
+          />
         </AppWizardStepSection>
       </>
     </AppWizardStep>

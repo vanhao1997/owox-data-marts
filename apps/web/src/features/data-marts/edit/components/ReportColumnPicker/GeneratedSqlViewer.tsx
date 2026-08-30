@@ -19,6 +19,7 @@ import { reportService } from '../../../reports/shared/services/report.service';
 import { useProjectRoute } from '../../../../../shared/hooks';
 import { extractApiError, type ApiError } from '../../../../../app/api';
 import SqlValidator from '../SqlValidator/SqlValidator';
+import { useTranslation } from 'react-i18next';
 
 type GeneratedSqlViewerVariant = 'action-icon' | 'outline-button';
 
@@ -55,6 +56,7 @@ export function GeneratedSqlViewer({
   reportTitle,
   className,
 }: GeneratedSqlViewerProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [sql, setSql] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +82,7 @@ export function GeneratedSqlViewer({
       // is none — otherwise the specific reason gets buried under it.
       const apiError = extractApiError(error) as ApiError | undefined;
       if (!apiError?.message?.trim()) {
-        toast.error('Failed to load generated SQL');
+        toast.error(t('generatedSql.failedLoad'));
       }
       setSql('');
       setCanModifySource(false);
@@ -103,9 +105,9 @@ export function GeneratedSqlViewer({
     if (!sql) return;
     try {
       await navigator.clipboard.writeText(sql);
-      toast.success('SQL copied to clipboard');
+      toast.success(t('generatedSql.copied'));
     } catch {
-      toast.error('Failed to copy SQL');
+      toast.error(t('generatedSql.copyFailed'));
     }
   }
 
@@ -113,7 +115,7 @@ export function GeneratedSqlViewer({
     setIsCopyingAsDataMart(true);
     try {
       const { dataMartId: newDataMartId } = await reportService.copyAsDataMart(reportId);
-      toast.success('Data Mart created from report');
+      toast.success(t('generatedSql.dataMartCreated'));
       setIsOpen(false);
       window.open(
         scope(`/data-marts/${newDataMartId}/data-setup`),
@@ -121,13 +123,15 @@ export function GeneratedSqlViewer({
         'noopener,noreferrer'
       );
     } catch {
-      toast.error('Failed to create Data Mart from report');
+      toast.error(t('generatedSql.createFailed'));
     } finally {
       setIsCopyingAsDataMart(false);
     }
   }
 
-  const ariaLabel = reportTitle ? `Preview SQL: ${reportTitle}` : 'Preview SQL';
+  const ariaLabel = reportTitle
+    ? t('generatedSql.previewNamed', { title: reportTitle })
+    : t('generatedSql.preview');
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -152,7 +156,7 @@ export function GeneratedSqlViewer({
             </DialogTrigger>
           </TooltipTrigger>
           <TooltipContent side='bottom' role='tooltip'>
-            Preview SQL
+            {t('generatedSql.preview')}
           </TooltipContent>
         </Tooltip>
       ) : (
@@ -166,7 +170,7 @@ export function GeneratedSqlViewer({
 
       <DialogContent className='flex flex-col gap-4 sm:max-w-[80vw]'>
         <DialogHeader>
-          <DialogTitle>Report SQL</DialogTitle>
+          <DialogTitle>{t('generatedSql.reportSql')}</DialogTitle>
         </DialogHeader>
 
         <div className='min-h-[600px]'>
@@ -205,7 +209,7 @@ export function GeneratedSqlViewer({
             <div className='inline-flex h-9 items-center px-3 py-2'>
               <div className='flex h-5 items-center gap-2 text-gray-500'>
                 <Loader2 className='h-4 w-4 animate-spin' />
-                <span className='text-sm'>Generating SQL...</span>
+                <span className='text-sm'>{t('generatedSql.generating')}</span>
               </div>
             </div>
           ) : canModifySource ? (
@@ -221,7 +225,7 @@ export function GeneratedSqlViewer({
               disabled={isLoading || !sql}
             >
               <Copy className='mr-2 h-4 w-4' />
-              Copy to Clipboard
+              {t('generatedSql.copyToClipboard')}
             </Button>
             {canModifySource && (
               <Button
@@ -230,7 +234,7 @@ export function GeneratedSqlViewer({
                 onClick={() => void handleCopyAsDataMart()}
                 disabled={isLoading || isCopyingAsDataMart}
               >
-                Copy as Data Mart
+                {t('generatedSql.copyAsDataMart')}
               </Button>
             )}
           </div>

@@ -8,6 +8,7 @@ import type { DataDestination } from '../../../../../data-destination';
 import { useUnsavedGuard } from '../../../../../../hooks/useUnsavedGuard';
 import { useIntercomLauncher } from '../../../../../../shared/hooks/useIntercomLauncher';
 import { ReportSheetDescription } from '../ReportSheetDescription';
+import { useTranslation } from 'react-i18next';
 
 interface LookerStudioReportEditSheetProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export function LookerStudioReportEditSheet({
   mode,
   preSelectedDestination,
 }: LookerStudioReportEditSheetProps) {
+  const { t } = useTranslation();
   const {
     showUnsavedDialog,
     setShowUnsavedDialog,
@@ -51,8 +53,8 @@ export function LookerStudioReportEditSheet({
           <SheetTitle>{preSelectedDestination?.title ?? 'Data Studio'}</SheetTitle>
           <ReportSheetDescription mode={mode} report={initialReport}>
             {mode === ReportFormMode.CREATE
-              ? 'Set up Data Mart as a data source'
-              : 'Update connection details'}
+              ? t('reportsUi.lookerCreateDescription', 'Thiết lập Data Mart làm nguồn dữ liệu')
+              : t('reportsUi.lookerEditDescription', 'Cập nhật thông tin kết nối')}
           </ReportSheetDescription>
         </SheetHeader>
 

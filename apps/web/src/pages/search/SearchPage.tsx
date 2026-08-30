@@ -126,7 +126,7 @@ export function SearchPage() {
         <div className='flex flex-col gap-0.5'>
           {unsupportedCount > 0 ? (
             <p className='text-muted-foreground px-3 py-2 text-sm'>
-              Some results could not be displayed.
+              {t('search.unsupportedResults', 'Some results could not be displayed.')}
             </p>
           ) : null}
           {visibleResults.map(result => {

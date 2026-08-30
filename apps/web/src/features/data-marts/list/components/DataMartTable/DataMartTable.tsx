@@ -3,6 +3,7 @@ import { type ColumnDef, type Row } from '@tanstack/react-table';
 import { Import, Plus } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { BulkCreateFromStorageDialog } from '../BulkCreateFromStorageDialog';
 import { CardSkeleton } from '../../../../../shared/components/CardSkeleton';
 import {
@@ -51,13 +52,14 @@ export function DataMartTable<TData, TValue>({
   onVisibleDataMartIdsChange,
   isLoading,
 }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const { navigate, scope } = useProjectRoute();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const tableId = 'data-marts-table';
 
   const filtersConfig = useMemo(
-    () => buildDataMartsTableFilters(data as DataMartListItem[], connectors),
-    [data, connectors]
+    () => buildDataMartsTableFilters(data as DataMartListItem[], connectors, t),
+    [data, connectors, t]
   );
 
   const { appliedState, apply, clear } = usePersistentFilters<DataMartFilterKey>({
@@ -97,7 +99,7 @@ export function DataMartTable<TData, TValue>({
         header: ({ table }) => (
           <TableSelectionCheckbox
             checked={table.getIsAllPageRowsSelected()}
-            ariaLabel='Select all rows on this page'
+            ariaLabel={t('dataMartsPage.selectAllRows', 'Select all rows on this page')}
             onClick={table.getToggleAllPageRowsSelectedHandler()}
             extendedHitArea
           />
@@ -105,7 +107,7 @@ export function DataMartTable<TData, TValue>({
         cell: ({ row }) => (
           <TableSelectionCheckbox
             checked={row.getIsSelected()}
-            ariaLabel='Select row'
+            ariaLabel={t('dataMartsPage.selectRow', 'Select row')}
             onClick={row.getToggleSelectedHandler()}
             extendedHitArea
           />
@@ -115,7 +117,7 @@ export function DataMartTable<TData, TValue>({
       },
       ...(columns as ColumnDef<TData>[]),
     ],
-    [columns]
+    [columns, t]
   );
 
   // Initialize table with shared hook (uses pre-filtered data)
@@ -207,7 +209,7 @@ export function DataMartTable<TData, TValue>({
           tableId={tableId}
           table={table}
           onRowClick={handleRowClick}
-          ariaLabel='Data Marts table'
+          ariaLabel={t('dataMartsPage.tableAriaLabel', 'Data Marts table')}
           renderToolbarLeft={table => (
             <>
               {/* BTNs for selected Rows */}
@@ -246,7 +248,7 @@ export function DataMartTable<TData, TValue>({
                 <TableColumnSearch
                   table={table}
                   columnId={DataMartColumnKey.TITLE}
-                  placeholder='Search'
+                  placeholder={t('search.placeholder', 'Search…')}
                 />
               </div>
             </>
@@ -258,15 +260,18 @@ export function DataMartTable<TData, TValue>({
                 onClick={() => {
                   setShowBulkCreateFromStorage(true);
                 }}
-                title='Import data marts from storage resources'
+                title={t(
+                  'dataMartsPage.importButtonTitle',
+                  'Import data marts from storage resources'
+                )}
               >
                 <Import className='h-4 w-4' />
-                <span className='hidden lg:block'>Import…</span>
+                <span className='hidden lg:block'>{t('dataMartsPage.importButton', 'Import…')}</span>
               </Button>
               <TableCTAButton asChild>
                 <Link to={scope('/data-marts/create')}>
                   <Plus className='h-4 w-4' />
-                  <span className='hidden lg:block'>New Data Mart</span>
+                  <span className='hidden lg:block'>{t('dataMartsPage.createDataMart')}</span>
                 </Link>
               </TableCTAButton>
             </div>
@@ -287,16 +292,28 @@ export function DataMartTable<TData, TValue>({
         <PromoBlock
           icon={GoogleBigQueryIcon}
           size='compact'
-          title='Use existing BigQuery tables or views'
-          description='Automatically create multiple Data Marts from your BigQuery assets in&nbsp;seconds'
+          title={t(
+            'dataMartsPage.bigQueryPromoTitle',
+            'Use existing BigQuery tables or views'
+          )}
+          description={t(
+            'dataMartsPage.bigQueryPromoDescription',
+            'Automatically create multiple Data Marts from your BigQuery assets in seconds'
+          )}
           primaryAction={{
-            label: 'Create Multiple Data Marts...',
+            label: t(
+              'dataMartsPage.bigQueryPromoPrimaryAction',
+              'Create Multiple Data Marts...'
+            ),
             onClick: () => {
               setShowBulkCreateFromStorage(true);
             },
           }}
           secondaryAction={{
-            label: 'Create from a Single Table',
+            label: t(
+              'dataMartsPage.bigQueryPromoSecondaryAction',
+              'Create from a Single Table'
+            ),
             href: scope('/data-marts/create?preset=table'),
           }}
         />

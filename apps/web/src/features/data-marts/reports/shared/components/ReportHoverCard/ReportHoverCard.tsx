@@ -23,7 +23,9 @@ import { getGoogleSheetTabUrl } from '../../utils';
 import { Button } from '@owox/ui/components/button';
 import { ExternalLink } from 'lucide-react';
 import { StatusLabel } from '../../../../../../shared/components/StatusLabel';
-import { mapReportStatusToStatusType, getReportStatusText } from '../../../../shared';
+import { mapReportStatusToStatusType } from '../../../../shared';
+import { ReportStatusEnum } from '../../enums';
+import { useTranslation } from 'react-i18next';
 
 interface ReportHoverCardProps {
   report: DataMartReport;
@@ -31,26 +33,28 @@ interface ReportHoverCardProps {
 }
 
 const useDateFormatters = () => {
+  const { i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage === 'vi' ? 'vi-VN' : 'en-US';
   const detailedDateFormatter = useMemo(
     () =>
-      new Intl.DateTimeFormat('en-US', {
+      new Intl.DateTimeFormat(locale, {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
       }),
-    []
+    [locale]
   );
 
   const shortDateFormatter = useMemo(
     () =>
-      new Intl.DateTimeFormat('en-US', {
+      new Intl.DateTimeFormat(locale, {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
       }),
-    []
+    [locale]
   );
 
   return { detailedDateFormatter, shortDateFormatter };
@@ -58,15 +62,22 @@ const useDateFormatters = () => {
 
 export const ReportHoverCard = React.memo(
   function ReportHoverCard({ report, children }: ReportHoverCardProps) {
+    const { t } = useTranslation();
     const { detailedDateFormatter, shortDateFormatter } = useDateFormatters();
 
     const statusInfo = useMemo(() => {
       if (!report.lastRunStatus) return null;
       return {
         statusType: mapReportStatusToStatusType(report.lastRunStatus),
-        statusText: getReportStatusText(report.lastRunStatus),
+        statusText: {
+          [ReportStatusEnum.SUCCESS]: t('reportStatus.success', 'Success'),
+          [ReportStatusEnum.RUNNING]: t('reportStatus.inProgress', 'In progress'),
+          [ReportStatusEnum.ERROR]: t('reportStatus.fail', 'Fail'),
+          [ReportStatusEnum.CANCELLED]: t('reportStatus.cancelled', 'Cancelled'),
+          [ReportStatusEnum.RESTRICTED]: t('reportStatus.restricted', 'Restricted'),
+        }[report.lastRunStatus],
       };
-    }, [report.lastRunStatus]);
+    }, [report.lastRunStatus, t]);
 
     const formattedDates = useMemo(() => {
       return {
@@ -114,9 +125,9 @@ export const ReportHoverCard = React.memo(
               <DestinationIcon size={20} />
             </HoverCardHeaderIcon>
             <HoverCardHeaderText>
-              <HoverCardHeaderTitle>{report.title || 'Unnamed Report'}</HoverCardHeaderTitle>
+              <HoverCardHeaderTitle>{report.title || t('reportsUi.unnamedReport', 'Unnamed Report')}</HoverCardHeaderTitle>
               <HoverCardHeaderDescription>
-                Last modified <RelativeTime date={new Date(report.modifiedAt)} />
+                {t('reportsUi.lastModified', 'Last modified')} <RelativeTime date={new Date(report.modifiedAt)} />
               </HoverCardHeaderDescription>
             </HoverCardHeaderText>
           </HoverCardHeader>
@@ -124,7 +135,7 @@ export const ReportHoverCard = React.memo(
           <HoverCardBody>
             {statusInfo && (
               <HoverCardItem>
-                <HoverCardItemLabel>Last run status:</HoverCardItemLabel>
+                <HoverCardItemLabel>{t('reportActions.lastRunStatus', 'Last run status:')}</HoverCardItemLabel>
                 <HoverCardItemValue>
                   <StatusLabel type={statusInfo.statusType} variant='ghost'>
                     {statusInfo.statusText}
@@ -134,7 +145,7 @@ export const ReportHoverCard = React.memo(
             )}
             {report.lastRunDate && (
               <HoverCardItem>
-                <HoverCardItemLabel>Last run date:</HoverCardItemLabel>
+                <HoverCardItemLabel>{t('reportActions.lastRunDate', 'Last run date:')}</HoverCardItemLabel>
                 <HoverCardItemValue>
                   <RelativeTime date={report.lastRunDate} />
                 </HoverCardItemValue>
@@ -142,17 +153,17 @@ export const ReportHoverCard = React.memo(
             )}
             {report.lastRunError && (
               <HoverCardItem>
-                <HoverCardItemLabel>Error message:</HoverCardItemLabel>
+                <HoverCardItemLabel>{t('reportActions.errorMessage', 'Error message:')}</HoverCardItemLabel>
                 <HoverCardItemValue>{report.lastRunError}</HoverCardItemValue>
               </HoverCardItem>
             )}
             <HoverCardItem>
-              {report.runsCount > 0 ? <HoverCardItemLabel>Total runs:</HoverCardItemLabel> : ''}
+              {report.runsCount > 0 ? <HoverCardItemLabel>{t('reportActions.totalRuns', 'Total runs:')}</HoverCardItemLabel> : ''}
               <HoverCardItemValue>
                 {report.runsCount === 0
-                  ? 'No runs'
-                  : `${report.runsCount.toString()} run${report.runsCount > 1 ? 's' : ''}`}
-                {formattedDates.createdAt && <>, since {formattedDates.createdAt}</>}
+                  ? t('reportsUi.noRuns', 'No runs')
+                  : `${report.runsCount.toString()} ${report.runsCount > 1 ? t('reportsUi.runPlural', 'runs') : t('reportsUi.runSingular', 'run')}`}
+                {formattedDates.createdAt && <>, {t('reportsUi.since', 'since')} {formattedDates.createdAt}</>}
               </HoverCardItemValue>
             </HoverCardItem>
           </HoverCardBody>
@@ -163,10 +174,10 @@ export const ReportHoverCard = React.memo(
                 className='w-full'
                 variant='default'
                 onClick={handleGoogleSheetOpen}
-                title='Open in Google Sheets'
-                aria-label='Open in Google Sheets'
+                title={t('reportsUi.openInGoogleSheets', 'Open in Google Sheets')}
+                aria-label={t('reportsUi.openInGoogleSheets', 'Open in Google Sheets')}
               >
-                Open in Google Sheets
+                {t('reportsUi.openInGoogleSheets', 'Open in Google Sheets')}
                 <ExternalLink className='ml-1 inline h-4 w-4' aria-hidden='true' />
               </Button>
             </HoverCardFooter>

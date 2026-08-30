@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRole } from '../hooks';
 import type { Role } from '../types';
+import { useTranslation } from 'react-i18next';
 
 /**
  * RoleGuard component props
@@ -20,11 +21,12 @@ export interface RoleGuardProps {
  * Access denied fallback component
  */
 function AccessDeniedFallback() {
+  const { t } = useTranslation();
   return (
     <div className='flex h-64 items-center justify-center'>
       <div className='text-center'>
-        <h3 className='mb-4'>Access Denied</h3>
-        <p className='text-sm'>You don't have permission to access this content.</p>
+        <h3 className='mb-4'>{t('authGuard.accessDenied', 'Access denied')}</h3>
+        <p className='text-sm'>{t('authGuard.accessDeniedDescription', "You don't have permission to access this content.")}</p>
       </div>
     </div>
   );

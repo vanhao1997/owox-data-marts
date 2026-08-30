@@ -4,7 +4,11 @@ import { DataStorageHealthIndicator, DataStorageType } from '../../../../shared'
 import { DataStorageTypeModel } from '../../../../shared/types/data-storage-type.model';
 import { DataStorageActionsCell } from '../DataStorageActionsCell';
 import { DataStorageColumnKey } from './columnKeys';
-import { dataStorageColumnLabels } from './columnLabels';
+import {
+  dataStorageColumnLabels as defaultDataStorageColumnLabels,
+  getDataStorageColumnLabels,
+} from './columnLabels';
+import type { TFunction } from 'i18next';
 import { type UserProjection } from '../../../../../../shared/types';
 import { UserReference } from '../../../../../../shared/components/UserReference';
 import { UserAvatarGroup } from '../../../../../../shared/components/UserAvatarGroup/UserAvatarGroup';
@@ -30,6 +34,7 @@ interface DataStorageColumnsProps {
   onEdit?: (id: string) => Promise<void>;
   onDelete?: (id: string) => void;
   onPublishDrafts?: (id: string) => Promise<void>;
+  t?: TFunction;
 }
 
 export const getDataStorageColumns = ({
@@ -37,7 +42,12 @@ export const getDataStorageColumns = ({
   onEdit,
   onDelete,
   onPublishDrafts,
-}: DataStorageColumnsProps = {}): ColumnDef<DataStorageTableItem>[] => [
+  t,
+}: DataStorageColumnsProps = {}): ColumnDef<DataStorageTableItem>[] => {
+  const dataStorageColumnLabels = t
+    ? getDataStorageColumnLabels(t)
+    : defaultDataStorageColumnLabels;
+  return [
   {
     id: DataStorageColumnKey.HEALTH,
     size: 40,
@@ -155,7 +165,11 @@ export const getDataStorageColumns = ({
     cell: ({ row }) => {
       const users = row.original.ownerUsers ?? [];
       if (users.length === 0)
-        return <span className='text-muted-foreground text-sm'>Not assigned</span>;
+        return (
+          <span className='text-muted-foreground text-sm'>
+            {t?.('common.notAssigned', 'Not assigned') ?? 'Not assigned'}
+          </span>
+        );
       if (users.length === 1) return <UserReference userProjection={users[0]} />;
       return <UserAvatarGroup users={users} />;
     },
@@ -225,4 +239,5 @@ export const getDataStorageColumns = ({
       />
     ),
   },
-];
+  ];
+};

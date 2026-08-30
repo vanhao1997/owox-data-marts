@@ -15,6 +15,7 @@ import {
 } from '@owox/ui/components/select';
 import { EllipsisVertical, Plus, Puzzle } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import {
   describeVisibility,
@@ -30,23 +31,8 @@ import {
 } from '../../../features/plugins';
 import { useProjectRoute } from '../../../shared/hooks';
 
-const FILTER_LABELS: Record<PluginFilter, string> = {
-  all: 'All plugins',
-  installed: 'Installed',
-  not_installed: 'Not installed',
-  // Verified (deployment) listings are project-available too — same bucket, not a
-  // separate filter that would overlap this one.
-  project: 'Available to project',
-  for_me: 'Only for me',
-};
-
-const SORT_LABELS: Record<PluginSort, string> = {
-  default: 'Default',
-  newest: 'Newest',
-  alphabetical: 'A–Z',
-};
-
 export default function PluginsGalleryPage() {
+  const { t } = useTranslation();
   const { plugins, isLoading } = usePluginGallery();
   const { install, isInstalling } = usePluginActions();
   const { view, update } = useGalleryView();
@@ -55,6 +41,19 @@ export default function PluginsGalleryPage() {
   const [query, setQuery] = useState('');
   const [candidate, setCandidate] = useState<PluginGalleryEntry | null>(null);
   const [publishing, setPublishing] = useState(false);
+
+  const filterLabels: Record<PluginFilter, string> = {
+    all: t('pluginsPage.filters.all'),
+    installed: t('pluginsPage.filters.installed'),
+    not_installed: t('pluginsPage.filters.notInstalled'),
+    project: t('pluginsPage.filters.project'),
+    for_me: t('pluginsPage.filters.forMe'),
+  };
+  const sortLabels: Record<PluginSort, string> = {
+    default: t('pluginsPage.sort.default'),
+    newest: t('pluginsPage.sort.newest'),
+    alphabetical: t('pluginsPage.sort.alphabetical'),
+  };
 
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -112,7 +111,7 @@ export default function PluginsGalleryPage() {
   return (
     <div className='dm-page'>
       <header className='dm-page-header flex items-center justify-between'>
-        <h1 className='dm-page-header-title'>Plugins</h1>
+        <h1 className='dm-page-header-title'>{t('pluginsPage.title')}</h1>
 
         <div className='flex items-center gap-1'>
           <Button
@@ -121,20 +120,20 @@ export default function PluginsGalleryPage() {
               setPublishing(true);
             }}
           >
-            <Plus className='size-4' aria-hidden /> Publish Plugin
+            <Plus className='size-4' aria-hidden /> {t('pluginsPage.publish')}
           </Button>
 
           {/* History is a recovery path, not a routine one, so it sits behind the menu
               rather than competing with the only action that adds a plugin. */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' size='icon' aria-label='More plugin actions'>
+              <Button variant='ghost' size='icon' aria-label={t('pluginsPage.moreActions')}>
                 <EllipsisVertical className='size-4' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               <DropdownMenuItem asChild>
-                <Link to={scope('/plugins/history')}>Installation history</Link>
+                <Link to={scope('/plugins/history')}>{t('pluginsPage.history')}</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -151,7 +150,7 @@ export default function PluginsGalleryPage() {
                 id='plugin-search'
                 value={query}
                 onChange={setQuery}
-                placeholder='Search plugins'
+                placeholder={t('pluginsPage.search')}
               />
 
               <Select
@@ -160,11 +159,11 @@ export default function PluginsGalleryPage() {
                   update({ filter: value as PluginFilter });
                 }}
               >
-                <SelectTrigger className='ml-auto w-40' aria-label='Filter plugins'>
+              <SelectTrigger className='ml-auto w-40' aria-label={t('pluginsPage.filterLabel')}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(FILTER_LABELS).map(([value, label]) => (
+                  {Object.entries(filterLabels).map(([value, label]) => (
                     <SelectItem key={value} value={value}>
                       {label}
                     </SelectItem>
@@ -178,11 +177,11 @@ export default function PluginsGalleryPage() {
                   update({ sort: value as PluginSort });
                 }}
               >
-                <SelectTrigger className='w-36' aria-label='Sort plugins'>
+                <SelectTrigger className='w-36' aria-label={t('pluginsPage.sortLabel')}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(SORT_LABELS).map(([value, label]) => (
+                  {Object.entries(sortLabels).map(([value, label]) => (
                     <SelectItem key={value} value={value}>
                       {label}
                     </SelectItem>
@@ -195,10 +194,9 @@ export default function PluginsGalleryPage() {
           {!isLoading && plugins.length === 0 && (
             <div className='dm-empty-state'>
               <Puzzle className='dm-empty-state-ico' strokeWidth={1} aria-hidden />
-              <h2 className='dm-empty-state-title'>Add your first plugin</h2>
+              <h2 className='dm-empty-state-title'>{t('pluginsPage.emptyTitle')}</h2>
               <p className='dm-empty-state-subtitle'>
-                Extend P2PDigital Data Marts with plugins published from a GitHub repository.
-                Publishing one lists it here — installing it is still up to each member.
+                {t('pluginsPage.emptySubtitle')}
               </p>
             </div>
           )}
@@ -207,7 +205,7 @@ export default function PluginsGalleryPage() {
               match what is on screen, and the fix is to change the query rather than publish. */}
           {plugins.length > 0 && visible.length === 0 && (
             <p className='text-muted-foreground py-8 text-center text-sm'>
-              No plugins match this search or filter.
+              {t('pluginsPage.noMatches')}
             </p>
           )}
 

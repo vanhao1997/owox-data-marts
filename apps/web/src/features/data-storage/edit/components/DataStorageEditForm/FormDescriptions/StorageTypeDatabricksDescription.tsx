@@ -5,31 +5,32 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Description for Databricks storage type.
  */
 export default function StorageTypeDatabricksDescription() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='databricks-setup'>
-        <AccordionTrigger>How do I get started with Databricks?</AccordionTrigger>
+        <AccordionTrigger>{t('storageHelp.databricks.title')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            Databricks is a unified data analytics platform built on Apache Spark. It provides a
-            lakehouse architecture that combines the best of data lakes and data warehouses.
+            {t('storageHelp.databricks.intro')}
           </p>
           <p className='mb-2'>
-            To Connect P2PDigital to Databricks, you'll need your workspace URL, SQL warehouse HTTP
-            path, and a Personal Access Token for authentication.
+            {t('storageHelp.databricks.connection')}
           </p>
           <p className='mb-2'>
-            Learn more in{' '}
+            {t('storageHelp.databricks.learnMore')}{' '}
             <ExternalAnchor
               className='underline'
               href='https://docs.p2pdigital.vn/docs/storages/supported-storages/databricks/'
             >
-              P2PDigital Databricks documentation
+              {t('storageHelp.databricks.documentation')}
             </ExternalAnchor>
             .
           </p>

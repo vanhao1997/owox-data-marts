@@ -37,6 +37,7 @@ import {
 } from '@owox/ui/components/sheet';
 import { Loader2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -60,12 +61,6 @@ const schema = z.object({
 
 type PublishFormValues = z.infer<typeof schema>;
 
-const SCOPE_LABELS: Record<PluginPublicationScope, string> = {
-  deployment: 'Everyone on this deployment',
-  project: 'Everyone in this project',
-  member: 'Only me',
-};
-
 interface PublishPluginSheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -79,10 +74,16 @@ interface PublishPluginSheetProps {
  * publishing somewhere the caller has no authority -- and it would be ignored anyway.
  */
 export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps) {
+  const { t } = useTranslation();
   const scopes = usePublishableScopes();
   const { publish, isPublishing } = usePluginPublishing();
   const [failure, setFailure] = useState<PublishFailure | null>(null);
   const installationHref = safeHttpsUrl(failure?.installationUrl);
+  const scopeLabels: Record<PluginPublicationScope, string> = {
+    deployment: t('pluginsPage.publishForm.scopes.deployment'),
+    project: t('pluginsPage.publishForm.scopes.project'),
+    member: t('pluginsPage.publishForm.scopes.member'),
+  };
 
   const form = useForm<PublishFormValues>({
     resolver: zodResolver(schema),
@@ -113,9 +114,9 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Publish a plugin</SheetTitle>
+          <SheetTitle>{t('pluginsPage.publishForm.title')}</SheetTitle>
           <SheetDescription>
-            Publishing lists a plugin so people can find it. It does not install it for anyone.
+            {t('pluginsPage.publishForm.description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -134,40 +135,22 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                   name='repository'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>GitHub repository</FormLabel>
+                      <FormLabel>{t('pluginsPage.publishForm.repository')}</FormLabel>
                       <FormControl>
                         <Input placeholder='p2pdigital/example-plugin' {...field} />
                       </FormControl>
                       <FormDescription>
-                        A URL or owner/name. The plugin&apos;s versions come from its GitHub
-                        releases.
+                        {t('pluginsPage.publishForm.repositoryHelp')}
                       </FormDescription>
                       <FormMessage />
 
                       <FieldHelp
                         value='repository-help'
-                        title='Which repositories can be published'
+                        title={t('pluginsPage.publishForm.repositoryQuestion')}
                       >
-                        <p>
-                          The repository must contain a <code>plugin.json</code> at its root and at
-                          least one published release tagged <code>MAJOR.MINOR.PATCH</code>, with an
-                          optional leading <code>v</code>. Prereleases and build metadata are
-                          ignored, because the highest eligible version becomes current for everyone
-                          at once and nobody can pin an older one.
-                        </p>
-                        <p>
-                          The repository — not its name — is the plugin&apos;s identity. Renaming or
-                          transferring it keeps the same plugin; two repositories are always two
-                          plugins, even with identical contents.
-                        </p>
-                        <p>
-                          {/* No link yet: the App does not exist. The server already returns the
-                              exact installation URL when it cannot read a repository, and the
-                              failure panel below renders it, so nothing here has to guess one. */}
-                          A public repository works immediately. For a private one, the P2PDigital
-                          Data Marts GitHub App has to be installed on it first — publish it once
-                          and P2PDigital will show you the exact link to grant that access.
-                        </p>
+                        <p>{t('pluginsPage.publishForm.repositoryRules')}</p>
+                        <p>{t('pluginsPage.publishForm.repositoryIdentity')}</p>
+                        <p>{t('pluginsPage.publishForm.repositoryAccess')}</p>
                       </FieldHelp>
                     </FormItem>
                   )}
@@ -178,7 +161,7 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                   name='scope'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Who can find it</FormLabel>
+                      <FormLabel>{t('pluginsPage.publishForm.audience')}</FormLabel>
                       <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger>
@@ -188,33 +171,18 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                         <SelectContent>
                           {scopes.map(scope => (
                             <SelectItem key={scope} value={scope}>
-                              {SCOPE_LABELS[scope]}
+                              {scopeLabels[scope]}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
 
-                      <FieldHelp value='scope-help' title='What each option does'>
-                        <p>
-                          <strong>Only me.</strong> The plugin appears in your Gallery and nobody
-                          else&apos;s. Available to every project member, and it needs no approval.
-                        </p>
-                        <p>
-                          <strong>Everyone in this project.</strong> Every member of this project
-                          finds it in their Gallery. Only a Project Admin can choose this.
-                        </p>
-                        <p>
-                          Whichever you pick, publishing only makes the plugin{' '}
-                          <strong>findable</strong>. It installs it for nobody: each member still
-                          installs it themselves, and unpublishing later removes the listing without
-                          uninstalling anyone.
-                        </p>
-                        <p>
-                          The levels are independent, so the same plugin can be listed at both and
-                          still appears once. You can widen a personal listing to the whole project
-                          later from the plugin&apos;s own page.
-                        </p>
+                      <FieldHelp value='scope-help' title={t('pluginsPage.publishForm.scopeQuestion')}>
+                        <p>{t('pluginsPage.publishForm.scopeOnlyMe')}</p>
+                        <p>{t('pluginsPage.publishForm.scopeProject')}</p>
+                        <p>{t('pluginsPage.publishForm.scopePublishOnly')}</p>
+                        <p>{t('pluginsPage.publishForm.scopeIndependent')}</p>
                       </FieldHelp>
                     </FormItem>
                   )}
@@ -232,9 +200,9 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
                   {installationHref && (
                     <p>
                       <ExternalAnchor href={installationHref}>
-                        Give P2PDigital Data Marts access to this repository
+                        {t('pluginsPage.publishForm.grantAccess')}
                       </ExternalAnchor>
-                      , then publish again.
+                      {t('pluginsPage.publishForm.thenPublish')}
                     </p>
                   )}
                 </div>
@@ -248,11 +216,11 @@ export function PublishPluginSheet({ isOpen, onClose }: PublishPluginSheetProps)
             */}
             <FormActions>
               <Button type='button' variant='secondary' onClick={onClose} disabled={isPublishing}>
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button type='submit' disabled={isPublishing}>
                 {isPublishing ? <Loader2 className='size-4 animate-spin' aria-hidden /> : null}
-                {isPublishing ? 'Publishing…' : 'Publish'}
+                {isPublishing ? t('pluginsPage.publishForm.publishing') : t('pluginsPage.publishForm.publish')}
               </Button>
             </FormActions>
           </AppForm>

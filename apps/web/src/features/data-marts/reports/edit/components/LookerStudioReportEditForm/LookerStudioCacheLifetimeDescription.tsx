@@ -5,18 +5,15 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 
-/**
- * Accordion with information about the Data Studio JSON Config.
- */
 export default function LookerStudioCacheLifetimeDescription() {
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='cache-lifetime-details'>
-        <AccordionTrigger>What is the Cache Lifetime for Data Studio?</AccordionTrigger>
+        <AccordionTrigger>Thời gian lưu bộ nhớ đệm cho Data Studio là gì?</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            Cache Lifetime - defines the period during which results from previous query executions
-            are served from storage-side cache, eliminating the need to re-execute the query
+            Thời gian lưu bộ nhớ đệm xác định khoảng thời gian mà kết quả từ các lần truy vấn trước
+            được phục vụ từ bộ nhớ đệm phía kho, giúp không cần chạy lại truy vấn.
           </p>
         </AccordionContent>
       </AccordionItem>

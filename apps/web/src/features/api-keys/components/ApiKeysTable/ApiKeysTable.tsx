@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Row } from '@tanstack/react-table';
 import { BaseTable, TableCTAButton } from '../../../../shared/components/Table';
 import { useBaseTable } from '../../../../shared/hooks';
@@ -20,9 +21,10 @@ export function ApiKeysTable({
   onEditName,
   onRevoke,
 }: ApiKeysTableProps) {
+  const { t } = useTranslation();
   const columns = useMemo(
-    () => getApiKeysColumns({ onEditName, onRevoke }),
-    [onEditName, onRevoke]
+    () => getApiKeysColumns({ onEditName, onRevoke, t }),
+    [onEditName, onRevoke, t]
   );
 
   const { table } = useBaseTable<ProjectMemberApiKey>({
@@ -58,7 +60,7 @@ export function ApiKeysTable({
         onRowClick={handleRowClick}
         renderToolbarLeft={() => <div />}
         renderToolbarRight={() => (
-          <TableCTAButton onClick={onCreateKey}>Create API Key</TableCTAButton>
+          <TableCTAButton onClick={onCreateKey}>{t('apiKeysPage.createButton')}</TableCTAButton>
         )}
       />
     </div>

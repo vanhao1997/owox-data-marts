@@ -3,6 +3,7 @@ import { Plug, ChevronRight } from 'lucide-react';
 import { DataMartConnectorView } from '../../DataMartConnectorView';
 import { DataStorageType } from '../../../../data-storage';
 import type { ConnectorConfig } from '../../../../data-marts/edit/model';
+import { useTranslation } from 'react-i18next';
 
 interface ConnectorSetupButtonProps {
   storageType: DataStorageType;
@@ -19,6 +20,8 @@ export function ConnectorSetupButton({
   isOpen,
   onClose,
 }: ConnectorSetupButtonProps) {
+  const { t } = useTranslation();
+
   return (
     <DataMartConnectorView
       dataStorageType={storageType}
@@ -36,7 +39,7 @@ export function ConnectorSetupButton({
         <div className='text-foreground flex h-7 w-7 items-center justify-center rounded-sm bg-gray-200/50 transition-colors duration-200 group-hover:bg-gray-200/75 dark:bg-white/8 dark:group-hover:bg-white/10'>
           <Plug className='h-4 w-4' strokeWidth={2.25} />
         </div>
-        <span>Setup Connector</span>
+        <span>{t('connectorWizard.setup')}</span>
         <ChevronRight className='h-6 w-6' />
       </Button>
     </DataMartConnectorView>

@@ -8,6 +8,7 @@ import {
 } from '@owox/ui/components/sheet';
 import { InsightReportsList } from './InsightReportsList';
 import type { DataMartReport } from '../../reports/shared/model/types/data-mart-report';
+import { useTranslation } from 'react-i18next';
 
 interface InsightReportsSheetProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export function InsightReportsSheet({
   onEditReport,
   onCreateReport,
 }: InsightReportsSheetProps) {
+  const { t } = useTranslation();
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -41,8 +43,8 @@ export function InsightReportsSheet({
       >
         <SheetHeader>
           <div className='flex flex-col gap-1.5 pr-8'>
-            <SheetTitle>Insight Reports</SheetTitle>
-            <SheetDescription>Manage reports associated with this insight</SheetDescription>
+            <SheetTitle>{t('insightsUi.insightReportsTitle', 'Insight Reports')}</SheetTitle>
+            <SheetDescription>{t('insightsUi.manageReportsDescription', 'Manage reports associated with this insight')}</SheetDescription>
           </div>
         </SheetHeader>
         <div className='bg-muted/50 dark:bg-sidebar flex-1 overflow-y-auto p-4'>

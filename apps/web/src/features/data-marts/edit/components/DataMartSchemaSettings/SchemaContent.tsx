@@ -25,6 +25,7 @@ import {
 } from './utils';
 import type { SchemaAiHelper } from './types/ai-helper';
 import type { SchemaToolbar } from './types/schema-toolbar';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Props for the SchemaContent component
@@ -59,6 +60,7 @@ export function SchemaContent({
   aiHelper,
   schemaToolbar,
 }: SchemaContentProps) {
+  const { t } = useTranslation();
   // If schema doesn't exist, create an initial schema based on storage type
   const initialSchema = useMemo(() => {
     if (!schema) {
@@ -121,7 +123,7 @@ export function SchemaContent({
   // Fallback for unsupported schema types
   return (
     <div className='p-4 text-center'>
-      <p>Unsupported schema type</p>
+      <p>{t('schemaUi.unsupportedType', 'Unsupported schema type')}</p>
     </div>
   );
 }

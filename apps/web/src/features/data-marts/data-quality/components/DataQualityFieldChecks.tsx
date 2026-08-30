@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@owox/ui/lib/utils';
 import {
   groupDataQualityFieldRules,
@@ -34,6 +35,7 @@ export function DataQualityFieldChecks({
   onAddCheck,
   onChange,
 }: DataQualityFieldChecksProps) {
+  const { t } = useTranslation();
   const displayedRuleKeySet = new Set(displayedRuleKeys);
   const displayedGroups = groupDataQualityFieldRules(rules)
     .map(group => ({
@@ -45,7 +47,7 @@ export function DataQualityFieldChecks({
   return (
     <section className='space-y-3'>
       <div className='flex flex-wrap items-center justify-between gap-2'>
-        <h3 className='text-sm font-semibold'>Field checks</h3>
+        <h3 className='text-sm font-semibold'>{t('dataQualityUi.fieldChecks')}</h3>
         <DataQualityFieldPicker
           fields={selectableFields}
           disabled={disabled || selectableFields.length === 0}
@@ -57,7 +59,7 @@ export function DataQualityFieldChecks({
 
       {displayedGroups.length === 0 ? (
         <p className='bg-background text-muted-foreground rounded-md border border-dashed p-4 text-sm'>
-          No field checks are configured.
+          {t('dataQualityUi.noFieldChecks')}
         </p>
       ) : (
         <div className='space-y-3'>
@@ -114,6 +116,7 @@ function DataQualityFieldGroup({
   onAddCheck: (ruleKey: string) => void;
   onChange: (key: string, next: DataQualityRuleConfig) => void;
 }) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
@@ -144,13 +147,13 @@ function DataQualityFieldGroup({
               {fieldType ?? selectableField?.type}
             </span>
           )}
-          <span className='bg-muted rounded px-2 py-0.5 text-xs'>{enabledCount} enabled</span>
+          <span className='bg-muted rounded px-2 py-0.5 text-xs'>{t('dataQualityUi.enabledCount', { count: enabledCount })}</span>
         </button>
         {selectableField && (
           <DataQualityFieldPicker
             fields={[selectableField]}
             initialFieldPathKey={fieldPathKey}
-            triggerLabel={`Add a check to ${fieldLabel}`}
+            triggerLabel={t('dataQualityUi.addCheckTo', { field: fieldLabel })}
             disabled={disabled}
             onAdd={onAddCheck}
           />

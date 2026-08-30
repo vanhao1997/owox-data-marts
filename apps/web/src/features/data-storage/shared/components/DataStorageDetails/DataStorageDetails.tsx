@@ -3,6 +3,7 @@ import { Skeleton } from '@owox/ui/components/skeleton';
 import { type DataStorage } from '../../model/types/data-storage';
 import { DataStorageTypeModel } from '../../types/data-storage-type.model';
 import { DataStorageInfo } from '../DataStorageInfo';
+import { useTranslation } from 'react-i18next';
 
 export interface DataStorageDetailsProps {
   dataStorage?: DataStorage | null;
@@ -10,6 +11,7 @@ export interface DataStorageDetailsProps {
 }
 
 export function DataStorageDetails({ dataStorage, isLoading = false }: DataStorageDetailsProps) {
+  const { t } = useTranslation();
   if (isLoading) {
     return (
       <div className='space-y-4'>
@@ -28,7 +30,7 @@ export function DataStorageDetails({ dataStorage, isLoading = false }: DataStora
   }
 
   if (!dataStorage) {
-    return <div>No storage information available.</div>;
+    return <div>{t('dataStorageDetails.notAvailable')}</div>;
   }
 
   const { type, config, createdAt, modifiedAt } = dataStorage;
@@ -57,7 +59,7 @@ export function DataStorageDetails({ dataStorage, isLoading = false }: DataStora
 
         <div className='text-muted-foreground flex gap-6 text-xs'>
           <div>
-            <span className='font-medium'>Created:</span>{' '}
+            <span className='font-medium'>{t('common.createdAt')}:</span>{' '}
             {new Intl.DateTimeFormat('en-US', {
               year: 'numeric',
               month: 'short',
@@ -67,7 +69,7 @@ export function DataStorageDetails({ dataStorage, isLoading = false }: DataStora
             }).format(new Date(createdAt))}
           </div>
           <div>
-            <span className='font-medium'>Modified:</span>{' '}
+            <span className='font-medium'>{t('dataStorageDetails.modified')}:</span>{' '}
             {new Intl.DateTimeFormat('en-US', {
               year: 'numeric',
               month: 'short',

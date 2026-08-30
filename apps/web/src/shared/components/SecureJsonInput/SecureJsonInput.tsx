@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Lock, Copy, Check } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
 import { Textarea } from '@owox/ui/components/textarea';
@@ -42,6 +43,7 @@ export function SecureJsonInput({
   displayOnly = false,
   showCopyButton = false,
 }: SecureJsonInputProps) {
+  const { t } = useTranslation();
   // Function to check if any of the keysToMask actually exist in the content
   const hasSensitiveData = (jsonString: string, keys: string[]): boolean => {
     if (!jsonString || keys.length === 0) return false;
@@ -172,7 +174,7 @@ export function SecureJsonInput({
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Content is locked in masked mode. Click the eye icon to enable editing.</p>
+              <p>{t('secureJson.lockedContent', 'Content is locked in masked mode. Click the eye icon to enable editing.')}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -218,11 +220,11 @@ export function SecureJsonInput({
                 <TooltipTrigger asChild>
                   <div className='flex items-center gap-1'>
                     <EyeOff className='h-4 w-4' />
-                    <span className='text-xs'>Mask & Lock</span>
+                    <span className='text-xs'>{t('secureJson.maskLock')}</span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Mask sensitive data and lock editing</p>
+                  <p>{t('secureJson.maskLockHelp')}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -232,11 +234,11 @@ export function SecureJsonInput({
                 <TooltipTrigger asChild>
                   <div className='flex items-center gap-1'>
                     <Eye className='h-4 w-4' />
-                    <span className='text-xs'>Show & Edit</span>
+                    <span className='text-xs'>{t('secureJson.showEdit')}</span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Show sensitive data and enable editing</p>
+                  <p>{t('secureJson.showEditHelp')}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -259,18 +261,18 @@ export function SecureJsonInput({
                   {isCopied ? (
                     <>
                       <Check className='h-4 w-4' />
-                      <span className='text-xs'>Copied!</span>
+                      <span className='text-xs'>{t('secureJson.copied')}</span>
                     </>
                   ) : (
                     <>
                       <Copy className='h-4 w-4' />
-                      <span className='text-xs'>Copy</span>
+                      <span className='text-xs'>{t('common.copy')}</span>
                     </>
                   )}
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Copy content to clipboard</p>
+                <p>{t('secureJson.copyHelp')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

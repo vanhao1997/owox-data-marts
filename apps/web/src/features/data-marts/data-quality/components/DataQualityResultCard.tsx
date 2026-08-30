@@ -13,6 +13,7 @@ import {
   Info,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../shared/components/Button';
 import { useClipboard } from '../../../../hooks/useClipboard';
 import {
@@ -70,6 +71,7 @@ export function DataQualityResultCard({
   targetAlias,
   defaultExpanded = false,
 }: DataQualityResultCardProps) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const [isSqlExpanded, setIsSqlExpanded] = useState(false);
   const { copiedSection, handleCopy } = useClipboard();
@@ -77,7 +79,7 @@ export function DataQualityResultCard({
   const isRedactedRelationship = result.scope.type === 'RELATIONSHIP' && result.redacted;
   const categoryTitle = DATA_QUALITY_CATEGORY_LABELS[result.category];
   const title = titleSuffix ? `${categoryTitle} · ${titleSuffix}` : categoryTitle;
-  const status = getResultStatus(result);
+  const status = getResultStatus(result, t);
   const StatusIcon = status.icon;
   const resultDetails =
     result.status === 'NOT_APPLICABLE' ||
@@ -149,7 +151,7 @@ export function DataQualityResultCard({
         </div>
         {result.status === 'FAILED' && (
           <Badge variant='outline' className='pointer-events-none relative z-10 shrink-0'>
-            {result.violationCount} {result.violationCount === 1 ? 'violation' : 'violations'}
+            {t('dataQualityUi.violationCount', { count: result.violationCount })}
           </Badge>
         )}
         <ChevronDown
@@ -167,14 +169,14 @@ export function DataQualityResultCard({
 
           {result.error && (
             <div className='border-destructive/40 bg-destructive/5 rounded-md border p-3 text-sm'>
-              <p className='font-medium'>Execution error — this check didn&apos;t run</p>
+              <p className='font-medium'>{t('dataQualityUi.executionError')}</p>
               <p className='text-muted-foreground mt-1'>{result.error.message}</p>
             </div>
           )}
 
           {result.examples.length > 0 && (
             <div>
-              <p className='mb-2 text-sm font-medium'>Examples</p>
+              <p className='mb-2 text-sm font-medium'>{t('dataQualityUi.examples')}</p>
               <div className='grid gap-2 lg:grid-cols-3'>
                 {result.examples.slice(0, 3).map((example, index) => (
                   <pre
@@ -250,11 +252,14 @@ export function DataQualityResultCard({
   );
 }
 
-function getResultStatus(result: DataQualityCheckResult): ResultStatusPresentation {
+function getResultStatus(
+  result: DataQualityCheckResult,
+  t: (key: string) => string
+): ResultStatusPresentation {
   switch (result.status) {
     case 'ERROR':
       return {
-        label: 'Execution error',
+        label: t('dataQualityUi.executionErrorLabel'),
         icon: CircleAlert,
         iconClassName: 'text-destructive',
         cardClassName: 'border-destructive/40',
@@ -264,7 +269,7 @@ function getResultStatus(result: DataQualityCheckResult): ResultStatusPresentati
     case 'FAILED': {
       const severityPresentation = FAILED_SEVERITY_PRESENTATIONS[result.severity];
       return {
-        label: 'Failed',
+        label: t('dataQualityUi.failed'),
         icon: AlertTriangle,
         ...severityPresentation,
         showStatusBadge: false,
@@ -273,7 +278,7 @@ function getResultStatus(result: DataQualityCheckResult): ResultStatusPresentati
     }
     case 'PASSED':
       return {
-        label: 'Passed',
+        label: t('dataQualityUi.passed'),
         icon: CheckCircle2,
         iconClassName: 'text-success',
         cardClassName: 'border-success/40',
@@ -282,7 +287,7 @@ function getResultStatus(result: DataQualityCheckResult): ResultStatusPresentati
       };
     case 'NOT_APPLICABLE':
       return {
-        label: 'Not applicable',
+        label: t('dataQualityUi.notApplicable'),
         icon: CircleMinus,
         iconClassName: 'text-muted-foreground',
         showStatusBadge: true,

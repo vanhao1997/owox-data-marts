@@ -63,7 +63,7 @@ import {
   isDataMartRunFinalStatus,
   isTaskFinalStatus,
 } from '../../shared';
-import { NO_PERMISSION_MESSAGE, usePermissions } from '../../../../app/permissions';
+import { usePermissions } from '../../../../app/permissions';
 import { trackEvent } from '../../../../utils';
 import {
   MarkdownEditorPreview,
@@ -99,11 +99,13 @@ import { InsightSourcesPanel } from './InsightSourcesPanel';
 import { InsightLoader } from './InsightLoader';
 import { InsightReportsSheet } from './InsightReportsSheet';
 import { useReportsByInsightTemplate } from '../../reports/list/model/hooks/useReportsByInsightTemplate';
+import { useTranslation } from 'react-i18next';
 import type { AiAssistantPanelHandle } from '../model/ai-assistant/types/ai-assistant-panel.types.ts';
 import type { DataMartReport } from '../../reports/shared/model/types/data-mart-report';
 import type { StartInsightTemplateExecutionRequestDto } from '../model/templates/types/insight-templates.dto';
 
 export default function InsightDetailsView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { insightId } = useParams<{ insightId: string }>();
   const { dataMart } = useDataMartContext();
@@ -133,9 +135,15 @@ export default function InsightDetailsView() {
 
     const typesString = typeLabels.join(', ');
     return reports.length === 1
-      ? `This Insight is used in 1 report (${typesString})`
-      : `This Insight is used in ${String(reports.length)} reports (${typesString})`;
-  }, []);
+      ? t('insightsUi.reportsTooltipSingular', 'This Insight is used in 1 report ({{types}})', {
+          types: typesString,
+        })
+      : t(
+          'insightsUi.reportsTooltipPlural',
+          'This Insight is used in {{count}} reports ({{types}})',
+          { count: reports.length, types: typesString }
+        );
+  }, [t]);
 
   // ── Preview panel ──────────────────────────────────────────────────────────
   // Closed by default; restored from localStorage.
@@ -298,11 +306,11 @@ export default function InsightDetailsView() {
 
       return runError;
     } catch {
-      toast.error('Failed to load insight');
+      toast.error(t('insightsUi.loadError', 'Failed to load insight'));
       void navigate('..');
       return null;
     }
-  }, [dataMart?.id, insightId, navigate]);
+  }, [dataMart?.id, insightId, navigate, t]);
 
   const ensureActiveRunPolling = useCallback(async () => {
     if (!dataMart?.id || !insightId || triggerId) return;
@@ -358,11 +366,11 @@ export default function InsightDetailsView() {
 
             const runError = await loadEntity();
             if (status === 'CANCELLED') {
-              toast.error('Insight run was cancelled');
+              toast.error(t('insightsUi.runCancelled', 'Insight run was cancelled'));
             } else if (runError) {
-              toast.error('Insight run failed');
+              toast.error(t('insightsUi.runFailed', 'Insight run failed'));
             } else {
-              toast.success('Insight run completed');
+              toast.success(t('insightsUi.runCompleted', 'Insight run completed'));
             }
           }
         } catch (err) {
@@ -372,7 +380,7 @@ export default function InsightDetailsView() {
           window.clearInterval(interval);
           setTriggerId(null);
           setIsRunning(false);
-          const message = 'Failed to check insight run status';
+          const message = t('insightsUi.checkRunFailed', 'Failed to check insight run status');
           setRunErrorMessage(message);
           toast.error(message);
         }
@@ -383,7 +391,7 @@ export default function InsightDetailsView() {
       controller.abort();
       window.clearInterval(interval);
     };
-  }, [dataMart?.id, insightId, loadEntity, triggerId]);
+  }, [dataMart?.id, insightId, loadEntity, triggerId, t]);
 
   // ── Actions ────────────────────────────────────────────────────────────────
 
@@ -407,7 +415,7 @@ export default function InsightDetailsView() {
         details: updated.title,
         context: dataMart.id,
       });
-      toast.success('Insight saved');
+      toast.success(t('insightsUi.saved', 'Insight saved'));
       return updated;
     } catch {
       trackEvent({
@@ -417,12 +425,12 @@ export default function InsightDetailsView() {
         label: entity.id,
         context: dataMart.id,
       });
-      toast.error('Failed to save insight');
+      toast.error(t('insightsUi.saveFailed', 'Failed to save insight'));
       return null;
     } finally {
       setSaving(false);
     }
-  }, [canEdit, dataMart?.id, entity, insightId, template]);
+  }, [canEdit, dataMart?.id, entity, insightId, template, t]);
 
   const handleRun = useCallback(
     async (request: StartInsightTemplateExecutionRequestDto) => {
@@ -456,10 +464,10 @@ export default function InsightDetailsView() {
           context: dataMart.id,
         });
         setIsRunning(false);
-        toast.error('Failed to start insight run');
+        toast.error(t('insightsUi.startRunFailed', 'Failed to start insight run'));
       }
     },
-    [dataMart?.id, expandPreview, insightId, isDraft, isRunning]
+    [dataMart?.id, expandPreview, insightId, isDraft, isRunning, t]
   );
 
   const handleCancelRun = useCallback(async () => {
@@ -477,7 +485,7 @@ export default function InsightDetailsView() {
         label: insightId,
         context: dataMart.id,
       });
-      toast.success('Run cancelled');
+      toast.success(t('insightsUi.cancelled', 'Run cancelled'));
     } catch {
       trackEvent({
         event: 'insight_error',
@@ -486,9 +494,9 @@ export default function InsightDetailsView() {
         label: insightId,
         context: dataMart.id,
       });
-      toast.error('Failed to cancel run');
+      toast.error(t('insightsUi.cancelFailed', 'Failed to cancel run'));
     }
-  }, [dataMart?.id, insightId, triggerId]);
+  }, [dataMart?.id, insightId, triggerId, t]);
 
   const handleDelete = useCallback(async () => {
     if (!dataMart?.id || !insightId || !canDelete) return;
@@ -501,7 +509,7 @@ export default function InsightDetailsView() {
         label: insightId,
         context: dataMart.id,
       });
-      toast.success('Insight deleted');
+      toast.success(t('insightsUi.deleted', 'Insight deleted'));
       void navigate('..');
     } catch {
       trackEvent({
@@ -511,9 +519,9 @@ export default function InsightDetailsView() {
         label: insightId,
         context: dataMart.id,
       });
-      toast.error('Failed to delete insight');
+      toast.error(t('insightsUi.deleteFailed', 'Failed to delete insight'));
     }
-  }, [canDelete, dataMart?.id, insightId, navigate]);
+  }, [canDelete, dataMart?.id, insightId, navigate, t]);
 
   const { data: sources = [], refetch: refetchSources } = useInsightTemplateSources(
     dataMart?.id ?? '',
@@ -624,7 +632,7 @@ export default function InsightDetailsView() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to='..'>Insights</Link>
+                <Link to='..'>{t('sidebar.insights', 'Insights')}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -648,7 +656,7 @@ export default function InsightDetailsView() {
                       context: dataMart.id,
                       details: value,
                     });
-                    toast.success('Title updated');
+                    toast.success(t('insightsUi.titleUpdated', 'Title updated'));
                   }}
                   readOnly={!canEdit}
                 />
@@ -662,7 +670,7 @@ export default function InsightDetailsView() {
             <>
               <span className='flex items-center gap-1.5 text-xs font-medium text-yellow-600'>
                 <Circle className='h-2 w-2 fill-current' />
-                Unsaved changes
+                {t('insightsUi.unsavedChanges', 'Unsaved changes')}
               </span>
               <Button
                 variant='default'
@@ -670,7 +678,7 @@ export default function InsightDetailsView() {
                 onClick={() => void handleSave()}
               >
                 {saving ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
-                Save
+                {t('insightsUi.save', 'Save')}
               </Button>
             </>
           )}
@@ -684,7 +692,9 @@ export default function InsightDetailsView() {
             ) : (
               <Play className='mr-1h-4 w-4' />
             )}
-            {isRunPending ? 'Running…' : 'Run Insight'}
+            {isRunPending
+              ? t('insightsUi.running', 'Running…')
+              : t('insightsUi.runInsight', 'Run Insight')}
           </Button>
           <Button
             variant='outline'
@@ -693,7 +703,7 @@ export default function InsightDetailsView() {
             className='relative gap-2'
           >
             <Send className='h-4 w-4' />
-            Send & Schedule
+            {t('insightsUi.sendSchedule', 'Send & Schedule')}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -706,7 +716,7 @@ export default function InsightDetailsView() {
                 <>
                   <DropdownMenuItem onClick={() => void handleCancelRun()}>
                     <OctagonX className='h-4 w-4' />
-                    <span>Cancel insight run</span>
+                    <span>{t('insightsUi.cancelInsightRun', 'Cancel insight run')}</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </>
@@ -715,14 +725,14 @@ export default function InsightDetailsView() {
                 disabled={!canDelete}
                 onClick={() => {
                   if (!canDelete) {
-                    toast.error(NO_PERMISSION_MESSAGE);
+                    toast.error(t('common.noPermission'));
                     return;
                   }
                   setIsDeleteDialogOpen(true);
                 }}
               >
                 <Trash2 className='h-4 w-4 text-red-600' />
-                <span className='text-red-600'>Delete insight</span>
+                <span className='text-red-600'>{t('insightsUi.deleteInsight', 'Delete insight')}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -748,17 +758,17 @@ export default function InsightDetailsView() {
               <button
                 onClick={toggleAi}
                 className='text-muted-foreground hover:text-foreground flex h-full w-full flex-col items-center gap-3 py-3 transition-colors'
-                title='Expand AI Assistant'
+                title={t('insightsUi.expandAiAssistant', 'Expand AI Assistant')}
               >
                 <PanelLeftOpen className='h-4 w-4 shrink-0' />
                 <span className='rotate-180 text-xs font-medium [writing-mode:vertical-rl]'>
-                  AI Assistant
+                  {t('insightsUi.aiAssistant', 'AI Assistant')}
                 </span>
               </button>
             ) : (
               <>
                 <div className='flex h-12 shrink-0 items-center justify-between border-b px-4'>
-                  <div className='text-sm font-medium'>AI Assistant</div>
+                  <div className='text-sm font-medium'>{t('insightsUi.aiAssistant', 'AI Assistant')}</div>
                   <div className='flex items-center gap-1'>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -767,7 +777,7 @@ export default function InsightDetailsView() {
                             size='icon'
                             variant='ghost'
                             className='h-8 w-8'
-                            aria-label='New chat'
+                            aria-label={t('insightsUi.newChat', 'New chat')}
                             disabled={!canEdit || isAiBusy}
                             onClick={() => void aiAssistantRef.current?.startNewConversation()}
                           >
@@ -776,7 +786,7 @@ export default function InsightDetailsView() {
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {!canEdit ? NO_PERMISSION_MESSAGE : 'New chat'}
+                        {!canEdit ? t('common.noPermission') : t('insightsUi.newChat', 'New chat')}
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -785,7 +795,7 @@ export default function InsightDetailsView() {
                           size='icon'
                           variant='ghost'
                           className='h-8 w-8'
-                          aria-label={isAiHistoryView ? 'Back to chat' : 'Chat history'}
+                          aria-label={isAiHistoryView ? t('insightsUi.backToChat', 'Back to chat') : t('insightsUi.chatHistory', 'Chat history')}
                           disabled={isAiBusy}
                           onClick={() => {
                             setIsAiHistoryView(prev => !prev);
@@ -799,7 +809,7 @@ export default function InsightDetailsView() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {isAiHistoryView ? 'Back to chat' : 'Chat history'}
+                        {isAiHistoryView ? t('insightsUi.backToChat', 'Back to chat') : t('insightsUi.chatHistory', 'Chat history')}
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -808,7 +818,7 @@ export default function InsightDetailsView() {
                           <PanelLeftClose className='h-4 w-4' />
                         </Button>
                       </TooltipTrigger>
-                      <TooltipContent>Hide</TooltipContent>
+                      <TooltipContent>{t('insightsUi.hide', 'Hide')}</TooltipContent>
                     </Tooltip>
                   </div>
                 </div>
@@ -827,7 +837,7 @@ export default function InsightDetailsView() {
                     onRun={handleRun}
                   />
                 ) : (
-                  <div className='text-muted-foreground p-4 text-sm'>No data mart context.</div>
+                  <div className='text-muted-foreground p-4 text-sm'>{t('insightsUi.noDataMartContext', 'No data mart context.')}</div>
                 )}
               </>
             )}
@@ -846,7 +856,7 @@ export default function InsightDetailsView() {
             >
               <div className='flex h-full flex-col'>
                 <div className='flex h-12 shrink-0 items-center justify-between border-b px-4'>
-                  <div className='text-sm font-medium'>Insight</div>
+                  <div className='text-sm font-medium'>{t('insightsUi.insight', 'Insight')}</div>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -858,13 +868,15 @@ export default function InsightDetailsView() {
                         }}
                       >
                         <FileText className='h-4 w-4' />
-                        {reports.length > 0 ? `${String(reports.length)} reports` : 'No reports'}
+                        {reports.length > 0
+                          ? t('insightsUi.reportsCount', '{{count}} reports', { count: reports.length })
+                          : t('insightsUi.noReports', 'No reports')}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                       {reports.length > 0
                         ? getReportsTooltipText(reports)
-                        : 'No reports configured for this Insight yet'}
+                        : t('insightsUi.noReportsConfigured', 'No reports configured for this Insight yet')}
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -910,7 +922,7 @@ export default function InsightDetailsView() {
                   </ResizablePanel>
                 </ResizablePanelGroup>
                 <div className='bg-muted/50 text-muted-foreground flex h-9 shrink-0 items-center border-t px-3 text-xs'>
-                  Data Artifacts ({sources.length}/5)
+                  {t('insightsUi.dataArtifactsCount', 'Data Artifacts ({{count}}/5)', { count: sources.length })}
                   <Button
                     variant='ghost'
                     size='sm'
@@ -947,20 +959,20 @@ export default function InsightDetailsView() {
                   <button
                     onClick={togglePreview}
                     className='text-muted-foreground hover:text-foreground flex h-full w-full flex-col items-center gap-3 py-3 transition-colors'
-                    title='Expand Preview'
+                    title={t('insightsUi.expandPreview', 'Expand Preview')}
                   >
                     <PanelRightOpen className='h-4 w-4 shrink-0' />
                     <span className='rotate-180 text-xs font-medium [writing-mode:vertical-rl]'>
-                      Preview
+                      {t('insightsUi.preview', 'Preview')}
                     </span>
                   </button>
                 ) : (
                   <>
                     <div className='flex h-12 shrink-0 items-center justify-between border-b px-4'>
-                      <div className='text-sm font-medium'>Preview</div>
+                      <div className='text-sm font-medium'>{t('insightsUi.preview', 'Preview')}</div>
                       <div className='flex items-center gap-2'>
                         {runErrorMessage ? (
-                          <span className='text-xs text-red-500'>Last run failed</span>
+                          <span className='text-xs text-red-500'>{t('insightsUi.lastRunFailed', 'Last run failed')}</span>
                         ) : null}
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -978,7 +990,7 @@ export default function InsightDetailsView() {
                               )}
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>{isCopied ? 'Copied!' : 'Copy markdown'}</TooltipContent>
+                          <TooltipContent>{isCopied ? t('insightsUi.copied', 'Copied!') : t('insightsUi.copyMarkdown', 'Copy markdown')}</TooltipContent>
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -991,7 +1003,7 @@ export default function InsightDetailsView() {
                               <PanelRightClose className='h-4 w-4' />
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>Hide</TooltipContent>
+                          <TooltipContent>{t('insightsUi.hide', 'Hide')}</TooltipContent>
                         </Tooltip>
                       </div>
                     </div>
@@ -1012,9 +1024,9 @@ export default function InsightDetailsView() {
                             <EmptyMedia variant='icon'>
                               <Bookmark />
                             </EmptyMedia>
-                            <EmptyTitle>Ready to explore your data?</EmptyTitle>
+                            <EmptyTitle>{t('insightsUi.readyToExplore', 'Ready to explore your data?')}</EmptyTitle>
                             <EmptyDescription>
-                              Run the insight to uncover the story behind your data!
+                              {t('insightsUi.runToUncover', 'Run the insight to uncover the story behind your data!')}
                             </EmptyDescription>
                           </EmptyHeader>
                         </Empty>
@@ -1047,9 +1059,9 @@ export default function InsightDetailsView() {
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
         onConfirm={() => void handleDelete()}
-        title='Delete insight'
-        description='This action cannot be undone. Delete this insight?'
-        confirmLabel='Delete'
+        title={t('insightsUi.deleteInsightTitle', 'Delete insight')}
+        description={t('insightsUi.deleteInsightDescription', 'This action cannot be undone. Delete this insight?')}
+        confirmLabel={t('common.delete', 'Delete')}
         variant='destructive'
       />
 
@@ -1068,8 +1080,12 @@ export default function InsightDetailsView() {
           preSelectedDestination={null}
           isInsightContext={true}
           prefill={{
-            title: entity?.title ? `Report: ${entity.title}` : 'New report',
-            subject: entity?.title ? `Insight: ${entity.title}` : 'Insight Report',
+            title: entity?.title
+              ? t('insightsUi.reportPrefill', 'Report: {{title}}', { title: entity.title })
+              : t('insightsUi.newReportPrefill', 'New report'),
+            subject: entity?.title
+              ? t('insightsUi.insightPrefill', 'Insight: {{title}}', { title: entity.title })
+              : t('insightsUi.insightReportPrefill', 'Insight Report'),
             messageTemplate: template,
             insightTemplateId: insightId,
             templateSourceType: TemplateSourceTypeEnum.INSIGHT_TEMPLATE,

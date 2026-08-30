@@ -6,6 +6,7 @@ import { useBaseTable } from '../../../../../shared/hooks';
 import { BaseTable } from '../../../../../shared/components/Table';
 import { Button } from '@owox/ui/components/button';
 import { Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ScheduledTriggerTableProps {
   triggers: ScheduledTrigger[];
@@ -22,6 +23,7 @@ export function ScheduledTriggerTable({
   onDeleteTrigger,
   onRequestCreate,
 }: ScheduledTriggerTableProps) {
+  const { t } = useTranslation();
   const [isFormSheetOpen, setIsFormSheetOpen] = useState(false);
 
   const handleCloseFormSheet = useCallback(() => {
@@ -40,8 +42,9 @@ export function ScheduledTriggerTable({
       getScheduledTriggerColumns({
         onEditTrigger,
         onDeleteTrigger: handleDeleteClick,
+        t,
       }),
-    [onEditTrigger, handleDeleteClick]
+    [onEditTrigger, handleDeleteClick, t]
   );
 
   const { table } = useBaseTable<ScheduledTrigger>({

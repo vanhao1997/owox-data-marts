@@ -8,12 +8,14 @@ import {
 } from '../../../../../shared/components/CollapsibleCard';
 import { useMembersSettings } from '../../model/members-settings.context';
 import { MembershipRequestRow } from './MembershipRequestRow';
+import { useTranslation } from 'react-i18next';
 
 // Kept in sync with apps/web/e2e/selectors/testids.ts -> TESTIDS.pendingRequestsSection.
 // Src must not import from e2e/ (test-only tree); the contract is a literal string.
 const TESTID = 'pendingRequestsSection';
 
 export function PendingRequestsSection() {
+  const { t } = useTranslation();
   const { isAdmin, pendingRequests, openMembershipRequestSheet } = useMembersSettings();
 
   if (!isAdmin) return null;
@@ -24,7 +26,9 @@ export function PendingRequestsSection() {
       <CollapsibleCard collapsible defaultCollapsed={false}>
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle icon={UserPlus}>
-            <span id='pending-requests-heading'>Access requests</span>
+            <span id='pending-requests-heading'>
+              {t('membersPage.accessRequests', 'Access requests')}
+            </span>
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>

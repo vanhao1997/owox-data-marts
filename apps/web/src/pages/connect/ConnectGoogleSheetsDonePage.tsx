@@ -1,4 +1,5 @@
 import { CheckCircle2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * A dedicated, static route for the post-creation confirmation — not just a state inside
@@ -12,14 +13,17 @@ import { CheckCircle2 } from 'lucide-react';
  * at all), so nothing here should be treated as an authoritative confirmation of details.
  */
 export function ConnectGoogleSheetsDonePage() {
+  const { t } = useTranslation();
   return (
     <div className='bg-card text-card-foreground w-full max-w-lg rounded-lg p-6 text-center shadow-lg'>
       <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30'>
         <CheckCircle2 className='h-7 w-7 text-green-600 dark:text-green-400' aria-hidden='true' />
       </div>
-      <p className='text-sm'>Your Google Sheets destination was created successfully.</p>
+      <p className='text-sm'>
+        {t('googleSheetsConnectPage.createdSuccess', 'Your Google Sheets destination was created successfully.')}
+      </p>
       <p className='text-muted-foreground mt-1 text-sm'>
-        You can close this tab now and return to your conversation to continue.
+        {t('googleSheetsConnectPage.closeAndReturn', 'You can close this tab now and return to your conversation to continue.')}
       </p>
     </div>
   );

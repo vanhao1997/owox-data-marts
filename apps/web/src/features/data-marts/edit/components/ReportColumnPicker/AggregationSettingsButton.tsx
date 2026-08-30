@@ -3,6 +3,7 @@ import { Badge } from '@owox/ui/components/badge';
 import { Button } from '@owox/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { cn } from '@owox/ui/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface AggregationSettingsButtonProps {
   active: boolean;
@@ -17,6 +18,8 @@ export function AggregationSettingsButton({
   onClick,
   count,
 }: AggregationSettingsButtonProps) {
+  const { t } = useTranslation();
+  const aggregationsLabel = t('reportColumnPicker.aggregations', 'Aggregations');
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -24,7 +27,7 @@ export function AggregationSettingsButton({
           type='button'
           variant={open ? 'secondary' : 'ghost'}
           size='sm'
-          aria-label='Aggregations'
+          aria-label={aggregationsLabel}
           aria-expanded={open}
           onClick={onClick}
           className='relative h-7 w-7 gap-1'
@@ -33,7 +36,7 @@ export function AggregationSettingsButton({
           {typeof count === 'number' && count > 0 && (
             <Badge
               variant='default'
-              aria-label='Aggregations count'
+              aria-label={t('reportColumnPicker.aggregationsCount', 'Aggregations count')}
               className='pointer-events-none absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[8px] leading-none'
             >
               {count}
@@ -41,7 +44,7 @@ export function AggregationSettingsButton({
           )}
         </Button>
       </TooltipTrigger>
-      <TooltipContent>Aggregations &amp; grouping</TooltipContent>
+      <TooltipContent>{t('reportColumnPicker.aggregationsGrouping', 'Aggregations & grouping')}</TooltipContent>
     </Tooltip>
   );
 }

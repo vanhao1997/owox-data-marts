@@ -64,6 +64,7 @@ import {
 } from '../../utils/apply-output-config-change';
 import { DEFAULT_REPORT_TITLE } from '../../../shared';
 import { useDataMartContext } from '../../../../edit/model';
+import { useTranslation } from 'react-i18next';
 
 interface ReportEditFormProps {
   initialReport?: DataMartReport;
@@ -89,6 +90,7 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const formId = 'report-edit-form';
     const titleInputId = 'report-title-input';
     const documentUrlInputId = 'report-document-url-input';
@@ -258,13 +260,13 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
           onSubmit={e => void form.handleSubmit(handleFormSubmit, focusFirstInvalidField)(e)}
         >
           <FormLayout>
-            <FormSection title='General'>
+            <FormSection title={t('reportsUi.general', 'General')}>
               <FormField
                 control={form.control}
                 name='title'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel tooltip='Add a title that reflects the report`s purpose'>
+                    <FormLabel tooltip={t('reportsUi.titleTooltip', "Add a title that reflects the report's purpose")}>
                       Title
                     </FormLabel>
                     <FormControl>
@@ -279,7 +281,7 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
                 name='dataDestinationId'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel tooltip='Select one of your existing destinations'>
+                      <FormLabel tooltip={t('reportsUi.selectDestinationTooltip', 'Select one of your existing destinations')}>
                       Destination
                     </FormLabel>
                     <Select
@@ -350,22 +352,22 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
                     {filteredDestinations.length === 0 && !loadingDestinations && (
                       <Alert className='mt-2'>
                         <AlertCircle className='h-4 w-4' />
-                        <AlertTitle>No destinations available</AlertTitle>
+                        <AlertTitle>{t('reportsUi.noDestinations', 'No destinations available')}</AlertTitle>
                         <AlertDescription>
-                          You need to create a Destination before you can create a report.{' '}
+                          {t('reportsUi.createDestinationFirst', 'You need to create a Destination before you can create a report.')}{' '}
                           <Link
                             to={scope('/data-destinations')}
                             className='font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300'
                           >
-                            Go to Destinations
+                            {t('reportsUi.goDestinations', 'Go to Destinations')}
                           </Link>
                         </AlertDescription>
                       </Alert>
                     )}
                     {field.value && selectedDestinationEmail && (
                       <div className='mt-2 flex flex-col gap-1'>
-                        <FormLabel tooltip='Share the Google Sheet with this email to allow writing'>
-                          Share document with
+                        <FormLabel tooltip={t('reportsUi.shareDocumentTooltip', 'Share the Google Sheet with this email to allow writing')}>
+                          {t('reportsUi.shareDocumentWith', 'Share document with')}
                         </FormLabel>
                         <CopyableField value={selectedDestinationEmail}>
                           {selectedDestinationEmail}
@@ -390,8 +392,8 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
               )}
             </FormSection>
             <FormSection
-              title='Report Columns'
-              tooltip='Select which columns to include in the report'
+              title={t('reportsUi.reportColumns', 'Report Columns')}
+              tooltip={t('reportsUi.reportColumnsTooltip', 'Select which columns to include in the report')}
               titleAdornment={<ReportColumnsCountBadge count={columnsCount} />}
               fields={[
                 'columnConfig',
@@ -443,7 +445,7 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
             {/* Nothing to schedule: a pull report is refreshed by its consumer, and the
                 server has no run to put on a timer. */}
             {!isPullDestination && (
-              <FormSection title='Automate Report Runs'>
+              <FormSection title={t('reportsUi.automateRuns', 'Automate Report Runs')}>
                 {dataMart?.id ? (
                   <ReportSchedulesInlineList
                     ref={scheduleRef}
@@ -457,27 +459,27 @@ export const ReportEditForm = forwardRef<HTMLFormElement, ReportEditFormProps>(
               </FormSection>
             )}
 
-            <FormSection title='Ownership'>
+            <FormSection title={t('reportsUi.ownership', 'Ownership')}>
               <FormItem>
-                <FormLabel tooltip='Team members responsible for this report'>Owners</FormLabel>
+                <FormLabel tooltip={t('reportsUi.ownersTooltip', 'Team members responsible for this report')}>{t('reportsUi.owners', 'Owners')}</FormLabel>
                 <OwnersSection ownerUsers={ownerUsers} onSave={handleOwnersChange} />
               </FormItem>
             </FormSection>
 
             {initialReport?.createdAt && (
-              <FormSection title='Details'>
+              <FormSection title={t('reportsUi.details', 'Details')}>
                 <FormItem>
-                  <FormLabel>Created By</FormLabel>
+                  <FormLabel>{t('reportsUi.createdBy', 'Created By')}</FormLabel>
                   <div className='text-sm'>
                     {initialReport.createdByUser ? (
                       <UserReference userProjection={initialReport.createdByUser} variant='full' />
                     ) : (
-                      <span className='text-muted-foreground'>Unknown</span>
+                      <span className='text-muted-foreground'>{t('reportsUi.unknown', 'Unknown')}</span>
                     )}
                   </div>
                 </FormItem>
                 <FormItem>
-                  <FormLabel>Created At</FormLabel>
+                  <FormLabel>{t('reportsUi.createdAt', 'Created At')}</FormLabel>
                   <div className='text-muted-foreground text-sm'>
                     {new Date(initialReport.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',

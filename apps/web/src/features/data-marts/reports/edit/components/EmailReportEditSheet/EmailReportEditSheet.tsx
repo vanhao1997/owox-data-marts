@@ -12,6 +12,7 @@ import { Link, useLocation, useParams } from 'react-router';
 import { useUnsavedGuard } from '../../../../../../hooks/useUnsavedGuard';
 import { useIntercomLauncher } from '../../../../../../shared/hooks/useIntercomLauncher';
 import { ReportSheetDescription } from '../ReportSheetDescription';
+import { useTranslation } from 'react-i18next';
 
 interface EmailReportEditSheetProps {
   isOpen: boolean;
@@ -44,6 +45,7 @@ export function EmailReportEditSheet({
   isInsightContext = false,
   isReadOnly = false,
 }: EmailReportEditSheetProps) {
+  const { t } = useTranslation();
   const { projectId, id: dataMartId } = useParams<{ projectId: string; id: string }>();
   const { pathname } = useLocation();
   const {
@@ -59,15 +61,14 @@ export function EmailReportEditSheet({
     const to = projectId && dataMartId ? `/ui/${projectId}/data-marts/${dataMartId}/reports` : '/';
     const isOnDestinationsPage = pathname.includes('/reports');
     if (!isOnDestinationsPage) {
-      toast('Report has been created', {
+      toast(t('reportsUi.reportCreatedToast', 'Đã tạo báo cáo'), {
         closeButton: true,
         description: (
           <>
-            You can view it in{' '}
+            {t('reportsUi.viewItInDestinations', 'Bạn có thể xem trong trang Điểm đến')}{' '}
             <Link to={to} className='underline underline-offset-4' onClick={() => toast.dismiss()}>
-              Destinations
+              {t('destinationsPage.title', 'Điểm đến')}
             </Link>{' '}
-            page
           </>
         ),
         duration: Infinity,
@@ -75,7 +76,7 @@ export function EmailReportEditSheet({
     }
     void onSubmitSuccess?.();
     baseHandleFormSubmitSuccess();
-  }, [baseHandleFormSubmitSuccess, dataMartId, onSubmitSuccess, pathname, projectId]);
+  }, [baseHandleFormSubmitSuccess, dataMartId, onSubmitSuccess, pathname, projectId, t]);
 
   useIntercomLauncher(isOpen);
 
@@ -92,12 +93,20 @@ export function EmailReportEditSheet({
         <SheetHeader>
           <SheetTitle>
             {preSelectedDestination?.title ??
-              (mode === ReportFormMode.CREATE ? 'Create Report' : 'Report')}
+              (mode === ReportFormMode.CREATE
+                ? t('reportsUi.createReportSheetTitle', 'Tạo báo cáo')
+                : t('reportsUi.report', 'Báo cáo'))}
           </SheetTitle>
           <ReportSheetDescription mode={mode} report={initialReport}>
             {mode === ReportFormMode.CREATE
-              ? 'Fill in the details to create a new report'
-              : 'Update details of an existing report'}
+              ? t(
+                  'reportsUi.createReportSheetDescription',
+                  'Điền thông tin để tạo báo cáo mới'
+                )
+              : t(
+                  'reportsUi.editReportSheetDescription',
+                  'Cập nhật thông tin của báo cáo hiện có'
+                )}
           </ReportSheetDescription>
         </SheetHeader>
 

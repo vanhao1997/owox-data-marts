@@ -3,6 +3,7 @@ import type { ConnectorDefinitionConfig } from '../../../../data-marts/edit/mode
 import { ConnectorRunForm } from './ConnectorRunForm';
 import type { ConnectorRunFormData } from '../../../shared/model/types/connector';
 import { useIntercomLauncher } from '../../../../../shared/hooks/useIntercomLauncher';
+import { useTranslation } from 'react-i18next';
 
 interface ConnectorRunSheetProps {
   isOpen: boolean;
@@ -17,13 +18,14 @@ export function ConnectorRunSheet({
   configuration,
   onSubmit,
 }: ConnectorRunSheetProps) {
+  const { t } = useTranslation();
   useIntercomLauncher(isOpen);
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Manual Run</SheetTitle>
+          <SheetTitle>{t('connectorRun.manualRun')}</SheetTitle>
         </SheetHeader>
         <ConnectorRunForm configuration={configuration} onClose={onClose} onSubmit={onSubmit} />
       </SheetContent>

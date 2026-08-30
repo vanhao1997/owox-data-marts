@@ -8,16 +8,9 @@ import {
   AlertDialogTitle,
 } from '@owox/ui/components/alert-dialog';
 import { Button } from '@owox/ui/components/button';
+import { useTranslation } from 'react-i18next';
 import { DataMartDefinitionType } from '../../../shared';
 import type { InputSourceChangeImpact } from './useInputSourceChangeImpact';
-
-const TYPE_LABELS: Record<DataMartDefinitionType, string> = {
-  [DataMartDefinitionType.SQL]: 'SQL',
-  [DataMartDefinitionType.TABLE]: 'Table',
-  [DataMartDefinitionType.VIEW]: 'View',
-  [DataMartDefinitionType.TABLE_PATTERN]: 'Pattern',
-  [DataMartDefinitionType.CONNECTOR]: 'Connector',
-};
 
 interface ChangeInputSourceTypeDialogProps {
   open: boolean;
@@ -32,19 +25,15 @@ interface ChangeInputSourceTypeDialogProps {
   onCancel: () => void;
 }
 
-function pluralize(count: number, singular: string): string {
-  return `${String(count)} ${count === 1 ? singular : `${singular}s`}`;
-}
-
-function describeImpact(impact: InputSourceChangeImpact): string | null {
+function describeImpact(impact: InputSourceChangeImpact, t: ReturnType<typeof useTranslation>['t']): string | null {
   const relationships = impact.inboundRelationships + impact.outboundRelationships;
   const parts: string[] = [];
 
   if (relationships > 0) {
-    parts.push(pluralize(relationships, 'relationship'));
+    parts.push(t('inputSourceChange.relationships', { count: relationships }));
   }
   if (impact.reports > 0) {
-    parts.push(pluralize(impact.reports, 'report'));
+    parts.push(t('inputSourceChange.reports', { count: impact.reports }));
   }
 
   if (parts.length === 0) {
@@ -65,7 +54,15 @@ export function ChangeInputSourceTypeDialog({
   onConfirm,
   onCancel,
 }: ChangeInputSourceTypeDialogProps) {
-  const dependants = impact ? describeImpact(impact) : null;
+  const { t } = useTranslation();
+  const typeLabels: Record<DataMartDefinitionType, string> = {
+    [DataMartDefinitionType.SQL]: 'SQL',
+    [DataMartDefinitionType.TABLE]: t('inputSourceChange.types.table'),
+    [DataMartDefinitionType.VIEW]: t('inputSourceChange.types.view'),
+    [DataMartDefinitionType.TABLE_PATTERN]: t('inputSourceChange.types.pattern'),
+    [DataMartDefinitionType.CONNECTOR]: t('inputSourceChange.types.connector'),
+  };
+  const dependants = impact ? describeImpact(impact, t) : null;
 
   return (
     <AlertDialog
@@ -79,39 +76,37 @@ export function ChangeInputSourceTypeDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Change input source from {TYPE_LABELS[fromType]} to {TYPE_LABELS[toType]}?
+            {t('inputSourceChange.title', { from: typeLabels[fromType], to: typeLabels[toType] })}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This Data Mart keeps its relationships, reports and field metadata. Fields that are
-            missing from the new source will be marked as disconnected, and anything built on them
-            will need attention.
+            {t('inputSourceChange.description')}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         {/* A failed read is "unknown", never "zero": the reassuring copy is reserved for a
             successful response that actually counted nothing. */}
         {isLoadingImpact ? (
-          <p className='text-muted-foreground text-sm'>Checking what depends on this Data Mart…</p>
+          <p className='text-muted-foreground text-sm'>{t('inputSourceChange.checking')}</p>
         ) : impactFailed ? (
           <p className='text-muted-foreground text-sm'>
-            Couldn’t check what depends on this Data Mart. You can still proceed, or{' '}
+            {t('inputSourceChange.failed')} {' '}
             <button type='button' className='underline underline-offset-2' onClick={onRetryImpact}>
-              try again
+              {t('inputSourceChange.retry')}
             </button>
             .
           </p>
         ) : impact ? (
           <p className='text-muted-foreground text-sm'>
             {dependants
-              ? `${dependants} depend on this Data Mart.`
-              : 'Nothing else depends on this Data Mart yet.'}
+              ? t('inputSourceChange.dependants', { dependants })
+              : t('inputSourceChange.none')}
           </p>
         ) : null}
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
           <Button type='button' onClick={onConfirm}>
-            Change input source
+            {t('inputSourceChange.confirm')}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

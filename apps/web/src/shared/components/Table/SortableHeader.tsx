@@ -2,6 +2,7 @@ import { type Column, type ColumnMeta } from '@tanstack/react-table';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
 import { useCallback, type PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ExtendedColumnMeta<TData> extends ColumnMeta<TData, unknown> {
   title?: string;
@@ -21,6 +22,7 @@ export interface SortableHeaderProps<TData> extends PropsWithChildren {
  * - Provides accessible aria attributes
  */
 export function SortableHeader<TData>({ column, children, label }: SortableHeaderProps<TData>) {
+  const { t } = useTranslation();
   const isSorted = column.getIsSorted();
 
   const handleSort = useCallback(() => {
@@ -28,9 +30,9 @@ export function SortableHeader<TData>({ column, children, label }: SortableHeade
   }, [column]);
 
   const getSortDescription = () => {
-    if (isSorted === 'asc') return 'sorted ascending';
-    if (isSorted === 'desc') return 'sorted descending';
-    return 'not sorted';
+    if (isSorted === 'asc') return t('table.sortedAscending', 'sorted ascending');
+    if (isSorted === 'desc') return t('table.sortedDescending', 'sorted descending');
+    return t('table.notSorted', 'not sorted');
   };
 
   const getAriaSort = () => {
@@ -53,7 +55,10 @@ export function SortableHeader<TData>({ column, children, label }: SortableHeade
       variant='ghost'
       onClick={handleSort}
       className='group flex h-8 w-full min-w-[48px] cursor-pointer items-center gap-2 transition-colors duration-200 hover:bg-white hover:shadow-xs dark:hover:bg-white/4'
-      aria-label={`${ariaLabel} - ${getSortDescription()}. Click to sort.`}
+      aria-label={t('table.sortAriaLabel', '{{label}} - {{state}}. Click to sort.', {
+        label: ariaLabel,
+        state: getSortDescription(),
+      })}
       aria-sort={getAriaSort()}
     >
       {showHeaderTitle && (

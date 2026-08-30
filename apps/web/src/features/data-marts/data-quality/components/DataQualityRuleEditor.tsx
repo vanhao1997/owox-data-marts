@@ -5,6 +5,7 @@ import { Badge } from '@owox/ui/components/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { Info } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   DATA_QUALITY_CATEGORY_DESCRIPTIONS,
   DATA_QUALITY_CATEGORY_LABELS,
@@ -40,6 +41,7 @@ export function DataQualityRuleEditor({
   scopeDetails = [],
   onChange,
 }: DataQualityRuleEditorProps) {
+  const { t } = useTranslation();
   const categoryTitle = DATA_QUALITY_CATEGORY_LABELS[rule.category];
   const title = titleSuffix ? `${categoryTitle} · ${titleSuffix}` : categoryTitle;
   const controlsDisabled = disabled || !rule.isApplicable;
@@ -55,7 +57,7 @@ export function DataQualityRuleEditor({
         <div className='min-w-0 flex-1'>
           <div className='flex items-center gap-3'>
             <Switch
-              aria-label={`Enable ${title}`}
+              aria-label={t('dataQualityUi.enableRule', 'Enable {{title}}', { title })}
               checked={value.enabled}
               disabled={switchDisabled}
               onCheckedChange={enabled => {
@@ -69,7 +71,7 @@ export function DataQualityRuleEditor({
                   <TooltipTrigger asChild>
                     <button
                       type='button'
-                      aria-label={`About ${title}`}
+                      aria-label={t('dataQualityUi.aboutRule', 'About {{title}}', { title })}
                       className='focus-visible:ring-ring pointer-events-none rounded-sm opacity-0 transition-opacity group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100 focus-visible:ring-2 focus-visible:outline-none'
                     >
                       <Info className='text-muted-foreground size-3.5' aria-hidden='true' />
@@ -85,7 +87,9 @@ export function DataQualityRuleEditor({
                     {DATA_QUALITY_CATEGORY_DESCRIPTIONS[rule.category]}
                   </TooltipContent>
                 </Tooltip>
-                {!rule.isApplicable && <Badge variant='outline'>Not applicable</Badge>}
+                {!rule.isApplicable && (
+                  <Badge variant='outline'>{t('dataQualityUi.notApplicable', 'Not applicable')}</Badge>
+                )}
               </div>
               {shouldShowScopeLabel && (
                 <div className='text-muted-foreground mt-1 text-xs'>
@@ -99,7 +103,7 @@ export function DataQualityRuleEditor({
           </div>
           {!rule.isApplicable && (
             <p className='text-muted-foreground mt-2 text-xs'>
-              {rule.notApplicableReason ?? 'This check is not applicable.'}
+              {rule.notApplicableReason ?? t('dataQualityUi.notApplicableReason', 'This check is not applicable.')}
             </p>
           )}
         </div>
@@ -110,11 +114,11 @@ export function DataQualityRuleEditor({
         >
           <div className='flex shrink-0 items-center gap-2'>
             <Label className='whitespace-nowrap' htmlFor={`${controlId}-severity`}>
-              Severity
+              {t('dataQualityUi.severity', 'Severity')}
             </Label>
             <select
               id={`${controlId}-severity`}
-              aria-label={`Severity for ${title}`}
+              aria-label={t('dataQualityUi.severityFor', 'Severity for {{title}}', { title })}
               value={value.severity}
               disabled={controlsDisabled}
               onChange={event => {
@@ -124,7 +128,7 @@ export function DataQualityRuleEditor({
             >
               {SEVERITIES.map(severity => (
                 <option key={severity} value={severity}>
-                  {severity}
+                  {t(`dataQualityUi.severities.${severity}`, severity)}
                 </option>
               ))}
             </select>
@@ -133,11 +137,11 @@ export function DataQualityRuleEditor({
           {rule.category === 'null_rate' && (
             <div className='flex shrink-0 items-center gap-2'>
               <Label className='whitespace-nowrap' htmlFor={`${controlId}-threshold-percent`}>
-                Threshold, %
+                {t('dataQualityUi.thresholdPercent', 'Threshold, %')}
               </Label>
               <NumericParameterInput
                 id={`${controlId}-threshold-percent`}
-                aria-label='Null rate threshold percent'
+                aria-label={t('dataQualityUi.nullRateThreshold', 'Null rate threshold percent')}
                 min={0}
                 max={100}
                 className='w-36'
@@ -156,11 +160,13 @@ export function DataQualityRuleEditor({
           {rule.category === 'data_freshness' && (
             <div className='flex shrink-0 items-center gap-2'>
               <Label className='whitespace-nowrap' htmlFor={`${controlId}-threshold-hours`}>
-                Threshold, hours
+                {t('dataQualityUi.thresholdHours', 'Threshold, hours')}
               </Label>
               <NumericParameterInput
                 id={`${controlId}-threshold-hours`}
-                aria-label={`Data freshness threshold hours for ${dataQualityScopeLabel(rule.scope)}`}
+                aria-label={t('dataQualityUi.freshnessThreshold', 'Data freshness threshold hours for {{scope}}', {
+                  scope: dataQualityScopeLabel(rule.scope),
+                })}
                 min={0}
                 max={MAX_THRESHOLD_HOURS}
                 className='w-36'

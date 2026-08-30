@@ -8,6 +8,7 @@ import {
   getDataQualityStatusVisual,
 } from '../../shared/utils/data-quality-status';
 import { formatDateShort } from '../../../../utils/date-formatters';
+import { useTranslation } from 'react-i18next';
 
 interface DataQualityCanvasStatusIconProps {
   dataMartTitle: string;
@@ -19,8 +20,10 @@ interface DataQualityCanvasStatusIconProps {
 const PREVIEW_OPEN_DELAY_MS = 100;
 const PREVIEW_CLOSE_DELAY_MS = 200;
 
-function pluralize(count: number, singular: string): string {
-  return `${count} ${singular}${count === 1 ? '' : 's'}`;
+function pluralize(count: number, singular: string, language?: string): string {
+  return (language ?? 'en').startsWith('vi')
+    ? `${count} ${singular}`
+    : `${count} ${singular}${count === 1 ? '' : 's'}`;
 }
 
 export function DataQualityCanvasStatusIcon({
@@ -29,6 +32,7 @@ export function DataQualityCanvasStatusIcon({
   onOpenQuality,
   onRunQuality,
 }: DataQualityCanvasStatusIconProps) {
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isStartingQuality, setIsStartingQuality] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -44,25 +48,25 @@ export function DataQualityCanvasStatusIcon({
   const resultIndicators = [
     {
       count: summary.errorChecks,
-      singular: 'execution error',
+      singular: t('dataQualityUi.executionErrorShort', 'execution error'),
       tone: 'error' as const,
       icon: ShieldX,
     },
     {
       count: summary.errorFindings,
-      singular: 'critical finding',
+      singular: t('dataQualityUi.criticalFinding', 'critical finding'),
       tone: 'error' as const,
       icon: ShieldAlert,
     },
     {
       count: summary.warningFindings,
-      singular: 'warning finding',
+      singular: t('dataQualityUi.warningFinding', 'warning finding'),
       tone: 'warning' as const,
       icon: ShieldAlert,
     },
     {
       count: summary.noticeFindings,
-      singular: 'notice finding',
+      singular: t('dataQualityUi.noticeFinding', 'notice finding'),
       tone: 'notice' as const,
       icon: ShieldAlert,
     },
@@ -71,16 +75,20 @@ export function DataQualityCanvasStatusIcon({
     (summary.state === 'ISSUES' || summary.state === 'EXECUTION_FAILED') &&
     resultIndicators.length > 0;
   const resultIndicatorLabel = resultIndicators
-    .map(indicator => pluralize(indicator.count, indicator.singular))
+    .map(indicator => pluralize(indicator.count, indicator.singular, i18n.language))
     .join(', ');
-  const actionLabel = `Open Data Quality for ${dataMartTitle}: ${presentation.label}${showResultIndicators ? `, ${resultIndicatorLabel}` : ''}`;
+  const actionLabel = t('dataQualityUi.openFor', 'Open Data Quality for {{title}}: {{status}}{{details}}', {
+    title: dataMartTitle,
+    status: presentation.label,
+    details: showResultIndicators ? `, ${resultIndicatorLabel}` : '',
+  });
   const isActive = presentation.isActive;
   const timeLabel =
     summary.state === 'QUEUED'
-      ? 'Queued'
-      : summary.state === 'RUNNING'
-        ? 'Started'
-        : 'Last checked';
+      ? t('dataQualityUi.queued', 'Queued')
+    : summary.state === 'RUNNING'
+      ? t('dataQualityUi.started', 'Started')
+      : t('dataQualityUi.lastChecked', 'Last checked');
 
   function clearOpenTimer() {
     if (openTimerRef.current === null) return;
@@ -237,7 +245,7 @@ export function DataQualityCanvasStatusIcon({
         >
           {showResultIndicators ? (
             resultIndicators.map(indicator => {
-              const label = pluralize(indicator.count, indicator.singular);
+              const label = pluralize(indicator.count, indicator.singular, i18n.language);
               const IndicatorIcon = indicator.icon;
               return (
                 <span
@@ -264,7 +272,7 @@ export function DataQualityCanvasStatusIcon({
         side='top'
         align='center'
         role='region'
-        aria-label={`Data Quality checks for ${dataMartTitle}`}
+        aria-label={t('dataQualityUi.checksFor', 'Data Quality checks for {{title}}', { title: dataMartTitle })}
         className='w-72 max-w-72 p-3 text-xs sm:w-72 sm:max-w-72'
         onOpenAutoFocus={event => {
           event.preventDefault();
@@ -295,7 +303,7 @@ export function DataQualityCanvasStatusIcon({
       >
         <div className='border-border flex items-center justify-between gap-3 border-b pb-2'>
           <PopoverTitle className='text-sm font-semibold whitespace-nowrap'>
-            Data Quality checks
+            {t('dataQualityUi.checks', 'Data Quality checks')}
           </PopoverTitle>
           <span
             className={`${DATA_QUALITY_STATUS_TEXT_CLASSES[presentation.tone]} shrink-0 font-medium whitespace-nowrap`}
@@ -304,14 +312,14 @@ export function DataQualityCanvasStatusIcon({
           </span>
         </div>
         <div className='text-muted-foreground space-y-1 py-2'>
-          {summary.enabledChecks > 0 && <p>{summary.enabledChecks} enabled</p>}
+          {summary.enabledChecks > 0 && <p>{t('dataQualityUi.enabledCount', '{{count}} enabled', { count: summary.enabledChecks })}</p>}
           {isActive ? (
-            <p>Terminal results will be available after this run finishes.</p>
+            <p>{t('dataQualityUi.terminalResults', 'Terminal results will be available after this run finishes.')}</p>
           ) : (
             <>
-              {summary.passedChecks > 0 && <p>{summary.passedChecks} passed</p>}
+              {summary.passedChecks > 0 && <p>{t('dataQualityUi.passedCount', '{{count}} passed', { count: summary.passedChecks })}</p>}
               {summary.notApplicableChecks > 0 && (
-                <p>{summary.notApplicableChecks} not applicable</p>
+                <p>{t('dataQualityUi.notApplicableCount', '{{count}} not applicable', { count: summary.notApplicableChecks })}</p>
               )}
               {summary.errorChecks > 0 && (
                 <p>{pluralize(summary.errorChecks, 'execution error')}</p>

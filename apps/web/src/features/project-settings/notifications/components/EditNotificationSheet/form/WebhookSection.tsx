@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { FieldItem, FieldLabel, FieldDescription } from './FormField';
+import { useTranslation } from 'react-i18next';
 
 interface WebhookSectionProps {
   webhookUrl: string;
@@ -29,11 +30,12 @@ export function WebhookSection({
   testError,
   testSuccess,
 }: WebhookSectionProps) {
+  const { t } = useTranslation();
   return (
-    <FormSection title='Webhook'>
+    <FormSection title={t('notificationsPage.webhook', 'Webhook')}>
       <FieldItem>
-        <FieldLabel tooltip='Enter the URL where webhook notifications should be sent'>
-          Webhook URL
+        <FieldLabel tooltip={t('notificationsPage.webhookTooltip', 'Enter the URL where webhook notifications should be sent')}>
+          {t('notificationsPage.webhookUrl', 'Webhook URL')}
         </FieldLabel>
         <div className='flex gap-2'>
           <Input
@@ -51,7 +53,7 @@ export function WebhookSection({
             onClick={onTest}
             disabled={(disabled ?? false) || (isTesting ?? false) || !webhookUrl}
           >
-            {isTesting ? <Loader2 className='h-4 w-4 animate-spin' /> : 'Test'}
+            {isTesting ? <Loader2 className='h-4 w-4 animate-spin' /> : t('notificationsPage.test', 'Test')}
           </Button>
         </div>
         {testError && (
@@ -63,16 +65,15 @@ export function WebhookSection({
         {testSuccess && !testError && (
           <p className='flex items-center gap-1.5 text-sm text-green-600'>
             <CheckCircle2 className='h-4 w-4 shrink-0' />
-            Test webhook sent successfully
+            {t('notificationsPage.testSuccess', 'Test webhook sent successfully')}
           </p>
         )}
         <FieldDescription>
           <Accordion variant='common' type='single' collapsible>
             <AccordionItem value='webhook-info'>
-              <AccordionTrigger>How webhooks work?</AccordionTrigger>
+              <AccordionTrigger>{t('notificationsPage.howWebhooksWork', 'How webhooks work?')}</AccordionTrigger>
               <AccordionContent>
-                Webhooks send real-time notifications directly to your endpoint. The request payload
-                contains event details in JSON format.
+                {t('notificationsPage.webhookDescription', 'Webhooks send real-time notifications directly to your endpoint. The request payload contains event details in JSON format.')}
               </AccordionContent>
             </AccordionItem>
           </Accordion>

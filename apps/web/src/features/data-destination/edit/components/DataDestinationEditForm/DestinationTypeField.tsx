@@ -41,11 +41,11 @@ export function DestinationTypeField({
       name='type'
       render={({ field }) => (
         <FormItem>
-          <FormLabel tooltip='Select the destination to send your data'>Destination Type</FormLabel>
+          <FormLabel tooltip='Chọn điểm đến để gửi dữ liệu của bạn'>Loại điểm đến</FormLabel>
           <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!isEditMode}>
             <FormControl>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select a destination type' />
+                <SelectValue placeholder='Chọn loại điểm đến' />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

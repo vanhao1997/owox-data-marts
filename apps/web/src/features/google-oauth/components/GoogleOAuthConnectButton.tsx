@@ -4,6 +4,7 @@ import {
   destinationOAuthApi,
   type OAuthStatus,
 } from '../api/google-oauth-api.service';
+import { useTranslation } from 'react-i18next';
 
 const GoogleLogo = () => (
   <svg className='h-5 w-5 shrink-0' viewBox='0 0 24 24'>
@@ -50,6 +51,7 @@ export function GoogleOAuthConnectButton({
   onSuccess,
   onStatusChange,
 }: GoogleOAuthConnectButtonProps) {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<OAuthStatus | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
   const [connecting, setConnecting] = useState(false);
@@ -162,10 +164,12 @@ export function GoogleOAuthConnectButton({
         void (async () => {
           try {
             if (data.error || !data.code) {
-              throw new Error(data.error ?? 'No authorization code received from Google');
+              throw new Error(
+                data.error ?? t('googleOAuth.errors.noAuthorizationCode', 'No authorization code received from Google')
+              );
             }
             if (data.state !== state) {
-              throw new Error('Invalid state token. Please try again.');
+              throw new Error(t('googleOAuth.errors.invalidState', 'Invalid state token. Please try again.'));
             }
 
             const result =
@@ -181,9 +185,9 @@ export function GoogleOAuthConnectButton({
             console.error('Google OAuth connection failed', error);
             setConnecting(false);
             setConnectError(
-              error instanceof Error && error.message
-                ? error.message
-                : 'Failed to connect your Google account. Please try again.'
+                error instanceof Error && error.message
+                  ? error.message
+                : t('googleOAuth.errors.connectFailed', 'Failed to connect your Google account. Please try again.')
             );
           }
         })();
@@ -200,7 +204,9 @@ export function GoogleOAuthConnectButton({
 
       if (!popup) {
         cleanup();
-        throw new Error('Popup was blocked. Please allow popups for this site and try again.');
+        throw new Error(
+          t('googleOAuth.errors.popupBlocked', 'Popup was blocked. Please allow popups for this site and try again.')
+        );
       }
       popupRef.current = popup;
 
@@ -220,7 +226,7 @@ export function GoogleOAuthConnectButton({
       setConnectError(
         error instanceof Error
           ? error.message
-          : 'Failed to start OAuth connection. Please try again.'
+          : t('googleOAuth.errors.startFailed', 'Failed to start OAuth connection. Please try again.')
       );
     }
   };
@@ -242,10 +248,11 @@ export function GoogleOAuthConnectButton({
         >
           <GoogleLogo />
           {connecting ? (
-            'Connecting...'
+            t('googleOAuth.connecting', 'Connecting...')
           ) : (
             <>
-              Authenticated as <strong>{userName ?? 'Google Account'}</strong>
+              {t('googleOAuth.authenticatedAs', 'Authenticated as')}{' '}
+              <strong>{userName ?? t('googleOAuth.googleAccount', 'Google Account')}</strong>
             </>
           )}
         </button>
@@ -263,7 +270,9 @@ export function GoogleOAuthConnectButton({
           ) : (
             <GoogleLogo />
           )}
-          {connecting ? 'Connecting...' : 'Connect with Google'}
+          {connecting
+            ? t('googleOAuth.connecting', 'Connecting...')
+            : t('googleOAuth.connectWithGoogle', 'Connect with Google')}
         </button>
       )}
       {connectError && <p className='text-destructive text-sm'>{connectError}</p>}

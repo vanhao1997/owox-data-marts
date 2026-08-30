@@ -16,6 +16,7 @@ import { useUnsavedGuard } from '../../../../../hooks/useUnsavedGuard';
 import { useIntercomLauncher } from '../../../../../shared/hooks/useIntercomLauncher';
 import { useProjectRoute } from '../../../../../shared/hooks';
 import { CopyLinkButton } from '@owox/ui/components/common/copy-link-button';
+import { useTranslation } from 'react-i18next';
 
 interface DataStorageEditSheetProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export function DataStorageConfigSheet({
   dataStorage,
   onSaveSuccess,
 }: DataStorageEditSheetProps) {
+  const { t } = useTranslation();
   const { updateDataStorage } = useDataStorage();
 
   useIntercomLauncher(isOpen);
@@ -95,9 +97,11 @@ export function DataStorageConfigSheet({
     >
       <SheetContent data-testid='storageConfigSheet'>
         <SheetHeader>
-          <SheetTitle>Configure Storage Provider</SheetTitle>
+          <SheetTitle>{t('configDialogs.storageTitle', 'Configure Storage Provider')}</SheetTitle>
           <div className='flex w-full items-center gap-4'>
-            <SheetDescription>Customize settings for your storage provider</SheetDescription>
+            <SheetDescription>
+              {t('configDialogs.storageDescription', 'Customize settings for your storage provider')}
+            </SheetDescription>
             {storageLink && (
               <CopyLinkButton link={storageLink} ariaLabel='Copy link to this storage' />
             )}

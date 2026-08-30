@@ -2,12 +2,13 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@owox/ui/component
 import { UnsavedChangesConfirmationDialog } from '../../../../../../shared/components/UnsavedChangesConfirmationDialog';
 import type { DataMartReport } from '../../../shared/model/types/data-mart-report.ts';
 import { ReportEditForm } from '../ReportEditForm';
-import { DataDestinationProvider, DataDestinationTypeModel } from '../../../../../data-destination';
+import { DataDestinationProvider } from '../../../../../data-destination';
 import { ReportFormMode } from '../../../shared';
 import type { DataDestination } from '../../../../../data-destination';
 import { useUnsavedGuard } from '../../../../../../hooks/useUnsavedGuard';
 import { useIntercomLauncher } from '../../../../../../shared/hooks/useIntercomLauncher';
 import { ReportSheetDescription } from '../ReportSheetDescription';
+import { useTranslation } from 'react-i18next';
 
 interface ReportEditSheetProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export function ReportEditSheet({
   mode,
   preSelectedDestination,
 }: ReportEditSheetProps) {
+  const { t } = useTranslation();
   const {
     showUnsavedDialog,
     setShowUnsavedDialog,
@@ -36,14 +38,6 @@ export function ReportEditSheet({
   } = useUnsavedGuard(onClose);
 
   useIntercomLauncher(isOpen);
-
-  // The sheet serves every destination whose report is configured the same way, so it names the
-  // one in hand rather than assuming Google Sheets. The trailing space belongs to the name, not
-  // to the sentence: without a destination the line has to read "a new report", not "a new
-  // report report" — and not "a new  report" either.
-  const destinationPrefix = preSelectedDestination
-    ? `${DataDestinationTypeModel.getInfo(preSelectedDestination.type).displayName} `
-    : '';
 
   return (
     <Sheet
@@ -57,12 +51,20 @@ export function ReportEditSheet({
       <SheetContent>
         <SheetHeader>
           <SheetTitle>
-            {mode === ReportFormMode.CREATE ? 'Create new report' : 'Edit report'}
+            {mode === ReportFormMode.CREATE
+              ? t('reportsUi.createNewReport', 'Tạo báo cáo mới')
+              : t('reportsUi.editReportSheetTitle', 'Chỉnh sửa báo cáo')}
           </SheetTitle>
           <ReportSheetDescription mode={mode} report={initialReport}>
             {mode === ReportFormMode.CREATE
-              ? `Fill in the details to create a new ${destinationPrefix}report`
-              : `Update details of an existing ${destinationPrefix}report`}
+              ? t(
+                  'reportsUi.createReportSheetDescription',
+                  'Điền thông tin để tạo báo cáo mới'
+                )
+              : t(
+                  'reportsUi.editReportSheetDescription',
+                  'Cập nhật thông tin của báo cáo hiện có'
+                )}
           </ReportSheetDescription>
         </SheetHeader>
 

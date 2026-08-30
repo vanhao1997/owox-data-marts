@@ -6,6 +6,7 @@ import {
   DATA_QUALITY_STATUS_TEXT_CLASSES,
   getDataQualityStatusVisual,
 } from '../../../shared/utils/data-quality-status';
+import { useTranslation } from 'react-i18next';
 
 interface StatusBadgeProps {
   status: DataMartRunStatus;
@@ -13,6 +14,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
+  const { t } = useTranslation();
   if (qualitySummary) {
     const visual = getDataQualityStatusVisual(qualitySummary);
     return (
@@ -29,7 +31,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
     case DataMartRunStatus.RUNNING:
       return (
         <Badge variant='secondary' className='text-primary bg-primary/10'>
-          Running
+          {t('runHistory.status.running', 'Running')}
         </Badge>
       );
     case DataMartRunStatus.SUCCESS:
@@ -38,7 +40,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400'
         >
-          Success
+          {t('runHistory.status.success', 'Success')}
         </Badge>
       );
     case DataMartRunStatus.FAILED:
@@ -47,7 +49,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400'
         >
-          Failed
+          {t('runHistory.status.failed', 'Failed')}
         </Badge>
       );
     case DataMartRunStatus.CANCELLED:
@@ -56,7 +58,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-gray-50 text-gray-500 dark:bg-gray-950 dark:text-gray-400'
         >
-          Cancelled
+          {t('runHistory.status.cancelled', 'Cancelled')}
         </Badge>
       );
     case DataMartRunStatus.INTERRUPTED:
@@ -65,7 +67,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-gray-50 text-gray-500 dark:bg-gray-950 dark:text-gray-400'
         >
-          Interrupted
+          {t('runHistory.status.interrupted', 'Interrupted')}
         </Badge>
       );
     case DataMartRunStatus.PENDING:
@@ -74,7 +76,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-gray-50 text-gray-500 dark:bg-gray-950 dark:text-gray-400'
         >
-          Pending
+          {t('runHistory.status.pending', 'Pending')}
         </Badge>
       );
     case DataMartRunStatus.RESTRICTED:
@@ -83,7 +85,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-yellow-50 text-yellow-500 dark:bg-yellow-950 dark:text-yellow-400'
         >
-          Restricted
+          {t('runHistory.status.restricted', 'Restricted')}
         </Badge>
       );
     default:
@@ -92,7 +94,7 @@ export function StatusBadge({ status, qualitySummary }: StatusBadgeProps) {
           variant='secondary'
           className='bg-gray-50 text-gray-500 dark:bg-gray-950 dark:text-gray-400'
         >
-          Unknown
+          {t('runHistory.status.unknown', 'Unknown')}
         </Badge>
       );
   }

@@ -61,13 +61,13 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
   return (
     <>
       {/* Connection Settings */}
-      <FormSection title='Connection Settings'>
+      <FormSection title='Cài đặt kết nối'>
         <FormField
           control={form.control}
           name='config.account'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Enter your Snowflake account identifier'>Account</FormLabel>
+              <FormLabel tooltip='Nhập mã định danh tài khoản Snowflake của bạn'>Tài khoản</FormLabel>
               <FormControl>
                 <Input {...field} placeholder='e.g., xy12345.us-east-1' />
               </FormControl>
@@ -83,11 +83,11 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
           name='config.warehouse'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Specify the Snowflake warehouse to use for query execution'>
+              <FormLabel tooltip='Chỉ định warehouse Snowflake dùng để thực thi truy vấn'>
                 Warehouse
               </FormLabel>
               <FormControl>
-                <Input {...field} placeholder='Enter warehouse name' />
+                <Input {...field} placeholder='Nhập tên warehouse' />
               </FormControl>
               <FormDescription>
                 <SnowflakeWarehouseDescription />
@@ -120,13 +120,13 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
               render={({ field }) => (
                 <FormItem>
                   <div className='flex items-center justify-between'>
-                    <FormLabel>Authentication Method</FormLabel>
+                    <FormLabel>Phương thức xác thực</FormLabel>
                     <Tabs value={field.value} onValueChange={field.onChange}>
                       <TabsList>
                         <TabsTrigger value={SnowflakeAuthMethod.PASSWORD}>
-                          Username & PAT
+                          Tên người dùng & PAT
                         </TabsTrigger>
-                        <TabsTrigger value={SnowflakeAuthMethod.KEY_PAIR}>Key Pair</TabsTrigger>
+                        <TabsTrigger value={SnowflakeAuthMethod.KEY_PAIR}>Cặp khóa</TabsTrigger>
                       </TabsList>
                     </Tabs>
                   </div>
@@ -143,9 +143,9 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
               name='credentials.username'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Your Snowflake username'>Username</FormLabel>
+                  <FormLabel tooltip='Tên người dùng Snowflake của bạn'>Tên người dùng</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='Enter username' />
+                    <Input {...field} placeholder='Nhập tên người dùng' />
                   </FormControl>
                   <FormDescription>
                     <SnowflakeUsernameDescription />
@@ -161,14 +161,14 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
                 name='credentials.password'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel tooltip='Your Snowflake PAT'>
-                      PAT (Programmatic access token)
+                    <FormLabel tooltip='PAT Snowflake của bạn'>
+                      PAT (mã truy cập tự động)
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type='password'
-                        placeholder={maskedPasswordValue || 'Enter PAT'}
+                        placeholder={maskedPasswordValue || 'Nhập PAT'}
                       />
                     </FormControl>
                     <FormDescription>
@@ -187,8 +187,8 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
                   name='credentials.privateKey'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Paste your private key in PEM format'>
-                        Private Key
+                      <FormLabel tooltip='Dán khóa riêng của bạn ở định dạng PEM'>
+                        Khóa riêng
                       </FormLabel>
                       <FormControl>
                         <Textarea
@@ -212,15 +212,15 @@ export const SnowflakeFields = ({ form }: SnowflakeFieldsProps) => {
                   name='credentials.privateKeyPassphrase'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Enter the passphrase if your private key is encrypted'>
-                        Passphrase (Optional)
+                      <FormLabel tooltip='Nhập passphrase nếu khóa riêng của bạn được mã hóa'>
+                        Passphrase (Tùy chọn)
                       </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           type='password'
                           value={field.value ?? ''}
-                          placeholder='Enter passphrase if key is encrypted'
+                          placeholder='Nhập passphrase nếu khóa được mã hóa'
                         />
                       </FormControl>
                       <FormDescription>

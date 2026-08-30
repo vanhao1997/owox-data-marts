@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Bookmark,
   DatabaseZap,
@@ -23,29 +24,30 @@ import {
 } from 'lucide-react';
 
 const STEPS = [
-  { icon: Bookmark, text: 'Initializing intelligence...' },
-  { icon: DatabaseZap, text: 'Connecting to data sources...' },
-  { icon: Network, text: 'Mapping data relationships...' },
-  { icon: FolderTree, text: 'Exploring dataset structure...' },
-  { icon: ScanText, text: 'Scanning available fields...' },
-  { icon: SquareChartGantt, text: 'Analyzing data patterns...' },
-  { icon: Route, text: 'Selecting optimal insight path...' },
-  { icon: Table, text: 'Preparing aggregated tables...' },
-  { icon: Layers, text: 'Building visual model...' },
-  { icon: FilePenLine, text: 'Finalizing insight output...' },
-  { icon: SwatchBook, text: 'Validating field consistency...' },
-  { icon: ScanSearch, text: 'Checking for missing values...' },
-  { icon: FlaskConical, text: 'Detecting anomalies in data...' },
-  { icon: ListChecks, text: 'Cross-referencing data sources...' },
-  { icon: CheckSquare, text: 'Verifying aggregation results...' },
-  { icon: Group, text: 'Ensuring data relationships are correct...' },
-  { icon: Blocks, text: 'Refining visual model parameters...' },
-  { icon: Grid2x2Check, text: 'Confirming data integrity...' },
-  { icon: FileScan, text: 'Preparing final output for insights...' },
-  { icon: Goal, text: 'Performing final quality checks...' },
+  { icon: Bookmark, key: 'initializing' },
+  { icon: DatabaseZap, key: 'connecting' },
+  { icon: Network, key: 'mapping' },
+  { icon: FolderTree, key: 'exploring' },
+  { icon: ScanText, key: 'scanning' },
+  { icon: SquareChartGantt, key: 'analyzing' },
+  { icon: Route, key: 'selecting' },
+  { icon: Table, key: 'aggregating' },
+  { icon: Layers, key: 'building' },
+  { icon: FilePenLine, key: 'finalizing' },
+  { icon: SwatchBook, key: 'validating' },
+  { icon: ScanSearch, key: 'missing' },
+  { icon: FlaskConical, key: 'anomalies' },
+  { icon: ListChecks, key: 'crossReferencing' },
+  { icon: CheckSquare, key: 'verifying' },
+  { icon: Group, key: 'relationships' },
+  { icon: Blocks, key: 'refining' },
+  { icon: Grid2x2Check, key: 'integrity' },
+  { icon: FileScan, key: 'preparing' },
+  { icon: Goal, key: 'quality' },
 ];
 
 export const InsightLoader = () => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ export const InsightLoader = () => {
           key={`${String(step)}-text`}
           className='text-muted-foreground animate-fade-slide-in-out text-sm'
         >
-          {STEPS[step].text}
+          {t(`insightsUi.loader.${STEPS[step].key}`)}
         </h3>
       </div>
     </div>

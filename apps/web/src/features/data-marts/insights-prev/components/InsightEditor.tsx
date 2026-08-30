@@ -2,6 +2,7 @@ import type * as monacoEditor from 'monaco-editor';
 import { Editor } from '@monaco-editor/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Command, CommandInput, CommandItem, CommandList } from '@owox/ui/components/command';
 import { useInsights, useInsightsList } from '../model';
 import {
@@ -42,6 +43,7 @@ export function InsightEditor({
   showLineNumbers = true,
   excludeInsightId,
 }: InsightEditorProps) {
+  const { t } = useTranslation();
   const { resolvedTheme } = useTheme();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
@@ -124,7 +126,7 @@ export function InsightEditor({
         const full = await getInsightSilently(insight.id);
         templateText = full?.template ?? '';
         if (templateText.length === 0) {
-          toast.error('Insight template is empty');
+          toast.error(t('insightsUi.templateEmpty'));
           setIsOpen(false);
           return;
         }
@@ -187,7 +189,7 @@ export function InsightEditor({
     // Inline placeholder content widget that appears on empty line under the caret
     const widgetId = 'insight-editor-inline-placeholder';
     const node = document.createElement('div');
-    node.textContent = "Press '/' for commands";
+    node.textContent = t('insightsUi.pressSlashCommands');
 
     const applyPlaceholderStyles = () => {
       try {
@@ -412,12 +414,12 @@ export function InsightEditor({
             <Command className='flex min-h-0 flex-col'>
               <CommandInput
                 autoFocus
-                placeholder='Search insights…'
+                placeholder={t('insightsUi.searchInsights')}
                 value={query}
                 onValueChange={setQuery}
               />
               <CommandList className='flex-1 overflow-auto'>
-                {insightsLoading && <div className='p-2 text-sm opacity-60'>Loading…</div>}
+                {insightsLoading && <div className='p-2 text-sm opacity-60'>{t('common.loading')}</div>}
                 {!insightsLoading &&
                   insights
                     .filter(i => (excludeInsightId ? i.id !== excludeInsightId : true))
@@ -443,8 +445,7 @@ export function InsightEditor({
                     <div className='flex items-start gap-2 p-2 text-sm opacity-60'>
                       <Lightbulb className='mt-0.5 h-4 w-4 shrink-0' aria-hidden='true' />
                       <span>
-                        No insights yet. Create them on the Insights tab, then you can copy their
-                        templates into the email report.
+                        {t('insightsUi.noInsightsYet')}
                       </span>
                     </div>
                   )}

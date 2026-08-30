@@ -47,6 +47,7 @@ import {
 } from '../../utils/apply-output-config-change';
 import { GeneratedSqlViewer } from '../../../../edit/components/ReportColumnPicker/GeneratedSqlViewer';
 import { useDataMartContext } from '../../../../edit/model';
+import { useTranslation } from 'react-i18next';
 
 interface LookerStudioReportEditFormProps {
   initialReport?: DataMartReport;
@@ -62,16 +63,16 @@ interface LookerStudioReportEditFormProps {
 // Cache time options in seconds
 const CACHE_TIME_OPTIONS = [
   // Minutes
-  { value: 300, label: '5 minutes' },
-  { value: 600, label: '10 minutes' },
-  { value: 900, label: '15 minutes' },
-  { value: 1800, label: '30 minutes' },
+  { value: 300, label: '5 phút' },
+  { value: 600, label: '10 phút' },
+  { value: 900, label: '15 phút' },
+  { value: 1800, label: '30 phút' },
   // Hours
-  { value: 3600, label: '1 hour' },
-  { value: 7200, label: '2 hours' },
-  { value: 14400, label: '4 hours' },
-  { value: 28800, label: '8 hours' },
-  { value: 43200, label: '12 hours' },
+  { value: 3600, label: '1 giờ' },
+  { value: 7200, label: '2 giờ' },
+  { value: 14400, label: '4 giờ' },
+  { value: 28800, label: '8 giờ' },
+  { value: 43200, label: '12 giờ' },
 ];
 
 export const LookerStudioReportEditForm = forwardRef<
@@ -90,6 +91,7 @@ export const LookerStudioReportEditForm = forwardRef<
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const formId = 'looker-studio-edit-form';
 
     const { dataMart } = useDataMartContext();
@@ -187,14 +189,14 @@ export const LookerStudioReportEditForm = forwardRef<
           onSubmit={e => void form.handleSubmit(handleFormSubmit, focusFirstInvalidField)(e)}
         >
           <FormLayout>
-            <FormSection title='Cache Configuration'>
+            <FormSection title={t('reportsUi.cacheConfiguration', 'Cache Configuration')}>
               <FormField
                 control={form.control}
                 name='cacheLifetime'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel tooltip='Period during which query results are served from storage-side cache, avoiding re-execution'>
-                      Cache Lifetime
+                    <FormLabel tooltip={t('reportsUi.cacheTooltip', 'Period during which query results are served from storage-side cache, avoiding re-execution')}>
+                      {t('reportsUi.cacheLifetime', 'Thời gian lưu bộ nhớ đệm')}
                     </FormLabel>
                     <Select
                       onValueChange={value => {
@@ -205,7 +207,12 @@ export const LookerStudioReportEditForm = forwardRef<
                     >
                       <FormControl>
                         <SelectTrigger className='w-full'>
-                          <SelectValue placeholder='Select cache time' />
+                          <SelectValue
+                            placeholder={t(
+                              'reportsUi.selectCacheTime',
+                              'Chọn thời gian lưu bộ nhớ đệm'
+                            )}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -226,8 +233,8 @@ export const LookerStudioReportEditForm = forwardRef<
             </FormSection>
 
             <FormSection
-              title='Report Columns'
-              tooltip='Select which columns to include in the report'
+              title={t('reportsUi.reportColumns', 'Report Columns')}
+              tooltip={t('reportsUi.reportColumnsTooltip', 'Select which columns to include in the report')}
               titleAdornment={<ReportColumnsCountBadge count={columnsCount} />}
               fields={[
                 'columnConfig',
@@ -292,29 +299,29 @@ export const LookerStudioReportEditForm = forwardRef<
               />
             </FormSection>
 
-            <FormSection title='Ownership'>
+            <FormSection title={t('reportsUi.ownership', 'Ownership')}>
               <FormItem>
-                <FormLabel tooltip='Team members responsible for this report'>Owners</FormLabel>
+                <FormLabel tooltip={t('reportsUi.ownersTooltip', 'Team members responsible for this report')}>{t('reportsUi.owners', 'Owners')}</FormLabel>
                 <OwnersSection ownerUsers={ownerUsers} onSave={handleOwnersChange} />
               </FormItem>
             </FormSection>
 
             {initialReport?.createdAt && (
-              <FormSection title='Details'>
+              <FormSection title={t('reportsUi.details', 'Details')}>
                 <FormItem>
-                  <FormLabel>Created By</FormLabel>
+                  <FormLabel>{t('reportsUi.createdBy', 'Created By')}</FormLabel>
                   <div className='text-sm'>
                     {initialReport.createdByUser ? (
                       <UserReference userProjection={initialReport.createdByUser} variant='full' />
                     ) : (
-                      <span className='text-muted-foreground'>Unknown</span>
+                      <span className='text-muted-foreground'>{t('reportsUi.unknown', 'Unknown')}</span>
                     )}
                   </div>
                 </FormItem>
                 <FormItem>
-                  <FormLabel>Created At</FormLabel>
+                  <FormLabel>{t('reportsUi.createdAt', 'Created At')}</FormLabel>
                   <div className='text-muted-foreground text-sm'>
-                    {new Date(initialReport.createdAt).toLocaleDateString('en-US', {
+                    {new Date(initialReport.createdAt).toLocaleDateString('vi-VN', {
                       year: 'numeric',
                       month: 'short',
                       day: 'numeric',
@@ -325,11 +332,15 @@ export const LookerStudioReportEditForm = forwardRef<
             )}
           </FormLayout>
           <FormActions>
-            <Button
-              variant='default'
-              type='submit'
-              className='w-full'
-              aria-label={mode === ReportFormMode.CREATE ? 'Create' : 'Save changes'}
+              <Button
+                variant='default'
+                type='submit'
+                className='w-full'
+              aria-label={
+                mode === ReportFormMode.CREATE
+                  ? t('reportsUi.createReport', 'Create report')
+                  : t('reportsUi.saveChanges', 'Save changes')
+              }
               // In CREATE mode the button stays clickable even while the form is
               // invalid: submitting surfaces validation errors instead of leaving
               // the user with a disabled button and no hint about what is missing.
@@ -337,11 +348,11 @@ export const LookerStudioReportEditForm = forwardRef<
             >
               {isSubmitting
                 ? mode === ReportFormMode.CREATE
-                  ? 'Creating...'
-                  : 'Saving...'
+                  ? t('reportsUi.creating', 'Creating...')
+                  : t('reportsUi.saving', 'Saving...')
                 : mode === ReportFormMode.CREATE
-                  ? 'Create'
-                  : 'Save changes'}
+                  ? t('reportsUi.createReport', 'Create report')
+                  : t('reportsUi.saveChanges', 'Save changes')}
             </Button>
             {onCancel && (
               <Button
@@ -349,9 +360,9 @@ export const LookerStudioReportEditForm = forwardRef<
                 type='button'
                 onClick={onCancel}
                 className='w-full'
-                aria-label='Cancel'
+                aria-label={t('common.cancel', 'Cancel')}
               >
-                Cancel
+                {t('common.cancel', 'Cancel')}
               </Button>
             )}
           </FormActions>

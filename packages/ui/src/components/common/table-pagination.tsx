@@ -15,7 +15,34 @@ interface TablePaginationProps<TData> {
   table: Table<TData>;
   pageSizeOptions?: number[];
   displaySelected?: boolean;
+  labels?: Partial<TablePaginationLabels>;
 }
+
+interface TablePaginationLabels {
+  rowsPerPage: string;
+  selectedRow: string;
+  selectedRows: string;
+  row: string;
+  rows: string;
+  of: string;
+  firstPage: string;
+  previousPage: string;
+  nextPage: string;
+  lastPage: string;
+}
+
+const DEFAULT_LABELS: TablePaginationLabels = {
+  rowsPerPage: 'Rows per page',
+  selectedRow: 'row selected',
+  selectedRows: 'rows selected',
+  row: 'row',
+  rows: 'rows',
+  of: 'of',
+  firstPage: 'Go to first page',
+  previousPage: 'Go to previous page',
+  nextPage: 'Go to next page',
+  lastPage: 'Go to last page',
+};
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [15, 30, 50, 100, 200];
 
@@ -23,7 +50,9 @@ export function TablePagination<TData>({
   table,
   pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
   displaySelected = true,
+  labels,
 }: TablePaginationProps<TData>) {
+  const copy = { ...DEFAULT_LABELS, ...labels };
   const pageSizeResult = useMemo(() => {
     const result = pageSizeOptions.map(item => Math.round(item)).filter(item => item > 0);
     return result.length > 0 ? result : DEFAULT_PAGE_SIZE_OPTIONS;
@@ -49,7 +78,7 @@ export function TablePagination<TData>({
       <div className='flex-1'>
         {displaySelected && selectedCount > 0 && (
           <span>
-            {selectedCount} {selectedCount === 1 ? 'row' : 'rows'} selected
+            {selectedCount} {selectedCount === 1 ? copy.selectedRow : copy.selectedRows}
           </span>
         )}
       </div>
@@ -57,7 +86,7 @@ export function TablePagination<TData>({
         <>
           <div className='flex items-center space-x-6 lg:space-x-8'>
             <div className='flex items-center space-x-2'>
-              <span>Rows per page</span>
+              <span>{copy.rowsPerPage}</span>
               <Select
                 value={`${table.getState().pagination.pageSize}`}
                 onValueChange={value => {
@@ -77,7 +106,7 @@ export function TablePagination<TData>({
               </Select>
             </div>
             <div className='flex items-center justify-center'>
-              {from}–{to} of {total} {total === 1 ? 'row' : 'rows'}
+              {from}–{to} {copy.of} {total} {total === 1 ? copy.row : copy.rows}
             </div>
             <div className='flex items-center space-x-1'>
               <Button
@@ -87,7 +116,7 @@ export function TablePagination<TData>({
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
               >
-                <span className='sr-only'>Go to first page</span>
+                <span className='sr-only'>{copy.firstPage}</span>
                 <ChevronsLeft />
               </Button>
               <Button
@@ -97,7 +126,7 @@ export function TablePagination<TData>({
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
               >
-                <span className='sr-only'>Go to previous page</span>
+                <span className='sr-only'>{copy.previousPage}</span>
                 <ChevronLeft />
               </Button>
               <Button
@@ -107,7 +136,7 @@ export function TablePagination<TData>({
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
               >
-                <span className='sr-only'>Go to next page</span>
+                <span className='sr-only'>{copy.nextPage}</span>
                 <ChevronRight />
               </Button>
               <Button
@@ -117,7 +146,7 @@ export function TablePagination<TData>({
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
               >
-                <span className='sr-only'>Go to last page</span>
+                <span className='sr-only'>{copy.lastPage}</span>
                 <ChevronsRight />
               </Button>
             </div>

@@ -6,6 +6,7 @@ import { formatBytes } from '../../../../../utils';
 import { useDebounce } from '../../../../../hooks/useDebounce.ts';
 import { useSqlDryRunTrigger } from '../../../shared/hooks/useSqlDryRunTrigger';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface SqlValidationState {
   isLoading: boolean;
@@ -30,6 +31,7 @@ export default function SqlValidator({
   className = '',
   onValidationStateChange,
 }: SqlValidatorProps) {
+  const { t } = useTranslation();
   const debouncedSql = useDebounce(sql.trim(), debounceDelay);
   const { validateSql, isLoading, result, cancel } = useSqlDryRunTrigger(dataMartId);
 
@@ -64,7 +66,7 @@ export default function SqlValidator({
       return (
         <div className='flex h-5 items-center gap-2'>
           <Loader2 className='h-4 w-4 animate-spin' />
-          <span className='text-sm'>Validating...</span>
+          <span className='text-sm'>{t('sqlValidator.validating')}</span>
         </div>
       );
     }
@@ -73,7 +75,7 @@ export default function SqlValidator({
       return (
         <div className='flex h-5 items-center gap-2 text-gray-500'>
           <Database className='h-4 w-4' />
-          <span className='text-sm'>Type a query to get started</span>
+          <span className='text-sm'>{t('sqlValidator.startTyping')}</span>
         </div>
       );
     }
@@ -82,7 +84,7 @@ export default function SqlValidator({
       return (
         <div className='flex h-5 items-center gap-2'>
           <CheckCircle className='h-4 w-4 text-green-600' />
-          <span className='text-sm font-medium text-green-600'>Valid SQL code</span>
+          <span className='text-sm font-medium text-green-600'>{t('sqlValidator.valid')}</span>
           {result.bytes !== undefined && (
             <>
               <span className='mx-1 text-gray-400'>•</span>
@@ -95,7 +97,7 @@ export default function SqlValidator({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className='text-xs'>
-                    This is an estimated volume and may differ from the actual value
+                    {t('sqlValidator.estimatedVolume')}
                   </p>
                 </TooltipContent>
               </Tooltip>

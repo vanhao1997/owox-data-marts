@@ -46,6 +46,7 @@ import {
   ReportTitleCell,
   reportTitleCellQuickActionClassName,
 } from '../../../features/data-marts/reports/shared/components';
+import { useTranslation } from 'react-i18next';
 
 const PROJECT_REPORTS_TABLE_PAGE_SIZE = 15;
 const PROJECT_REPORTS_TABLE_ID = 'project-reports-table';
@@ -73,7 +74,8 @@ const projectReportFilterAccessors: FilterAccessors<ProjectReportFilterKey, Data
 };
 
 function buildProjectReportFilters(
-  data: DataMartReport[]
+  data: DataMartReport[],
+  t: (key: string) => string
 ): FilterConfigItem<ProjectReportFilterKey>[] {
   const userLabelMapper = buildProjectTableUserLabelMapper(
     data.flatMap(report => [report.createdByUser, ...(report.ownerUsers ?? [])])
@@ -82,37 +84,37 @@ function buildProjectReportFilters(
   return [
     {
       id: 'dataMart',
-      label: 'Data Mart',
+      label: t('search.labelDataMart'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, projectReportFilterAccessors.dataMart),
     },
     {
       id: 'report',
-      label: 'Report',
+      label: t('projectDataMartPages.reportLabel'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, projectReportFilterAccessors.report),
     },
     {
       id: 'destination',
-      label: 'Destination',
+      label: t('search.labelDestination'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, projectReportFilterAccessors.destination),
     },
     {
       id: 'runStatus',
-      label: 'Run Status',
+      label: t('projectDataMartPages.runStatusLabel'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, projectReportFilterAccessors.runStatus, {
-        labelMapper: value => (value === 'never' ? 'Never run' : value),
+        labelMapper: value => (value === 'never' ? t('projectDataMartPages.neverRun') : value),
       }),
     },
     {
       id: 'createdBy',
-      label: 'Created By',
+      label: t('common.createdBy'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, projectReportFilterAccessors.createdBy, {
@@ -121,7 +123,7 @@ function buildProjectReportFilters(
     },
     {
       id: 'owners',
-      label: 'Owners',
+      label: t('projectDataMartPages.ownersLabel'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, projectReportFilterAccessors.owners, {
@@ -209,6 +211,7 @@ function ProjectReportActionsCell({
 }
 
 export default function DataMartReportsPage() {
+  const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const { scope } = useProjectRoute();
   const [reports, setReports] = useState<DataMartReport[]>([]);
@@ -284,7 +287,7 @@ export default function DataMartReportsPage() {
     [editingReport]
   );
 
-  const filtersConfig = useMemo(() => buildProjectReportFilters(reports), [reports]);
+  const filtersConfig = useMemo(() => buildProjectReportFilters(reports, t), [reports, t]);
 
   const { appliedState, apply, clear } = usePersistentFilters<ProjectReportFilterKey>({
     projectId,
@@ -336,8 +339,10 @@ export default function DataMartReportsPage() {
         id: 'dataMart',
         accessorFn: row => row.dataMart.title,
         size: 260,
-        meta: { title: 'Data Mart' },
-        header: ({ column }) => <SortableHeader column={column}>Data Mart</SortableHeader>,
+        meta: { title: t('search.labelDataMart') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('search.labelDataMart')}</SortableHeader>
+        ),
         cell: ({ row }) => (
           <ProjectDataMartTitleLink
             to={scope(`/data-marts/${row.original.dataMart.id}/reports`)}
@@ -348,8 +353,10 @@ export default function DataMartReportsPage() {
       {
         accessorKey: 'title',
         size: 320,
-        meta: { title: 'Report' },
-        header: ({ column }) => <SortableHeader column={column}>Report</SortableHeader>,
+        meta: { title: t('projectDataMartPages.reportLabel') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('projectDataMartPages.reportLabel')}</SortableHeader>
+        ),
         cell: ({ row }) => {
           const title = row.original.title.trim();
           if (!title) {
@@ -362,8 +369,10 @@ export default function DataMartReportsPage() {
         id: 'destination',
         accessorFn: row => row.dataDestination.title,
         size: 220,
-        meta: { title: 'Destination' },
-        header: ({ column }) => <SortableHeader column={column}>Destination</SortableHeader>,
+        meta: { title: t('search.labelDestination') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('search.labelDestination')}</SortableHeader>
+        ),
         cell: ({ row }) => {
           const { displayName, icon: Icon } = DataDestinationTypeModel.getInfo(
             row.original.dataDestination.type
@@ -381,14 +390,16 @@ export default function DataMartReportsPage() {
         accessorKey: 'lastRunDate',
         size: 170,
         sortDescFirst: true,
-        meta: { title: 'Last Run' },
-        header: ({ column }) => <SortableHeader column={column}>Last Run</SortableHeader>,
+        meta: { title: t('projectDataMartPages.lastRunLabel') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('projectDataMartPages.lastRunLabel')}</SortableHeader>
+        ),
         cell: ({ row }) => (
           <div className='text-muted-foreground text-sm'>
             {row.original.lastRunDate ? (
               <RelativeTime date={row.original.lastRunDate} />
             ) : (
-              'Never run'
+              t('projectDataMartPages.neverRun')
             )}
           </div>
         ),
@@ -396,8 +407,12 @@ export default function DataMartReportsPage() {
       {
         accessorKey: 'lastRunStatus',
         size: 150,
-        meta: { title: 'Run Status' },
-        header: ({ column }) => <SortableHeader column={column}>Run Status</SortableHeader>,
+        meta: { title: t('projectDataMartPages.runStatusLabel') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>
+            {t('projectDataMartPages.runStatusLabel')}
+          </SortableHeader>
+        ),
         cell: ({ row }) =>
           row.original.lastRunStatus ? (
             <StatusIcon status={row.original.lastRunStatus} error={row.original.lastRunError} />
@@ -409,8 +424,10 @@ export default function DataMartReportsPage() {
         id: 'createdBy',
         accessorFn: row => row.createdByUser?.fullName ?? row.createdByUser?.email,
         size: 190,
-        meta: { title: 'Created By' },
-        header: ({ column }) => <SortableHeader column={column}>Created By</SortableHeader>,
+        meta: { title: t('common.createdBy') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('common.createdBy')}</SortableHeader>
+        ),
         cell: ({ row }) => {
           const user = row.original.createdByUser;
           if (!user) return <span className='text-muted-foreground'>-</span>;
@@ -422,12 +439,18 @@ export default function DataMartReportsPage() {
         accessorFn: row =>
           (row.ownerUsers ?? []).map(user => user.fullName ?? user.email).join(', '),
         size: 190,
-        meta: { title: 'Owners' },
-        header: ({ column }) => <SortableHeader column={column}>Owners</SortableHeader>,
+        meta: { title: t('projectDataMartPages.ownersLabel') },
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('projectDataMartPages.ownersLabel')}</SortableHeader>
+        ),
         cell: ({ row }) => {
           const users = row.original.ownerUsers ?? [];
           if (users.length === 0) {
-            return <span className='text-muted-foreground text-sm'>Not assigned</span>;
+            return (
+              <span className='text-muted-foreground text-sm'>
+                {t('projectDataMartPages.notAssigned')}
+              </span>
+            );
           }
           if (users.length === 1) return <UserReference userProjection={users[0]} />;
           return <UserAvatarGroup users={users} />;
@@ -448,7 +471,7 @@ export default function DataMartReportsPage() {
         ),
       },
     ],
-    [handleEditReport, handleReportActionComplete, scope]
+    [handleEditReport, handleReportActionComplete, scope, t]
   );
 
   const { table } = useBaseTable<DataMartReport>({
@@ -484,7 +507,7 @@ export default function DataMartReportsPage() {
     <ReportsProvider>
       <div className='dm-page' data-testid='dataMartReportsPage'>
         <header className='dm-page-header'>
-          <h1 className='dm-page-header-title'>Reports</h1>
+          <h1 className='dm-page-header-title'>{t('projectDataMartPages.reportsTitle')}</h1>
         </header>
 
         <div className='dm-page-content'>

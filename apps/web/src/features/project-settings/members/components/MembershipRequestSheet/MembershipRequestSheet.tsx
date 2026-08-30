@@ -32,6 +32,7 @@ import { formatDateShort } from '../../../../../utils/date-formatters';
 import { UserAvatar, UserAvatarSize } from '../../../../../shared/components/UserAvatar';
 import { generateInitials } from '../../../../../shared/utils';
 import { memberRoleFormSchema, type MemberRoleFormValues } from '../../schemas';
+import { useTranslation } from 'react-i18next';
 
 interface MembershipRequestSheetProps {
   isOpen: boolean;
@@ -55,6 +56,7 @@ export function MembershipRequestSheet({
   onClose,
   onResolved,
 }: MembershipRequestSheetProps) {
+  const { t } = useTranslation();
   const { optimisticRemoveRequest, members } = useMembersSettings();
   const form = useForm<MemberRoleFormValues>({
     resolver: zodResolver(memberRoleFormSchema),
@@ -117,10 +119,10 @@ export function MembershipRequestSheet({
         contextIds: effectiveContextIds,
       });
       optimisticRemoveRequest(request.requestId);
-      toast.success(`Approved request from ${request.email}`);
+      toast.success(t('membersPage.approvedRequest', { email: request.email, defaultValue: 'Approved request from {{email}}' }));
       onResolved(true);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to approve request', {
+      toast.error(err instanceof Error ? err.message : t('membersPage.approveFailed', 'Failed to approve request'), {
         duration: 8000,
       });
     } finally {
@@ -134,11 +136,11 @@ export function MembershipRequestSheet({
     try {
       await projectMembersService.declineMembershipRequest(request.requestId);
       optimisticRemoveRequest(request.requestId);
-      toast.success(`Declined request from ${request.email}`);
+      toast.success(t('membersPage.declinedRequest', { email: request.email, defaultValue: 'Declined request from {{email}}' }));
       setDeclineConfirm(false);
       onResolved(true);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to decline request');
+      toast.error(err instanceof Error ? err.message : t('membersPage.declineFailed', 'Failed to decline request'));
     } finally {
       endSubmit();
     }
@@ -154,9 +156,9 @@ export function MembershipRequestSheet({
       >
         <SheetContent data-testid='membershipRequestSheet'>
           <SheetHeader>
-            <SheetTitle>Membership request</SheetTitle>
+            <SheetTitle>{t('membersPage.membershipRequest', 'Membership request')}</SheetTitle>
             <SheetDescription>
-              Choose the final role, scope and contexts, then approve or decline.
+              {t('membersPage.membershipRequestDescription', 'Choose the final role, scope and contexts, then approve or decline.')}
             </SheetDescription>
           </SheetHeader>
 
@@ -167,10 +169,10 @@ export function MembershipRequestSheet({
               }}
             >
               <FormLayout>
-                <FormSection title='Requester' name='membership-request-requester'>
+                <FormSection title={t('membersPage.requester', 'Requester')} name='membership-request-requester'>
                   <FormItem>
-                    <FormLabel tooltip='Display name and email of the requester'>
-                      Identity
+                    <FormLabel tooltip={t('membersPage.identityTooltip', 'Display name and email of the requester')}>
+                      {t('membersPage.identity', 'Identity')}
                     </FormLabel>
                     <div className='flex items-center gap-3'>
                       <UserAvatar
@@ -191,7 +193,7 @@ export function MembershipRequestSheet({
                   </FormItem>
                   {request?.createdAt && (
                     <FormItem>
-                      <FormLabel>Requested date</FormLabel>
+                      <FormLabel>{t('membersPage.requestedDate', 'Requested date')}</FormLabel>
                       <span className='text-sm'>{formatDateShort(request.createdAt)}</span>
                     </FormItem>
                   )}
@@ -220,7 +222,7 @@ export function MembershipRequestSheet({
                   {submitting === 'approve' ? (
                     <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   ) : null}
-                  Approve request
+                  {t('membersPage.approve', 'Approve request')}
                 </Button>
                 <Button
                   type='button'
@@ -234,7 +236,7 @@ export function MembershipRequestSheet({
                   {submitting === 'decline' ? (
                     <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   ) : null}
-                  Decline request
+                  {t('membersPage.decline', 'Decline request')}
                 </Button>
               </FormActions>
             </AppForm>
@@ -247,15 +249,14 @@ export function MembershipRequestSheet({
             onOpenChange={open => {
               if (!open && submitting === null) setDeclineConfirm(false);
             }}
-            title='Decline membership request'
+            title={t('membersPage.declineTitle', 'Decline membership request')}
             description={
               <span className='mt-2 block'>
-                Are you sure you want to decline the request from <strong>{request?.email}</strong>?
-                They will be notified the request was rejected.
+                {t('membersPage.declineDescription', 'Are you sure you want to decline the request from')} <strong>{request?.email}</strong>? {t('membersPage.declineNotified', 'They will be notified the request was rejected.')}
               </span>
             }
-            confirmLabel='Decline'
-            cancelLabel='Cancel'
+            confirmLabel={t('membersPage.declineConfirm', 'Decline')}
+            cancelLabel={t('common.cancel', 'Cancel')}
             variant='destructive'
             onConfirm={() => {
               void handleDecline();

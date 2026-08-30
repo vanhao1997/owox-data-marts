@@ -39,7 +39,7 @@ export function LookerStudioFields({ form }: LookerStudioFieldsProps) {
           name='credentials.destinationSecretKey'
           render={() => (
             <FormItem>
-              <FormLabel>JSON Config</FormLabel>
+              <FormLabel>Cấu hình JSON</FormLabel>
               <FormControl>
                 <SecureJsonInput
                   value={jsonConfig}

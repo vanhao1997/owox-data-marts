@@ -25,6 +25,7 @@ import {
 } from '../../../../shared';
 import { getStorageResourceUrlFromFqn } from '../../../../../data-storage/shared/utils/storage-url.utils';
 import { FillFromStorageButton } from './FillFromStorageButton';
+import { useTranslation } from 'react-i18next';
 
 interface TablePatternDefinitionFieldProps {
   control: Control<DataMartDefinitionFormData>;
@@ -41,6 +42,7 @@ export function TablePatternDefinitionField({
   storageConfig,
   autoOpen,
 }: TablePatternDefinitionFieldProps) {
+  const { t } = useTranslation();
   const placeholder = getTablePatternPlaceholder(storageType);
   const helpText = getTablePatternHelpText(storageType);
   const { setValue } = useFormContext<DataMartDefinitionFormData>();
@@ -69,7 +71,7 @@ export function TablePatternDefinitionField({
 
         return (
           <FormItem className='dm-card-block'>
-            <FormLabel>Table Pattern</FormLabel>
+            <FormLabel>{t('dataMartDefinitionType.tablePattern', 'Table pattern')}</FormLabel>
             <FormControl>
               <InputGroup className='dm-card-formcontrol'>
                 <InputGroupAddon align='inline-start'>
@@ -94,7 +96,7 @@ export function TablePatternDefinitionField({
                         href={resourceUrl}
                         target='_blank'
                         rel='noopener noreferrer'
-                        title='Open in storage console'
+                        title={t('dataMartDefinitionType.openInStorageConsole', 'Open in storage console')}
                       >
                         <ExternalLink className='!h-3.5 !w-3.5 shrink-0' />
                       </a>

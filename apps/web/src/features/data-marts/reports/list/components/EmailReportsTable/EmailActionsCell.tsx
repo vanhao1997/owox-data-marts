@@ -11,6 +11,7 @@ import {
 import { ConfirmationDialog } from '../../../../../../shared/components/ConfirmationDialog';
 import type { DataMartReport } from '../../../shared/model/types/data-mart-report';
 import { useReport, ReportStatusEnum } from '../../../shared';
+import { useTranslation } from 'react-i18next';
 
 interface EmailActionsCellProps {
   row: { original: DataMartReport };
@@ -25,6 +26,7 @@ export function EmailActionsCell({
   onEditReport,
   onRunSuccess,
 }: EmailActionsCellProps) {
+  const { t } = useTranslation();
   const canRun = row.original.canRun;
   const canEditConfig = row.original.canEditConfig;
 
@@ -122,7 +124,7 @@ export function EmailActionsCell({
             role='menuitem'
           >
             <Play className='text-foreground h-4 w-4' aria-hidden='true' />
-            {isRunning ? 'Running report...' : 'Run report'}
+            {isRunning ? t('reportActions.running', 'Running report...') : t('reportActions.run', 'Run report')}
           </DropdownMenuItem>
 
           <DropdownMenuItem
@@ -134,7 +136,7 @@ export function EmailActionsCell({
             role='menuitem'
           >
             <Pencil className='text-foreground h-4 w-4' aria-hidden='true' />
-            Edit report
+            {t('reportActions.edit', 'Edit report')}
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
@@ -149,7 +151,7 @@ export function EmailActionsCell({
             aria-label={`Delete report: ${row.original.title}`}
           >
             <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
-            <span className='text-red-600'>Delete report</span>
+            <span className='text-red-600'>{t('reportActions.delete', 'Delete report')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -157,16 +159,16 @@ export function EmailActionsCell({
       <ConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        title='Delete Report'
+        title={t('reportActions.deleteTitle', 'Delete Report')}
         description={
           <p className='break-words'>
-            Are you sure you want to delete "
-            <span className='font-semibold [overflow-wrap:anywhere]'>{row.original.title}</span>
-            "? This action cannot be undone.
+            {t('reportActions.deleteDescription', 'Are you sure you want to delete "{{title}}"? This action cannot be undone.', {
+              title: row.original.title,
+            })}
           </p>
         }
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => {
           void handleDelete();
         }}

@@ -82,6 +82,8 @@ import {
   applyOutputConfigChange,
 } from '../../utils/apply-output-config-change';
 import { DEFAULT_REPORT_TITLE } from '../../../shared';
+import i18n from '../../../../../../i18n';
+import { useTranslation } from 'react-i18next';
 
 export interface EmailReportEditFormProps {
   initialReport?: DataMartReport;
@@ -113,7 +115,9 @@ const MESSAGE_DESTINATION_TYPES: DataDestinationType[] = [
 
 function buildDefaultEmailReportLabel(dataMartTitle?: string | null): string {
   const normalizedTitle = dataMartTitle?.trim();
-  return normalizedTitle ? `Report: ${normalizedTitle}` : DEFAULT_REPORT_TITLE;
+  return normalizedTitle
+    ? i18n.t('insightsUi.reportPrefill', 'Report: {{title}}', { title: normalizedTitle })
+    : DEFAULT_REPORT_TITLE;
 }
 
 function buildDefaultEmailMessageTemplate(): string {
@@ -137,6 +141,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const formId = 'email-report-edit-form';
     const navigate = useNavigate();
     const { scope } = useProjectRoute();
@@ -336,11 +341,11 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
 
     const reportConditionOptions = useMemo(
       () => [
-        { value: ReportConditionEnum.ALWAYS, label: 'Send always' },
-        { value: ReportConditionEnum.RESULT_IS_EMPTY, label: 'Send only when result is empty' },
+        { value: ReportConditionEnum.ALWAYS, label: 'Gửi luôn' },
+        { value: ReportConditionEnum.RESULT_IS_EMPTY, label: 'Chỉ gửi khi kết quả trống' },
         {
           value: ReportConditionEnum.RESULT_IS_NOT_EMPTY,
-          label: 'Send only when result is not empty',
+          label: 'Chỉ gửi khi kết quả không trống',
         },
       ],
       []
@@ -380,7 +385,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
       try {
         setIsCreatingInsight(true);
         const newInsight = await insightTemplatesService.createInsightTemplate(dataMart.id, {
-          title: 'New Insight',
+          title: t('insightsUi.newInsight', 'New Insight'),
         });
         void navigate(scope(`/data-marts/${dataMart.id}/insights-v2/${newInsight.id}`));
       } catch (error) {
@@ -402,17 +407,17 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
             }}
           >
             <FormLayout>
-              <FormSection title='General'>
+              <FormSection title={t('reportsUi.general', 'General')}>
                 <FormField
                   control={form.control}
                   name='title'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Add a title that reflects the report`s purpose'>
-                        Title
+                      <FormLabel tooltip={t('reportsUi.titleTooltip', "Add a title that reflects the report's purpose")}>
+                        {t('reportsUi.title', 'Title')}
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder='Enter a report title' {...field} />
+                        <Input placeholder={t('reportsUi.reportTitlePlaceholder', 'Enter a report title')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -425,8 +430,8 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                   render={({ field }) => (
                     <FormItem>
                       <div className='flex items-center justify-between gap-2'>
-                        <FormLabel tooltip='Select one of your existing destinations'>
-                          Destination
+                        <FormLabel tooltip={t('reportsUi.selectDestinationTooltip', 'Select one of your existing destinations')}>
+                          {t('reportsUi.destination', 'Destination')}
                         </FormLabel>
                       </div>
                       <Select
@@ -444,7 +449,10 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                       >
                         <FormControl>
                           <SelectTrigger className='w-full max-w-full overflow-hidden'>
-                            <SelectValue className='truncate' placeholder='Select a destination'>
+                            <SelectValue
+                              className='truncate'
+                              placeholder={t('reportsUi.selectDestination', 'Select a destination')}
+                            >
                               {selectedDestination && (
                                 <DestinationOptionContent destination={selectedDestination} />
                               )}
@@ -459,7 +467,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                           ))}
                           {filteredDestinations.length > 0 && <SelectSeparator />}
                           {!preSelectedDestination && (
-                            <SelectItem value='__create_new__'>+ Create new</SelectItem>
+                            <SelectItem value='__create_new__'>{t('reportsUi.createNew', '+ Create new')}</SelectItem>
                           )}
                         </SelectContent>
                       </Select>
@@ -470,17 +478,17 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                 />
               </FormSection>
 
-              <FormSection title='Template'>
+              <FormSection title={t('reportsUi.template', 'Template')}>
                 <FormField
                   control={form.control}
                   name='subject'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Add a short, clear subject line for your report'>
-                        Subject
+                      <FormLabel tooltip={t('reportsUi.subjectTooltip', 'Add a short, clear subject line for your report')}>
+                        {t('reportsUi.subject', 'Subject')}
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder='Enter a message title' {...field} />
+                        <Input placeholder={t('reportsUi.subjectPlaceholder', 'Enter a message title')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -518,7 +526,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                           }}
                         >
                           <div className='flex items-center justify-between gap-4'>
-                            <FormLabel className='mt-0!'>Message</FormLabel>
+                            <FormLabel className='mt-0!'>{t('reportsUi.message', 'Message')}</FormLabel>
                             <TabsList className='grid grid-cols-2'>
                               <TabsTrigger
                                 value={TemplateSourceTypeEnum.CUSTOM_MESSAGE}
@@ -527,7 +535,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                     'border-destructive text-destructive data-[state=active]:border-destructive data-[state=active]:text-destructive'
                                 )}
                               >
-                                Custom
+                                {t('reportsUi.custom', 'Custom')}
                               </TabsTrigger>
                               <TabsTrigger
                                 value={TemplateSourceTypeEnum.INSIGHT_TEMPLATE}
@@ -536,7 +544,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                     'border-destructive text-destructive data-[state=active]:border-destructive data-[state=active]:text-destructive'
                                 )}
                               >
-                                Insight
+                                {t('reportsUi.insight', 'Insight')}
                               </TabsTrigger>
                             </TabsList>
                           </div>
@@ -599,7 +607,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                                 <Edit2 className='size-4' />
                                               </Button>
                                             </TooltipTrigger>
-                                            <TooltipContent side='left'>Edit</TooltipContent>
+                                            <TooltipContent side='left'>{t('reportsUi.edit', 'Edit')}</TooltipContent>
                                           </Tooltip>
                                         </TooltipProvider>
                                         <div className='border-t' />
@@ -623,7 +631,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                                 <Eye className='size-4' />
                                               </Button>
                                             </TooltipTrigger>
-                                            <TooltipContent side='left'>Preview</TooltipContent>
+                                            <TooltipContent side='left'>{t('reportsUi.preview', 'Preview')}</TooltipContent>
                                           </Tooltip>
                                         </TooltipProvider>
                                       </div>
@@ -659,10 +667,12 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                       <div className='bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full'>
                                         <Sparkles className='text-muted-foreground h-6 w-6' />
                                       </div>
-                                      <h3 className='text-sm font-semibold'>No Insights</h3>
+                                      <h3 className='text-sm font-semibold'>{t('reportsUi.noInsights', 'No Insights')}</h3>
                                       <p className='text-muted-foreground mt-1 mb-4 max-w-[240px] text-xs'>
-                                        Create an Insight to use it as a source for your report
-                                        messages
+                                        {t(
+                                          'reportsUi.insightSourceDescription',
+                                          'Create an Insight to use it as a source for your report messages'
+                                        )}
                                       </p>
                                       <div className='flex gap-2'>
                                         <Button
@@ -674,7 +684,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                           disabled={isCreatingInsight}
                                         >
                                           <Plus className='mr-2 h-3.5 w-3.5' />
-                                          Create Insight
+                                          {t('insightsUi.newInsight', 'New Insight')}
                                         </Button>
                                       </div>
                                     </div>
@@ -687,13 +697,13 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                       >
                                         <FormControl>
                                           <SelectTrigger className='w-full max-w-full overflow-hidden'>
-                                            <SelectValue placeholder='Select an insight'>
+                                            <SelectValue placeholder={t('reportsUi.selectInsight', 'Select an insight')}>
                                               <span className='block truncate'>
                                                 {insightField.value
                                                   ? insightTemplates.find(
                                                       t => t.id === insightField.value
                                                     )?.title
-                                                  : 'Select an insight'}
+                                                  : t('reportsUi.selectInsight', 'Select an insight')}
                                               </span>
                                             </SelectValue>
                                           </SelectTrigger>
@@ -709,7 +719,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                           {insightTemplates.length === 0 &&
                                             !loadingInsightTemplates && (
                                               <div className='text-muted-foreground p-2 text-sm'>
-                                                No insight available
+                                                {t('reportsUi.noInsightAvailable', 'No insight available')}
                                               </div>
                                             )}
                                         </SelectContent>
@@ -720,7 +730,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                             `/data-marts/${dataMart.id}/insights-v2/${insightField.value}`
                                           )}
                                           target='_blank'
-                                          title='Open Insight'
+                                          title={t('reportsUi.openInsight', 'Open Insight')}
                                           className='text-muted-foreground hover:text-primary shrink-0 p-1.5 transition-colors'
                                         >
                                           <ExternalLink className='h-4 w-4' />
@@ -749,10 +759,10 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                           }
                         >
                           <div className='mb-0! flex items-center justify-between gap-4'>
-                            <FormLabel className='mt-0!'>Message</FormLabel>
+                            <FormLabel className='mt-0!'>{t('reportsUi.message', 'Message')}</FormLabel>
                             <TabsList className='grid grid-cols-1'>
                               <TabsTrigger value={TemplateSourceTypeEnum.INSIGHT_TEMPLATE} disabled>
-                                Insight
+                                {t('reportsUi.insight', 'Insight')}
                               </TabsTrigger>
                             </TabsList>
                           </div>
@@ -767,8 +777,8 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                           {form.watch('insightTemplateId')
                                             ? (insightTemplates.find(
                                                 t => t.id === form.watch('insightTemplateId')
-                                              )?.title ?? 'Selected Insight')
-                                            : 'No Insight selected'}
+                                              )?.title ?? t('reportsUi.selectedInsight', 'Selected Insight'))
+                                            : t('reportsUi.noInsightSelected', 'No Insight selected')}
                                         </p>
                                         {!isInsightContext &&
                                           dataMart &&
@@ -778,7 +788,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                                 `/data-marts/${dataMart.id}/insights-v2/${String(form.watch('insightTemplateId'))}`
                                               )}
                                               target='_blank'
-                                              title='Open Insight'
+                                              title={t('reportsUi.openInsight', 'Open Insight')}
                                               className='text-muted-foreground hover:text-primary shrink-0 transition-colors'
                                             >
                                               <ExternalLink className='h-3.5 w-3.5' />
@@ -786,7 +796,10 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                           )}
                                       </div>
                                       <p className='text-muted-foreground mt-1 text-xs'>
-                                        The Insight will be used when the report runs
+                                        {t(
+                                          'reportsUi.insightWillRun',
+                                          'The Insight will be used when the report runs'
+                                        )}
                                       </p>
                                     </div>
                                   </div>
@@ -835,7 +848,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                         <FileCode className='size-4' />
                                       </Button>
                                     </TooltipTrigger>
-                                    <TooltipContent side='left'>View Source</TooltipContent>
+                                    <TooltipContent side='left'>{t('reportsUi.viewSource', 'View Source')}</TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
                                 <div className='border-t' />
@@ -859,7 +872,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                                         <Eye className='size-4' />
                                       </Button>
                                     </TooltipTrigger>
-                                    <TooltipContent side='left'>Preview</TooltipContent>
+                                    <TooltipContent side='left'>{t('reportsUi.preview', 'Preview')}</TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
                               </div>
@@ -882,14 +895,19 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                 />
               </FormSection>
 
-              <FormSection title='Sending conditions'>
+              <FormSection title={t('reportsUi.sendingConditions', 'Sending conditions')}>
                 <FormField
                   control={form.control}
                   name='reportCondition'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Define when the report should be sent based on your Data Mart’s execution result'>
-                        Data Mart Run results
+                      <FormLabel
+                        tooltip={t(
+                          'reportsUi.dataMartRunResultsTooltip',
+                          'Define when the report should be sent based on your Data Mart’s execution result'
+                        )}
+                      >
+                        {t('reportsUi.dataMartRunResults', 'Data Mart Run results')}
                       </FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
@@ -915,8 +933,8 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
               </FormSection>
 
               <FormSection
-                title='Report Columns'
-                tooltip='Select which columns to include in the report'
+                title={t('reportsUi.reportColumns', 'Report Columns')}
+                tooltip={t('reportsUi.reportColumnsTooltip', 'Select which columns to include in the report')}
                 titleAdornment={<ReportColumnsCountBadge count={columnsCount} />}
                 fields={[
                   'columnConfig',
@@ -966,7 +984,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                 />
               </FormSection>
 
-              <FormSection title='Automate Report Runs'>
+                <FormSection title={t('reportsUi.automateRuns', 'Automate Report Runs')}>
                 {dataMart?.id ? (
                   <ReportSchedulesInlineList
                     ref={scheduleRef}
@@ -980,18 +998,18 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
               </FormSection>
 
               {!isReadOnly && (
-                <FormSection title='Ownership'>
+                <FormSection title={t('reportsUi.ownership', 'Ownership')}>
                   <FormItem>
-                    <FormLabel tooltip='Team members responsible for this report'>Owners</FormLabel>
+                    <FormLabel tooltip={t('reportsUi.ownersTooltip', 'Team members responsible for this report')}>{t('reportsUi.owners', 'Owners')}</FormLabel>
                     <OwnersSection ownerUsers={ownerUsers} onSave={handleOwnersChange} />
                   </FormItem>
                 </FormSection>
               )}
 
               {initialReport?.createdAt && (
-                <FormSection title='Details'>
+                <FormSection title={t('reportsUi.details', 'Details')}>
                   <FormItem>
-                    <FormLabel>Created By</FormLabel>
+                    <FormLabel>{t('reportsUi.createdBy', 'Created By')}</FormLabel>
                     <div className='text-sm'>
                       {initialReport.createdByUser ? (
                         <UserReference
@@ -999,12 +1017,12 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
                           variant='full'
                         />
                       ) : (
-                        <span className='text-muted-foreground'>Unknown</span>
+                        <span className='text-muted-foreground'>{t('reportsUi.unknown', 'Unknown')}</span>
                       )}
                     </div>
                   </FormItem>
                   <FormItem>
-                    <FormLabel>Created At</FormLabel>
+                    <FormLabel>{t('reportsUi.createdAt', 'Created At')}</FormLabel>
                     <div className='text-muted-foreground text-sm'>
                       {new Date(initialReport.createdAt).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -1038,7 +1056,7 @@ export const EmailReportEditForm = forwardRef<HTMLFormElement, EmailReportEditFo
           dataDestination={null}
           initialFormData={
             {
-              title: 'New Destination',
+              title: t('destinationsPage.newDestination', 'New Destination'),
               type: allowedDestinationTypes?.[0] ?? DataDestinationType.EMAIL,
             } as DataDestinationFormData
           }

@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@owox/ui/components/dropdown-menu';
 import { TableSelectionCheckbox } from './TableSelectionCheckbox';
+import { useTranslation } from 'react-i18next';
 
 interface ExtendedColumnMeta<TData> extends ColumnMeta<TData, unknown> {
   title?: string;
@@ -28,6 +29,7 @@ export function ToggleColumnsHeader<TData>({
   table,
   getColumnLabel,
 }: ToggleColumnsHeaderProps<TData>) {
+  const { t } = useTranslation();
   return (
     <div className='text-right'>
       <DropdownMenu>
@@ -35,7 +37,7 @@ export function ToggleColumnsHeader<TData>({
           <Button
             variant='ghost'
             className='h-8 transition-colors transition-shadow duration-200 hover:bg-white hover:shadow-xs dark:hover:bg-white/4'
-            aria-label='Toggle columns'
+            aria-label={t('table.toggleColumns', 'Toggle columns')}
           >
             <MoreHorizontal className='text-muted-foreground h-4 w-4' />
           </Button>
@@ -55,7 +57,7 @@ export function ToggleColumnsHeader<TData>({
                   <label className='flex items-center space-x-2'>
                     <TableSelectionCheckbox
                       checked={column.getIsVisible()}
-                      ariaLabel={`Toggle column ${label}`}
+                      ariaLabel={t('table.toggleColumn', 'Toggle column {{label}}', { label })}
                       onClick={() => {
                         column.toggleVisibility(!column.getIsVisible());
                       }}

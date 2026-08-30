@@ -12,6 +12,7 @@ import {
 } from '../../../features/plugins';
 import { useProjectRoute } from '../../../shared/hooks';
 import { formatDateOnly } from '../../../utils/date-formatters';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Everything this member has ever installed in this project, still installed or not.
@@ -22,6 +23,7 @@ import { formatDateOnly } from '../../../utils/date-formatters';
  * page, where uninstall and update live. Nothing else reaches either.
  */
 export default function PluginHistoryPage() {
+  const { t } = useTranslation();
   const { installations, isLoading } = usePluginInstallations(true);
   const { install, isInstalling } = usePluginActions();
   const { scope } = useProjectRoute();
@@ -60,12 +62,12 @@ export default function PluginHistoryPage() {
           <Button
             variant='ghost'
             className='size-8 lg:size-9'
-            aria-label='Back to plugins'
+            aria-label={t('pluginsPage.back', 'Back to plugins')}
             onClick={() => void navigate(scope('/plugins'))}
           >
             <ArrowLeft className='h-4 w-4 lg:h-5 lg:w-5' />
           </Button>
-          <h1 className='dm-page-header-title truncate'>Installation history</h1>
+          <h1 className='dm-page-header-title truncate'>{t('pluginsPage.history', 'Installation history')}</h1>
         </div>
       </header>
 
@@ -74,21 +76,20 @@ export default function PluginHistoryPage() {
           {!isLoading && installations.length === 0 && (
             <div className='dm-empty-state'>
               <History className='dm-empty-state-ico' strokeWidth={1} aria-hidden />
-              <h2 className='dm-empty-state-title'>Nothing installed yet</h2>
+              <h2 className='dm-empty-state-title'>{t('pluginsPage.historyEmptyTitle', 'Nothing installed yet')}</h2>
               <p className='dm-empty-state-subtitle'>
-                Plugins you install stay here, and so do the ones you remove — including any nobody
-                publishes any more.
+                {t('pluginsPage.historyEmptySubtitle', 'Plugins you install stay here, and so do the ones you remove — including any nobody publishes any more.')}
               </p>
             </div>
           )}
 
           {current.length > 0 && (
-            <Section title='Installed'>
+            <Section title={t('pluginsPage.installed', 'Installed')}>
               {current.map(item => (
                 <PluginHistoryCard
                   key={item.installationId}
                   item={item}
-                  caption={`Installed ${formatDateOnly(item.installedAt)}`}
+                  caption={t('pluginsPage.installedOn', { date: formatDateOnly(item.installedAt), defaultValue: 'Installed {{date}}' })}
                   href={scope(`/plugins/${item.pluginId}`)}
                 />
               ))}
@@ -96,12 +97,12 @@ export default function PluginHistoryPage() {
           )}
 
           {removed.length > 0 && (
-            <Section title='Removed'>
+            <Section title={t('pluginsPage.removed', 'Removed')}>
               {removed.map(item => (
                 <PluginHistoryCard
                   key={item.installationId}
                   item={item}
-                  caption={`Removed ${formatDateOnly(item.uninstalledAt)}`}
+                  caption={t('pluginsPage.removedOn', { date: formatDateOnly(item.uninstalledAt), defaultValue: 'Removed {{date}}' })}
                   href={scope(`/plugins/${item.pluginId}`)}
                   action={
                     <Button
@@ -111,7 +112,7 @@ export default function PluginHistoryPage() {
                         setConfirming(item);
                       }}
                     >
-                      Restore
+                      {t('pluginsPage.restore', 'Restore')}
                     </Button>
                   }
                 />
@@ -165,6 +166,7 @@ function PluginHistoryCard({
   href: string;
   action?: ReactNode;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const open = () => void navigate(href);
 
@@ -196,10 +198,12 @@ function PluginHistoryCard({
         <div className='flex flex-wrap items-center gap-2'>
           <span className='truncate font-medium'>{item.displayName}</span>
           {item.currentSemver && <Badge variant='secondary'>v{item.currentSemver}</Badge>}
-          {item.suspended && <Badge variant='destructive'>Unavailable</Badge>}
+          {item.suspended && (
+            <Badge variant='destructive'>{t('pluginsPage.unavailable', 'Unavailable')}</Badge>
+          )}
         </div>
         <span className='text-muted-foreground truncate text-sm'>
-          by {item.source.ownerName} · {caption}
+          {t('pluginsPage.byOwner', 'by')} {item.source.ownerName} · {caption}
         </span>
       </div>
 

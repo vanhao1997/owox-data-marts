@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { CredentialIdentity } from '../../../../../shared/types/credential-identity';
@@ -81,10 +82,11 @@ export function DataDestinationForm({
   allowedDestinationTypes,
   destinationId,
 }: DataDestinationFormProps) {
+  const { t } = useTranslation();
   const form = useForm<DataDestinationFormData>({
     resolver: zodResolver(dataDestinationSchema),
     defaultValues: initialData ?? {
-      title: 'New Destination',
+      title: t('destinationsPage.newDestination', 'New Destination'),
       type: DataDestinationType.GOOGLE_SHEETS,
     },
     mode: 'onTouched',
@@ -225,15 +227,15 @@ export function DataDestinationForm({
         }}
       >
         <FormLayout>
-          <FormSection title='General'>
+          <FormSection title={t('formCommon.general', 'General')}>
             <FormField
               control={form.control}
               name='title'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Name the destination to clarify its purpose'>Title</FormLabel>
+                  <FormLabel tooltip={t('formCommon.titleTooltipDestination', 'Name the destination to clarify its purpose')}>{t('common.title', 'Title')}</FormLabel>
                   <FormControl>
-                    <Input placeholder='Enter title' {...field} />
+                    <Input placeholder={t('formCommon.destinationTitlePlaceholder', 'Enter title')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -258,37 +260,49 @@ export function DataDestinationForm({
           )}
 
           {destinationType === DataDestinationType.EMAIL && (
-            <EmailFields form={form} emailsFieldTitle={'Enter user emails list'} />
+            <EmailFields
+              form={form}
+              emailsFieldTitle={t('destinationForm.userEmailsTitle', 'Enter user emails list')}
+            />
           )}
 
           {destinationType === DataDestinationType.SLACK && (
-            <EmailFields form={form} emailsFieldTitle={'Enter Slack channel emails list'} />
+            <EmailFields
+              form={form}
+              emailsFieldTitle={t(
+                'destinationForm.slackChannelEmailsTitle',
+                'Enter Slack channel emails list'
+              )}
+            />
           )}
 
           {destinationType === DataDestinationType.MS_TEAMS && (
             <EmailFields
               form={form}
-              emailsFieldTitle={'Enter Microsoft Teams channel emails list'}
+              emailsFieldTitle={t(
+                'destinationForm.microsoftTeamsChannelEmailsTitle',
+                'Enter Microsoft Teams channel emails list'
+              )}
             />
           )}
 
           {destinationType === DataDestinationType.GOOGLE_CHAT && <GoogleChatFields form={form} />}
 
-          <FormSection title='Ownership' defaultOpen={false} name='destination-ownership'>
+          <FormSection title={t('formCommon.ownership', 'Ownership')} defaultOpen={false} name='destination-ownership'>
             <FormItem>
-              <FormLabel tooltip='Team members responsible for this destination'>Owners</FormLabel>
+              <FormLabel tooltip='Các thành viên phụ trách điểm đến này'>{t('formCommon.owners', 'Owners')}</FormLabel>
               <OwnersSection ownerUsers={ownerUsers} onSave={handleOwnersChange} />
               <FormDescription>
                 <Accordion variant='common' type='single' collapsible>
                   <AccordionItem value='destination-owners-help'>
-                    <AccordionTrigger>What is a Destination Owner?</AccordionTrigger>
+                    <AccordionTrigger>Chủ sở hữu điểm đến là gì?</AccordionTrigger>
                     <AccordionContent>
                       <p>
-                        Destination Owner is direct ownership of this Destination. When the
-                        owner&apos;s role is Technical User or Project Admin, they may view, edit,
-                        delete, configure Sharing, and copy credentials from this Destination —
-                        regardless of Sharing settings. Assigning Owner to a Business User stores
-                        the assignment but grants no maintenance permissions until the role changes.
+                        Chủ sở hữu điểm đến là quyền sở hữu trực tiếp của điểm đến này. Khi vai trò
+                        của chủ sở hữu là Technical User hoặc Project Admin, họ có thể xem, sửa, xóa,
+                        cấu hình Sharing và sao chép thông tin xác thực từ điểm đến này — bất kể cài
+                        đặt Sharing. Gán Owner cho Business User vẫn lưu lại phân công, nhưng chưa
+                        cấp quyền bảo trì cho đến khi vai trò thay đổi.
                       </p>
                     </AccordionContent>
                   </AccordionItem>
@@ -298,10 +312,10 @@ export function DataDestinationForm({
           </FormSection>
 
           {isEditMode && destinationId && (
-            <FormSection title='Contexts' defaultOpen={false} name='destination-contexts'>
+            <FormSection title={t('formCommon.contexts', 'Contexts')} defaultOpen={false} name='destination-contexts'>
               <FormItem>
-                <FormLabel tooltip='Business domain contexts assigned to this destination'>
-                  Assigned
+                <FormLabel tooltip='Các ngữ cảnh miền nghiệp vụ được gán cho điểm đến này'>
+                  {t('formCommon.assigned', 'Assigned')}
                 </FormLabel>
                 <ContextPicker
                   selectedContextIds={contextIds}
@@ -312,14 +326,14 @@ export function DataDestinationForm({
                 <FormDescription>
                   <Accordion variant='common' type='single' collapsible>
                     <AccordionItem value='destination-contexts-help'>
-                      <AccordionTrigger>What are Contexts?</AccordionTrigger>
+                      <AccordionTrigger>Ngữ cảnh là gì?</AccordionTrigger>
                       <AccordionContent>
                         <p>
-                          Contexts are business domains (e.g. Marketing, Finance, Sales) used to
-                          group Storages, Destinations and Data Marts. They also control access: a
-                          member whose role scope is limited to specific contexts will only see
-                          resources assigned to those contexts. Assign one or more contexts to make
-                          this Destination discoverable to the right people.
+                          Ngữ cảnh là các miền nghiệp vụ (ví dụ: Marketing, Finance, Sales) dùng để
+                          nhóm Storages, Destinations và Data Mart. Chúng cũng kiểm soát quyền truy
+                          cập: thành viên chỉ được giới hạn trong một số ngữ cảnh sẽ chỉ thấy các tài
+                          nguyên được gán cho những ngữ cảnh đó. Hãy gán một hoặc nhiều ngữ cảnh để
+                          điểm đến này dễ được đúng người tìm thấy.
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -330,10 +344,10 @@ export function DataDestinationForm({
           )}
 
           {isEditMode && (
-            <FormSection title='Sharing' defaultOpen={false} name='destination-availability'>
+            <FormSection title={t('formCommon.sharing', 'Sharing')} defaultOpen={false} name='destination-availability'>
               <FormItem>
                 <div className='flex items-center justify-between gap-4'>
-                  <FormLabel>Shared for use</FormLabel>
+                  <FormLabel>{t('formCommon.sharedForUse', 'Shared for use')}</FormLabel>
                   <Switch
                     checked={sharingState.availableForUse}
                     onCheckedChange={v => {
@@ -342,16 +356,16 @@ export function DataDestinationForm({
                   />
                 </div>
                 <p className='text-muted-foreground text-sm'>
-                  Project members can use this destination in their reports
+                  Thành viên dự án có thể dùng điểm đến này trong báo cáo của họ
                 </p>
                 <FormDescription>
                   <Accordion variant='common' type='single' collapsible>
                     <AccordionItem value='sharing-use-help'>
-                      <AccordionTrigger>What does "Shared for use" mean?</AccordionTrigger>
+                      <AccordionTrigger>“Chia sẻ để sử dụng” nghĩa là gì?</AccordionTrigger>
                       <AccordionContent>
                         <p>
-                          When enabled, project members can select this destination when configuring
-                          reports. Without this, only destination owners and admins can use it.
+                          Khi bật, thành viên dự án có thể chọn điểm đến này khi cấu hình báo cáo.
+                          Nếu tắt, chỉ chủ sở hữu điểm đến và quản trị viên mới dùng được.
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -360,7 +374,7 @@ export function DataDestinationForm({
               </FormItem>
               <FormItem>
                 <div className='flex items-center justify-between gap-4'>
-                  <FormLabel>Shared for maintenance</FormLabel>
+                  <FormLabel>{t('formCommon.sharedForMaintenance', 'Shared for maintenance')}</FormLabel>
                   <Switch
                     checked={sharingState.availableForMaintenance}
                     onCheckedChange={v => {
@@ -369,18 +383,18 @@ export function DataDestinationForm({
                   />
                 </div>
                 <p className='text-muted-foreground text-sm'>
-                  Project members with access can copy credentials, edit, and delete this
-                  destination
+                  Thành viên dự án có quyền truy cập có thể sao chép thông tin xác thực, sửa và xóa
+                  điểm đến này
                 </p>
                 <FormDescription>
                   <Accordion variant='common' type='single' collapsible>
                     <AccordionItem value='sharing-maintenance-help'>
-                      <AccordionTrigger>What does "Shared for maintenance" mean?</AccordionTrigger>
+                      <AccordionTrigger>“Chia sẻ để bảo trì” nghĩa là gì?</AccordionTrigger>
                       <AccordionContent>
                         <p>
-                          When enabled, project members can copy credentials from this destination,
-                          edit its configuration, and delete it. Without this, only owners and
-                          admins can perform these actions.
+                          Khi bật, thành viên dự án có thể sao chép thông tin xác thực từ điểm đến
+                          này, sửa cấu hình và xóa nó. Nếu tắt, chỉ chủ sở hữu và quản trị viên mới
+                          thực hiện được các thao tác này.
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -391,21 +405,21 @@ export function DataDestinationForm({
           )}
 
           {initialData?.createdAt && (
-            <FormSection title='Details' defaultOpen={false} name='destination-details'>
+            <FormSection title={t('formCommon.details', 'Details')} defaultOpen={false} name='destination-details'>
               <FormItem>
-                <FormLabel>Created By</FormLabel>
+                <FormLabel>{t('formCommon.createdBy', 'Created By')}</FormLabel>
                 <div className='text-sm'>
                   {initialData.createdByUser ? (
                     <UserReference userProjection={initialData.createdByUser} variant='full' />
                   ) : (
-                    <span className='text-muted-foreground'>Unknown</span>
+                    <span className='text-muted-foreground'>{t('formCommon.unknown', 'Unknown')}</span>
                   )}
                 </div>
               </FormItem>
               <FormItem>
-                <FormLabel>Created At</FormLabel>
+                <FormLabel>{t('formCommon.createdAt', 'Created At')}</FormLabel>
                 <div className='text-muted-foreground text-sm'>
-                  {new Date(initialData.createdAt).toLocaleDateString('en-US', {
+                  {new Date(initialData.createdAt).toLocaleDateString('vi-VN', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
@@ -420,7 +434,7 @@ export function DataDestinationForm({
             variant='default'
             type='submit'
             className='w-full'
-            aria-label='Save'
+            aria-label={t('formCommon.save', 'Save')}
             disabled={
               (!form.formState.isDirty &&
                 !selectedSource &&
@@ -431,16 +445,16 @@ export function DataDestinationForm({
             }
           >
             {form.formState.isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-            Save
+            {t('formCommon.save', 'Save')}
           </Button>
           <Button
             variant='outline'
             type='button'
             onClick={onCancel}
             className='w-full'
-            aria-label='Cancel'
+            aria-label={t('formCommon.cancel', 'Cancel')}
           >
-            Cancel
+            {t('formCommon.cancel', 'Cancel')}
           </Button>
         </FormActions>
       </AppForm>

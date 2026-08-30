@@ -15,6 +15,7 @@ import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
 import { ExternalLink, Info, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 import { Button } from '../../../../../shared/components/Button';
@@ -126,6 +127,7 @@ export function JoinSettingsForm({
   inheritedFrom,
   onSaved,
 }: JoinSettingsFormProps) {
+  const { t } = useTranslation();
   const { scope } = useProjectRoute();
   const [sourceDM, setSourceDM] = useState<DataMartResponseDto | null>(null);
   const [targetDM, setTargetDM] = useState<DataMartResponseDto | null>(null);
@@ -308,7 +310,7 @@ export function JoinSettingsForm({
             }}
           >
             <ExternalLink className='size-3.5' />
-            <span className='max-w-[200px] truncate'>Open {inheritedFrom.title}</span>
+            <span className='max-w-[200px] truncate'>{t('common.open')} {inheritedFrom.title}</span>
           </Button>
         </div>
       )}
@@ -348,7 +350,7 @@ export function JoinSettingsForm({
               </Tooltip>
               {relationship.createdByUser && (
                 <span className='flex min-w-0 items-center gap-1.5'>
-                  <span>by</span>
+                  <span>{t('dataMartRelationships.by', 'by')}</span>
                   <UserReference userProjection={relationship.createdByUser} />
                 </span>
               )}
@@ -364,7 +366,7 @@ export function JoinSettingsForm({
                 className='bg-muted/50 flex flex-col gap-1.5 rounded-md p-3 dark:bg-white/5'
               >
                 <label className='flex items-center gap-1.5 text-sm font-medium'>
-                  SQL Alias
+                  {t('dataMartRelationships.sqlAlias', 'SQL Alias')}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span className='text-muted-foreground/50 hover:text-muted-foreground shrink-0 transition-colors'>
@@ -372,15 +374,17 @@ export function JoinSettingsForm({
                       </span>
                     </TooltipTrigger>
                     <TooltipContent side='top' className='max-w-xs'>
-                      Internal name used when building the SQL JOIN for this data mart (e.g.
-                      orders_customer_id). Not shown in the output.
+                      {t(
+                        'dataMartRelationships.aliasTooltip',
+                        'Internal name used when building the SQL JOIN for this data mart (e.g. orders_customer_id). Not shown in the output.'
+                      )}
                     </TooltipContent>
                   </Tooltip>
                 </label>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder='e.g. orders'
+                    placeholder={t('dataMartRelationships.aliasPlaceholder', 'e.g. orders')}
                     disabled={readOnly}
                     className='bg-background h-8 text-sm dark:bg-white/5'
                   />
@@ -397,7 +401,7 @@ export function JoinSettingsForm({
         <div className='flex flex-col gap-3'>
           <div className='flex shrink-0 items-center justify-between'>
             <p className='flex items-center gap-1.5 text-sm font-medium'>
-              Join Fields
+              {t('dataMartRelationships.joinFields', 'Join Fields')}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className='text-muted-foreground/50 hover:text-muted-foreground shrink-0 transition-colors'>
@@ -405,7 +409,10 @@ export function JoinSettingsForm({
                   </span>
                 </TooltipTrigger>
                 <TooltipContent side='top' className='max-w-xs'>
-                  Define how rows are matched between the source and related data marts.
+                  {t(
+                    'dataMartRelationships.joinFieldsTooltip',
+                    'Define how rows are matched between the source and related data marts.'
+                  )}
                 </TooltipContent>
               </Tooltip>
             </p>
@@ -419,7 +426,7 @@ export function JoinSettingsForm({
                 }}
               >
                 <Plus className='mr-1 h-3.5 w-3.5' />
-                Add Join Field
+                {t('dataMartRelationships.addJoinField', 'Add Join Field')}
               </Button>
             )}
           </div>
@@ -434,7 +441,9 @@ export function JoinSettingsForm({
                     name={`joinConditions.${index}.sourceFieldName`}
                     render={({ field }) => (
                       <FormItem variant='light' className='min-w-0 flex-1'>
-                        <FormLabel className={cn(index > 0 && 'sr-only')}>Source field</FormLabel>
+                        <FormLabel className={cn(index > 0 && 'sr-only')}>
+                          {t('dataMartRelationships.sourceField', 'Source field')}
+                        </FormLabel>
                         <FormControl>
                           <Combobox
                             options={sourceFields.map(f => ({
@@ -443,7 +452,7 @@ export function JoinSettingsForm({
                             }))}
                             value={field.value}
                             onValueChange={field.onChange}
-                            placeholder='Select field...'
+                            placeholder={t('dataMartRelationships.selectField', 'Select field...')}
                             disabled={readOnly || isLoadingSchemas}
                             className={cn(mismatch && 'border-destructive')}
                             renderLabel={option => (
@@ -473,7 +482,9 @@ export function JoinSettingsForm({
                     name={`joinConditions.${index}.targetFieldName`}
                     render={({ field }) => (
                       <FormItem variant='light' className='min-w-0 flex-1'>
-                        <FormLabel className={cn(index > 0 && 'sr-only')}>Related field</FormLabel>
+                        <FormLabel className={cn(index > 0 && 'sr-only')}>
+                          {t('dataMartRelationships.relatedField', 'Related field')}
+                        </FormLabel>
                         <FormControl>
                           <Combobox
                             options={targetFields.map(f => ({
@@ -482,7 +493,7 @@ export function JoinSettingsForm({
                             }))}
                             value={field.value}
                             onValueChange={field.onChange}
-                            placeholder='Select field...'
+                            placeholder={t('dataMartRelationships.selectField', 'Select field...')}
                             disabled={readOnly || isLoadingSchemas}
                             className={cn(mismatch && 'border-destructive')}
                             renderLabel={option => (
@@ -510,7 +521,7 @@ export function JoinSettingsForm({
                         'text-destructive hover:text-destructive',
                         index === 0 ? 'mt-7' : 'mt-2'
                       )}
-                      aria-label='Remove join condition'
+                      aria-label={t('dataMartRelationships.removeJoinCondition', 'Remove join condition')}
                     >
                       <Trash2 className='h-3.5 w-3.5' />
                     </Button>

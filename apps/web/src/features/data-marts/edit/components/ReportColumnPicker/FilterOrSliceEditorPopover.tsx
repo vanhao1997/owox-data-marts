@@ -1,4 +1,5 @@
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Popover, PopoverContent, PopoverTrigger } from '@owox/ui/components/popover';
 import { Button } from '@owox/ui/components/button';
 import { Label } from '@owox/ui/components/label';
@@ -75,6 +76,7 @@ interface TabbedPopoverProps extends FilterOrSliceEditorPopoverProps {
 }
 
 function TabbedPopover(props: TabbedPopoverProps) {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<'filter' | 'slice'>(props.defaultTab ?? 'filter');
   const [filterDraft, setFilterDraft] = useState<FilterRule | null>(
     props.filterProps.initialRule ?? null
@@ -115,13 +117,13 @@ function TabbedPopover(props: TabbedPopoverProps) {
   function handleApply() {
     if (tab === 'filter') {
       if (!filterDraft) {
-        setError('Value is required');
+        setError(t('reportColumnPicker.valueRequired'));
         return;
       }
       props.filterProps.onApply(filterDraft);
     } else {
       if (!sliceDraft) {
-        setError('Value is required');
+        setError(t('reportColumnPicker.valueRequired'));
         return;
       }
       const preJoinRule = {
@@ -145,7 +147,9 @@ function TabbedPopover(props: TabbedPopoverProps) {
 
   const hasExistingFilters = !!props.filterProps.existingRules?.length;
   const hasExistingSlices = !!props.sliceProps.existingSlicesForColumn?.length;
-  const applyLabel = (tab === 'filter' ? hasExistingFilters : hasExistingSlices) ? 'Add' : 'Apply';
+  const applyLabel = (tab === 'filter' ? hasExistingFilters : hasExistingSlices)
+    ? t('reportColumnPicker.add')
+    : t('reportColumnPicker.apply');
   const activeDelete = tab === 'filter' ? props.filterProps.onDelete : props.sliceProps.onDelete;
 
   return (
@@ -170,7 +174,11 @@ function TabbedPopover(props: TabbedPopoverProps) {
                 activeDelete();
                 props.onOpenChange(false);
               }}
-              aria-label={tab === 'filter' ? 'Delete filter' : 'Delete slice'}
+              aria-label={
+                tab === 'filter'
+                  ? t('reportColumnPicker.deleteFilter')
+                  : t('reportColumnPicker.deleteSlice')
+              }
             >
               <Trash2 className='h-4 w-4' />
             </Button>
@@ -183,7 +191,7 @@ function TabbedPopover(props: TabbedPopoverProps) {
 
         {tab === 'filter' && hasExistingFilters && (
           <div className='space-y-1'>
-            <Label>Active filters</Label>
+            <Label>{t('reportColumnPicker.activeFilters')}</Label>
             <div className='space-y-1'>
               {(props.filterProps.existingRules ?? []).map((rule, idx) => {
                 const valueStr = summarizeFilterRule(rule);
@@ -204,7 +212,7 @@ function TabbedPopover(props: TabbedPopoverProps) {
                         onClick={() => {
                           props.filterProps.onRemoveExistingAt?.(idx);
                         }}
-                        aria-label='Remove filter'
+                        aria-label={t('reportColumnPicker.removeFilter')}
                       >
                         <X className='h-3 w-3' />
                       </Button>
@@ -218,7 +226,7 @@ function TabbedPopover(props: TabbedPopoverProps) {
 
         {tab === 'slice' && hasExistingSlices && (
           <div className='space-y-1'>
-            <Label>Active slices</Label>
+            <Label>{t('reportColumnPicker.activeSlices')}</Label>
             <div className='space-y-1'>
               {(props.sliceProps.existingSlicesForColumn ?? []).map((rule, idx) => {
                 const valueStr = summarizeFilterRule(rule);
@@ -239,7 +247,7 @@ function TabbedPopover(props: TabbedPopoverProps) {
                         onClick={() => {
                           props.sliceProps.onRemoveExistingAt?.(idx);
                         }}
-                        aria-label='Remove slice'
+                        aria-label={t('reportColumnPicker.removeSlice')}
                       >
                         <X className='h-3 w-3' />
                       </Button>
@@ -275,7 +283,7 @@ function TabbedPopover(props: TabbedPopoverProps) {
 
         <div className='flex justify-end gap-2'>
           <Button variant='outline' size='sm' onClick={handleCancel}>
-            Cancel
+            {t('reportColumnPicker.cancel')}
           </Button>
           <Button size='sm' onClick={handleApply}>
             {applyLabel}

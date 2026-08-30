@@ -10,18 +10,20 @@ import { Info, BookOpen, Airplay } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '../../shared/components/Button/index.tsx';
 import { useContentPopovers } from '../../app/store/hooks/useContentPopovers.ts';
+import { useTranslation } from 'react-i18next';
 
 export function PageNotificationLegacyStorageSetup() {
+  const { t } = useTranslation();
   const { open } = useContentPopovers();
   return (
     <div className='mb-4'>
       <CollapsibleCard collapsible name='notification-legacy-storage-setup'>
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle icon={Info}>
-            Complete BigQuery storage setup to publish your Data Marts
+            {t('legacyStorageNotice.title')}
           </CollapsibleCardHeaderTitle>
           <CollapsibleCardHeaderActions>
-            <p className='text-muted-foreground/75 text-sm'>Action required</p>
+            <p className='text-muted-foreground/75 text-sm'>{t('legacyStorageNotice.actionRequired')}</p>
           </CollapsibleCardHeaderActions>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
@@ -29,7 +31,7 @@ export function PageNotificationLegacyStorageSetup() {
             <div className='flex flex-col gap-4 p-4 text-sm xl:p-6'>
               <div className='flex flex-col gap-2'>
                 <p>
-                  Your Data Marts created with{' '}
+                  {t('legacyStorageNotice.createdWith')}{' '}
                   <a
                     href='https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832'
                     target='_blank'
@@ -38,23 +40,21 @@ export function PageNotificationLegacyStorageSetup() {
                   >
                     P2PDigital Reports
                   </a>{' '}
-                  (Google Sheets extension) are listed below in{' '}
-                  <span className='font-semibold'>Draft</span> status.
+                  {t('legacyStorageNotice.extensionSuffix')}{' '}
+                  <span className='font-semibold'>{t('common.draft')}</span> {t('legacyStorageNotice.statusSuffix')}
                 </p>
                 <p>
-                  To manage Data Marts in one place, get Insights and sync data to multiple
-                  destinations, complete the following steps:
+                  {t('legacyStorageNotice.instructions')}
                 </p>
                 <ol className='ml-4 flex list-inside list-decimal flex-col gap-1 text-left'>
                   <li>
-                    <span className='font-semibold'>Select</span> a storage
+                    <span className='font-semibold'>{t('common.select')}</span> {t('legacyStorageNotice.storage')}
                   </li>
                   <li>
-                    <span className='font-semibold'>Grant access</span> to Google BigQuery (used in
-                    P2PDigital extension)
+                    <span className='font-semibold'>{t('legacyStorageNotice.grantAccess')}</span> {t('legacyStorageNotice.bigQuerySuffix')}
                   </li>
                   <li>
-                    <span className='font-semibold'>Publish</span> your Data Marts
+                    <span className='font-semibold'>{t('common.publish')}</span> {t('legacyStorageNotice.publishSuffix')}
                   </li>
                 </ol>
               </div>
@@ -64,7 +64,7 @@ export function PageNotificationLegacyStorageSetup() {
                     open('video-4-legacy-storage-setup');
                   }}
                 >
-                  <Airplay className='size-4' /> Watch video (30 seconds)
+                    <Airplay className='size-4' /> {t('legacyStorageNotice.watchVideo')}
                 </Button>
                 <Button variant='outline' asChild>
                   <Link
@@ -73,7 +73,7 @@ export function PageNotificationLegacyStorageSetup() {
                     rel='noopener noreferrer'
                   >
                     <BookOpen className='size-4' />
-                    View setup guide
+                    {t('legacyStorageNotice.viewGuide')}
                   </Link>
                 </Button>
               </div>

@@ -4,22 +4,22 @@ import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
 export default function GoogleSheetsDescription() {
   return (
     <AccordionItem value='sheets-api-details'>
-      <AccordionTrigger>How do I enable the Google Sheets API?</AccordionTrigger>
+      <AccordionTrigger>Làm sao bật Google Sheets API?</AccordionTrigger>
       <AccordionContent>
         <p className='mb-2'>
-          To send data to Google Sheets, you need to enable the{' '}
+          Để gửi dữ liệu sang Google Sheets, bạn cần bật{' '}
           <ExternalAnchor href='https://console.cloud.google.com/apis/library/sheets.googleapis.com'>
             Google Sheets API
           </ExternalAnchor>{' '}
-          in your Google Cloud project.
+          trong dự án Google Cloud của bạn.
         </p>
-        <p className='mb-2'>Here's how to do it:</p>
+        <p className='mb-2'>Cách thực hiện:</p>
         <ol className='list-inside list-decimal space-y-2 text-sm'>
-          <li>Open the link above and make sure the correct project is selected.</li>
+          <li>Mở liên kết ở trên và bảo đảm dự án đúng đã được chọn.</li>
           <li>
-            If the API isn't enabled yet, click <strong>Enable</strong>.
+            Nếu API chưa bật, hãy bấm <strong>Bật</strong>.
           </li>
-          <li>If it's already enabled, you'll see the API dashboard — that's fine.</li>
+          <li>Nếu API đã bật rồi, bạn sẽ thấy bảng điều khiển API — như vậy là ổn.</li>
         </ol>
       </AccordionContent>
     </AccordionItem>

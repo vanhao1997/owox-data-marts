@@ -9,6 +9,7 @@ import type {
   MemberWithScopeDto,
 } from '../../../../../features/contexts/types/context.types';
 import { MembersActionsCell } from './MembersActionsCell';
+import type { TFunction } from 'i18next';
 
 export interface MembersTableItem extends MemberWithScopeDto {
   contextsDetailed: ContextDto[];
@@ -34,19 +35,21 @@ interface MembersColumnsProps {
   onEdit?: (userId: string) => void;
   onRemove?: (userId: string) => void;
   isAdmin?: boolean;
+  t: TFunction;
 }
 
 export const getMembersColumns = ({
   onEdit,
   onRemove,
   isAdmin = false,
-}: MembersColumnsProps = {}): ColumnDef<MembersTableItem>[] => [
+  t,
+}: MembersColumnsProps): ColumnDef<MembersTableItem>[] => [
   {
     accessorKey: MembersColumnKey.NAME,
     size: 220,
-    meta: { title: membersColumnLabels[MembersColumnKey.NAME] },
+    meta: { title: t('common.name') },
     header: ({ column }) => (
-      <SortableHeader column={column}>{membersColumnLabels[MembersColumnKey.NAME]}</SortableHeader>
+      <SortableHeader column={column}>{t('common.name')}</SortableHeader>
     ),
     cell: ({ row }) => {
       const { displayName, email, avatarUrl } = row.original;
@@ -68,18 +71,18 @@ export const getMembersColumns = ({
   {
     accessorKey: MembersColumnKey.EMAIL,
     size: 280,
-    meta: { title: membersColumnLabels[MembersColumnKey.EMAIL] },
+    meta: { title: t('membersPage.email', 'Email') },
     header: ({ column }) => (
-      <SortableHeader column={column}>{membersColumnLabels[MembersColumnKey.EMAIL]}</SortableHeader>
+      <SortableHeader column={column}>{t('membersPage.email', 'Email')}</SortableHeader>
     ),
     cell: ({ row }) => <div className='text-muted-foreground break-all'>{row.original.email}</div>,
   },
   {
     accessorKey: MembersColumnKey.ROLE,
     size: 140,
-    meta: { title: membersColumnLabels[MembersColumnKey.ROLE] },
+    meta: { title: t('membersPage.role') },
     header: ({ column }) => (
-      <SortableHeader column={column}>{membersColumnLabels[MembersColumnKey.ROLE]}</SortableHeader>
+      <SortableHeader column={column}>{t('membersPage.role')}</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className='text-foreground text-sm'>{getRoleDisplayName(row.original.role)}</span>
@@ -88,9 +91,9 @@ export const getMembersColumns = ({
   {
     accessorKey: MembersColumnKey.SCOPE,
     size: 160,
-    meta: { title: membersColumnLabels[MembersColumnKey.SCOPE] },
+    meta: { title: t('membersPage.scope') },
     header: ({ column }) => (
-      <SortableHeader column={column}>{membersColumnLabels[MembersColumnKey.SCOPE]}</SortableHeader>
+      <SortableHeader column={column}>{t('membersPage.scope')}</SortableHeader>
     ),
     cell: ({ row }) => {
       if (row.original.role === 'admin') {
@@ -98,7 +101,9 @@ export const getMembersColumns = ({
       }
       return (
         <span className='text-foreground text-sm'>
-          {row.original.roleScope === 'selected_contexts' ? 'Selected' : 'Entire project'}
+          {row.original.roleScope === 'selected_contexts'
+            ? t('membersPage.selected')
+            : t('membersPage.entireProject')}
         </span>
       );
     },
@@ -108,8 +113,8 @@ export const getMembersColumns = ({
     accessorFn: row => row.contextsDetailed.map(c => c.name).join(', '),
     size: 280,
     enableSorting: false,
-    meta: { title: membersColumnLabels[MembersColumnKey.CONTEXTS] },
-    header: membersColumnLabels[MembersColumnKey.CONTEXTS],
+    meta: { title: t('projectMenu.contexts') },
+    header: t('projectMenu.contexts'),
     cell: ({ row }) => {
       // Members with project-wide scope (admins and any other entire_project
       // member) implicitly belong to every context — render a dash to avoid

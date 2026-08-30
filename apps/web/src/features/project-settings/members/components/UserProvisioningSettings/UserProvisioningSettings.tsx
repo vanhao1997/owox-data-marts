@@ -25,6 +25,7 @@ import {
   CollapsibleCardFooter,
 } from '../../../../../shared/components/CollapsibleCard';
 import { DefaultRoleSheet } from './DefaultRoleSheet';
+import { useTranslation } from 'react-i18next';
 
 const ROLE_SCOPE_LABELS: Record<RoleScope, string> = {
   entire_project: 'Entire Project',
@@ -60,12 +61,13 @@ function ProjectLevelAccessNotice({
 }: {
   organization: UserProvisioningOrganization | null;
 }) {
+  const { t } = useTranslation();
   if (!organization) {
     return null;
   }
 
   const mainProjectLabel =
-    organization.mainProjectTitle ?? organization.mainProjectId ?? 'the main project';
+    organization.mainProjectTitle ?? organization.mainProjectId ?? t('userProvisioning.mainProject', 'the main project');
   const mainProjectHref = organization.mainProjectId
     ? buildProjectPath(organization.mainProjectId, '/project-settings/members')
     : null;
@@ -73,18 +75,24 @@ function ProjectLevelAccessNotice({
   return (
     <CollapsibleCard collapsible defaultCollapsed={false} name='user-provisioning-project-access'>
       <CollapsibleCardHeader>
-        <CollapsibleCardHeaderTitle icon={UserCog}>Project-level access</CollapsibleCardHeaderTitle>
+        <CollapsibleCardHeaderTitle icon={UserCog}>
+          {t('userProvisioning.projectLevelAccess', 'Project-level access')}
+        </CollapsibleCardHeaderTitle>
       </CollapsibleCardHeader>
 
       <CollapsibleCardContent>
         <div className='bg-background rounded-md border px-6 py-5 shadow-sm'>
-          <h3 className='text-foreground text-sm font-semibold'>Manual access request</h3>
+          <h3 className='text-foreground text-sm font-semibold'>
+            {t('userProvisioning.manualAccessRequest', 'Manual access request')}
+          </h3>
           <div className='text-muted-foreground mt-2 text-sm leading-6'>
-            <p>New members must request access before joining this project.</p>
+            <p>{t('userProvisioning.mustRequestAccess', 'New members must request access before joining this project.')}</p>
             <div className='my-4 border-t' />
             <p>
-              To manage automatic provisioning for the {organization.name} organization, please
-              visit the main project
+              {t('userProvisioning.visitMainProject', {
+                organization: organization.name,
+                defaultValue: 'To manage automatic provisioning for the {{organization}} organization, please visit the main project',
+              })}
               {mainProjectHref ? (
                 <>
                   :{' '}
@@ -106,6 +114,7 @@ function ProjectLevelAccessNotice({
 }
 
 export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioningSettingsProps) {
+  const { t } = useTranslation();
   const { settings, isLoading, isSaving, save } = useUserProvisioningSettings();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -164,10 +173,12 @@ export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioning
     try {
       await save(normalized);
       form.reset(normalized);
-      toast.success('User provisioning settings updated');
+      toast.success(t('userProvisioning.updated', 'User provisioning settings updated'));
     } catch (err) {
       toast.error(
-        err instanceof Error ? err.message : 'Failed to update user provisioning settings'
+        err instanceof Error
+          ? err.message
+          : t('userProvisioning.updateFailed', 'Failed to update user provisioning settings')
       );
     }
   };
@@ -182,9 +193,13 @@ export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioning
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={UserCog}
-            tooltip={`Control how new members from your organization domain '${organization?.name}' join the '${organization?.mainProjectTitle}' project`}
+            tooltip={t('userProvisioning.organizationTooltip', {
+              organization: organization?.name,
+              project: organization?.mainProjectTitle,
+              defaultValue: "Control how new members from your organization domain '{{organization}}' join the '{{project}}' project",
+            })}
           >
-            Organization-level access settings
+            {t('userProvisioning.organizationSettings', 'Organization-level access settings')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
 
@@ -196,8 +211,14 @@ export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioning
                   <FormRadioCard
                     data-testid='radio-auto-join'
                     value='automatic'
-                    label={`Automatically join new members to the '${organization?.mainProjectTitle}' project`}
-                    description={`New members with your '${organization?.name}' organization domain are automatically added to this project with default roles and scopes`}
+                    label={t('userProvisioning.automaticLabel', {
+                      project: organization?.mainProjectTitle,
+                      defaultValue: "Automatically join new members to the '{{project}}' project",
+                    })}
+                    description={t('userProvisioning.automaticDescription', {
+                      organization: organization?.name,
+                      defaultValue: "New members with your '{{organization}}' organization domain are automatically added to this project with default roles and scopes",
+                    })}
                     checked={mode === 'automatic'}
                     onChange={v => {
                       form.setValue('mode', v as UserProvisioningMode, { shouldDirty: true });
@@ -219,7 +240,12 @@ export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioning
                       >
                         {isAdminRole
                           ? getRoleDisplayName(defaultRole)
-                          : `${getRoleDisplayName(defaultRole)} · ${ROLE_SCOPE_LABELS[roleScope]}`}
+                          : `${getRoleDisplayName(defaultRole)} · ${t(
+                              roleScope === 'entire_project'
+                                ? 'membersPage.entireProject'
+                                : 'userProvisioning.selectedContexts',
+                              ROLE_SCOPE_LABELS[roleScope]
+                            )}`}
                         <ChevronRight className='h-4 w-4' />
                       </Button>
                     )}
@@ -228,8 +254,8 @@ export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioning
                   <FormRadioCard
                     data-testid='radio-require-request'
                     value='manual'
-                    label='Manual access request'
-                    description='New members must request access before joining. Project Admins can approve or reject requests manually'
+                    label={t('userProvisioning.manualAccessRequest', 'Manual access request')}
+                    description={t('userProvisioning.manualDescription', 'New members must request access before joining. Project Admins can approve or reject requests manually')}
                     checked={mode === 'manual'}
                     onChange={v => {
                       form.setValue('mode', v as UserProvisioningMode, { shouldDirty: true });
@@ -241,10 +267,10 @@ export function UserProvisioningSettings({ contexts, isAdmin }: UserProvisioning
                 <div className='flex items-center gap-4'>
                   <Button type='submit' disabled={!isDirty || !isValid || isSaving}>
                     {isSaving && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-                    Save
+                    {t('common.save', 'Save')}
                   </Button>
                   <Button type='button' variant='ghost' onClick={handleDiscard} disabled={!isDirty}>
-                    Discard
+                    {t('userProvisioning.discard', 'Discard')}
                   </Button>
                 </div>
               </div>

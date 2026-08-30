@@ -13,6 +13,7 @@ import {
   contentPopoversInitialState,
   type ContentPopoversState,
 } from './reducers/content-popovers.reducer';
+import i18n from '../../i18n';
 
 export interface RootState {
   project: ProjectState;
@@ -81,14 +82,17 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
     dispatch({ type: APP_SET_READY, payload: ready });
   }, [status, user?.projectId, hasEmptyProjectRoles, flagsStatus, dispatch]);
 
-  const loader = useMemo(() => <LoadingSpinner fullScreen message='Loading application...' />, []);
+  const loader = useMemo(
+    () => <LoadingSpinner fullScreen message={i18n.t('common.loadingApplication', 'Loading application...')} />,
+    []
+  );
 
   if (!isReady) {
     if (flagsStatus === RequestStatus.ERROR) {
       return (
         <LoadingSpinner
           fullScreen
-          message={`Failed to load app flags: ${flagsState.error ?? ''}`}
+          message={`${i18n.t('common.failedLoadAppFlags', 'Failed to load app flags')}: ${flagsState.error ?? ''}`}
         />
       );
     }

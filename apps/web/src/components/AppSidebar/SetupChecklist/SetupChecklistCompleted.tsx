@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 export function SetupChecklistCompleted() {
+  const { t } = useTranslation();
   return (
     <div className='flex flex-col items-center gap-2 px-4 pt-4 pb-8 text-center'>
       {/* Icon */}
@@ -47,9 +50,11 @@ export function SetupChecklistCompleted() {
       </div>
 
       <div className='flex flex-col items-center gap-1'>
-        <p className='text-primary text-sm font-semibold'>You did an amazing job!</p>
+        <p className='text-primary text-sm font-semibold'>
+          {t('setupChecklist.completedTitle', 'You did an amazing job!')}
+        </p>
         <p className='text-primary/75 dark:text-primary/50 text-xs'>
-          Your data is ready. Keep exploring.
+          {t('setupChecklist.completedSubtitle', 'Your data is ready. Keep exploring.')}
         </p>
       </div>
     </div>

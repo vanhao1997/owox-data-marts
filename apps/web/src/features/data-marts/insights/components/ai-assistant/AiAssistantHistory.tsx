@@ -9,6 +9,7 @@ import {
 import { Textarea } from '@owox/ui/components/textarea';
 import type { AiAssistantSessionListItemDto } from '../../model/ai-assistant/types/ai-assistant.dto.ts';
 import { formatSessionTitle } from '../../model/ai-assistant/utils/ai-assistant-panel.utils.ts';
+import { useTranslation } from 'react-i18next';
 
 interface AiAssistantHistoryProps {
   sessions: AiAssistantSessionListItemDto[];
@@ -39,17 +40,18 @@ export function AiAssistantHistory({
   onRenameSubmit,
   onDeleteSession,
 }: AiAssistantHistoryProps) {
+  const { t } = useTranslation();
   if (isHistoryLoading) {
     return (
       <div className='text-muted-foreground flex items-center gap-2 px-2 py-3 text-sm'>
         <Loader2 className='h-4 w-4 animate-spin' />
-        Loading chat history...
+        {t('insightsUi.loadingHistory', 'Loading chat history...')}
       </div>
     );
   }
 
   if (sessions.length === 0) {
-    return <div className='text-muted-foreground px-2 py-3 text-sm'>No chats yet.</div>;
+    return <div className='text-muted-foreground px-2 py-3 text-sm'>{t('insightsUi.noChats', 'No chats yet.')}</div>;
   }
 
   return (
@@ -142,7 +144,7 @@ export function AiAssistantHistory({
                     disabled={!canEdit}
                   >
                     <Pencil className='h-4 w-4' />
-                    Rename
+                    {t('insightsUi.rename', 'Rename')}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className='text-destructive hover:text-destructive focus:text-destructive'
@@ -153,7 +155,7 @@ export function AiAssistantHistory({
                     disabled={!canEdit}
                   >
                     <Trash2 className='text-destructive h-4 w-4' />
-                    Delete
+                    {t('insightsUi.delete', 'Delete')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

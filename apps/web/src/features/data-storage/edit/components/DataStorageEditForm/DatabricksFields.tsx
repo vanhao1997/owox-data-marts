@@ -49,13 +49,13 @@ export const DatabricksFields = ({ form }: DatabricksFieldsProps) => {
   return (
     <>
       {/* Connection Settings */}
-      <FormSection title='Connection Settings'>
+      <FormSection title='Cài đặt kết nối'>
         <FormField
           control={form.control}
           name='config.host'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Enter your Databricks workspace URL'>Host</FormLabel>
+              <FormLabel tooltip='Nhập URL workspace Databricks của bạn'>Máy chủ</FormLabel>
               <FormControl>
                 <Input {...field} placeholder='e.g., adb-123456.7.azuredatabricks.net' />
               </FormControl>
@@ -71,7 +71,7 @@ export const DatabricksFields = ({ form }: DatabricksFieldsProps) => {
           name='config.httpPath'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Specify the SQL warehouse HTTP path'>HTTP Path</FormLabel>
+              <FormLabel tooltip='Chỉ định HTTP path của SQL warehouse'>HTTP Path</FormLabel>
               <FormControl>
                 <Input {...field} placeholder='e.g., /sql/1.0/warehouses/abc123def456' />
               </FormControl>
@@ -105,14 +105,14 @@ export const DatabricksFields = ({ form }: DatabricksFieldsProps) => {
               name='credentials.token'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Your Databricks Personal Access Token'>
-                    Personal Access Token
+              <FormLabel tooltip='Databricks Personal Access Token của bạn'>
+                    Mã truy cập cá nhân
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type='password'
-                      placeholder={maskedTokenValue || 'Enter your token'}
+                      placeholder={maskedTokenValue || 'Nhập mã truy cập'}
                     />
                   </FormControl>
                   <FormDescription>

@@ -199,7 +199,7 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
           {isOAuthAvailable && (
             <FormItem>
               <div className='flex items-center justify-between'>
-                <FormLabel>Authentication Method</FormLabel>
+                  <FormLabel>Phương thức xác thực</FormLabel>
                 <Tabs
                   value={authMethod}
                   onValueChange={v => {
@@ -207,8 +207,8 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                   }}
                 >
                   <TabsList>
-                    <TabsTrigger value='oauth'>Connect with Google</TabsTrigger>
-                    <TabsTrigger value='service-account'>Service Account JSON</TabsTrigger>
+                      <TabsTrigger value='oauth'>Kết nối với Google</TabsTrigger>
+                      <TabsTrigger value='service-account'>JSON tài khoản dịch vụ</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
@@ -225,8 +225,8 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
               render={() => (
                 <FormItem>
                   <div className='mb-4 flex items-center justify-between'>
-                    <FormLabel tooltip='Authorize P2PDigital to access your Google Sheets'>
-                      Connect with Google OAuth
+                    <FormLabel tooltip='Cho phép P2PDigital truy cập Google Sheets của bạn'>
+                      Kết nối bằng Google OAuth
                     </FormLabel>
                   </div>
                   <GoogleOAuthConnectButton
@@ -239,7 +239,7 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                   />
                   {oauthEmail && (
                     <div className='mt-2 flex flex-col gap-1'>
-                      <FormLabel>Authenticated email</FormLabel>
+                      <FormLabel>Email đã xác thực</FormLabel>
                       <CopyableField value={oauthEmail}>{oauthEmail}</CopyableField>
                     </div>
                   )}
@@ -254,8 +254,8 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
 
           {isOAuthAvailable && authMethod === 'oauth' && credentialIdValue && canPickFolder && (
             <FormItem>
-              <FormLabel tooltip='New documents created from chat or reports are placed in this Drive folder'>
-                Drive folder for auto-created documents (optional)
+                <FormLabel tooltip='Tài liệu mới tạo từ chat hoặc báo cáo sẽ được đặt trong thư mục Drive này'>
+                Thư mục Drive cho tài liệu tự tạo (tùy chọn)
               </FormLabel>
               <div className='flex items-center gap-2'>
                 <Button
@@ -264,7 +264,7 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                   onClick={handlePickFolder}
                   disabled={isPickingFolder}
                 >
-                  {isFolderConfigured ? 'Change folder' : 'Choose folder'}
+                  {isFolderConfigured ? 'Đổi thư mục' : 'Chọn thư mục'}
                 </Button>
                 {isFolderConfigured && folderUrl && (
                   <ExternalAnchor
@@ -287,13 +287,13 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                       });
                     }}
                   >
-                    Clear
+                    Xóa
                   </Button>
                 )}
               </div>
               <FormDescription>
-                New documents created with “Create document” are placed in this Google Drive folder.
-                Leave empty to create them in your Drive root.
+                Tài liệu mới tạo bằng “Tạo tài liệu” sẽ được đặt trong thư mục Google Drive này.
+                Để trống nếu muốn tạo ở thư mục gốc Drive.
               </FormDescription>
             </FormItem>
           )}
@@ -305,18 +305,18 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
               render={({ field }) => (
                 <FormItem>
                   <div className='flex items-center justify-between'>
-                    <FormLabel tooltip='Paste a JSON key from a service account that has access to the selected destination provider'>
-                      Service Account
+                    <FormLabel tooltip='Dán khóa JSON từ tài khoản dịch vụ có quyền truy cập vào nhà cung cấp điểm đến đã chọn'>
+                      Tài khoản dịch vụ
                     </FormLabel>
                     {!isEditing && serviceAccountValue && (
-                      <Button variant='ghost' size='sm' onClick={handleEdit} type='button'>
-                        Edit
-                      </Button>
+                        <Button variant='ghost' size='sm' onClick={handleEdit} type='button'>
+                          Sửa
+                        </Button>
                     )}
                     {isEditing && (
-                      <Button variant='ghost' size='sm' onClick={handleCancel} type='button'>
-                        Cancel
-                      </Button>
+                        <Button variant='ghost' size='sm' onClick={handleCancel} type='button'>
+                          Hủy
+                        </Button>
                     )}
                   </div>
                   <FormControl>
@@ -324,11 +324,11 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                       <FieldWithActions
                         value={serviceAccountLink.email}
                         actions={[
-                          { type: 'copy', tooltip: 'Copy email' },
+                          { type: 'copy', tooltip: 'Sao chép email' },
                           {
                             type: 'external-link',
                             href: serviceAccountLink.url,
-                            tooltip: 'Open details',
+                            tooltip: 'Mở chi tiết',
                           },
                         ]}
                       />
@@ -337,7 +337,7 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                         {...field}
                         className='min-h-[150px] font-mono'
                         rows={8}
-                        placeholder='Paste your service account JSON here or drag & drop the file'
+                        placeholder='Dán JSON tài khoản dịch vụ vào đây hoặc kéo thả tệp'
                         onFileRead={content => {
                           form.setValue('credentials.serviceAccount', content, {
                             shouldDirty: true,
@@ -368,8 +368,8 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                 const isValidFolderUrl = !!folderUrl && isValidGoogleDriveFolderUrl(folderUrl);
                 return (
                   <FormItem>
-                    <FormLabel tooltip='New documents created from chat or reports are placed in this Shared Drive folder'>
-                      Drive folder for auto-created documents (required)
+                    <FormLabel tooltip='Tài liệu mới tạo từ chat hoặc báo cáo sẽ được đặt trong thư mục Shared Drive này'>
+                      Thư mục Drive cho tài liệu tự tạo (bắt buộc)
                     </FormLabel>
                     <FormControl>
                       <div className='flex items-center gap-2'>
@@ -396,8 +396,8 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                               disabled={!isValidFolderUrl}
                               aria-label={
                                 isValidFolderUrl
-                                  ? 'Open folder in new tab'
-                                  : 'Folder link is not valid'
+                                  ? 'Mở thư mục ở tab mới'
+                                  : 'Liên kết thư mục không hợp lệ'
                               }
                             >
                               <ExternalLink className='h-4 w-4' aria-hidden='true' />
@@ -405,16 +405,16 @@ export function GoogleSheetsFields({ form }: GoogleSheetsFieldsProps) {
                           </TooltipTrigger>
                           <TooltipContent side='top' align='center' role='tooltip'>
                             {isValidFolderUrl
-                              ? 'Open folder in new tab'
-                              : 'Paste a valid Drive folder URL to enable link'}
+                              ? 'Mở thư mục ở tab mới'
+                              : 'Dán URL thư mục Drive hợp lệ để bật liên kết'}
                           </TooltipContent>
                         </Tooltip>
                       </div>
                     </FormControl>
                     <FormDescription>
-                      Paste a Google Drive folder URL. New documents created with “Create document”
-                      are placed here. A Shared Drive folder is required — add the service account
-                      email above as a member with the Content Manager role.
+                      Dán URL thư mục Google Drive. Tài liệu mới tạo bằng “Tạo tài liệu” sẽ được đặt ở
+                      đây. Cần dùng thư mục Shared Drive — hãy thêm email tài khoản dịch vụ ở trên
+                      làm thành viên với vai trò Content Manager.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

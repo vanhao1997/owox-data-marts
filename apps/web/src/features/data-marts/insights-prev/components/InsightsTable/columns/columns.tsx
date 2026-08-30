@@ -3,7 +3,7 @@ import { InsightActionsCell } from '../InsightActionsCell';
 import { SortableHeader, ToggleColumnsHeader } from '../../../../../../shared/components/Table';
 import { formatDateShort } from '../../../../../../utils/date-formatters';
 import { InsightColumnKey } from './columnKeys';
-import { InsightColumnLabels } from './columnLabels';
+import { getInsightColumnLabels } from './columnLabels';
 
 export interface InsightTableItem {
   id: string;
@@ -13,17 +13,20 @@ export interface InsightTableItem {
 
 interface InsightColumnsProps {
   onDelete?: (id: string) => void;
+  t: (key: string, defaultValue: string) => string;
 }
 
 export const getInsightColumns = ({
   onDelete,
-}: InsightColumnsProps = {}): ColumnDef<InsightTableItem>[] => [
-  {
+  t,
+}: InsightColumnsProps): ColumnDef<InsightTableItem>[] => {
+  const labels = getInsightColumnLabels(t);
+  return [{
     accessorKey: InsightColumnKey.TITLE,
     size: 320,
-    meta: { title: InsightColumnLabels[InsightColumnKey.TITLE] },
+    meta: { title: labels[InsightColumnKey.TITLE] },
     header: ({ column }) => (
-      <SortableHeader column={column}>{InsightColumnLabels[InsightColumnKey.TITLE]}</SortableHeader>
+      <SortableHeader column={column}>{labels[InsightColumnKey.TITLE]}</SortableHeader>
     ),
     cell: ({ row }) => {
       const title = row.getValue<string>(InsightColumnKey.TITLE);
@@ -33,11 +36,11 @@ export const getInsightColumns = ({
   {
     accessorKey: InsightColumnKey.LAST_RUN,
     size: 150,
-    meta: { title: InsightColumnLabels[InsightColumnKey.LAST_RUN] },
+    meta: { title: labels[InsightColumnKey.LAST_RUN] },
     sortDescFirst: true,
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {InsightColumnLabels[InsightColumnKey.LAST_RUN]}
+        {labels[InsightColumnKey.LAST_RUN]}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -52,4 +55,5 @@ export const getInsightColumns = ({
     header: ({ table }) => <ToggleColumnsHeader table={table} />,
     cell: ({ row }) => <InsightActionsCell id={row.original.id} onDelete={onDelete} />,
   },
-];
+  ];
+};

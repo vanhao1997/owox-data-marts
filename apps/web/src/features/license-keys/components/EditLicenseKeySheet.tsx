@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -29,16 +30,16 @@ import { licenseKeysService } from '../services/license-keys.service';
 import { formatDateShort } from '../../../utils';
 import type { LicenseKey } from '../types';
 import { ExpirationValue } from '../../../shared/components/ExpirationValue/ExpirationValue';
-import { LICENSE_KEY_EXPIRED_NOTICE, LICENSE_KEY_EXPIRING_SOON_NOTICE } from '../utils';
 
-const editLicenseKeySchema = z.object({
-  name: z.string().min(1, 'Name is required').max(255, 'Name must be 255 characters or less'),
-});
+const editLicenseKeySchema = (t: (key: string) => string) =>
+  z.object({
+    name: z
+      .string()
+      .min(1, t('licenseKeysPage.validation.nameRequired'))
+      .max(255, t('licenseKeysPage.validation.nameTooLong')),
+  });
 
-type EditLicenseKeyFormValues = z.infer<typeof editLicenseKeySchema>;
-
-const LICENSE_KEY_UNAVAILABLE_NOTICE =
-  'The license key is only shown once, right after creation. If you no longer have it, create a new key and revoke this one.';
+type EditLicenseKeyFormValues = z.infer<ReturnType<typeof editLicenseKeySchema>>;
 
 interface EditLicenseKeySheetProps {
   licenseKey: LicenseKey | null;
@@ -73,6 +74,8 @@ function CopyableItem({
   value: string;
   description: string;
 }) {
+  const { t } = useTranslation();
+
   return (
     <FormItem>
       <FormLabel tooltip={description}>{label}</FormLabel>
@@ -83,12 +86,12 @@ function CopyableItem({
           variant='ghost'
           size='icon'
           className='size-7 shrink-0'
-          aria-label={`Copy ${label}`}
+          aria-label={t('licenseKeysPage.table.copyValue', { label })}
           onClick={() => {
             void navigator.clipboard
               .writeText(value)
-              .then(() => toast.success(`${label} copied`))
-              .catch(() => toast.error(`Failed to copy ${label}`));
+              .then(() => toast.success(t('licenseKeysPage.table.valueCopied', { label })))
+              .catch(() => toast.error(t('licenseKeysPage.table.copyValueFailed', { label })));
           }}
         >
           <Copy className='size-3.5' />
@@ -104,11 +107,13 @@ export function EditLicenseKeySheet({
   onUpdated,
   onRevoke,
 }: EditLicenseKeySheetProps) {
+  const { t } = useTranslation();
   const [submitting, setSubmitting] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const schema = useMemo(() => editLicenseKeySchema(t), [t]);
 
   const form = useForm<EditLicenseKeyFormValues>({
-    resolver: zodResolver(editLicenseKeySchema),
+    resolver: zodResolver(schema),
     defaultValues: { name: '' },
     mode: 'onChange',
   });
@@ -126,10 +131,10 @@ export function EditLicenseKeySheet({
     setSubmitting(true);
     try {
       await licenseKeysService.updateKey(licenseKey.licenseKeyId, { name: values.name });
-      toast.success('License key name updated');
+      toast.success(t('licenseKeysPage.nameUpdated'));
       onUpdated();
     } catch {
-      toast.error('Failed to update license key name');
+      toast.error(t('licenseKeysPage.nameUpdateFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -150,24 +155,24 @@ export function EditLicenseKeySheet({
       >
         <SheetHeader>
           <SheetTitle ref={titleRef} tabIndex={-1} className='focus:outline-none'>
-            License Key Details
+            {t('licenseKeysPage.editTitle')}
           </SheetTitle>
           <SheetDescription>
-            Manage this license key and review the deployment it authorizes.
+            {t('licenseKeysPage.editDescription')}
           </SheetDescription>
         </SheetHeader>
 
         <Form {...form}>
           <AppForm onSubmit={e => void handleSubmit(onSubmit)(e)}>
             <FormLayout>
-              <FormSection title='General' name='license-key-general'>
+              <FormSection title={t('common.general')} name='license-key-general'>
                 <FormField
                   control={control}
                   name='name'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Friendly label used to identify this license key.'>
-                        Name
+                      <FormLabel tooltip={t('licenseKeysPage.nameTooltip')}>
+                        {t('common.name')}
                       </FormLabel>
                       <FormControl>
                         <Input {...field} />
@@ -177,60 +182,59 @@ export function EditLicenseKeySheet({
                   )}
                 />
                 <CopyableItem
-                  label='License key ID'
+                  label={t('licenseKeysPage.table.licenseKeyId')}
                   value={licenseKey?.licenseKeyId ?? ''}
-                  description='Non-secret identifier used in logs, support, and debugging.'
+                  description={t('licenseKeysPage.table.licenseKeyIdTooltip')}
                 />
                 <CopyableItem
-                  label='Public origin'
+                  label={t('licenseKeysPage.table.origin')}
                   value={licenseKey?.origin ?? ''}
-                  description='The deployment address this key authorizes. It works on this address only.'
+                  description={t('licenseKeysPage.table.originTooltip')}
                 />
                 <MetadataItem
-                  label='Expires'
+                  label={t('licenseKeysPage.table.expires')}
                   value={
                     licenseKey ? (
                       <ExpirationValue
                         expiresAt={licenseKey.expiresAt}
-                        expiredNotice={LICENSE_KEY_EXPIRED_NOTICE}
-                        expiringSoonNotice={LICENSE_KEY_EXPIRING_SOON_NOTICE}
+                        expiredNotice={t('licenseKeysPage.expiredNotice')}
+                        expiringSoonNotice={t('licenseKeysPage.expiringSoonNotice')}
                         focusable
                       />
                     ) : (
-                      'Unknown'
+                      t('common.unknown')
                     )
                   }
-                  description='Date when this license key stops authorizing Report Runs.'
+                  description={t('licenseKeysPage.table.expiresTooltip')}
                 />
                 <MetadataItem
-                  label='Created'
-                  value={licenseKey ? formatDateShort(licenseKey.createdAt) : 'Unknown'}
-                  description='When this license key was created.'
+                  label={t('licenseKeysPage.table.created')}
+                  value={licenseKey ? formatDateShort(licenseKey.createdAt) : t('common.unknown')}
+                  description={t('licenseKeysPage.table.createdTooltip')}
                 />
                 <MetadataItem
-                  label='Last activity'
-                  value={licenseKey?.lastUsedAt ? formatDateShort(licenseKey.lastUsedAt) : 'Never'}
-                  description='When this license key was last successfully used by its self-managed deployment.'
+                  label={t('licenseKeysPage.table.lastActivity')}
+                  value={licenseKey?.lastUsedAt ? formatDateShort(licenseKey.lastUsedAt) : t('licenseKeysPage.table.never')}
+                  description={t('licenseKeysPage.table.lastActivityTooltip')}
                 />
               </FormSection>
 
-              <FormSection title='Credentials' name='license-key-credentials'>
+              <FormSection title={t('licenseKeysPage.credentials')} name='license-key-credentials'>
                 <FormItem>
-                  <FormLabel tooltip='Full signed license shown only once. Store it securely.'>
-                    License key
+                  <FormLabel tooltip={t('licenseKeysPage.keyTooltip')}>
+                    {t('licenseKeysPage.keyLabel')}
                   </FormLabel>
-                  <p className='text-muted-foreground text-sm'>{LICENSE_KEY_UNAVAILABLE_NOTICE}</p>
+                  <p className='text-muted-foreground text-sm'>{t('licenseKeysPage.unavailableNotice')}</p>
                 </FormItem>
               </FormSection>
 
-              <FormSection title='Danger zone' name='license-key-danger-zone' defaultOpen={false}>
+              <FormSection title={t('licenseKeysPage.dangerZone')} name='license-key-danger-zone' defaultOpen={false}>
                 <FormItem>
                   <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                     <div className='space-y-1'>
-                      <p className='text-sm font-medium'>Revoke this license key</p>
+                      <p className='text-sm font-medium'>{t('licenseKeysPage.revokeTitle')}</p>
                       <p className='text-muted-foreground text-sm'>
-                        The deployment using it stops running reports immediately. This action
-                        cannot be undone.
+                        {t('licenseKeysPage.revokeDescription')}
                       </p>
                     </div>
                     <Button
@@ -243,7 +247,7 @@ export function EditLicenseKeySheet({
                       }}
                     >
                       <Trash2 className='size-4' />
-                      Revoke license key
+                      {t('licenseKeysPage.revokeButton')}
                     </Button>
                   </div>
                 </FormItem>
@@ -252,11 +256,11 @@ export function EditLicenseKeySheet({
 
             <FormActions>
               <Button type='button' variant='secondary' onClick={onClose}>
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button type='submit' disabled={submitting}>
                 {submitting ? <Loader2 className='mr-2 size-4 animate-spin' /> : null}
-                Save
+                {t('common.save')}
               </Button>
             </FormActions>
           </AppForm>

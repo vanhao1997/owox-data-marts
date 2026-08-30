@@ -8,6 +8,7 @@ import type { BaseSchemaField } from '../../../../../shared/types/data-mart-sche
 import { DataMartSchemaFieldStatus } from '../../../../../shared/types/data-mart-schema.types';
 import { SchemaFieldStatusIcon } from '../fields';
 import type { SchemaToolbar } from '../../types/schema-toolbar';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Props for the TableToolbar component
@@ -47,16 +48,17 @@ export function TableToolbar<TData extends BaseSchemaField>({
   disabled = false,
   schemaToolbar,
 }: TableToolbarProps<TData>) {
+  const { t } = useTranslation();
   return (
     <div className='mb-4 flex items-center justify-between gap-2 last:mb-0'>
       <div className='flex grow items-center gap-2'>
         <SearchInput
           id={searchInputId}
-          placeholder='Search fields'
+          placeholder={t('schemaSettings.searchFields')}
           value={filterValue}
           onChange={onFilterChange}
           className='border-muted dark:border-muted/50 w-full min-w-0 rounded-md border bg-white pl-8 text-sm dark:bg-white/4 dark:hover:bg-white/8'
-          aria-label='Search fields'
+          aria-label={t('schemaSettings.searchFields')}
         />
       </div>
       <div className='flex flex-shrink-0 items-center gap-2'>
@@ -81,7 +83,7 @@ export function TableToolbar<TData extends BaseSchemaField>({
                 variant='outline'
                 disabled={schemaToolbar.ai.disabled}
                 onClick={schemaToolbar.ai.onGenerateMetadata}
-                aria-label='Generate field aliases &amp; descriptions'
+                aria-label={t('schemaSettings.generateMetadata')}
               >
                 {schemaToolbar.ai.loading.metadata ? (
                   <Loader2 className='h-4 w-4 animate-spin' aria-hidden='true' />
@@ -90,7 +92,7 @@ export function TableToolbar<TData extends BaseSchemaField>({
                 )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Generate aliases &amp; descriptions for all fields</TooltipContent>
+            <TooltipContent>{t('schemaSettings.generateMetadata')}</TooltipContent>
           </Tooltip>
         )}
 
@@ -103,10 +105,10 @@ export function TableToolbar<TData extends BaseSchemaField>({
               disabled={schemaToolbar.refresh.disabled}
             >
               <RefreshCw className='h-4 w-4' aria-hidden='true' />
-              <span className='hidden 2xl:inline'>Refresh schema</span>
+              <span className='hidden 2xl:inline'>{t('schemaSettings.refreshSchema')}</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Refresh schema</TooltipContent>
+          <TooltipContent>{t('schemaSettings.refreshSchema')}</TooltipContent>
         </Tooltip>
 
         {onAddCalculatedField && (
@@ -117,13 +119,13 @@ export function TableToolbar<TData extends BaseSchemaField>({
                 variant='outline'
                 onClick={onAddCalculatedField}
                 disabled={disabled}
-                aria-label='Add calculated field'
+                aria-label={t('schemaSettings.addCalculatedField')}
               >
                 <FunctionSquare className='h-4 w-4' aria-hidden='true' />
-                <span className='hidden 2xl:inline'>Add Calculated Field</span>
+                <span className='hidden 2xl:inline'>{t('schemaSettings.addCalculatedField')}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Add calculated field</TooltipContent>
+            <TooltipContent>{t('schemaSettings.addCalculatedField')}</TooltipContent>
           </Tooltip>
         )}
 
@@ -133,13 +135,13 @@ export function TableToolbar<TData extends BaseSchemaField>({
               variant='outline'
               onClick={onAddField}
               disabled={disabled}
-              aria-label='Add new field'
+              aria-label={t('schemaSettings.addField')}
             >
               <Plus className='h-4 w-4' aria-hidden='true' />
-              <span className='hidden 2xl:inline'>Add Field</span>
+              <span className='hidden 2xl:inline'>{t('schemaSettings.addField')}</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Add new field</TooltipContent>
+          <TooltipContent>{t('schemaSettings.addField')}</TooltipContent>
         </Tooltip>
       </div>
     </div>

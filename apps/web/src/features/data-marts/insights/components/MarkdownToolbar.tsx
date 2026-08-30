@@ -12,6 +12,7 @@ import {
 import { MARKDOWN_ACTIONS, HEADING_LEVELS } from './InsightTemplateEditor.constants';
 import type { MarkdownAction } from './InsightTemplateEditor.constants';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 export interface MarkdownToolbarProps {
   readOnly?: boolean;
@@ -30,6 +31,7 @@ export function MarkdownToolbar({
   onActionClick,
   onHeadingClick,
 }: MarkdownToolbarProps) {
+  const { t } = useTranslation();
   const [headingMenuOpen, setHeadingMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
@@ -48,13 +50,13 @@ export function MarkdownToolbar({
                     size='icon'
                     className='h-8 w-8'
                     disabled={readOnly}
-                    aria-label='Heading level'
+                    aria-label={t('insightsUi.headingLevel', 'Heading level')}
                   >
                     <Heading className='h-4 w-4' />
                   </Button>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
-              <TooltipContent>Heading</TooltipContent>
+              <TooltipContent>{t('insightsUi.headingAction', 'Heading')}</TooltipContent>
             </Tooltip>
             <DropdownMenuContent
               align='end'
@@ -70,7 +72,7 @@ export function MarkdownToolbar({
                     onHeadingClick(level);
                   }}
                 >
-                  H{level} Heading {level}
+                  {t('insightsUi.hHeading', 'H{{level}} Heading {{level}}', { level })}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -78,6 +80,7 @@ export function MarkdownToolbar({
 
           {MARKDOWN_ACTIONS.map(action => {
             const Icon = action.icon;
+            const actionLabel = t(`insightsUi.${action.id === 'ordered-list' ? 'numberedList' : action.id === 'task-list' ? 'taskList' : action.id === 'code-block' ? 'codeBlock' : action.id === 'slash-command' ? 'slashCommands' : action.id === 'list' ? 'bulletList' : action.id}`, action.label);
             return (
               <Tooltip key={action.id}>
                 <TooltipTrigger asChild>
@@ -89,12 +92,12 @@ export function MarkdownToolbar({
                     onClick={() => {
                       onActionClick(action.id);
                     }}
-                    aria-label={action.label}
+                    aria-label={actionLabel}
                   >
                     <Icon className='h-4 w-4' />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>{action.label}</TooltipContent>
+                <TooltipContent>{actionLabel}</TooltipContent>
               </Tooltip>
             );
           })}
@@ -112,12 +115,12 @@ export function MarkdownToolbar({
           </TooltipTrigger>
           <TooltipContent>
             <p>
-              This editor uses Markdown formatting.{' '}
+              {t('insightsUi.markdownDescription', 'This editor uses Markdown formatting.')}{' '}
               <ExternalAnchor
                 href='https://www.markdownguide.org/basic-syntax/'
                 className='hover:text-foreground text-tooltip underline'
               >
-                Learn more
+                {t('insightsUi.markdownLearnMore', 'Learn more')}
               </ExternalAnchor>
             </p>
           </TooltipContent>
@@ -132,7 +135,7 @@ export function MarkdownToolbar({
                 onClick={() => {
                   setIsCollapsed(!isCollapsed);
                 }}
-                aria-label={isCollapsed ? 'Expand toolbar' : 'Collapse toolbar'}
+                aria-label={isCollapsed ? t('insightsUi.expandToolbar', 'Expand toolbar') : t('insightsUi.collapseToolbar', 'Collapse toolbar')}
               >
                 {isCollapsed ? (
                   <ChevronDown className='h-4 w-4' />
@@ -141,7 +144,7 @@ export function MarkdownToolbar({
                 )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>{isCollapsed ? 'Expand toolbar' : 'Collapse toolbar'}</TooltipContent>
+            <TooltipContent>{isCollapsed ? t('insightsUi.expandToolbar', 'Expand toolbar') : t('insightsUi.collapseToolbar', 'Collapse toolbar')}</TooltipContent>
           </Tooltip>
         )}
       </div>

@@ -12,6 +12,7 @@ import { StepperHeroBlock } from '../components';
 import type { ConnectorListItem } from '../../../../shared/model/types/connector';
 import { ChevronRight, Unplug } from 'lucide-react';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 interface NodesSelectionStepProps {
   connector: ConnectorListItem;
@@ -30,7 +31,10 @@ export function NodesSelectionStep({
   loading = false,
   onFieldSelect,
 }: NodesSelectionStepProps) {
-  const title = connectorName ? `Select data for ${connectorName}` : 'Select data';
+  const { t } = useTranslation();
+  const title = connectorName
+    ? t('connectorWizard.selectDataFor', { connector: connectorName })
+    : t('connectorWizard.selectData');
 
   if (loading) {
     return <AppWizardStepLoading variant='list' />;
@@ -42,10 +46,14 @@ export function NodesSelectionStep({
         <StepperHeroBlock connector={connector} />
         <AppWizardStepHero
           icon={<Unplug size={56} strokeWidth={1} />}
-          title={connectorName ? `No nodes found for ${connectorName}` : 'No nodes found'}
-          subtitle='This connector might not be fully implemented yet or there could be other issues.'
+          title={
+            connectorName
+              ? t('connectorWizard.noNodesFor', { connector: connectorName })
+              : t('connectorWizard.noNodes')
+          }
+          subtitle={t('connectorWizard.connectorIncomplete')}
         />
-        <OpenIssueLink label='Missing some data?' />
+        <OpenIssueLink label={t('connectorWizard.missingData')} />
       </AppWizardStep>
     );
   }
@@ -72,12 +80,13 @@ export function NodesSelectionStep({
                 field.name && (
                   <div className='flex flex-col gap-2 py-1'>
                     <p>
-                      <span className='font-semibold'>Table name:</span>{' '}
+                      <span className='font-semibold'>{t('connectorWizard.tableName')}:</span>{' '}
                       {field.destinationName ?? field.name}
                     </p>
                     {field.description && (
                       <p>
-                        <span className='font-semibold'>Description:</span> {field.description}
+                        <span className='font-semibold'>{t('connectorWizard.description')}:</span>{' '}
+                        {field.description}
                       </p>
                     )}
                     {field.documentation && (
@@ -87,7 +96,7 @@ export function NodesSelectionStep({
                         rel='noopener noreferrer'
                         className='bg-muted/16 hover:bg-muted/20 dark:bg-muted/8 dark:hover:bg-muted/16 flex items-center justify-center gap-1 rounded-sm px-2 py-1 font-semibold'
                       >
-                        Read more
+                        {t('connectorWizard.readMore')}
                         <ChevronRight className='h-3 w-3' />
                       </Link>
                     )}
@@ -99,7 +108,7 @@ export function NodesSelectionStep({
           ))}
         </AppWizardStepCards>
 
-        <OpenIssueLink label='Missing some data?' />
+        <OpenIssueLink label={t('connectorWizard.missingData')} />
       </AppWizardStepSection>
     </AppWizardStep>
   );

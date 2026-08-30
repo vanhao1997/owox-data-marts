@@ -20,6 +20,7 @@ import { SortRow } from './SortRow';
 import { LimitInput } from './LimitInput';
 import { FilterEditorPopover } from './FilterEditorPopover';
 import { isFilterableType } from './output-controls-operators';
+import { useTranslation } from 'react-i18next';
 
 export type { JoinedSource };
 
@@ -131,7 +132,7 @@ export function OutputSettingsDropdown({
 
   return (
     <div className='space-y-4 p-3'>
-      <FiltersSection
+        <FiltersSection
         indexedRules={postJoinIndexed}
         allColumns={allColumns}
         onAdd={onAddRule}
@@ -194,6 +195,7 @@ function FiltersSection({
   onUpdateAt,
   onRemoveAt,
 }: FiltersSectionProps) {
+  const { t } = useTranslation();
   const [pendingColumn, setPendingColumn] = useState<OutputSettingsDropdownColumn | null>(null);
   const filterableColumns = allColumns.filter(
     c => isFilterableType(c.type) && !c.isJoinedCalculated
@@ -204,7 +206,7 @@ function FiltersSection({
 
   return (
     <div>
-      <SectionHeader title='Filters' info={SECTION_INFO.filters} />
+      <SectionHeader title={t('reportColumnPicker.filters', 'Filters')} info={t('reportColumnPicker.filtersHelp', SECTION_INFO.filters)} />
       <div className='space-y-1'>
         {indexedRules.map(({ rule, index }) => (
           <FilterRow
@@ -275,6 +277,7 @@ function SlicesSection({
   onUpdateAt,
   onRemoveAt,
 }: SlicesSectionProps) {
+  const { t } = useTranslation();
   const [pending, setPending] = useState<PendingSliceColumn | null>(null);
 
   // All slice lookups key off the unified column id (= col.id = rule.column).
@@ -306,7 +309,7 @@ function SlicesSection({
 
   return (
     <div>
-      <SectionHeader title='Slices' info={SECTION_INFO.slices} />
+      <SectionHeader title={t('reportColumnPicker.slices', 'Slices')} info={t('reportColumnPicker.slicesHelp', SECTION_INFO.slices)} />
       <div className='space-y-1'>
         {indexedRules.map(({ rule, index }) => (
           <FilterRow
@@ -361,6 +364,7 @@ function AddSlicePicker({
   joinedSources: readonly JoinedSource[];
   onSelect: (pending: PendingSliceColumn) => void;
 }) {
+  const { t } = useTranslation();
   const lookup = new Map<string, PendingSliceColumn>();
   const items: FieldPickerItem[] = [];
   for (const src of joinedSources) {
@@ -385,13 +389,13 @@ function AddSlicePicker({
   }
 
   if (items.length === 0) {
-    return <span className='text-muted-foreground text-xs'>No filterable joined columns.</span>;
+    return <span className='text-muted-foreground text-xs'>{t('reportColumnPicker.noJoinedFilterableColumns', 'No filterable joined columns.')}</span>;
   }
 
   return (
     <FieldSearchPicker
       items={items}
-      placeholder='Add slice'
+      placeholder={t('reportColumnPicker.addSlice', 'Add slice')}
       onSelect={value => {
         const pending = lookup.get(value);
         if (pending) onSelect(pending);
@@ -407,13 +411,14 @@ function AddFilterPicker({
   columns: readonly OutputSettingsDropdownColumn[];
   onSelect: (column: OutputSettingsDropdownColumn) => void;
 }) {
+  const { t } = useTranslation();
   if (columns.length === 0) {
-    return <span className='text-muted-foreground text-xs'>No more filterable columns.</span>;
+    return <span className='text-muted-foreground text-xs'>{t('reportColumnPicker.noMoreFilterableColumns', 'No more filterable columns.')}</span>;
   }
   return (
     <FieldSearchPicker
       items={columns.map(columnToPickerItem)}
-      placeholder='Add filter'
+      placeholder={t('reportColumnPicker.addFilter', 'Add filter')}
       onSelect={name => {
         const column = columns.find(c => c.name === name);
         if (column) onSelect(column);
@@ -429,6 +434,7 @@ interface SortSectionProps {
 }
 
 function SortSection({ sort, selectedColumns, onChange }: SortSectionProps) {
+  const { t } = useTranslation();
   const sortColumns = new Set(sort.map(s => s.column));
   const selectedColumnSet = new Set(selectedColumns.map(c => c.name));
   const labelByName = new Map(selectedColumns.map(c => [c.name, c.label]));
@@ -474,7 +480,7 @@ function SortSection({ sort, selectedColumns, onChange }: SortSectionProps) {
 
   return (
     <div>
-      <SectionHeader title='Sort' info={SECTION_INFO.sort} />
+      <SectionHeader title={t('reportColumnPicker.sort', 'Sort')} info={t('reportColumnPicker.sortHelp', SECTION_INFO.sort)} />
       <div className='space-y-1'>
         {sort.map((rule, index) => (
           <div
@@ -514,12 +520,12 @@ function SortSection({ sort, selectedColumns, onChange }: SortSectionProps) {
       <div className='mt-2'>
         {available.length === 0 ? (
           <span className='text-muted-foreground text-xs'>
-            All selected columns are already sorted.
+            {t('reportColumnPicker.allColumnsSorted', 'All selected columns are already sorted.')}
           </span>
         ) : (
           <FieldSearchPicker
             items={available.map(columnToPickerItem)}
-            placeholder='Add sort by'
+            placeholder={t('reportColumnPicker.addSort', 'Add sort by')}
             onSelect={name => {
               if (name && !sortColumns.has(name)) {
                 onChange([...sort, { column: name, direction: 'asc' }]);
@@ -538,9 +544,10 @@ interface LimitSectionProps {
 }
 
 function LimitSection({ value, onChange }: LimitSectionProps) {
+  const { t } = useTranslation();
   return (
     <div>
-      <SectionHeader title='Limit' info={SECTION_INFO.limit} />
+      <SectionHeader title={t('reportColumnPicker.limit', 'Limit')} info={t('reportColumnPicker.limitHelp', SECTION_INFO.limit)} />
       <LimitInput value={value} onChange={onChange} />
     </div>
   );

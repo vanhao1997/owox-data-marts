@@ -12,10 +12,12 @@ import { SortableHeader, ToggleColumnsHeader } from '../../../../shared/componen
 import type { ProjectMemberApiKey } from '../../types';
 import toast from 'react-hot-toast';
 import { ApiKeyExpirationValue } from '../ApiKeyExpirationValue';
+import type { TFunction } from 'i18next';
 
 interface ApiKeysColumnsProps {
   onEditName: (key: ProjectMemberApiKey) => void;
   onRevoke: (key: ProjectMemberApiKey) => void;
+  t: TFunction;
 }
 
 const relativeTimeCellClassName =
@@ -24,12 +26,13 @@ const relativeTimeCellClassName =
 export const getApiKeysColumns = ({
   onEditName,
   onRevoke,
+  t,
 }: ApiKeysColumnsProps): ColumnDef<ProjectMemberApiKey>[] => [
   {
     accessorKey: 'name',
     size: 190,
-    meta: { title: 'Name' },
-    header: ({ column }) => <SortableHeader column={column}>Name</SortableHeader>,
+    meta: { title: t('common.name') },
+    header: ({ column }) => <SortableHeader column={column}>{t('common.name')}</SortableHeader>,
     cell: ({ row }) => <span className='font-medium'>{row.original.name}</span>,
   },
   {
@@ -44,11 +47,11 @@ export const getApiKeysColumns = ({
           variant='ghost'
           size='icon'
           className='size-6'
-          aria-label='Copy API Key ID'
+          aria-label={t('apiKeysPage.table.copyId')}
           onClick={e => {
             e.stopPropagation();
             void navigator.clipboard.writeText(row.original.apiKeyId);
-            toast.success('API Key ID copied');
+            toast.success(t('apiKeysPage.table.idCopied'));
           }}
         >
           <Copy className='size-3' />
@@ -61,16 +64,16 @@ export const getApiKeysColumns = ({
     accessorFn: row =>
       row.expiresAt ? new Date(row.expiresAt).getTime() : Number.POSITIVE_INFINITY,
     size: 200,
-    meta: { title: 'Expires' },
+    meta: { title: t('apiKeysPage.table.expires') },
     sortingFn: 'basic',
-    header: ({ column }) => <SortableHeader column={column}>Expires</SortableHeader>,
+    header: ({ column }) => <SortableHeader column={column}>{t('apiKeysPage.table.expires')}</SortableHeader>,
     cell: ({ row }) => <ApiKeyExpirationValue expiresAt={row.original.expiresAt} />,
   },
   {
     accessorKey: 'createdAt',
     size: 130,
-    meta: { title: 'Created' },
-    header: ({ column }) => <SortableHeader column={column}>Created</SortableHeader>,
+    meta: { title: t('common.createdAt') },
+    header: ({ column }) => <SortableHeader column={column}>{t('common.createdAt')}</SortableHeader>,
     cell: ({ row }) => (
       <RelativeTime date={new Date(row.original.createdAt)} className={relativeTimeCellClassName} />
     ),
@@ -78,11 +81,11 @@ export const getApiKeysColumns = ({
   {
     accessorKey: 'lastAuthenticatedAt',
     size: 150,
-    meta: { title: 'Last authenticated' },
-    header: ({ column }) => <SortableHeader column={column}>Last authenticated</SortableHeader>,
+    meta: { title: t('apiKeysPage.table.lastAuthenticated') },
+    header: ({ column }) => <SortableHeader column={column}>{t('apiKeysPage.table.lastAuthenticated')}</SortableHeader>,
     cell: ({ row }) => {
       const { lastAuthenticatedAt } = row.original;
-      if (!lastAuthenticatedAt) return <span className='text-muted-foreground'>Never</span>;
+      if (!lastAuthenticatedAt) return <span className='text-muted-foreground'>{t('apiKeysPage.table.never')}</span>;
       return (
         <RelativeTime date={new Date(lastAuthenticatedAt)} className={relativeTimeCellClassName} />
       );
@@ -107,7 +110,7 @@ export const getApiKeysColumns = ({
             }}
           >
             <Pencil className='mr-2 size-4' />
-            Edit name
+            {t('apiKeysPage.table.editName')}
           </DropdownMenuItem>
           <DropdownMenuItem
             className='text-red-600 focus:text-red-600'
@@ -116,7 +119,7 @@ export const getApiKeysColumns = ({
             }}
           >
             <Trash2 className='mr-2 size-4' />
-            Revoke
+            {t('apiKeysPage.revokeButton')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -26,6 +26,7 @@ import { DataDestinationType, DataDestinationTypeModel } from '../../../data-des
 import { ConfirmationDialog } from '../../../../shared/components/ConfirmationDialog';
 import { ReportStatusEnum } from '../../reports/shared';
 import { trackEvent } from '../../../../utils';
+import { useTranslation } from 'react-i18next';
 
 interface InsightReportsListProps {
   dataMartId: string;
@@ -40,6 +41,7 @@ export function InsightReportsList({
   onEditReport,
   onCreateReport,
 }: InsightReportsListProps) {
+  const { t } = useTranslation();
   const [reportToDelete, setReportToDelete] = useState<string | null>(null);
   const {
     data: reports = [],
@@ -66,7 +68,7 @@ export function InsightReportsList({
         label: reportToDelete,
         context: `${dataMartId}:${insightId}`,
       });
-      toast.success('Report deleted');
+      toast.success(t('insightsUi.reportDeleted', 'Report deleted'));
       setReportToDelete(null);
       void refetch();
     } catch {
@@ -77,7 +79,7 @@ export function InsightReportsList({
         label: reportToDelete,
         context: `${dataMartId}:${insightId}`,
       });
-      toast.error('Failed to delete report');
+      toast.error(t('insightsUi.reportDeleteFailed', 'Failed to delete report'));
     }
   };
 
@@ -101,14 +103,14 @@ export function InsightReportsList({
         label: reportId,
         context: `${dataMartId}:${insightId}`,
       });
-      toast.error('Failed to run report');
+      toast.error(t('insightsUi.reportRunFailed', 'Failed to run report'));
     }
   };
 
   if (isLoading) {
     return (
       <div className='text-muted-foreground flex h-20 items-center justify-center text-sm'>
-        Loading reports...
+        {t('insightsUi.loadingReports', 'Loading reports...')}
       </div>
     );
   }
@@ -118,18 +120,18 @@ export function InsightReportsList({
       {reports.length === 0 ? (
         <div className='bg-muted/30 flex flex-col items-center justify-center rounded-lg border border-dashed py-10 text-center'>
           <div className='mb-4 flex flex-col'>
-            <p className='text-sm font-medium'>Schedule your insights</p>
-            <p className='text-muted-foreground text-xs'>Automate delivery to your destinations</p>
+            <p className='text-sm font-medium'>{t('insightsUi.scheduleTitle', 'Schedule your insights')}</p>
+            <p className='text-muted-foreground text-xs'>{t('insightsUi.scheduleDescription', 'Automate delivery to your destinations')}</p>
           </div>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant='outline' onClick={onCreateReport} className='gap-2 shadow-sm'>
                   <Plus className='h-4 w-4' />
-                  New Report
+                  {t('insightsUi.newReport', 'New Report')}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side='top'>Create a new report for this insight</TooltipContent>
+              <TooltipContent side='top'>{t('insightsUi.createReportTooltip', 'Create a new report for this insight')}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -141,9 +143,9 @@ export function InsightReportsList({
                 <Calendar className='text-primary h-5 w-5' />
               </div>
               <div className='flex flex-col'>
-                <p className='text-sm font-medium'>Schedule your insights</p>
+                <p className='text-sm font-medium'>{t('insightsUi.scheduleTitle', 'Schedule your insights')}</p>
                 <p className='text-muted-foreground text-xs'>
-                  Automate delivery to your destinations
+                  {t('insightsUi.scheduleDescription', 'Automate delivery to your destinations')}
                 </p>
               </div>
             </div>
@@ -157,10 +159,10 @@ export function InsightReportsList({
                     className='shrink-0 gap-2 shadow-sm'
                   >
                     <Plus className='h-4 w-4' />
-                    New Report
+                    {t('insightsUi.newReport', 'New Report')}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side='top'>Create a new report for this insight</TooltipContent>
+                <TooltipContent side='top'>{t('insightsUi.createReportTooltip', 'Create a new report for this insight')}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
@@ -184,7 +186,10 @@ export function InsightReportsList({
                             className='h-4 w-4'
                           />
                         ) : (
-                          <div className='bg-muted h-2 w-2 rounded-full' title='Never run' />
+                          <div
+                            className='bg-muted h-2 w-2 rounded-full'
+                            title={t('insightsUi.never', 'Never')}
+                          />
                         )}
                       </div>
                       <h4 className='line-clamp-1 leading-tight font-medium'>{report.title}</h4>
@@ -227,13 +232,13 @@ export function InsightReportsList({
                               runReport.isPending ||
                               report.lastRunStatus === ReportStatusEnum.RUNNING
                             }
-                            aria-label='Run report'
+                            aria-label={t('insightsUi.runReport', 'Run report')}
                             onClick={e => void handleRun(report.id, e)}
                           >
                             <Play className='h-4 w-4' />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent side='top'>Run report</TooltipContent>
+                        <TooltipContent side='top'>{t('insightsUi.runReport', 'Run report')}</TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                     <DropdownMenu>
@@ -257,7 +262,7 @@ export function InsightReportsList({
                           }
                         >
                           <Play className='mr-2 h-4 w-4' />
-                          Run report
+                          {t('insightsUi.runReport', 'Run report')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={e => {
@@ -266,7 +271,7 @@ export function InsightReportsList({
                           }}
                         >
                           <Pencil className='mr-2 h-4 w-4' />
-                          Edit
+                          {t('insightsUi.edit', 'Edit')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           variant='destructive'
@@ -276,7 +281,7 @@ export function InsightReportsList({
                           }}
                         >
                           <Trash2 className='mr-2 h-4 w-4' />
-                          Delete
+                          {t('common.delete', 'Delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -289,12 +294,12 @@ export function InsightReportsList({
                       <Clock className='text-muted-foreground h-4 w-4' />
                     </div>
                     <div className='flex items-center gap-1.5'>
-                      <span className='text-muted-foreground'>Last run:</span>
+                      <span className='text-muted-foreground'>{t('insightsUi.lastRun', 'Last run:')}</span>
                       <span className='font-medium'>
                         {report.lastRunDate ? (
                           <RelativeTime date={new Date(report.lastRunDate)} />
                         ) : (
-                          'Never'
+                          t('insightsUi.never', 'Never')
                         )}
                       </span>
                     </div>
@@ -311,10 +316,10 @@ export function InsightReportsList({
         onOpenChange={open => {
           if (!open) setReportToDelete(null);
         }}
-        title='Delete Report'
-        description='Are you sure you want to delete this report? This action cannot be undone.'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('insightsUi.deleteReportTitle', 'Delete Report')}
+        description={t('insightsUi.deleteReportDescription', 'Are you sure you want to delete this report? This action cannot be undone.')}
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => void handleDelete()}
         variant='destructive'
       />

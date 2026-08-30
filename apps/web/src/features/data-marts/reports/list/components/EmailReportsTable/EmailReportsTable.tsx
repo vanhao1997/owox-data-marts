@@ -8,6 +8,7 @@ import type { DataDestination } from '../../../../../data-destination';
 import { useBaseTable } from '../../../../../../shared/hooks';
 import { BaseTable } from '../../../../../../shared/components/Table';
 import { AddReportButton } from '../DestinationCard/AddReportButton';
+import { useTranslation } from 'react-i18next';
 
 interface EmailReportsTableProps {
   destinationType: DataDestinationType;
@@ -28,6 +29,7 @@ export function EmailReportsTable({
   onEditReport,
   onAddReport,
 }: EmailReportsTableProps) {
+  const { t } = useTranslation();
   const { reports, setPollingConfig } = useReport();
 
   // Filter only Email reports for this destination
@@ -56,8 +58,9 @@ export function EmailReportsTable({
           return;
         },
         onEditReport, // directly use the parent callback
+        t,
       }),
-    [onEditReport]
+    [onEditReport, t]
   );
 
   // Initialize table with shared hook
@@ -93,7 +96,7 @@ export function EmailReportsTable({
           aria-live='polite'
         >
           <p className='text-muted-foreground text-sm font-medium'>
-            Create your first report for this destination
+            {t('reportsUi.createFirstForDestination', 'Create your first report for this destination')}
           </p>
           <AddReportButton onAddReport={onAddReport} />
         </div>

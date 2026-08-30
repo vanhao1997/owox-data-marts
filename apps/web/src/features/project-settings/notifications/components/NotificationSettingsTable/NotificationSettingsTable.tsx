@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Row } from '@tanstack/react-table';
 import { BaseTable } from '../../../../../shared/components/Table/BaseTable';
 import { useBaseTable } from '../../../../../shared/hooks/useBaseTable';
@@ -16,9 +17,10 @@ export function NotificationSettingsTable({
   onRowClick,
   onToggleEnabled,
 }: NotificationSettingsTableProps) {
+  const { t } = useTranslation();
   const columns = useMemo(
-    () => getNotificationSettingsColumns({ onToggleEnabled, onEdit: onRowClick }),
-    [onToggleEnabled, onRowClick]
+    () => getNotificationSettingsColumns({ onToggleEnabled, onEdit: onRowClick, t }),
+    [onToggleEnabled, onRowClick, t]
   );
 
   const { table } = useBaseTable<NotificationSettingsItem>({
@@ -44,11 +46,11 @@ export function NotificationSettingsTable({
         tableId='notification-settings-table'
         table={table}
         onRowClick={handleRowClick}
-        ariaLabel='Notification settings table'
+        ariaLabel={t('notificationsPage.tableLabel')}
         showPagination={false}
         renderEmptyState={() => (
           <span role='status' aria-live='polite'>
-            No notification settings found
+            {t('notificationsPage.empty')}
           </span>
         )}
       />

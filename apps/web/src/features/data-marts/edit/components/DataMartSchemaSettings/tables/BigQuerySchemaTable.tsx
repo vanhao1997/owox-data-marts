@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/too
 import type { Row, Table } from '@tanstack/react-table';
 import { EyeOff } from 'lucide-react';
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DataStorageType } from '../../../../../data-storage';
 import type { BigQuerySchemaField } from '../../../../shared/types/data-mart-schema.types';
 import {
@@ -52,6 +53,7 @@ export function BigQuerySchemaTable({
   aiHelper,
   schemaToolbar,
 }: BigQuerySchemaTableProps) {
+  const { t } = useTranslation();
   // Use the record expansion hook to manage expanded/collapsed state
   const {
     expandedRecords,
@@ -138,7 +140,7 @@ export function BigQuerySchemaTable({
         accessorKey: 'mode',
         header: () => (
           <Tooltip>
-            <TooltipTrigger className='cursor-default pl-[12px]'>Mode</TooltipTrigger>
+            <TooltipTrigger className='cursor-default pl-[12px]'>{t('schemaUi.mode')}</TooltipTrigger>
             <TooltipContent style={{ whiteSpace: 'pre' }}>
               {`BigQuery Field mode:\nNULLABLE - field can be NULL\nREQUIRED - field cant be NULL\nREPEATED - field is an Array of Type`}
             </TooltipContent>
@@ -162,7 +164,7 @@ export function BigQuerySchemaTable({
         columnIndex: 4,
       },
     ],
-    [updateField]
+    [updateField, t]
   );
 
   // Custom name column header with expand all button
@@ -173,12 +175,12 @@ export function BigQuerySchemaTable({
           <ExpandAllButton isAllExpanded={allExpanded} onToggle={toggleAllRecords} />
         )}
         <Tooltip>
-          <TooltipTrigger className='cursor-default'>Name</TooltipTrigger>
-          <TooltipContent>Field name in the output schema</TooltipContent>
+          <TooltipTrigger className='cursor-default'>{t('schemaUi.name')}</TooltipTrigger>
+          <TooltipContent>{t('schemaUi.fieldNameOutput')}</TooltipContent>
         </Tooltip>
       </div>
     ),
-    [hasRecordFields, allExpanded, toggleAllRecords]
+    [hasRecordFields, allExpanded, toggleAllRecords, t]
   );
 
   // Custom name column cell with indentation and expand button
@@ -214,7 +216,9 @@ export function BigQuerySchemaTable({
               onToggle={() => {
                 toggleRecordExpansion(path);
               }}
-              ariaLabel={isExpanded ? 'Collapse nested fields' : 'Expand nested fields'}
+              ariaLabel={
+                isExpanded ? t('schemaUi.collapseNested') : t('schemaUi.expandNested')
+              }
             />
           ) : (
             // Only add placeholder if there are record fields in the schema
@@ -226,7 +230,7 @@ export function BigQuerySchemaTable({
             onValueChange={value => {
               updateField(row.index, { name: value });
             }}
-            placeholder={'Field name is required'}
+            placeholder={t('schemaUi.fieldNameRequired')}
             isBold={true}
             trailingContent={
               level === 0 && row.original.isHiddenForReporting ? (
@@ -234,7 +238,7 @@ export function BigQuerySchemaTable({
                   <TooltipTrigger asChild>
                     <EyeOff className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
                   </TooltipTrigger>
-                  <TooltipContent>Hidden from reports</TooltipContent>
+                  <TooltipContent>{t('schemaUi.hiddenFromReports')}</TooltipContent>
                 </Tooltip>
               ) : undefined
             }
@@ -242,7 +246,7 @@ export function BigQuerySchemaTable({
         </div>
       );
     },
-    [flattenedFields, expandedRecords, hasRecordFields, toggleRecordExpansion, updateField]
+    [flattenedFields, expandedRecords, hasRecordFields, toggleRecordExpansion, updateField, t]
   );
 
   // Custom primary key column cell that only shows checkbox for top-level non-record fields

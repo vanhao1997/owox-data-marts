@@ -10,6 +10,7 @@ import { DataStorageTypeModel } from '../types/data-storage-type.model';
 import { DataStorageStatus, DataStorageType } from '../model/types';
 import { Badge } from '@owox/ui/components/badge';
 import { useActionLock } from '../../../../shared/hooks';
+import { useTranslation } from 'react-i18next';
 
 interface DataStorageTypeDialogProps {
   isOpen: boolean;
@@ -24,14 +25,15 @@ export const DataStorageTypeDialog = ({
   onSelect,
   isCreatingDataStorage,
 }: DataStorageTypeDialogProps) => {
+  const { t } = useTranslation();
   const { trigger, isLocked } = useActionLock(onSelect, 1000);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className='sm:max-w-sm' data-testid='storageTypeDialog'>
         <DialogHeader>
-          <DialogTitle>New Storage</DialogTitle>
-          <DialogDescription>Choose the type of storage you want to create</DialogDescription>
+          <DialogTitle>{t('storageTypeDialog.title')}</DialogTitle>
+          <DialogDescription>{t('storageTypeDialog.description')}</DialogDescription>
         </DialogHeader>
         <div className='flex flex-col gap-4 py-4'>
           {DataStorageTypeModel.getAllTypes()
@@ -57,7 +59,7 @@ export const DataStorageTypeDialog = ({
                     <span className='font-medium'>{typeInfo.displayName}</span>
                   </span>
                   {typeInfo.status === DataStorageStatus.COMING_SOON && (
-                    <Badge variant='secondary'>Coming soon</Badge>
+                    <Badge variant='secondary'>{t('storageTypeDialog.comingSoon')}</Badge>
                   )}
                 </Button>
               );

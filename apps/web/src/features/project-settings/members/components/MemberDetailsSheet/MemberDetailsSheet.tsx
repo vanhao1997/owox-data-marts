@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -80,6 +81,7 @@ export function MemberDetailsSheet({
   onClose,
   onSaved,
 }: MemberDetailsSheetProps) {
+  const { t } = useTranslation();
   const form = useForm<MemberDetailsFormValues>({
     resolver: zodResolver(memberDetailsSchema),
     defaultValues: DEFAULT_VALUES,
@@ -130,18 +132,18 @@ export function MemberDetailsSheet({
           roleScope: values.roleScope,
           contextIds: selectedContextIds,
         });
-        toast.success('Member settings updated');
+        toast.success(t('membersPage.settingsUpdated'));
         if (result.roleStatus === 'pending' && result.message) {
           toast(result.message, { duration: 8000, icon: 'ℹ️' });
         }
         onSaved();
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : 'Failed to save');
+        toast.error(error instanceof Error ? error.message : t('membersPage.saveFailed'));
       } finally {
         setSaving(false);
       }
     },
-    [member, selectedContextIds, onSaved]
+    [member, selectedContextIds, onSaved, t]
   );
 
   if (!member) return null;
@@ -158,8 +160,8 @@ export function MemberDetailsSheet({
       >
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Configure member</SheetTitle>
-            <SheetDescription>Customize role, scope and contexts for this member</SheetDescription>
+            <SheetTitle>{t('membersPage.configureTitle')}</SheetTitle>
+            <SheetDescription>{t('membersPage.configureDescription')}</SheetDescription>
           </SheetHeader>
 
           <Form {...form}>
@@ -169,9 +171,9 @@ export function MemberDetailsSheet({
               }}
             >
               <FormLayout>
-                <FormSection title='General' name='member-details-general'>
+                <FormSection title={t('common.general')} name='member-details-general'>
                   <FormItem>
-                    <FormLabel tooltip='Display name and email of the member'>Identity</FormLabel>
+                    <FormLabel tooltip={t('membersPage.identityTooltip')}>{t('membersPage.identity')}</FormLabel>
                     <div className='flex items-center gap-3'>
                       {member.avatarUrl ? (
                         <img
@@ -196,7 +198,7 @@ export function MemberDetailsSheet({
                     name='role'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel tooltip='Project role granted to this member'>Role</FormLabel>
+                        <FormLabel tooltip={t('membersPage.roleTooltip')}>{t('membersPage.role')}</FormLabel>
                         <FormControl>
                           <Select
                             value={field.value}
@@ -219,26 +221,16 @@ export function MemberDetailsSheet({
                         <FormDescription>
                           <Accordion variant='common' type='single' collapsible>
                             <AccordionItem value='member-role-help'>
-                              <AccordionTrigger>Which role should I pick?</AccordionTrigger>
+                              <AccordionTrigger>{t('membersPage.roleHelp.question')}</AccordionTrigger>
                               <AccordionContent>
                                 <p className='mb-2'>
-                                  <strong>Business User</strong> — sees accessible Data Marts and
-                                  Reports, creates Reports for Data Marts shared for reporting,
-                                  manages Reports they own (edit, delete, change owners), manages
-                                  Report Triggers under their Reports, and uses Destinations shared
-                                  for use. Cannot create, edit, or delete Data Marts, Data Mart
-                                  Triggers, or Storages.
+                                  <strong>{t('requestAccessPage.roles.viewer')}</strong> — {t('membersPage.roleHelp.businessUser')}
                                 </p>
                                 <p className='mb-2'>
-                                  <strong>Technical User</strong> — everything a Business User may
-                                  do, plus: creates, edits, and deletes Data Marts, Data Mart
-                                  Triggers, and Storages; edits and deletes Reports project-wide;
-                                  changes Report owners; manages Report Triggers project-wide.
+                                  <strong>{t('requestAccessPage.roles.editor')}</strong> — {t('membersPage.roleHelp.technicalUser')}
                                 </p>
                                 <p>
-                                  <strong>Project Admin</strong> — everything a Technical User may
-                                  do, plus: manages Project Members, manages billing, and manages
-                                  general Project settings such as the Project title.
+                                  <strong>{t('requestAccessPage.roles.admin')}</strong> — {t('membersPage.roleHelp.projectAdmin')}
                                 </p>
                               </AccordionContent>
                             </AccordionItem>
@@ -250,24 +242,23 @@ export function MemberDetailsSheet({
                 </FormSection>
 
                 {isAdminRole ? (
-                  <FormSection title='Access' collapsible={false} name='member-details-admin'>
+                  <FormSection title={t('membersPage.access')} collapsible={false} name='member-details-admin'>
                     <FormItem className='mt-2'>
                       <p className='text-muted-foreground text-sm'>
-                        Project Admin has project-wide access. Scope and context assignments do not
-                        apply.
+                        {t('membersPage.adminAccessDescription')}
                       </p>
                     </FormItem>
                   </FormSection>
                 ) : (
                   <>
-                    <FormSection title='Scope' name='member-details-scope'>
+                    <FormSection title={t('membersPage.scope')} name='member-details-scope'>
                       <FormField
                         control={control}
                         name='roleScope'
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel tooltip='Controls what resources this member can see by default'>
-                              Role scope
+                            <FormLabel tooltip={t('membersPage.scopeTooltip')}>
+                              {t('membersPage.roleScope')}
                             </FormLabel>
                             <FormControl>
                               <Select
@@ -279,9 +270,9 @@ export function MemberDetailsSheet({
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value='entire_project'>Entire project</SelectItem>
+                                  <SelectItem value='entire_project'>{t('membersPage.entireProject')}</SelectItem>
                                   <SelectItem value='selected_contexts'>
-                                    Selected contexts only
+                                    {t('membersPage.selectedContextsOnly')}
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
@@ -290,16 +281,13 @@ export function MemberDetailsSheet({
                             <FormDescription>
                               <Accordion variant='common' type='single' collapsible>
                                 <AccordionItem value='scope-help'>
-                                  <AccordionTrigger>What do the scopes mean?</AccordionTrigger>
+                                  <AccordionTrigger>{t('membersPage.scopeHelp.question')}</AccordionTrigger>
                                   <AccordionContent>
                                     <p className='mb-2'>
-                                      <strong>Entire project</strong> — the member sees every shared
-                                      resource in the project (subject to role and ownership rules).
+                                      <strong>{t('membersPage.entireProject')}</strong> — {t('membersPage.scopeHelp.entireProject')}
                                     </p>
                                     <p className='mb-2'>
-                                      <strong>Selected contexts only</strong> — the member sees
-                                      resources only if they share at least one assigned context, or
-                                      if the member is an owner.
+                                      <strong>{t('membersPage.scopeHelp.selectedContextsLabel')}</strong> — {t('membersPage.scopeHelp.selectedContexts')}
                                     </p>
                                   </AccordionContent>
                                 </AccordionItem>
@@ -311,10 +299,10 @@ export function MemberDetailsSheet({
                     </FormSection>
 
                     {roleScope === 'selected_contexts' && (
-                      <FormSection title='Contexts' name='member-details-contexts'>
+                    <FormSection title={t('membersPage.contexts')} name='member-details-contexts'>
                         <FormItem>
-                          <FormLabel tooltip='Contexts assigned to this member — controls visibility when scope is "Selected contexts"'>
-                            Assigned contexts
+                          <FormLabel tooltip={t('membersPage.contextsAssignedTooltip')}>
+                            {t('membersPage.assignedContexts')}
                           </FormLabel>
                           <ContextsCheckboxList
                             idPrefix='member-ctx'
@@ -333,17 +321,10 @@ export function MemberDetailsSheet({
                           <FormDescription>
                             <Accordion variant='common' type='single' collapsible>
                               <AccordionItem value='member-contexts-help'>
-                                <AccordionTrigger>What are Contexts?</AccordionTrigger>
+                                <AccordionTrigger>{t('membersPage.contextHelp.question')}</AccordionTrigger>
                                 <AccordionContent>
                                   <p>
-                                    Contexts are business domains (e.g. Marketing, Finance, Sales)
-                                    used to group Storages, Destinations and Data Marts. When this
-                                    member&apos;s role scope is set to{' '}
-                                    <strong>Selected contexts only</strong>, they will see a
-                                    resource only if it is assigned to at least one of the contexts
-                                    checked here (ownership still overrides visibility). With scope{' '}
-                                    <strong>Entire project</strong>, these assignments have no
-                                    effect.
+                                    {t('membersPage.contextHelp.description')}
                                   </p>
                                 </AccordionContent>
                               </AccordionItem>
@@ -363,7 +344,7 @@ export function MemberDetailsSheet({
                   disabled={saving || (!formState.isDirty && !contextsDirty)}
                 >
                   {saving && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-                  Save
+                  {t('common.save')}
                 </Button>
                 <Button
                   type='button'
@@ -372,7 +353,7 @@ export function MemberDetailsSheet({
                   onClick={onClose}
                   disabled={saving}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               </FormActions>
             </AppForm>

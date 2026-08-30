@@ -14,6 +14,7 @@ import {
 } from '@owox/ui/components/accordion';
 import { FieldItem, FieldLabel, FieldDescription } from './FormField';
 import { GROUPING_DELAY_OPTIONS } from '../../../types';
+import { useTranslation } from 'react-i18next';
 
 interface GroupingDelaySectionProps {
   value: string;
@@ -22,11 +23,12 @@ interface GroupingDelaySectionProps {
 }
 
 export function GroupingDelaySection({ value, onChange, disabled }: GroupingDelaySectionProps) {
+  const { t } = useTranslation();
   return (
-    <FormSection title='Delay'>
+    <FormSection title={t('notificationsPage.delay', 'Delay')}>
       <FieldItem>
-        <FieldLabel tooltip='Select how long to wait before sending a grouped email'>
-          Grouping multiple notifications
+        <FieldLabel tooltip={t('notificationsPage.groupingTooltip', 'Select how long to wait before sending a grouped email')}>
+          {t('notificationsPage.groupingMultiple', 'Grouping multiple notifications')}
         </FieldLabel>
         <Select value={value} onValueChange={onChange} disabled={disabled}>
           <SelectTrigger className='w-full'>
@@ -43,10 +45,9 @@ export function GroupingDelaySection({ value, onChange, disabled }: GroupingDela
         <FieldDescription>
           <Accordion variant='common' type='single' collapsible>
             <AccordionItem value='grouping-delay-info'>
-              <AccordionTrigger>How grouping works?</AccordionTrigger>
+              <AccordionTrigger>{t('notificationsPage.howGroupingWorks', 'How grouping works?')}</AccordionTrigger>
               <AccordionContent>
-                If multiple notifications are triggered within this time window, they are sent as a
-                single email to keep your inbox tidy. Only email notifications are grouped.
+                {t('notificationsPage.groupingDescription', 'If multiple notifications are triggered within this time window, they are sent as a single email to keep your inbox tidy. Only email notifications are grouped.')}
               </AccordionContent>
             </AccordionItem>
           </Accordion>

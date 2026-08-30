@@ -37,6 +37,7 @@ import { contextService } from '../../services/context.service';
 import { MembersAssignmentField } from '../../../../shared/components/MembersAssignmentField';
 import { getRoleDisplayName } from '../../../idp/utils/role-display-name';
 import type { ContextDto, MemberWithScopeDto } from '../../types/context.types';
+import { useTranslation } from 'react-i18next';
 
 const addContextSchema = z.object({
   name: z
@@ -59,6 +60,7 @@ interface AddContextSheetProps {
 }
 
 export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddContextSheetProps) {
+  const { t } = useTranslation();
   const form = useForm<AddContextFormValues>({
     resolver: zodResolver(addContextSchema),
     defaultValues: DEFAULT_VALUES,
@@ -104,16 +106,20 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
           await contextService.updateContextMembers(created.id, selectedMemberIds);
         }
 
-        toast.success('Context created');
+        toast.success(t('contextsPage.created', 'Context created'));
         reset();
         onCreated(created);
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : 'Failed to create context');
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : t('contextsPage.createFailed', 'Failed to create context')
+        );
       } finally {
         setSaving(false);
       }
     },
-    [selectedMemberIds, onCreated, reset]
+    [selectedMemberIds, onCreated, reset, t]
   );
 
   return (
@@ -125,9 +131,9 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Add context</SheetTitle>
+          <SheetTitle>{t('contextsPage.addTitle', 'Add context')}</SheetTitle>
           <SheetDescription>
-            Create a business-domain context and optionally assign members to it.
+            {t('contextsPage.addDescription', 'Create a business-domain context and optionally assign members to it.')}
           </SheetDescription>
         </SheetHeader>
 
@@ -138,13 +144,15 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
             }}
           >
             <FormLayout>
-              <FormSection title='General' name='add-context-general'>
+              <FormSection title={t('common.general', 'General')} name='add-context-general'>
                 <FormField
                   control={control}
                   name='name'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Business-domain label shown on resources'>Name</FormLabel>
+                      <FormLabel tooltip={t('contextsPage.nameTooltip', 'Business-domain label shown on resources')}>
+                        {t('common.name', 'Name')}
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} placeholder='Marketing' disabled={saving} autoFocus />
                       </FormControl>
@@ -158,28 +166,25 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
                   name='description'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel tooltip='Helps members understand what resources belong to this context'>
-                        Description (optional)
+                      <FormLabel tooltip={t('contextsPage.descriptionTooltip', 'Helps members understand what resources belong to this context')}>
+                        {t('common.description', 'Description')} ({t('common.optional', 'optional')})
                       </FormLabel>
                       <FormControl>
                         <Textarea
                           {...field}
                           rows={3}
                           disabled={saving}
-                          placeholder='What this context represents'
+                          placeholder={t('contextsPage.descriptionPlaceholder', 'What this context represents')}
                         />
                       </FormControl>
                       <FormMessage />
                       <FormDescription>
                         <Accordion variant='common' type='single' collapsible>
                           <AccordionItem value='add-ctx-help'>
-                            <AccordionTrigger>What is a context?</AccordionTrigger>
+                            <AccordionTrigger>{t('contextsPage.whatIsContext', 'What is a context?')}</AccordionTrigger>
                             <AccordionContent>
                               <p className='mb-2'>
-                                A context is a business-domain label (e.g. Marketing, Finance) that
-                                you can attach to Data Marts, Storages, Destinations and members.
-                                Non-admin members with "Selected contexts" scope can only access
-                                resources that share at least one of their contexts.
+                                {t('contextsPage.whatIsContextDescription', 'A context is a business-domain label (e.g. Marketing, Finance) that you can attach to Data Marts, Storages, Destinations and members. Non-admin members with "Selected contexts" scope can only access resources that share at least one of their contexts.')}
                               </p>
                             </AccordionContent>
                           </AccordionItem>
@@ -191,11 +196,11 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
               </FormSection>
 
               {members.length > 0 && (
-                <FormSection title='Members' name='add-context-members'>
+                <FormSection title={t('membersPage.title', 'Members')} name='add-context-members'>
                   <MembersAssignmentField
                     idPrefix='new-ctx-mem'
-                    label='Assign to members (optional)'
-                    tooltip='Members you select here will get access to resources tagged with this context'
+                    label={`${t('contextsPage.assignMembers', 'Assign to members')} (${t('common.optional', 'optional')})`}
+                    tooltip={t('contextsPage.assignMembersTooltip', 'Members you select here will get access to resources tagged with this context')}
                     members={members.map(m => ({
                       userId: m.userId,
                       email: m.email,
@@ -217,7 +222,7 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
             <FormActions>
               <Button type='submit' className='w-full' disabled={saving || !formState.isValid}>
                 {saving && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-                Create
+                {t('common.create', 'Create')}
               </Button>
               <Button
                 type='button'
@@ -226,7 +231,7 @@ export function AddContextSheet({ isOpen, members, onClose, onCreated }: AddCont
                 onClick={handleClose}
                 disabled={saving}
               >
-                Cancel
+                {t('common.cancel', 'Cancel')}
               </Button>
             </FormActions>
           </AppForm>

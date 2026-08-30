@@ -5,33 +5,36 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Accordion with step-by-step instructions for enabling the Google BigQuery API.
  */
 export default function StorageTypeBigQueryDescription() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='bigquery-api-details'>
-        <AccordionTrigger>How do I enable the BigQuery API?</AccordionTrigger>
+        <AccordionTrigger>{t('storageHelp.bigQuery.title')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            To run queries and process data in Google BigQuery, you need to enable the{' '}
+            {t('storageHelp.bigQuery.intro')}{' '}
             <ExternalAnchor
               className='underline'
               href='https://console.cloud.google.com/apis/library/bigquery.googleapis.com'
             >
-              BigQuery API
+              {t('storageHelp.bigQuery.apiLink')}
             </ExternalAnchor>{' '}
-            in your Google Cloud project.
+            {t('storageHelp.bigQuery.projectSuffix')}
           </p>
-          <p className='mb-2'>Here's how to do it:</p>
+          <p className='mb-2'>{t('storageHelp.bigQuery.stepsIntro')}</p>
           <ol className='list-inside list-decimal space-y-2 text-sm'>
-            <li>Open the link above and make sure the correct project is selected.</li>
+            <li>{t('storageHelp.bigQuery.openLink')}</li>
             <li>
-              If the API isn't enabled yet, click <strong>Enable</strong>.
+              {t('storageHelp.bigQuery.enablePrefix')} <strong>{t('storageHelp.bigQuery.enable')}</strong>.
             </li>
-            <li>If it's already enabled, you'll see the API dashboard — that's fine.</li>
+            <li>{t('storageHelp.bigQuery.alreadyEnabled')}</li>
           </ol>
         </AccordionContent>
       </AccordionItem>

@@ -45,6 +45,8 @@ import { ProjectDataMartEmptyState } from '../shared/ProjectDataMartEmptyState';
 import { ProjectDataMartTitleLink } from '../shared/ProjectDataMartTitleLink';
 import { ProjectScheduledTriggerEditSheet } from './ProjectScheduledTriggerEditSheet';
 import { getScheduledTriggerTypeLabel } from '../../../features/data-marts/scheduled-triggers/utils/scheduled-trigger-labels';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 const DATA_MART_SCHEDULES_PAGE_SIZE = 15;
 const PROJECT_SCHEDULED_TRIGGERS_TABLE_ID = 'project-scheduled-triggers-table';
@@ -57,12 +59,13 @@ type ProjectScheduledTriggerFilterKey =
   | 'createdBy';
 
 function buildProjectScheduledTriggerFilterAccessors(
-  connectors: ConnectorListItem[]
+  connectors: ConnectorListItem[],
+  t: TFunction
 ): FilterAccessors<ProjectScheduledTriggerFilterKey, ProjectScheduledTrigger> {
   return {
     dataMart: row => row.dataMart.title,
     triggerType: row => row.type,
-    runTarget: row => getScheduledTriggerRunTargetTitle(row, connectors),
+    runTarget: row => getScheduledTriggerRunTargetTitle(row, connectors, t),
     triggerStatus: row => String(row.isActive),
     createdBy: row => row.createdByUser?.userId,
   };
@@ -70,14 +73,15 @@ function buildProjectScheduledTriggerFilterAccessors(
 
 function getScheduledTriggerRunTargetTitle(
   trigger: ProjectScheduledTrigger,
-  connectors: ConnectorListItem[] = []
+  connectors: ConnectorListItem[] = [],
+  t: TFunction = ((_key: string, fallback?: string) => fallback ?? '') as TFunction
 ) {
   if (trigger.type === ScheduledTriggerType.REPORT_RUN) {
     const config = trigger.triggerConfig as ScheduledReportRunConfig | undefined;
-    return config?.report?.title ?? config?.reportId ?? 'Report';
+    return config?.report?.title ?? config?.reportId ?? t('scheduledTriggerUi.report', 'Report');
   }
   if (trigger.type === ScheduledTriggerType.DATA_QUALITY_RUN) {
-    return 'Data Quality checks';
+    return t('scheduledTriggerUi.qualityChecks', 'Data Quality checks');
   }
 
   const config = trigger.triggerConfig as ScheduledConnectorRunConfig | undefined;
@@ -87,15 +91,16 @@ function getScheduledTriggerRunTargetTitle(
     connector?.displayName ??
     config?.connector?.connector.info?.displayName ??
     connectorSourceName ??
-    'Connector'
+    t('scheduledTriggerUi.connector', 'Connector')
   );
 }
 
 function buildProjectScheduledTriggerFilters(
   data: ProjectScheduledTrigger[],
-  connectors: ConnectorListItem[]
+  connectors: ConnectorListItem[],
+  t: TFunction
 ): FilterConfigItem<ProjectScheduledTriggerFilterKey>[] {
-  const filterAccessors = buildProjectScheduledTriggerFilterAccessors(connectors);
+  const filterAccessors = buildProjectScheduledTriggerFilterAccessors(connectors, t);
   const userLabelMapper = buildProjectTableUserLabelMapper(
     data.map(trigger => trigger.createdByUser)
   );
@@ -103,14 +108,14 @@ function buildProjectScheduledTriggerFilters(
   return [
     {
       id: 'dataMart',
-      label: 'Data Mart',
+      label: t('search.labelDataMart'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, filterAccessors.dataMart),
     },
     {
       id: 'triggerType',
-      label: 'Trigger Type',
+      label: t('projectDataMartPages.triggerTypeLabel'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, filterAccessors.triggerType, {
@@ -119,23 +124,24 @@ function buildProjectScheduledTriggerFilters(
     },
     {
       id: 'runTarget',
-      label: 'Run Target',
+      label: t('projectDataMartPages.runTargetLabel'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: collectOptionsFromData(data, filterAccessors.runTarget),
     },
     {
       id: 'triggerStatus',
-      label: 'Trigger Status',
+      label: t('projectDataMartPages.triggerStatusLabel'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, filterAccessors.triggerStatus, {
-        labelMapper: value => (value === 'true' ? 'Enabled' : 'Disabled'),
+        labelMapper: value =>
+          value === 'true' ? t('common.active') : t('projectDataMartPages.disabled'),
       }),
     },
     {
       id: 'createdBy',
-      label: 'Created By',
+      label: t('common.createdBy'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: collectOptionsFromData(data, filterAccessors.createdBy, {
@@ -146,6 +152,7 @@ function buildProjectScheduledTriggerFilters(
 }
 
 function DataMartSchedulesPageContent() {
+  const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
   const { scope } = useProjectRoute();
   const { connectors, fetchAvailableConnectors } = useConnector();
@@ -163,11 +170,14 @@ function DataMartSchedulesPageContent() {
       const response = await scheduledTriggerService.getProjectScheduledTriggers();
       setTriggers(ScheduledTriggerMapper.mapProjectFromDtoList(response));
     } catch (caught) {
-      setError(extractApiError(caught).message ?? 'Failed to fetch Data Mart triggers');
+      setError(
+        extractApiError(caught).message ??
+          t('projectDataMartPages.loadTriggersFailed', 'Failed to fetch Data Mart triggers')
+      );
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     void loadTriggers();
@@ -194,13 +204,47 @@ function DataMartSchedulesPageContent() {
   );
 
   const filterAccessors = useMemo(
-    () => buildProjectScheduledTriggerFilterAccessors(connectors),
-    [connectors]
+    () => buildProjectScheduledTriggerFilterAccessors(connectors, t),
+    [connectors, t]
   );
 
   const filtersConfig = useMemo(
-    () => buildProjectScheduledTriggerFilters(triggers, connectors),
-    [connectors, triggers]
+    () => buildProjectScheduledTriggerFilters(triggers, connectors, t),
+    [connectors, t, triggers]
+  );
+
+  const translatedColumnLabels = useMemo(
+    () => ({
+      [ScheduledTriggerColumnKey.TYPE]: t(
+        'scheduledTriggerUi.columns.triggerType',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TYPE]
+      ),
+      [ScheduledTriggerColumnKey.TRIGGER_CONFIG]: t(
+        'scheduledTriggerUi.columns.runTarget',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG]
+      ),
+      [ScheduledTriggerColumnKey.CRON_EXPRESSION]: t(
+        'scheduledTriggerUi.columns.schedule',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION]
+      ),
+      [ScheduledTriggerColumnKey.NEXT_RUN]: t(
+        'scheduledTriggerUi.columns.nextRun',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN]
+      ),
+      [ScheduledTriggerColumnKey.LAST_RUN]: t(
+        'scheduledTriggerUi.columns.lastRun',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.LAST_RUN]
+      ),
+      [ScheduledTriggerColumnKey.IS_ACTIVE]: t(
+        'scheduledTriggerUi.columns.triggerStatus',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE]
+      ),
+      [ScheduledTriggerColumnKey.CREATED_BY]: t(
+        'scheduledTriggerUi.columns.createdBy',
+        ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CREATED_BY]
+      ),
+    }),
+    [t]
   );
 
   const { appliedState, apply, clear } = usePersistentFilters<ProjectScheduledTriggerFilterKey>({
@@ -226,14 +270,14 @@ function DataMartSchedulesPageContent() {
         matchesProjectTableSearch(searchQuery, [
           trigger.dataMart.title,
           getScheduledTriggerTypeLabel(trigger.type),
-          getScheduledTriggerRunTargetTitle(trigger, connectors),
+          getScheduledTriggerRunTargetTitle(trigger, connectors, t),
           trigger.cronExpression,
-          trigger.isActive ? 'Enabled' : 'Disabled',
+          trigger.isActive ? t('common.active', 'Active') : t('projectDataMartPages.disabled', 'Disabled'),
           trigger.createdByUser?.fullName,
           trigger.createdByUser?.email,
         ])
       ),
-    [connectors, filteredTriggers, searchQuery]
+    [connectors, filteredTriggers, searchQuery, t]
   );
 
   const columns = useMemo<ColumnDef<ProjectScheduledTrigger>[]>(
@@ -241,9 +285,11 @@ function DataMartSchedulesPageContent() {
       {
         id: 'dataMart',
         accessorFn: row => row.dataMart.title,
-        meta: { title: 'Data Mart' },
+        meta: { title: t('search.labelDataMart') },
         size: 260,
-        header: ({ column }) => <SortableHeader column={column}>Data Mart</SortableHeader>,
+        header: ({ column }) => (
+          <SortableHeader column={column}>{t('search.labelDataMart')}</SortableHeader>
+        ),
         cell: ({ row }) => (
           <ProjectDataMartTitleLink
             to={scope(`/data-marts/${row.original.dataMart.id}/triggers`)}
@@ -253,11 +299,11 @@ function DataMartSchedulesPageContent() {
       },
       {
         accessorKey: ScheduledTriggerColumnKey.TYPE,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TYPE] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.TYPE] },
         size: 170,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TYPE]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.TYPE]}
           </SortableHeader>
         ),
         cell: ({ row }) => {
@@ -267,11 +313,11 @@ function DataMartSchedulesPageContent() {
       },
       {
         accessorKey: ScheduledTriggerColumnKey.TRIGGER_CONFIG,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG] },
         size: 220,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.TRIGGER_CONFIG]}
           </SortableHeader>
         ),
         cell: ({ row }) => (
@@ -282,11 +328,11 @@ function DataMartSchedulesPageContent() {
       },
       {
         accessorKey: ScheduledTriggerColumnKey.CRON_EXPRESSION,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION] },
         size: 190,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.CRON_EXPRESSION]}
           </SortableHeader>
         ),
         cell: ({ row }) => (
@@ -299,26 +345,30 @@ function DataMartSchedulesPageContent() {
       },
       {
         accessorKey: ScheduledTriggerColumnKey.NEXT_RUN,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN] },
         size: 160,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.NEXT_RUN]}
           </SortableHeader>
         ),
         cell: ({ row }) => (
           <div className='text-muted-foreground text-sm'>
-            {row.original.nextRun ? <RelativeTime date={row.original.nextRun} /> : 'Not scheduled'}
+            {row.original.nextRun ? (
+              <RelativeTime date={row.original.nextRun} />
+            ) : (
+              t('projectDataMartPages.notScheduled')
+            )}
           </div>
         ),
       },
       {
         accessorKey: ScheduledTriggerColumnKey.LAST_RUN,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.LAST_RUN] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.LAST_RUN] },
         size: 150,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.LAST_RUN]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.LAST_RUN]}
           </SortableHeader>
         ),
         cell: ({ row }) => (
@@ -326,18 +376,20 @@ function DataMartSchedulesPageContent() {
             {row.original.lastRun ? (
               <RelativeTime date={row.original.lastRun} />
             ) : (
-              <span className='text-muted-foreground text-sm'>Never run</span>
+              <span className='text-muted-foreground text-sm'>
+                {t('projectDataMartPages.neverRun')}
+              </span>
             )}
           </div>
         ),
       },
       {
         accessorKey: ScheduledTriggerColumnKey.IS_ACTIVE,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE] },
         size: 150,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.IS_ACTIVE]}
           </SortableHeader>
         ),
         cell: ({ row }) => (
@@ -346,18 +398,18 @@ function DataMartSchedulesPageContent() {
             variant='ghost'
             showIcon={false}
           >
-            {row.original.isActive ? 'Enabled' : 'Disabled'}
+            {row.original.isActive ? t('common.active') : t('projectDataMartPages.disabled')}
           </StatusLabel>
         ),
       },
       {
         id: ScheduledTriggerColumnKey.CREATED_BY,
         accessorFn: row => row.createdByUser?.fullName ?? row.createdByUser?.email,
-        meta: { title: ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CREATED_BY] },
+        meta: { title: translatedColumnLabels[ScheduledTriggerColumnKey.CREATED_BY] },
         size: 180,
         header: ({ column }) => (
           <SortableHeader column={column}>
-            {ScheduledTriggerColumnLabels[ScheduledTriggerColumnKey.CREATED_BY]}
+            {translatedColumnLabels[ScheduledTriggerColumnKey.CREATED_BY]}
           </SortableHeader>
         ),
         cell: ({ row }) => {
@@ -387,7 +439,7 @@ function DataMartSchedulesPageContent() {
         ),
       },
     ],
-    [handleDeleteTrigger, scope]
+    [handleDeleteTrigger, scope, t, translatedColumnLabels]
   );
 
   const { table } = useBaseTable<ProjectScheduledTrigger>({
@@ -402,7 +454,7 @@ function DataMartSchedulesPageContent() {
   return (
     <div className='dm-page' data-testid='dataMartSchedulesPage'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>Triggers</h1>
+        <h1 className='dm-page-header-title'>{t('projectDataMartPages.triggersTitle')}</h1>
       </header>
 
       <div className='dm-page-content'>
@@ -419,7 +471,7 @@ function DataMartSchedulesPageContent() {
             <BaseTable
               tableId={PROJECT_SCHEDULED_TRIGGERS_TABLE_ID}
               table={table}
-              ariaLabel='Project Data Mart Triggers'
+              ariaLabel={t('projectDataMartPages.triggersTitle')}
               paginationProps={{ displaySelected: false }}
               renderToolbarLeft={() => (
                 <>
@@ -438,7 +490,7 @@ function DataMartSchedulesPageContent() {
                   role='status'
                   aria-live='polite'
                 >
-                  No triggers found for accessible Data Marts
+                  {t('projectDataMartPages.noTriggersForAccessible')}
                 </div>
               )}
               onRowClick={row => {

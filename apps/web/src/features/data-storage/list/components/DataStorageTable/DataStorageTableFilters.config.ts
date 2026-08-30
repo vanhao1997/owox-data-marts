@@ -12,7 +12,12 @@ import {
 } from '../../../../../shared/components/TableFilters/availability-filter.utils';
 import { DataStorageTypeModel } from '../../../shared/types/data-storage-type.model';
 import type { DataStorageTableItem } from './columns';
-import { DataStorageColumnKey, dataStorageColumnLabels } from './columns';
+import { DataStorageColumnKey } from './columns';
+import {
+  dataStorageColumnLabels as defaultDataStorageColumnLabels,
+  getDataStorageColumnLabels,
+} from './columns/columnLabels';
+import type { TFunction } from 'i18next';
 
 /* ---------------------------------------------------------------------------
  * Filter keys
@@ -52,8 +57,12 @@ export const dataStorageFilterAccessors: FilterAccessors<
  * ------------------------------------------------------------------------ */
 
 export function buildDataStorageTableFilters(
-  data: DataStorageTableItem[]
+  data: DataStorageTableItem[],
+  t?: TFunction
 ): FilterConfigItem<DataStorageFilterKey>[] {
+  const dataStorageColumnLabels = t
+    ? getDataStorageColumnLabels(t)
+    : defaultDataStorageColumnLabels;
   /* -----------------------------
    * Storage title options
    * --------------------------- */
@@ -152,7 +161,7 @@ export function buildDataStorageTableFilters(
     },
     buildAvailabilityFilter<DataStorageFilterKey>({
       id: AdditionalFilterKeys.AVAILABILITY,
-      firstLabel: 'Use',
+      firstLabel: t?.('storageTableColumns.use', 'Use') ?? 'Use',
     }),
   ];
 }

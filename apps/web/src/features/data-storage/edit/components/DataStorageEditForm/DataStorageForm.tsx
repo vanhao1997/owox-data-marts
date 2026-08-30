@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from '@owox/ui/components/select';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import type { CredentialIdentity } from '../../../../../shared/types/credential-identity';
 import { OwnersSection } from '../../../../../shared/components/OwnersSection/OwnersSection';
@@ -90,6 +91,7 @@ export function DataStorageForm({
   onCancel,
   onDirtyChange,
 }: DataStorageFormProps) {
+  const { t } = useTranslation();
   // The resolver reads this ref so credential validation is bypassed while
   // the user copies credentials from another storage (fields are hidden then).
   const copySourceSelectedRef = useRef(false);
@@ -230,7 +232,7 @@ export function DataStorageForm({
       >
         <FormLayout>
           <FormSection
-            title='General'
+            title={t('formCommon.general', 'General')}
             defaultOpen={!isLegacyGoogleBigQuery}
             fields={['title', 'type']}
           >
@@ -244,11 +246,11 @@ export function DataStorageForm({
               name='title'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='Name the storage to clarify its purpose'>Title</FormLabel>
+                  <FormLabel tooltip={t('formCommon.titleTooltipStorage', 'Name the storage to clarify its purpose')}>{t('common.title', 'Title')}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder='Storage title'
+                      placeholder={t('formCommon.storageTitlePlaceholder', 'Storage title')}
                       disabled={isLegacyGoogleBigQuery}
                     />
                   </FormControl>
@@ -266,8 +268,8 @@ export function DataStorageForm({
               name='type'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel tooltip='The selected source will be used to process data in your Data Marts'>
-                    Storage Type
+                  <FormLabel tooltip='Nguồn đã chọn sẽ được dùng để xử lý dữ liệu trong các Data Mart của bạn'>
+                    {t('formCommon.storageType', 'Storage Type')}
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -276,7 +278,7 @@ export function DataStorageForm({
                       disabled={!!initialData}
                     >
                       <SelectTrigger className='w-full'>
-                        <SelectValue placeholder='Select a storage type' />
+                        <SelectValue placeholder={t('formCommon.selectStorageType', 'Select a storage type')} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
@@ -338,21 +340,21 @@ export function DataStorageForm({
             {selectedType === DataStorageType.DATABRICKS && <DatabricksFields form={form} />}
           </CopyCredentialContext.Provider>
 
-          <FormSection title='Ownership' defaultOpen={false} name='storage-ownership'>
+          <FormSection title={t('formCommon.ownership', 'Ownership')} defaultOpen={false} name='storage-ownership'>
             <FormItem>
-              <FormLabel tooltip='Team members responsible for this storage'>Owners</FormLabel>
+              <FormLabel tooltip='Các thành viên phụ trách kho lưu trữ này'>{t('formCommon.owners', 'Owners')}</FormLabel>
               <OwnersSection ownerUsers={ownerUsers} onSave={handleOwnersChange} />
               <FormDescription>
                 <Accordion variant='common' type='single' collapsible>
                   <AccordionItem value='storage-owners-help'>
-                    <AccordionTrigger>What is a Storage Owner?</AccordionTrigger>
+                    <AccordionTrigger>Chủ sở hữu kho lưu trữ là gì?</AccordionTrigger>
                     <AccordionContent>
                       <p>
-                        Storage Owner is direct technical ownership of this Storage. When the
-                        owner&apos;s role is Technical User or Project Admin, they may view, edit,
-                        delete, configure Sharing, and copy credentials from this Storage —
-                        regardless of Sharing settings. Assigning Owner to a Business User stores
-                        the assignment but grants no maintenance permissions until the role changes.
+                        Chủ sở hữu kho lưu trữ là quyền sở hữu kỹ thuật trực tiếp của kho lưu trữ
+                        này. Khi vai trò của chủ sở hữu là Technical User hoặc Project Admin, họ có
+                        thể xem, sửa, xóa, cấu hình Sharing và sao chép thông tin xác thực từ kho
+                        lưu trữ này — bất kể cài đặt Sharing. Gán Owner cho Business User vẫn lưu
+                        lại phân công, nhưng chưa cấp quyền bảo trì cho đến khi vai trò thay đổi.
                       </p>
                     </AccordionContent>
                   </AccordionItem>
@@ -362,10 +364,10 @@ export function DataStorageForm({
           </FormSection>
 
           {storageId && (
-            <FormSection title='Contexts' defaultOpen={false} name='storage-contexts'>
+            <FormSection title={t('formCommon.contexts', 'Contexts')} defaultOpen={false} name='storage-contexts'>
               <FormItem>
-                <FormLabel tooltip='Business domain contexts assigned to this storage'>
-                  Assigned
+                <FormLabel tooltip='Các ngữ cảnh miền nghiệp vụ được gán cho kho lưu trữ này'>
+                  {t('formCommon.assigned', 'Assigned')}
                 </FormLabel>
                 <ContextPicker
                   selectedContextIds={contextIds}
@@ -376,14 +378,14 @@ export function DataStorageForm({
                 <FormDescription>
                   <Accordion variant='common' type='single' collapsible>
                     <AccordionItem value='storage-contexts-help'>
-                      <AccordionTrigger>What are Contexts?</AccordionTrigger>
+                      <AccordionTrigger>Ngữ cảnh là gì?</AccordionTrigger>
                       <AccordionContent>
                         <p>
-                          Contexts are business domains (e.g. Marketing, Finance, Sales) used to
-                          group Storages, Destinations and Data Marts. They also control access: a
-                          member whose role scope is limited to specific contexts will only see
-                          resources assigned to those contexts. Assign one or more contexts to make
-                          this Storage discoverable to the right people.
+                          Ngữ cảnh là các miền nghiệp vụ (ví dụ: Marketing, Finance, Sales) dùng để
+                          nhóm Storages, Destinations và Data Mart. Chúng cũng kiểm soát quyền truy
+                          cập: thành viên chỉ được giới hạn trong một số ngữ cảnh sẽ chỉ thấy các tài
+                          nguyên được gán cho những ngữ cảnh đó. Hãy gán một hoặc nhiều ngữ cảnh để
+                          kho lưu trữ này dễ được đúng người tìm thấy.
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -394,10 +396,10 @@ export function DataStorageForm({
           )}
 
           {initialData?.id && (
-            <FormSection title='Sharing' defaultOpen={false} name='storage-availability'>
+            <FormSection title={t('formCommon.sharing', 'Sharing')} defaultOpen={false} name='storage-availability'>
               <FormItem>
                 <div className='flex items-center justify-between gap-4'>
-                  <FormLabel>Shared for use</FormLabel>
+                  <FormLabel>{t('formCommon.sharedForUse', 'Shared for use')}</FormLabel>
                   <Switch
                     checked={sharingState.availableForUse}
                     onCheckedChange={v => {
@@ -406,19 +408,17 @@ export function DataStorageForm({
                   />
                 </div>
                 <p className='text-muted-foreground text-sm'>
-                  Technical users can use this storage when creating Data Marts
+                  Người dùng kỹ thuật có thể dùng kho lưu trữ này khi tạo Data Mart
                 </p>
                 <FormDescription>
                   <Accordion variant='common' type='single' collapsible>
                     <AccordionItem value='sharing-use-help'>
-                      <AccordionTrigger>
-                        What does &quot;Shared for use&quot; mean?
-                      </AccordionTrigger>
+                      <AccordionTrigger>“Chia sẻ để sử dụng” nghĩa là gì?</AccordionTrigger>
                       <AccordionContent>
                         <p>
-                          When enabled, Technical Users who are not owners can select this storage
-                          when creating new Data Marts. Without this, only storage owners and admins
-                          can use it.
+                          Khi bật, Technical User không phải chủ sở hữu vẫn có thể chọn kho lưu trữ
+                          này khi tạo Data Mart mới. Nếu tắt, chỉ chủ sở hữu kho lưu trữ và quản trị
+                          viên mới dùng được.
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -427,7 +427,7 @@ export function DataStorageForm({
               </FormItem>
               <FormItem>
                 <div className='flex items-center justify-between gap-4'>
-                  <FormLabel>Shared for maintenance</FormLabel>
+                  <FormLabel>{t('formCommon.sharedForMaintenance', 'Shared for maintenance')}</FormLabel>
                   <Switch
                     checked={sharingState.availableForMaintenance}
                     onCheckedChange={v => {
@@ -436,19 +436,18 @@ export function DataStorageForm({
                   />
                 </div>
                 <p className='text-muted-foreground text-sm'>
-                  Project members with access can copy credentials, edit, and delete this storage
+                  Thành viên dự án có quyền truy cập có thể sao chép thông tin xác thực, sửa và xóa
+                  kho lưu trữ này
                 </p>
                 <FormDescription>
                   <Accordion variant='common' type='single' collapsible>
                     <AccordionItem value='sharing-maintenance-help'>
-                      <AccordionTrigger>
-                        What does &quot;Shared for maintenance&quot; mean?
-                      </AccordionTrigger>
+                      <AccordionTrigger>“Chia sẻ để bảo trì” nghĩa là gì?</AccordionTrigger>
                       <AccordionContent>
                         <p>
-                          When enabled, project members can copy credentials from this storage, edit
-                          its configuration, and delete it. Without this, only owners and admins can
-                          perform these actions.
+                          Khi bật, thành viên dự án có thể sao chép thông tin xác thực từ kho lưu
+                          trữ này, sửa cấu hình và xóa nó. Nếu tắt, chỉ chủ sở hữu và quản trị viên mới
+                          thực hiện được các thao tác này.
                         </p>
                       </AccordionContent>
                     </AccordionItem>
@@ -459,21 +458,21 @@ export function DataStorageForm({
           )}
 
           {initialData?.createdAt && (
-            <FormSection title='Details' defaultOpen={false} name='storage-details'>
+            <FormSection title={t('formCommon.details', 'Details')} defaultOpen={false} name='storage-details'>
               <FormItem>
-                <FormLabel>Created By</FormLabel>
+                <FormLabel>{t('formCommon.createdBy', 'Created By')}</FormLabel>
                 <div className='text-sm'>
                   {initialData.createdByUser ? (
                     <UserReference userProjection={initialData.createdByUser} variant='full' />
                   ) : (
-                    <span className='text-muted-foreground'>Unknown</span>
+                    <span className='text-muted-foreground'>{t('formCommon.unknown', 'Unknown')}</span>
                   )}
                 </div>
               </FormItem>
               <FormItem>
-                <FormLabel>Created At</FormLabel>
+                <FormLabel>{t('formCommon.createdAt', 'Created At')}</FormLabel>
                 <div className='text-muted-foreground text-sm'>
-                  {new Date(initialData.createdAt).toLocaleDateString('en-US', {
+                  {new Date(initialData.createdAt).toLocaleDateString('vi-VN', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
@@ -488,22 +487,22 @@ export function DataStorageForm({
             variant='default'
             type='submit'
             className='w-full'
-            aria-label='Save'
+            aria-label={t('formCommon.save', 'Save')}
             disabled={
               (!isDirty && !selectedSource && !ownersDirty && !sharingDirty && !contextsDirty) ||
               isSubmitting
             }
           >
-            Save
+            {t('formCommon.save', 'Save')}
           </Button>
           <Button
             variant='outline'
             type='button'
             onClick={onCancel}
             className='w-full'
-            aria-label='Cancel'
+            aria-label={t('formCommon.cancel', 'Cancel')}
           >
-            Cancel
+            {t('formCommon.cancel', 'Cancel')}
           </Button>
         </FormActions>
       </AppForm>

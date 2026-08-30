@@ -13,6 +13,7 @@ import {
   isGoogleSheetsDestinationConfig,
   type DataMartReport,
 } from '../model/types/data-mart-report';
+import { useTranslation } from 'react-i18next';
 
 interface ReportOpenDocumentActionProps {
   report: DataMartReport;
@@ -20,6 +21,7 @@ interface ReportOpenDocumentActionProps {
 }
 
 export function ReportOpenDocumentAction({ report, className }: ReportOpenDocumentActionProps) {
+  const { t } = useTranslation();
   if (report.dataDestination.type !== DataDestinationType.GOOGLE_SHEETS) {
     return null;
   }
@@ -44,7 +46,7 @@ export function ReportOpenDocumentAction({ report, className }: ReportOpenDocume
               'dm-card-table-body-row-actionbtn inline-flex !h-6 !w-6 items-center justify-center rounded-md',
               className
             )}
-            aria-label={`Open document: ${report.title}`}
+            aria-label={`${t('reportActions.openDocument', 'Open document')}: ${report.title}`}
             target='_blank'
             rel='noopener noreferrer'
             onClick={e => {
@@ -56,7 +58,7 @@ export function ReportOpenDocumentAction({ report, className }: ReportOpenDocume
         </TooltipTrigger>
 
         <TooltipContent side='bottom' role='tooltip'>
-          Open document
+          {t('reportActions.openDocument', 'Open document')}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

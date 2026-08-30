@@ -16,7 +16,11 @@ import type { ConnectorListItem } from '../../../../../connectors/shared/model/t
 import { DataMartColumnKey } from '../columns/columnKeys';
 import { DataMartStatus } from '../../../../shared/enums/data-mart-status.enum';
 import { DataMartStatusModel } from '../../../../shared/types/data-mart-status.model';
-import { dataMartColumnLabels } from '../columns/columnLabels';
+import {
+  dataMartColumnLabels as defaultDataMartColumnLabels,
+  getDataMartColumnLabels,
+} from '../columns/columnLabels';
+import type { TFunction } from 'i18next';
 
 /* ---------------------------------------------------------------------------
  * Filter keys
@@ -70,8 +74,13 @@ export const dataMartsFilterAccessors: FilterAccessors<DataMartFilterKey, DataMa
 
 export function buildDataMartsTableFilters(
   data: DataMartListItem[],
-  connectors: ConnectorListItem[] = []
+  connectors: ConnectorListItem[] = [],
+  t?: TFunction
 ): FilterConfigItem<DataMartFilterKey>[] {
+  const translate = t ?? ((key: string, defaultValue?: string) => defaultValue ?? key);
+  const dataMartColumnLabels = t
+    ? getDataMartColumnLabels(t)
+    : defaultDataMartColumnLabels;
   /* -----------------------------
    * Status options
    * --------------------------- */
@@ -82,9 +91,9 @@ export function buildDataMartsTableFilters(
       labelMapper: value => {
         switch (value as DataMartStatus) {
           case DataMartStatus.DRAFT:
-            return DataMartStatusModel.getInfo(DataMartStatus.DRAFT).displayName;
+            return DataMartStatusModel.getInfo(DataMartStatus.DRAFT, t).displayName;
           case DataMartStatus.PUBLISHED:
-            return DataMartStatusModel.getInfo(DataMartStatus.PUBLISHED).displayName;
+            return DataMartStatusModel.getInfo(DataMartStatus.PUBLISHED, t).displayName;
           default:
             return value;
         }
@@ -130,7 +139,7 @@ export function buildDataMartsTableFilters(
     dataMartsFilterAccessors[DataMartColumnKey.DEFINITION_TYPE],
     {
       labelMapper: value => {
-        const info = DataMartDefinitionTypeModel.getInfo(value as never);
+        const info = DataMartDefinitionTypeModel.getInfo(value as never, t);
         return info.displayName;
       },
     }
@@ -146,7 +155,10 @@ export function buildDataMartsTableFilters(
     if (option.value === 'OTHER') {
       return {
         value: 'OTHER',
-        label: 'Other (not connector)',
+        label: translate(
+          'dataMartTableColumns.otherNotConnector',
+          'Other (not connector)'
+        ),
       };
     }
 
@@ -204,21 +216,21 @@ export function buildDataMartsTableFilters(
     },
     {
       id: DataMartColumnKey.DEFINITION_TYPE,
-      label: 'Definition',
+      label: translate('dataMartTableColumns.definition', 'Definition'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: definitionTypeOptions,
     },
     {
       id: DataMartColumnKey.STORAGE_TYPE,
-      label: 'Storage type',
+      label: translate('dataMartTableColumns.storageType', 'Storage type'),
       dataType: 'enum',
       operators: ['eq', 'neq'],
       options: storageTypeOptions,
     },
     {
       id: AdditionalFilterKeys.STORAGE_TITLE,
-      label: 'Storage title',
+      label: translate('dataMartTableColumns.storageTitle', 'Storage title'),
       dataType: 'string',
       operators: ['contains', 'not_contains', 'eq', 'neq'],
       options: storageTitleOptions,
@@ -274,10 +286,16 @@ export function buildDataMartsTableFilters(
     },
     buildAvailabilityFilter<DataMartFilterKey>({
       id: AdditionalFilterKeys.AVAILABILITY,
-      firstLabel: 'Shared for reporting',
-      maintenanceLabel: 'Shared for maintenance',
-      bothLabel: 'Shared for reporting and maintenance',
-      noneLabel: 'Not shared',
+      firstLabel: translate('dataMartTableColumns.sharedForReporting', 'Shared for reporting'),
+      maintenanceLabel: translate(
+        'dataMartTableColumns.sharedForMaintenance',
+        'Shared for maintenance'
+      ),
+      bothLabel: translate(
+        'dataMartTableColumns.sharedForReportingAndMaintenance',
+        'Shared for reporting and maintenance'
+      ),
+      noneLabel: translate('dataMartTableColumns.notShared', 'Not shared'),
     }),
   ];
 }

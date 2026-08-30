@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Row } from '@tanstack/react-table';
 import { BaseTable, TableCTAButton } from '../../../../shared/components/Table';
 import { useBaseTable } from '../../../../shared/hooks';
@@ -13,7 +14,8 @@ interface LicenseKeysTableProps {
 }
 
 export function LicenseKeysTable({ keys, onCreateKey, onEdit, onRevoke }: LicenseKeysTableProps) {
-  const columns = useMemo(() => getLicenseKeysColumns({ onEdit, onRevoke }), [onEdit, onRevoke]);
+  const { t } = useTranslation();
+  const columns = useMemo(() => getLicenseKeysColumns({ onEdit, onRevoke, t }), [onEdit, onRevoke, t]);
 
   const { table } = useBaseTable<LicenseKey>({
     data: keys,
@@ -49,7 +51,7 @@ export function LicenseKeysTable({ keys, onCreateKey, onEdit, onRevoke }: Licens
         renderToolbarLeft={() => <div />}
         renderToolbarRight={
           onCreateKey
-            ? () => <TableCTAButton onClick={onCreateKey}>Create license key</TableCTAButton>
+            ? () => <TableCTAButton onClick={onCreateKey}>{t('licenseKeysPage.createButton')}</TableCTAButton>
             : () => <div />
         }
       />

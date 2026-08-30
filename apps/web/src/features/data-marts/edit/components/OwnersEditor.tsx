@@ -16,6 +16,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/too
 import { useFlags } from '../../../../app/store/hooks/useFlags';
 import { checkVisible } from '../../../../utils/check-visible';
 import { getRoleDisplayName } from '../../../idp/utils/role-display-name';
+import { useTranslation } from 'react-i18next';
 
 interface OwnersEditorProps {
   ownerUsers: UserProjectionDto[];
@@ -24,6 +25,7 @@ interface OwnersEditorProps {
 }
 
 export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProps) {
+  const { t } = useTranslation();
   const { members, isLoading: isMembersLoading } = useProjectMembers(projectId);
   const { flags } = useFlags();
   const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +112,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
               <TooltipTrigger asChild>
                 <AlertTriangle className='h-4 w-4 text-yellow-500' />
               </TooltipTrigger>
-              <TooltipContent>This user is no longer a member of the project</TooltipContent>
+              <TooltipContent>{t('owners.userNoLongerMember', 'This user is no longer a member of the project')}</TooltipContent>
             </Tooltip>
           )}
         </div>
@@ -129,7 +131,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
               <TooltipTrigger asChild>
                 <AlertTriangle className='h-4 w-4 text-yellow-500' />
               </TooltipTrigger>
-              <TooltipContent>Some owners are no longer members of the project</TooltipContent>
+              <TooltipContent>{t('owners.someNoLongerMembers', 'Some owners are no longer members of the project')}</TooltipContent>
             </Tooltip>
           )}
         </div>
@@ -153,12 +155,12 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
               className='text-muted-foreground hover:text-foreground rounded-full'
             >
               <Plus className='size-4' />
-              Add owner
+              {t('owners.addOwner', 'Add owner')}
             </Button>
           )}
         </PopoverTrigger>
         <PopoverContent align='start' className='w-96 p-4'>
-          <div className='mb-3 border-b pb-3 text-sm font-medium'>Owners</div>
+          <div className='mb-3 border-b pb-3 text-sm font-medium'>{t('owners.title', 'Owners')}</div>
           {isMembersLoading ? (
             <div className='space-y-2'>
               {[1, 2, 3].map(i => (
@@ -171,7 +173,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
                 <div className='relative mb-2'>
                   <Search className='text-muted-foreground absolute top-1/2 left-2.5 h-3.5 w-3.5 -translate-y-1/2' />
                   <Input
-                    placeholder='Search by name or email...'
+                    placeholder={t('owners.search', 'Search by name or email...')}
                     value={searchQuery}
                     onChange={e => {
                       setSearchQuery(e.target.value);
@@ -191,7 +193,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
                 ))}
                 {filteredActiveMembers.length === 0 && searchQuery.trim() !== '' && (
                   <div className='text-muted-foreground py-2 text-center text-sm'>
-                    No members match &quot;{searchQuery}&quot;
+                    {t('owners.noMembersMatch', 'No members match "{{query}}"', { query: searchQuery })}
                   </div>
                 )}
                 {outboundMembers.map((member: ProjectMember) => (
@@ -209,7 +211,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
                   unknownOwners.length === 0 &&
                   searchQuery.trim() === '' && (
                     <div className='text-muted-foreground py-2 text-center text-sm'>
-                      No project members found
+                      {t('owners.noMembers', 'No project members found')}
                     </div>
                   )}
               </div>
@@ -225,7 +227,7 @@ export function OwnersEditor({ ownerUsers, onSave, projectId }: OwnersEditorProp
                   className='text-muted-foreground hover:text-foreground hover:bg-muted/80 dark:hover:bg-muted/20 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors'
                 >
                   <Plus className='size-4' />
-                  Add members to project
+                  {t('owners.addMembers', 'Add members to project')}
                 </a>
               </div>
             </div>
@@ -285,6 +287,7 @@ function OutboundMemberCheckbox({
   member: ProjectMember;
   onToggle: (userId: string, checked: boolean) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -315,7 +318,7 @@ function OutboundMemberCheckbox({
           </span>
         </div>
       </TooltipTrigger>
-      <TooltipContent>This user is no longer a member of the project</TooltipContent>
+      <TooltipContent>{t('owners.userNoLongerMember', 'This user is no longer a member of the project')}</TooltipContent>
     </Tooltip>
   );
 }
@@ -327,6 +330,7 @@ function OutboundOwnerRow({
   user: UserProjectionDto;
   onToggle: (userId: string, checked: boolean) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -340,7 +344,7 @@ function OutboundOwnerRow({
           {user.avatar ? (
             <img
               src={user.avatar}
-              alt={user.fullName ?? 'Removed user'}
+              alt={user.fullName ?? t('owners.removedUser', 'Removed user')}
               className='h-6 w-6 rounded-full object-cover'
             />
           ) : (
@@ -349,12 +353,12 @@ function OutboundOwnerRow({
             </div>
           )}
           <span className='text-muted-foreground flex items-center gap-1 text-sm'>
-            {user.fullName ?? user.email ?? 'Removed user'}
+            {user.fullName ?? user.email ?? t('owners.removedUser', 'Removed user')}
             <AlertTriangle className='h-3.5 w-3.5 shrink-0 text-yellow-500' />
           </span>
         </div>
       </TooltipTrigger>
-      <TooltipContent>This user is no longer a member of the project</TooltipContent>
+      <TooltipContent>{t('owners.userNoLongerMember', 'This user is no longer a member of the project')}</TooltipContent>
     </Tooltip>
   );
 }

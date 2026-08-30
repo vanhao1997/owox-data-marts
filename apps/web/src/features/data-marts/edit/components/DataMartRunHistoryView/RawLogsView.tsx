@@ -3,6 +3,7 @@ import { AlertCircle, AlertTriangle, Info } from 'lucide-react';
 import { CopyButton, CopyButtonVariant } from '@owox/ui/components/common/copy-button';
 import { useClipboard } from '../../../../../hooks/useClipboard';
 import { isPersistedWarning } from './utils';
+import { useTranslation } from 'react-i18next';
 
 interface RawLogsViewProps {
   logs: string[];
@@ -65,6 +66,7 @@ function RawLogSection({
 }
 
 export function RawLogsView({ logs, errors }: RawLogsViewProps) {
+  const { t } = useTranslation();
   const { copiedSection, handleCopy } = useClipboard();
 
   const handleStopPropagation = (e: React.MouseEvent) => {
@@ -80,7 +82,7 @@ export function RawLogsView({ logs, errors }: RawLogsViewProps) {
   return (
     <div className='border-border space-y-4 rounded-lg border p-4' onClick={handleStopPropagation}>
       <RawLogSection
-        title='Error Output'
+        title={t('runHistory.errorOutput', 'Error Output')}
         icon={<AlertCircle className='h-4 w-4 text-red-500' />}
         lines={failures}
         section='errors'
@@ -92,7 +94,7 @@ export function RawLogsView({ logs, errors }: RawLogsViewProps) {
         onCopy={handleCopy}
       />
       <RawLogSection
-        title='Warnings'
+        title={t('runHistory.warnings', 'Warnings')}
         icon={<AlertTriangle className='h-4 w-4 text-yellow-500' />}
         lines={warnings}
         section='warnings'
@@ -103,7 +105,7 @@ export function RawLogsView({ logs, errors }: RawLogsViewProps) {
         onCopy={handleCopy}
       />
       <RawLogSection
-        title='Standard Output'
+        title={t('runHistory.standardOutput', 'Standard Output')}
         icon={<Info className='h-4 w-4 text-blue-500' />}
         lines={logs}
         section='logs'

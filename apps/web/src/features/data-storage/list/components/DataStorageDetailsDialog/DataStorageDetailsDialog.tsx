@@ -8,6 +8,7 @@ import {
 } from '@owox/ui/components/dialog';
 import { DataStorageDetails } from '../../../shared';
 import { useDataStorage } from '../../../shared/model/hooks/useDataStorage';
+import { useTranslation } from 'react-i18next';
 
 interface DataStorageDetailsDialogProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface DataStorageDetailsDialogProps {
 }
 
 export function DataStorageDetailsDialog({ isOpen, onClose, id }: DataStorageDetailsDialogProps) {
+  const { t } = useTranslation();
   const { getDataStorageById, currentDataStorage, loading, clearCurrentDataStorage } =
     useDataStorage();
 
@@ -47,8 +49,10 @@ export function DataStorageDetailsDialog({ isOpen, onClose, id }: DataStorageDet
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Storage Details</DialogTitle>
-          <DialogDescription>View detailed information about this storage.</DialogDescription>
+          <DialogTitle>{t('dataStorageDetails.title', 'Storage Details')}</DialogTitle>
+          <DialogDescription>
+            {t('dataStorageDetails.description', 'View detailed information about this storage.')}
+          </DialogDescription>
         </DialogHeader>
         <div className='py-4'>
           <DataStorageDetails dataStorage={currentDataStorage} isLoading={loading} />

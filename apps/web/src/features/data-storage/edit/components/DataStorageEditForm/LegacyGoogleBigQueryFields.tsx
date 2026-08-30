@@ -37,8 +37,8 @@ const LEGACY_AUTODETECT_LOCATION = 'AUTODETECT';
 const legacyGoogleBigQueryLocationOptions = [
   {
     value: LEGACY_AUTODETECT_LOCATION,
-    label: 'Auto-detect location',
-    group: 'General',
+    label: 'Tự phát hiện vị trí',
+    group: 'Chung',
   },
   ...googleBigQueryLocationOptions,
 ];
@@ -134,14 +134,14 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
   return (
     <>
       {/* Connection Settings */}
-      <FormSection title='Connection Settings'>
+      <FormSection title='Cài đặt kết nối'>
         <FormField
           control={form.control}
           name='config.projectId'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='The ID of your Google Cloud project associated with this storage'>
-                Project ID
+              <FormLabel tooltip='Mã dự án Google Cloud gắn với kho lưu trữ này'>
+                Mã dự án
               </FormLabel>
               <FormControl>
                 <Input {...field} disabled />
@@ -158,16 +158,16 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
           name='config.location'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Choose the same region where your BigQuery data is stored to ensure queries work correctly or use auto-detect option'>
-                Location
+              <FormLabel tooltip='Chọn cùng khu vực nơi dữ liệu BigQuery đang được lưu để truy vấn hoạt động đúng, hoặc dùng tùy chọn tự phát hiện'>
+                Vị trí
               </FormLabel>
               <FormControl>
                 <Combobox
                   options={legacyGoogleBigQueryLocationOptions}
                   value={field.value}
                   onValueChange={field.onChange}
-                  placeholder='Select a location'
-                  emptyMessage='No locations found'
+                  placeholder='Chọn vị trí'
+                  emptyMessage='Không tìm thấy vị trí nào'
                   className='w-full'
                 />
               </FormControl>
@@ -199,7 +199,7 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
             {isOAuthAvailable && (
               <FormItem>
                 <div className='flex items-center justify-between'>
-                  <FormLabel>Authentication Method</FormLabel>
+                  <FormLabel>Phương thức xác thực</FormLabel>
                   <Tabs
                     value={authMethod}
                     onValueChange={v => {
@@ -207,8 +207,8 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
                     }}
                   >
                     <TabsList>
-                      <TabsTrigger value='oauth'>Connect with Google</TabsTrigger>
-                      <TabsTrigger value='service-account'>Service Account JSON</TabsTrigger>
+                      <TabsTrigger value='oauth'>Kết nối với Google</TabsTrigger>
+                      <TabsTrigger value='service-account'>JSON tài khoản dịch vụ</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
@@ -222,8 +222,8 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
                 render={() => (
                   <FormItem>
                     <div className='mb-4 flex items-center justify-between'>
-                      <FormLabel tooltip='Authorize Owox to access your BigQuery datasets'>
-                        Connect with Google OAuth
+                      <FormLabel tooltip='Cho phép Owox truy cập các tập dữ liệu BigQuery của bạn'>
+                        Kết nối bằng Google OAuth
                       </FormLabel>
                     </div>
                     <GoogleOAuthConnectButton
@@ -249,17 +249,17 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
                 render={({ field }) => (
                   <FormItem>
                     <div className='flex items-center justify-between'>
-                      <FormLabel tooltip='Paste a JSON key from a service account that has access to the selected storage provider'>
-                        Service Account
+                      <FormLabel tooltip='Dán khóa JSON từ tài khoản dịch vụ có quyền truy cập vào nhà cung cấp kho lưu trữ đã chọn'>
+                        Tài khoản dịch vụ
                       </FormLabel>
                       {!isEditing && serviceAccountValue && (
-                        <Button variant='ghost' size='sm' onClick={handleEdit} type='button'>
-                          Edit
+                          <Button variant='ghost' size='sm' onClick={handleEdit} type='button'>
+                          Sửa
                         </Button>
                       )}
                       {isEditing && (
-                        <Button variant='ghost' size='sm' onClick={handleCancel} type='button'>
-                          Cancel
+                          <Button variant='ghost' size='sm' onClick={handleCancel} type='button'>
+                          Hủy
                         </Button>
                       )}
                     </div>
@@ -268,11 +268,11 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
                         <FieldWithActions
                           value={serviceAccountLink.email}
                           actions={[
-                            { type: 'copy', tooltip: 'Copy email' },
+                            { type: 'copy', tooltip: 'Sao chép email' },
                             {
                               type: 'external-link',
                               href: serviceAccountLink.url,
-                              tooltip: 'Open details',
+                              tooltip: 'Mở chi tiết',
                             },
                           ]}
                         />
@@ -281,7 +281,7 @@ export const LegacyGoogleBigQueryFields = ({ form }: LegacyGoogleBigQueryFieldsP
                           {...field}
                           className='min-h-[150px] font-mono'
                           rows={8}
-                          placeholder='Paste your service account JSON here or drag & drop the file'
+                          placeholder='Dán JSON tài khoản dịch vụ vào đây hoặc kéo thả tệp'
                           onFileRead={content => {
                             form.setValue('credentials.serviceAccount', content, {
                               shouldDirty: true,

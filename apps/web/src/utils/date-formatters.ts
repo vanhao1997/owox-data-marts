@@ -2,6 +2,17 @@
  * Shared date formatting utilities using Intl.DateTimeFormat
  * for consistent date/time display across the application
  */
+import i18n from '../i18n';
+
+function getDateLocale(): string {
+  const language = String(i18n.resolvedLanguage);
+  if (language.startsWith('vi')) return 'vi-VN';
+  if (language.startsWith('en')) return 'en-US';
+  if (typeof navigator !== 'undefined' && navigator.language) {
+    return navigator.language;
+  }
+  return 'en-US';
+}
 
 /**
  * Format a date as a short, readable string (e.g., "Mar 15, 2024, 02:30 PM")
@@ -19,7 +30,7 @@ export const formatDateShort = (date: Date | string | null): string => {
     if (isNaN(d.getTime())) return '—';
   }
 
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(getDateLocale(), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -43,7 +54,7 @@ export const formatDateOnly = (
     if (isNaN(d.getTime())) return '—';
   }
 
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(getDateLocale(), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -70,7 +81,7 @@ export const formatDateTime = (date: Date | string | null): string => {
 
   // Use Intl.DateTimeFormat to format in browser's timezone
   // This approach is similar to timezone.service.ts
-  const formatter = new Intl.DateTimeFormat('en-US', {
+  const formatter = new Intl.DateTimeFormat(getDateLocale(), {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -122,7 +133,7 @@ export const formatDateTimeWithTimezone = (
   }
 
   try {
-    const formatter = new Intl.DateTimeFormat('en-US', {
+    const formatter = new Intl.DateTimeFormat(getDateLocale(), {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',

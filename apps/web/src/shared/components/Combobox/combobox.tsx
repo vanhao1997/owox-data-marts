@@ -29,6 +29,8 @@ interface ComboboxProps {
   emptyMessage?: string;
   className?: string;
   disabled?: boolean;
+  /** Optional accessible name for the trigger, independent from its visible value. */
+  'aria-label'?: string;
   renderLabel?: (option: ComboboxOption) => React.ReactNode;
 }
 
@@ -45,6 +47,7 @@ export function Combobox({
   emptyMessage = 'No results found.',
   className,
   disabled = false,
+  'aria-label': ariaLabel,
   renderLabel,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
@@ -96,6 +99,7 @@ export function Combobox({
           variant='outline'
           role='combobox'
           aria-expanded={open}
+          aria-label={ariaLabel}
           className={cn('w-full justify-between', !value && 'text-muted-foreground', className)}
           disabled={disabled}
         >

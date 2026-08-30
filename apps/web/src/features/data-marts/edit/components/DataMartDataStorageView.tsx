@@ -15,6 +15,7 @@ import { trackEvent } from '../../../../utils';
 import { useDataStorageHealthStatus } from '../../../data-storage/shared/model/hooks/useDataStorageHealthStatus.ts';
 import { DataStorageHealthStatus } from '../../../data-storage/shared/services/data-storage-health-status.service.ts';
 import { DataStorageHealthStatusView } from '../../../data-storage/shared/components/DataStorageHealthIndicator/DataStorageHealthStatusView.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface DataMartDataStorageViewProps {
   dataStorage: DataStorage;
@@ -41,6 +42,7 @@ export const DataMartDataStorageView = ({
   onDataStorageChange,
   onEditSheetClose,
 }: DataMartDataStorageViewProps) => {
+  const { t } = useTranslation();
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const hasChangesRef = useRef(false);
   const dataStorageInfo = DataStorageTypeModel.getInfo(dataStorage.type);
@@ -72,7 +74,7 @@ export const DataMartDataStorageView = ({
         <div className='flex flex-col gap-2'>
           <div className='flex items-center gap-1 text-sm text-red-500'>
             <AlertTriangle className='h-4 w-4 shrink-0' />
-            <span>Storage configuration is incomplete</span>
+            <span>{t('dataMartDetails.storageIncomplete')}</span>
           </div>
         </div>
       );

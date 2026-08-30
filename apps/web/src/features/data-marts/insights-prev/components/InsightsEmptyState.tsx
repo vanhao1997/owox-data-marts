@@ -1,4 +1,5 @@
 import { Plus, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@owox/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
@@ -12,13 +13,13 @@ import {
 } from '@owox/ui/components/empty';
 import { useInsights } from '../model';
 import { useInsightsPermissions } from '../hooks/useInsightsPermissions';
-import { NO_PERMISSION_MESSAGE } from '../../../../app/permissions';
 
 /**
  * Empty state component for insights.
  * @constructor
  */
 export const InsightsEmptyState = () => {
+  const { t } = useTranslation();
   const { handleCreateInsight, handleCreateInsightWithAi, insightLoading } = useInsights();
   const { canCreate, canGenerateAI } = useInsightsPermissions();
 
@@ -28,10 +29,8 @@ export const InsightsEmptyState = () => {
         <EmptyMedia variant='icon'>
           <Sparkles />
         </EmptyMedia>
-        <EmptyTitle>Create your first Insight</EmptyTitle>
-        <EmptyDescription>
-          Create an Insight to prompt your Data Mart and discover the story behind your data.
-        </EmptyDescription>
+        <EmptyTitle>{t('insightsUi.firstInsightTitle')}</EmptyTitle>
+        <EmptyDescription>{t('insightsUi.firstInsightDescription')}</EmptyDescription>
       </EmptyHeader>
       <EmptyContent className='max-w-xl'>
         <div className='flex w-full items-center justify-center gap-4'>
@@ -43,11 +42,11 @@ export const InsightsEmptyState = () => {
                   disabled={insightLoading || !canGenerateAI}
                 >
                   <Sparkles className='h-4 w-4' />
-                  Generate Insight with AI
+                  {t('insightsUi.generateWithAi')}
                 </Button>
               </div>
             </TooltipTrigger>
-            {!canGenerateAI && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+            {!canGenerateAI && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -58,11 +57,11 @@ export const InsightsEmptyState = () => {
                   disabled={insightLoading || !canCreate}
                 >
                   <Plus className='h-4 w-4' />
-                  Blank Insight
+                  {t('insightsUi.blankInsight')}
                 </Button>
               </div>
             </TooltipTrigger>
-            {!canCreate && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+            {!canCreate && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
           </Tooltip>
         </div>
       </EmptyContent>

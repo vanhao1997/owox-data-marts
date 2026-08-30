@@ -11,19 +11,16 @@ export interface MessageTemplateDescriptionProps {
   type: TemplateSourceTypeEnum;
 }
 
-/**
- * Accordion with instructions for formatting Markdown or Insight Template.
- */
 export default function MessageTemplateDescription({ type }: MessageTemplateDescriptionProps) {
   if (type === TemplateSourceTypeEnum.INSIGHT_TEMPLATE) {
     return (
       <Accordion variant='common' type='single' collapsible>
         <AccordionItem value='insight-template-details' className='border-none'>
-          <AccordionTrigger>How does Insight work?</AccordionTrigger>
+          <AccordionTrigger>Phân tích chuyên sâu hoạt động thế nào?</AccordionTrigger>
           <AccordionContent className='text-muted-foreground'>
             <p>
-              Insight allow you to use predefined layouts and data visualizations. Select an Insight
-              from the list to use it in your report.
+              Phân tích chuyên sâu cho phép bạn dùng bố cục và biểu đồ dữ liệu dựng sẵn. Chọn một
+              phân tích chuyên sâu từ danh sách để dùng trong báo cáo.
             </p>
           </AccordionContent>
         </AccordionItem>
@@ -34,57 +31,57 @@ export default function MessageTemplateDescription({ type }: MessageTemplateDesc
   return (
     <Accordion variant='common' type='single' collapsible className='space-y-1'>
       <AccordionItem value='message-details' className='border-none'>
-        <AccordionTrigger>How can I format my message?</AccordionTrigger>
+        <AccordionTrigger>Làm cách nào để định dạng nội dung?</AccordionTrigger>
         <AccordionContent className='text-muted-foreground'>
           <p className='mb-2'>
-            You can format your message using Markdown — a simple text formatting syntax that lets
-            you add structure and style without using complex editors.
+            Bạn có thể định dạng nội dung bằng Markdown — một cú pháp văn bản đơn giản cho phép
+            thêm cấu trúc và kiểu chữ mà không cần trình soạn thảo phức tạp.
           </p>
           <p className='mb-2'>
-            For example:
+            Ví dụ:
             <br />
-            **bold text** → <b>bold text</b>
+            **văn bản đậm** → <b>văn bản đậm</b>
             <br />
-            *italic text* → <i>italic text</i>
-            <br />- list item → • list item
+            *văn bản nghiêng* → <i>văn bản nghiêng</i>
+            <br />- mục danh sách → • mục danh sách
           </p>
           <p>
-            Use the Preview tab to see how your message will look after formatting.
+            Dùng tab Xem trước để xem nội dung sẽ hiển thị như thế nào sau khi định dạng.
             <br />
-            If you’re new to Markdown, learn more from this{' '}
+            Nếu bạn mới dùng Markdown, xem thêm trong{' '}
             <ExternalAnchor
               className='underline'
               href='https://www.markdownguide.org/basic-syntax/'
             >
-              quick guide
+              hướng dẫn nhanh
             </ExternalAnchor>
           </p>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value='data-table-details' className='border-none'>
-        <AccordionTrigger>How can I add data into my message?</AccordionTrigger>
+        <AccordionTrigger>Làm cách nào để thêm dữ liệu vào nội dung?</AccordionTrigger>
         <AccordionContent className='text-muted-foreground'>
           <p className='mb-2'>
-            Use the <code>{'{{table}}'}</code> tag to render your data mart results as a table. Type{' '}
-            <code>/</code> in the editor to insert it quickly, or paste it manually.
+            Dùng thẻ <code>{'{{table}}'}</code> để hiển thị kết quả Data Mart dưới dạng bảng. Gõ{' '}
+            <code>/</code> trong trình soạn thảo để chèn nhanh hoặc dán thủ công.
           </p>
           <p className='mb-2'>
-            Optional parameters:
+            Tham số tùy chọn:
             <br />
-            <code>limit</code> — max rows to display. Accepts 1 to 100. Default: <code>100</code>{' '}
-            (also the hard maximum). Example: <code>limit=20</code>
+            <code>limit</code> — số dòng tối đa cần hiển thị. Cho phép từ 1 đến 100. Mặc định:{' '}
+            <code>100</code> (cũng là giới hạn tối đa). Ví dụ: <code>limit=20</code>
             <br />
-            <code>columns</code> — comma-separated list of columns to show. Example:{' '}
+            <code>columns</code> — danh sách cột ngăn cách bằng dấu phẩy. Ví dụ:{' '}
             <code>{'columns="id, revenue"'}</code>
           </p>
           <p className='mb-2'>
-            Example:
+            Ví dụ:
             <br />
             <code>{'{{table limit=20 columns="id, revenue"}}'}</code>
           </p>
           <p className='mb-2'>
-            You can also use <code>{'{{dataHeadersCount}}'}</code> variable to display the total
-            number of columns.
+            Bạn cũng có thể dùng biến <code>{'{{dataHeadersCount}}'}</code> để hiển thị tổng số
+            cột.
           </p>
         </AccordionContent>
       </AccordionItem>

@@ -14,7 +14,6 @@ import { Button } from '@owox/ui/components/button';
 import { Textarea } from '@owox/ui/components/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { ConfirmationDialog } from '../../../../shared/components/ConfirmationDialog';
-import { NO_PERMISSION_MESSAGE } from '../../../../app/permissions';
 import { useAiAssistant } from '../model/ai-assistant/hooks/useAiAssistant.ts';
 import type {
   AiAssistantScope,
@@ -34,6 +33,7 @@ import {
 import { AiAssistantSkeleton } from './ai-assistant/AiAssistantSkeleton.tsx';
 import { AiAssistantHistory } from './ai-assistant/AiAssistantHistory.tsx';
 import { AiAssistantMessage } from './ai-assistant/AiAssistantMessage.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface AiAssistantPanelProps {
   dataMartId: string;
@@ -64,6 +64,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
     },
     ref
   ) {
+    const { t } = useTranslation();
     const [prompt, setPrompt] = useState('');
     const [lastApplyResult, setLastApplyResult] =
       useState<ApplyAiAssistantSessionResponseDto | null>(null);
@@ -181,11 +182,11 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
 
     const displayedSessionTitle = useMemo(() => {
       if (!session) {
-        return 'AI Assistant';
+        return t('insightsUi.aiAssistant', 'AI Assistant');
       }
 
       return formatSessionTitle(session);
-    }, [session]);
+    }, [session, t]);
 
     const handleSend = async () => {
       const text = prompt.trim();
@@ -328,7 +329,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
     const handleRenameSubmit = async (sessionId: string) => {
       const nextTitle = renameDraft.trim();
       if (!nextTitle) {
-        toast.error('Title cannot be empty');
+        toast.error(t('insightsUi.titleCannotEmpty', 'Title cannot be empty'));
         return;
       }
 
@@ -345,7 +346,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
         context: dataMartId,
         details: nextTitle,
       });
-      toast.success('Chat renamed');
+      toast.success(t('insightsUi.chatRenamed', 'Chat renamed'));
       handleCancelRename();
     };
 
@@ -358,7 +359,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
         label: sessionId,
         context: dataMartId,
       });
-      toast.success('Chat deleted');
+      toast.success(t('insightsUi.chatDeleted', 'Chat deleted'));
       if (session?.id === sessionId) {
         onHistoryViewChange(false);
       }
@@ -426,7 +427,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
                   </div>
                 ) : !isInitializing && !isHistoryLoading ? (
                   <div className='text-muted-foreground flex h-full items-center justify-center py-10 text-center text-xs'>
-                    No messages yet. Start a conversation!
+                    {t('insightsUi.noMessages', 'No messages yet. Start a conversation!')}
                   </div>
                 ) : null}
 
@@ -438,14 +439,13 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
 
                 {resolvedContext?.contextResolution === 'explicit_not_found' && (
                   <div className='mt-3 rounded-md border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-900'>
-                    Please specify an existing source key from this template.
+                    {t('insightsUi.sourceNotFound', 'Please specify an existing source key from this template.')}
                   </div>
                 )}
 
                 {resolvedContext?.contextResolution === 'ambiguous_implicit' && (
                   <div className='mt-3 rounded-md border border-slate-200 bg-slate-50 px-2 py-1.5 text-xs text-slate-900'>
-                    No clear source match was found. Use <strong>Create source and attach</strong>{' '}
-                    to continue.
+                    {t('insightsUi.ambiguousSource', 'No clear source match was found. Use Create source and attach to continue.')}
                   </div>
                 )}
 
@@ -456,7 +456,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
                     <div>{formatApplyStatusMessage(lastApplyResult)}</div>
                     {lastApplyResult.reason && (
                       <div className='mt-1 break-words whitespace-pre-wrap opacity-90'>
-                        Reason: {lastApplyResult.reason}
+                        {t('insightsUi.reason', 'Reason:')} {lastApplyResult.reason}
                       </div>
                     )}
                   </div>
@@ -465,7 +465,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
                 {isHeavyProcessing && (
                   <div className='text-muted-foreground mt-3 flex items-center gap-2 text-xs'>
                     <Loader2 className='h-3.5 w-3.5 animate-spin' />
-                    processing...
+                    {t('insightsUi.processing', 'processing...')}
                   </div>
                 )}
                 <div ref={messagesEndRef} />
@@ -481,7 +481,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
                     setPrompt(event.target.value);
                   }}
                   onKeyDown={handlePromptInputKeyDown}
-                  placeholder='Ask a question about your data…'
+                  placeholder={t('insightsUi.askQuestion', 'Ask a question about your data…')}
                   rows={2}
                   disabled={!canEdit || isSending || isHeavyProcessing}
                 />
@@ -507,7 +507,7 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
                         </Button>
                       </div>
                     </TooltipTrigger>
-                    {!canEdit && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+                    {!canEdit && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
                   </Tooltip>
                 </div>
               </div>
@@ -526,9 +526,9 @@ export const AiAssistantPanel = forwardRef<AiAssistantPanelHandle, AiAssistantPa
               setSessionToDelete(null);
             }
           }}
-          title='Delete Chat'
-          description='Are you sure you want to delete this chat session? This action cannot be undone.'
-          confirmLabel='Delete'
+          title={t('insightsUi.deleteChatTitle', 'Delete Chat')}
+          description={t('insightsUi.deleteChatDescription', 'Are you sure you want to delete this chat session? This action cannot be undone.')}
+          confirmLabel={t('common.delete', 'Delete')}
           variant='destructive'
         />
       </div>

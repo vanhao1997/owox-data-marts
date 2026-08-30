@@ -156,7 +156,7 @@ export function MyApiKeysPage() {
             {t('apiKeysPage.revokeWarning')}
           </>
         }
-        confirmLabel={t('common.delete')}
+        confirmLabel={t('apiKeysPage.revokeButton')}
         variant='destructive'
         onConfirm={() => {
           void handleRevokeConfirm();

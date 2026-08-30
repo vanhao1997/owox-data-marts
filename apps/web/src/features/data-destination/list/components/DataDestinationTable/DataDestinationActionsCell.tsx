@@ -15,6 +15,7 @@ import {
 } from '../../../shared';
 import toast from 'react-hot-toast';
 import { isLookerStudioCredentials } from '../../../shared/model/types/looker-studio-credentials.ts';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Component for displaying a context menu of actions on the Destination in a table.
@@ -44,13 +45,14 @@ export const DataDestinationActionsCell: FC<DataDestinationActionsCellProps> = (
   onDelete,
   onRotateSecretKey,
 }) => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleCopyJsonConfig = () => {
     if (credentials && isLookerStudioCredentials(credentials)) {
       const jsonConfig = generateLookerStudioJsonConfig(credentials);
       void navigator.clipboard.writeText(jsonConfig);
-      toast.success('JSON Config copied to clipboard');
+      toast.success(t('dataDestinationList.newConfigCopied', 'New JSON Config copied to clipboard'));
     }
   };
 
@@ -66,7 +68,7 @@ export const DataDestinationActionsCell: FC<DataDestinationActionsCellProps> = (
             <Button
               variant='ghost'
               className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${isMenuOpen ? 'opacity-100' : 'group-hover:opacity-100'}`}
-              aria-label='Open menu'
+              aria-label={t('common.openMenu', 'Open menu')}
             >
               <MoreHorizontal className='dm-card-table-body-row-actionbtn-icon' />
             </Button>
@@ -74,7 +76,7 @@ export const DataDestinationActionsCell: FC<DataDestinationActionsCellProps> = (
           <DropdownMenuContent align='end'>
             <DropdownMenuItem onClick={() => void onEdit?.(id)}>
               <Pencil className='text-foreground h-4 w-4' aria-hidden='true' />
-              <span>Edit</span>
+              <span>{t('common.edit', 'Edit')}</span>
             </DropdownMenuItem>
 
             {isLookerStudio && hasSecretKey && (
@@ -82,7 +84,7 @@ export const DataDestinationActionsCell: FC<DataDestinationActionsCellProps> = (
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleCopyJsonConfig}>
                   <Copy className='text-foreground h-4 w-4' aria-hidden='true' />
-                  <span>Copy JSON Config</span>
+                  <span>{t('common.copyJsonConfig', 'Copy JSON Config')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
@@ -90,7 +92,7 @@ export const DataDestinationActionsCell: FC<DataDestinationActionsCellProps> = (
                   }}
                 >
                   <KeyRound className='text-foreground h-4 w-4' aria-hidden='true' />
-                  <span>Rotate Secret Key</span>
+                  <span>{t('common.rotateSecretKey', 'Rotate Secret Key')}</span>
                 </DropdownMenuItem>
               </>
             )}
@@ -98,7 +100,7 @@ export const DataDestinationActionsCell: FC<DataDestinationActionsCellProps> = (
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onDelete?.(id)}>
               <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
-              <span className='text-red-600'>Delete</span>
+              <span className='text-red-600'>{t('common.delete', 'Delete')}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

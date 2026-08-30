@@ -34,6 +34,7 @@ import {
 } from '../../../../../data-destination';
 import { InviteTeammatesCard } from '../../../../../../shared/components/InviteTeammatesCard';
 import { useReport } from '../../../shared';
+import { useTranslation } from 'react-i18next';
 
 interface DestinationCardProps {
   destination: DataDestination;
@@ -83,6 +84,7 @@ export function DestinationCard({
   onPublishDataMart,
   onReviewDataSetup,
 }: DestinationCardProps) {
+  const { t } = useTranslation();
   const { destinationInfo, isVisible } = useDataDestinationVisibility(destination);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReportCreationDialog>('setup');
@@ -174,8 +176,8 @@ export function DestinationCard({
         </CollapsibleCard>
         {shouldShowInviteCard && (
           <InviteTeammatesCard
-            hint='— Give business users self-service access to reporting in Google Sheets'
-            docsLabel='Learn more about Google Sheets destination'
+            hint={t('reportsUi.inviteHint', '— Give business users self-service access to reporting in Google Sheets')}
+            docsLabel={t('reportsUi.learnSheetsDestination', 'Learn more about Google Sheets destination')}
             docsHref='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=no_reports_google_sheets_destination'
           />
         )}
@@ -200,15 +202,15 @@ export function DestinationCard({
           <AlertDialogHeader>
             <AlertDialogTitle>
               {dialogContent === 'publish'
-                ? 'Publish Data Mart to create a report?'
-                : 'Complete Data Mart setup first'}
+                ? t('reportsUi.publishToCreateTitle', 'Publish Data Mart to create a report?')
+                : t('reportsUi.completeSetupTitle', 'Complete Data Mart setup first')}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {dialogContent === 'publish'
-                ? 'Reports are available only for published Data Marts. We’ll open the new report form when publishing is complete.'
+                ? t('reportsUi.publishToCreateDescription', 'Reports are available only for published Data Marts. We’ll open the new report form when publishing is complete.')
                 : requiredSetupActions.length === 1
-                  ? `Before creating a report, ${requiredSetupActions[0]}.`
-                  : 'Before creating a report the required setup is needed:'}
+                  ? t('reportsUi.beforeCreateSingleSetup', 'Before creating a report, {{action}}.', { action: requiredSetupActions[0] })
+                  : t('reportsUi.beforeCreateMultipleSetup', 'Before creating a report the required setup is needed:')}
             </AlertDialogDescription>
             {dialogContent === 'setup' && requiredSetupActions.length > 1 && (
               <ul className='text-muted-foreground list-disc space-y-0.5 pl-5 text-sm'>
@@ -220,13 +222,13 @@ export function DestinationCard({
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPublishing}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPublishing}>{t('reportsUi.cancel', 'Cancel')}</AlertDialogCancel>
             {dialogContent === 'publish' ? (
               <Button onClick={() => void handlePublishAndCreateReport()} disabled={isPublishing}>
-                {isPublishing ? 'Publishing…' : 'Publish and create report'}
+                {isPublishing ? t('reportsUi.publishing', 'Publishing…') : t('reportsUi.publishAndCreate', 'Publish and create report')}
               </Button>
             ) : (
-              <Button onClick={handleReviewDataSetup}>Open Data Setup</Button>
+              <Button onClick={handleReviewDataSetup}>{t('reportsUi.openDataSetup', 'Open Data Setup')}</Button>
             )}
           </AlertDialogFooter>
         </AlertDialogContent>

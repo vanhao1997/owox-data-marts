@@ -7,6 +7,7 @@ import type {
   DataMartRunInsightTemplateDefinition,
   DataMartRunReportDefinition,
 } from '../../model';
+import { useTranslation } from 'react-i18next';
 
 interface ConfigurationViewProps {
   definitionRun: DataMartDefinitionConfig | null;
@@ -23,6 +24,7 @@ export function ConfigurationView({
   insightTemplateDefinition,
   additionalParams,
 }: ConfigurationViewProps) {
+  const { t } = useTranslation();
   const httpDataParams =
     additionalParams != null &&
     typeof additionalParams.httpData === 'object' &&
@@ -51,7 +53,7 @@ export function ConfigurationView({
     return (
       <div className='border-border rounded-lg border' onClick={handleStopPropagation}>
         <div className='text-muted-foreground p-8 text-center'>
-          No configuration data available for this run
+          {t('runHistoryConfig.noData')}
         </div>
       </div>
     );
@@ -63,7 +65,7 @@ export function ConfigurationView({
         {definitionRun != null && (
           <>
             <div className='mb-3 flex items-center justify-between'>
-              <h4 className='text-foreground text-sm font-medium'>Configuration:</h4>
+              <h4 className='text-foreground text-sm font-medium'>{t('runHistoryConfig.configuration')}:</h4>
               <CopyButton
                 text={JSON.stringify(definitionRun, null, 2)}
                 section='configuration'
@@ -80,7 +82,7 @@ export function ConfigurationView({
         {reportDefinition?.executionSqlQuery != null && (
           <>
             <div className='mt-3 mb-3 flex items-center justify-between'>
-              <h4 className='text-foreground text-sm font-medium'>Executed SQL:</h4>
+              <h4 className='text-foreground text-sm font-medium'>{t('runHistoryConfig.executedSql')}:</h4>
               <CopyButton
                 text={reportDefinition.executionSqlQuery}
                 section='executionSql'
@@ -96,7 +98,7 @@ export function ConfigurationView({
         )}
         {definitionRun != null && reportDefinition && (
           <>
-            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>Report definition:</h4>
+            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>{t('runHistoryConfig.reportDefinition')}:</h4>
             <pre className='bg-muted text-foreground overflow-x-auto rounded p-3 font-mono text-xs whitespace-pre-wrap dark:bg-white/3'>
               {JSON.stringify(
                 // outputConfig and executionSqlQuery each render in their own block below,
@@ -112,7 +114,7 @@ export function ConfigurationView({
             </pre>
             {reportDefinition.outputConfig && (
               <>
-                <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>Output controls:</h4>
+                <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>{t('runHistoryConfig.outputControls')}:</h4>
                 <pre className='bg-muted text-foreground overflow-x-auto rounded p-3 font-mono text-xs whitespace-pre-wrap dark:bg-white/3'>
                   {JSON.stringify(reportDefinition.outputConfig, null, 2)}
                 </pre>
@@ -122,7 +124,7 @@ export function ConfigurationView({
         )}
         {definitionRun != null && insightDefinition && (
           <>
-            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>Insight definition:</h4>
+            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>{t('runHistoryConfig.insightDefinition')}:</h4>
             <pre className='bg-muted text-foreground overflow-x-auto rounded p-3 font-mono text-xs whitespace-pre-wrap dark:bg-white/3'>
               {JSON.stringify(insightDefinition, null, 2)}
             </pre>
@@ -131,7 +133,7 @@ export function ConfigurationView({
         {definitionRun != null && insightTemplateDefinition && (
           <>
             <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>
-              Insight template definition:
+              {t('runHistoryConfig.insightTemplateDefinition')}:
             </h4>
             <pre className='bg-muted text-foreground overflow-x-auto rounded p-3 font-mono text-xs whitespace-pre-wrap dark:bg-white/3'>
               {JSON.stringify(insightTemplateDefinition, null, 2)}
@@ -140,7 +142,7 @@ export function ConfigurationView({
         )}
         {httpDataParams && (
           <>
-            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>Data parameters:</h4>
+            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>{t('runHistoryConfig.dataParameters')}:</h4>
             <pre className='bg-muted text-foreground overflow-x-auto rounded p-3 font-mono text-xs whitespace-pre-wrap dark:bg-white/3'>
               {JSON.stringify(httpDataParams, null, 2)}
             </pre>
@@ -149,7 +151,7 @@ export function ConfigurationView({
         {mcpExecutedSql != null && (
           <>
             <div className='mt-3 mb-3 flex items-center justify-between'>
-              <h4 className='text-foreground text-sm font-medium'>Executed SQL:</h4>
+              <h4 className='text-foreground text-sm font-medium'>{t('runHistoryConfig.executedSql')}:</h4>
               <CopyButton
                 text={mcpExecutedSql}
                 section='mcpExecutionSql'
@@ -165,7 +167,7 @@ export function ConfigurationView({
         )}
         {mcpQueryParams && (
           <>
-            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>MCP query:</h4>
+            <h4 className='text-foreground mt-3 mb-3 text-sm font-medium'>{t('runHistoryConfig.mcpQuery')}:</h4>
             <pre className='bg-muted text-foreground overflow-x-auto rounded p-3 font-mono text-xs whitespace-pre-wrap dark:bg-white/3'>
               {JSON.stringify(
                 // executionSqlQuery renders in its own "Executed SQL:" block above,

@@ -1,4 +1,5 @@
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Popover, PopoverContent, PopoverTrigger } from '@owox/ui/components/popover';
 import { Button } from '@owox/ui/components/button';
 import { Label } from '@owox/ui/components/label';
@@ -28,6 +29,7 @@ export interface FilterEditorPopoverProps {
 }
 
 export function FilterEditorPopover(props: FilterEditorPopoverProps) {
+  const { t } = useTranslation();
   const [draftRule, setDraftRule] = useState<FilterRule | null>(props.initialRule ?? null);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,7 +57,7 @@ export function FilterEditorPopover(props: FilterEditorPopoverProps) {
 
   function handleApply() {
     if (!draftRule) {
-      setError('Value is required');
+      setError(t('reportColumnPicker.valueRequired'));
       return;
     }
     props.onApply(draftRule);
@@ -68,7 +70,7 @@ export function FilterEditorPopover(props: FilterEditorPopoverProps) {
   }
 
   const hasExisting = !!props.existingRules?.length;
-  const applyLabel = hasExisting ? 'Add' : 'Apply';
+  const applyLabel = hasExisting ? t('reportColumnPicker.add') : t('reportColumnPicker.apply');
 
   return (
     <Popover open={props.open} onOpenChange={props.onOpenChange}>
@@ -90,7 +92,7 @@ export function FilterEditorPopover(props: FilterEditorPopoverProps) {
                 props.onDelete?.();
                 props.onOpenChange(false);
               }}
-              aria-label='Delete filter'
+              aria-label={t('reportColumnPicker.deleteFilter')}
             >
               <Trash2 className='h-4 w-4' />
             </Button>
@@ -99,7 +101,7 @@ export function FilterEditorPopover(props: FilterEditorPopoverProps) {
 
         {hasExisting && (
           <div className='space-y-1'>
-            <Label>Active filters</Label>
+            <Label>{t('reportColumnPicker.activeFilters')}</Label>
             <div className='space-y-1'>
               {(props.existingRules ?? []).map((rule, idx) => (
                 <div
@@ -118,7 +120,7 @@ export function FilterEditorPopover(props: FilterEditorPopoverProps) {
                       onClick={() => {
                         props.onRemoveExistingAt?.(idx);
                       }}
-                      aria-label='Remove filter'
+                        aria-label={t('reportColumnPicker.removeFilter')}
                     >
                       <X className='h-3 w-3' />
                     </Button>
@@ -141,7 +143,7 @@ export function FilterEditorPopover(props: FilterEditorPopoverProps) {
 
         <div className='flex justify-end gap-2'>
           <Button variant='outline' size='sm' onClick={handleCancel}>
-            Cancel
+            {t('reportColumnPicker.cancel')}
           </Button>
           <Button size='sm' onClick={handleApply}>
             {applyLabel}

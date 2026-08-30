@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Row } from '@tanstack/react-table';
 import { UserPlus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
@@ -9,7 +10,6 @@ import {
 } from '../../../../../shared/components/Table';
 import { useBaseTable } from '../../../../../shared/hooks/useBaseTable';
 import { getMembersColumns, MembersColumnKey, type MembersTableItem } from './columns';
-import { ADMIN_ONLY_MEMBERS_HINT } from '../../constants';
 import type {
   ContextDto,
   MemberWithScopeDto,
@@ -34,6 +34,7 @@ export function MembersTable({
   onRemoveMember,
   onInvite,
 }: MembersTableProps) {
+  const { t } = useTranslation();
   const data: MembersTableItem[] = useMemo(() => {
     const contextMap = new Map(contexts.map(c => [c.id, c]));
     return members.map(m => ({
@@ -45,8 +46,8 @@ export function MembersTable({
   }, [members, contexts]);
 
   const columns = useMemo(
-    () => getMembersColumns({ onEdit: onEditMember, onRemove: onRemoveMember, isAdmin }),
-    [onEditMember, onRemoveMember, isAdmin]
+    () => getMembersColumns({ onEdit: onEditMember, onRemove: onRemoveMember, isAdmin, t }),
+    [onEditMember, onRemoveMember, isAdmin, t]
   );
 
   const { table } = useBaseTable<MembersTableItem>({
@@ -74,13 +75,13 @@ export function MembersTable({
         tableId='members-settings-table'
         table={table}
         onRowClick={handleRowClick}
-        ariaLabel='Project members table'
+        ariaLabel={t('membersPage.tableLabel', 'Project members table')}
         paginationProps={{ displaySelected: false }}
         renderToolbarLeft={() => (
           <TableColumnSearch
             table={table}
             columnId={MembersColumnKey.NAME}
-            placeholder='Search by name'
+            placeholder={t('membersPage.searchByName', 'Search by name')}
           />
         )}
         renderToolbarRight={
@@ -95,7 +96,7 @@ export function MembersTable({
                       aria-disabled={!isAdmin}
                     >
                       <UserPlus className='h-4 w-4' />
-                      <span className='hidden lg:block'>Invite member</span>
+                      <span className='hidden lg:block'>{t('membersPage.inviteTitle', 'Invite member')}</span>
                     </button>
                   </TableCTAButton>
                 );
@@ -108,7 +109,7 @@ export function MembersTable({
                     <TooltipTrigger asChild>
                       <span className='inline-block'>{button}</span>
                     </TooltipTrigger>
-                    <TooltipContent>{ADMIN_ONLY_MEMBERS_HINT}</TooltipContent>
+                    <TooltipContent>{t('membersPage.adminOnlyHint')}</TooltipContent>
                   </Tooltip>
                 );
               }
@@ -116,7 +117,7 @@ export function MembersTable({
         }
         renderEmptyState={() => (
           <span role='status' aria-live='polite'>
-            No members found
+            {t('membersPage.noMembersFound', 'No members found')}
           </span>
         )}
       />

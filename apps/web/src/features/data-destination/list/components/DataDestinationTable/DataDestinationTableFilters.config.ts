@@ -12,7 +12,12 @@ import {
 } from '../../../../../shared/components/TableFilters/availability-filter.utils';
 import { DataDestinationTypeModel } from '../../../shared';
 import type { DataDestinationTableItem } from './columns';
-import { DataDestinationColumnKey, dataDestinationColumnLabels } from './columns';
+import { DataDestinationColumnKey } from './columns';
+import {
+  dataDestinationColumnLabels as defaultDataDestinationColumnLabels,
+  getDataDestinationColumnLabels,
+} from './columns/columnLabels';
+import type { TFunction } from 'i18next';
 
 /* ---------------------------------------------------------------------------
  * Filter keys
@@ -52,8 +57,12 @@ export const dataDestinationFilterAccessors: FilterAccessors<
  * ------------------------------------------------------------------------ */
 
 export function buildDataDestinationTableFilters(
-  data: DataDestinationTableItem[]
+  data: DataDestinationTableItem[],
+  t?: TFunction
 ): FilterConfigItem<DataDestinationFilterKey>[] {
+  const dataDestinationColumnLabels = t
+    ? getDataDestinationColumnLabels(t)
+    : defaultDataDestinationColumnLabels;
   /* -----------------------------
    * Destination title options
    * --------------------------- */
@@ -152,7 +161,7 @@ export function buildDataDestinationTableFilters(
     },
     buildAvailabilityFilter<DataDestinationFilterKey>({
       id: AdditionalFilterKeys.AVAILABILITY,
-      firstLabel: 'Use',
+      firstLabel: t?.('destinationTableColumns.use', 'Use') ?? 'Use',
     }),
   ];
 }

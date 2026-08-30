@@ -3,6 +3,7 @@ import { TriangleAlert } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import type {
   AthenaSchemaField,
   BigQuerySchemaField,
@@ -193,6 +194,7 @@ function ViolationsByFieldList({ violationsByField }: { violationsByField: Viola
  * Uses custom hooks for state management and the SchemaContent component for rendering
  */
 export function DataMartSchemaSettings({ definitionType }: DataMartSchemaSettingsProps) {
+  const { t } = useTranslation();
   const {
     dataMart,
     updateDataMartSchema,
@@ -584,7 +586,7 @@ export function DataMartSchemaSettings({ definitionType }: DataMartSchemaSetting
   };
 
   if (!dataMart) {
-    return <div>Error: Data mart not found</div>;
+    return <div>{t('schemaSettings.notFound')}</div>;
   }
 
   return (
@@ -617,7 +619,7 @@ export function DataMartSchemaSettings({ definitionType }: DataMartSchemaSetting
           role='alert'
           className='border-destructive/30 bg-destructive/5 text-destructive space-y-1 rounded-md border px-3 py-2 text-sm'
         >
-          <p className='font-medium'>Fix these calculated fields, then save again:</p>
+            <p className='font-medium'>{t('schemaSettings.fixCalculated')}</p>
           <ViolationsByFieldList violationsByField={errorsByField} />
         </div>
       )}
@@ -631,7 +633,7 @@ export function DataMartSchemaSettings({ definitionType }: DataMartSchemaSetting
         >
           <TriangleAlert className='mt-0.5 size-4 shrink-0' />
           <div className='space-y-1'>
-            <p className='font-medium'>Saved — worth a look:</p>
+            <p className='font-medium'>{t('schemaSettings.savedWarnings')}</p>
             <ViolationsByFieldList violationsByField={warningsByField} />
           </div>
         </div>
@@ -643,7 +645,7 @@ export function DataMartSchemaSettings({ definitionType }: DataMartSchemaSetting
             onClick={handleSave}
             disabled={!isDirty || isSchemaOperationInProgress}
           >
-            Save
+            {t('common.save')}
           </Button>
           <Button
             type='button'
@@ -651,7 +653,7 @@ export function DataMartSchemaSettings({ definitionType }: DataMartSchemaSetting
             onClick={handleDiscard}
             disabled={!isDirty || isSchemaOperationInProgress}
           >
-            Discard
+            {t('schemaSettings.discard')}
           </Button>
         </div>
 

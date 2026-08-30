@@ -1,4 +1,5 @@
 import { SecretRevealDialog } from '../../../shared/components/SecretRevealDialog/SecretRevealDialog';
+import { useTranslation } from 'react-i18next';
 import type { CreateLicenseKeyResponse } from '../types';
 
 interface LicenseKeyRevealDialogProps {
@@ -7,22 +8,23 @@ interface LicenseKeyRevealDialogProps {
 }
 
 export function LicenseKeyRevealDialog({ data, onDone }: LicenseKeyRevealDialogProps) {
+  const { t } = useTranslation();
   if (!data) return null;
 
   return (
     <SecretRevealDialog
-      title='License key created'
+      title={t('licenseKeysPage.revealTitle')}
       description={
         <>
-          Set this value as <code>LICENSE_KEY</code> on the deployment served at{' '}
-          <strong>{data.origin}</strong>.
+          {t('licenseKeysPage.revealDescriptionPrefix')} <code>LICENSE_KEY</code>{' '}
+          {t('licenseKeysPage.revealDescriptionMiddle')} <strong>{data.origin}</strong>.
         </>
       }
-      label='License key'
-      labelTooltip='Full signed license. Store it securely.'
+      label={t('licenseKeysPage.keyLabel')}
+      labelTooltip={t('licenseKeysPage.keyTooltip')}
       secret={data.licenseKey}
-      notice="Copy the license key now. You won't be able to see it again."
-      confirmLabel='I have saved the license key'
+      notice={t('licenseKeysPage.revealNotice')}
+      confirmLabel={t('licenseKeysPage.revealConfirm')}
       onDone={onDone}
     />
   );

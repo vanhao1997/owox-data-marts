@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { EyeOff, Info, MoreHorizontal, Eye, Search, Sigma } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
 import {
@@ -95,6 +96,7 @@ export function SourceFieldsTable({
   onFieldOverrideChange,
   leadingToolbar,
 }: SourceFieldsTableProps) {
+  const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   // Re-run the filter on the debounced value so typing stays responsive on
   // schemas with hundreds of fields (the input itself always reflects the
@@ -151,7 +153,7 @@ export function SourceFieldsTable({
   const filteringBlock = (
     <div className='bg-muted/50 flex flex-col gap-1.5 rounded-md p-3 dark:bg-white/5'>
       <label className='flex items-center gap-1.5 text-sm font-medium'>
-        Fields filtering
+        {t('schemaUi.fieldsFiltering')}
         <Tooltip>
           <TooltipTrigger asChild>
             <span className='text-muted-foreground/50 hover:text-muted-foreground shrink-0 transition-colors'>
@@ -159,7 +161,7 @@ export function SourceFieldsTable({
             </span>
           </TooltipTrigger>
           <TooltipContent side='top' className='max-w-xs'>
-            Search and filter the fields exposed to reports from this data mart.
+            {t('schemaUi.fieldsFilteringHelp')}
           </TooltipContent>
         </Tooltip>
       </label>
@@ -167,7 +169,7 @@ export function SourceFieldsTable({
         <div className='relative flex-1'>
           <Search className='text-muted-foreground pointer-events-none absolute top-1/2 left-2 h-3.5 w-3.5 -translate-y-1/2' />
           <Input
-            placeholder='Search fields'
+            placeholder={t('schemaUi.searchFields')}
             value={searchValue}
             onChange={e => {
               setSearchValue(e.target.value);
@@ -182,9 +184,9 @@ export function SourceFieldsTable({
           }}
         >
           <TabsList>
-            <TabsTrigger value='all'>All ({totalCount})</TabsTrigger>
-            <TabsTrigger value='visible'>Visible ({visibleCount})</TabsTrigger>
-            <TabsTrigger value='hidden'>Hidden ({hiddenCount})</TabsTrigger>
+            <TabsTrigger value='all'>{t('schemaUi.all')} ({totalCount})</TabsTrigger>
+            <TabsTrigger value='visible'>{t('schemaUi.visible')} ({visibleCount})</TabsTrigger>
+            <TabsTrigger value='hidden'>{t('schemaUi.hidden')} ({hiddenCount})</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -208,28 +210,27 @@ export function SourceFieldsTable({
             <TableRow className='hover:bg-transparent'>
               <TableHead className={`${headCellClass} w-[24%]`}>
                 <Tooltip>
-                  <TooltipTrigger className='cursor-default'>Name</TooltipTrigger>
-                  <TooltipContent>Field name in the source data mart</TooltipContent>
+                  <TooltipTrigger className='cursor-default'>{t('schemaUi.name')}</TooltipTrigger>
+                  <TooltipContent>{t('schemaUi.fieldNameSource')}</TooltipContent>
                 </Tooltip>
               </TableHead>
               <TableHead className={`${headCellClass} w-[18%]`}>
                 <Tooltip>
-                  <TooltipTrigger className='cursor-default'>Alias</TooltipTrigger>
-                  <TooltipContent>Alternative name for the field</TooltipContent>
+                  <TooltipTrigger className='cursor-default'>{t('schemaUi.alias')}</TooltipTrigger>
+                  <TooltipContent>{t('schemaUi.alternativeName')}</TooltipContent>
                 </Tooltip>
               </TableHead>
               <TableHead className={`${headCellClass} w-[12%]`}>
                 <Tooltip>
-                  <TooltipTrigger className='cursor-default'>Type</TooltipTrigger>
-                  <TooltipContent>Data type of the field</TooltipContent>
+                  <TooltipTrigger className='cursor-default'>{t('schemaUi.type')}</TooltipTrigger>
+                  <TooltipContent>{t('schemaUi.dataType')}</TooltipContent>
                 </Tooltip>
               </TableHead>
               <TableHead className={`${headCellClass} w-[18%]`}>
                 <Tooltip>
-                  <TooltipTrigger className='cursor-default'>Dedup</TooltipTrigger>
+                  <TooltipTrigger className='cursor-default'>{t('schemaUi.dedup')}</TooltipTrigger>
                   <TooltipContent>
-                    Deduplication rollup — collapses a joined field to one row per join key so the
-                    join never multiplies rows.
+                    {t('schemaUi.dedupHelp')}
                   </TooltipContent>
                 </Tooltip>
               </TableHead>
@@ -237,14 +238,13 @@ export function SourceFieldsTable({
                 <Tooltip>
                   <TooltipTrigger
                     className='flex cursor-default items-center gap-1'
-                    aria-label='Available aggregations'
+                    aria-label={t('schemaUi.availableAggregationsAria')}
                   >
                     <Sigma className='h-3.5 w-3.5' />
-                    available
+                    {t('schemaUi.available')}
                   </TooltipTrigger>
                   <TooltipContent>
-                    Available aggregations — functions a report may apply to this field after the
-                    join.
+                    {t('schemaUi.availableAfterJoin')}
                   </TooltipContent>
                 </Tooltip>
               </TableHead>
@@ -267,7 +267,7 @@ export function SourceFieldsTable({
                           <TooltipTrigger asChild>
                             <EyeOff className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
                           </TooltipTrigger>
-                          <TooltipContent>Hidden from reports</TooltipContent>
+                          <TooltipContent>{t('schemaUi.hiddenFromReports')}</TooltipContent>
                         </Tooltip>
                       )}
                       {field.description && (
@@ -377,12 +377,12 @@ export function SourceFieldsTable({
                           {hidden ? (
                             <>
                               <Eye className='mr-2 h-4 w-4' />
-                              Show in reports
+                              {t('schemaUi.showInReports')}
                             </>
                           ) : (
                             <>
                               <EyeOff className='mr-2 h-4 w-4' />
-                              Hide from reports
+                              {t('schemaUi.hideFromReports')}
                             </>
                           )}
                         </DropdownMenuItem>
@@ -399,7 +399,7 @@ export function SourceFieldsTable({
                   className='text-center text-gray-400'
                   style={{ whiteSpace: 'nowrap' }}
                 >
-                  No fields match the current filter
+                  {t('schemaUi.noFieldsCurrentFilter')}
                 </TableCell>
               </TableRow>
             )}

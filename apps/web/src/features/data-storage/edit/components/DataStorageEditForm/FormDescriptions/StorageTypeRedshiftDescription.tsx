@@ -5,39 +5,38 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Accordion with general information about AWS Redshift storage type.
  */
 export default function StorageTypeRedshiftDescription() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='redshift-storage-details'>
-        <AccordionTrigger>What is AWS Redshift?</AccordionTrigger>
+        <AccordionTrigger>{t('storageHelp.redshift.title')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            Amazon Redshift is a fast, fully managed cloud data warehouse that makes it simple and
-            cost-effective to analyze data using standard SQL and existing business intelligence
-            tools.
+            {t('storageHelp.redshift.intro')}
           </p>
-          <p className='mb-2'>Redshift supports two deployment options:</p>
+          <p className='mb-2'>{t('storageHelp.redshift.options')}</p>
           <ul className='mb-2 list-inside list-disc space-y-1 text-sm'>
             <li>
-              <strong>Redshift Serverless:</strong> Automatically scales compute capacity and you
-              only pay for what you use
+              <strong>{t('storageHelp.redshift.serverlessLabel')}:</strong> {t('storageHelp.redshift.serverlessText')}
             </li>
             <li>
-              <strong>Provisioned Clusters:</strong> Traditional clusters where you provision and
-              manage compute nodes
+              <strong>{t('storageHelp.redshift.provisionedLabel')}:</strong> {t('storageHelp.redshift.provisionedText')}
             </li>
           </ul>
           <p className='text-sm'>
-            Learn more in the{' '}
+            {t('storageHelp.redshift.learnMore')}{' '}
             <ExternalAnchor
               className='underline'
               href='https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html'
             >
-              AWS Redshift Documentation
+              {t('storageHelp.redshift.documentation')}
             </ExternalAnchor>
             .
           </p>

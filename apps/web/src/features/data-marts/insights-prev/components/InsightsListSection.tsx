@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Sparkles, Plus, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@owox/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
@@ -23,9 +24,9 @@ import { useInsights, useInsightsList } from '../model';
 import { useInsightsPermissions } from '../hooks/useInsightsPermissions';
 import InsightsEmptyState from './InsightsEmptyState';
 import { InsightsTable } from './InsightsTable/InsightsTable';
-import { NO_PERMISSION_MESSAGE } from '../../../../app/permissions';
 
 export default function InsightsListSection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     fetchInsights,
@@ -62,8 +63,8 @@ export default function InsightsListSection() {
   return (
     <CollapsibleCard>
       <CollapsibleCardHeader>
-        <CollapsibleCardHeaderTitle tooltip='Manage and review your insights' icon={Sparkles}>
-          Insights
+        <CollapsibleCardHeaderTitle tooltip={t('insightsUi.manageTooltip')} icon={Sparkles}>
+          {t('insightsUi.insightPlural')}
         </CollapsibleCardHeaderTitle>
         {hasInsights && (
           <CollapsibleCardHeaderActions>
@@ -78,18 +79,18 @@ export default function InsightsListSection() {
                       disabled={insightLoading || !canCreate}
                     >
                       <Plus className='h-4 w-4' aria-hidden='true' />
-                      New insight
+                      {t('insightsUi.newInsight')}
                     </Button>
                   </div>
                 </TooltipTrigger>
-                {!canCreate && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+                {!canCreate && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
               </Tooltip>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant='outline'
                     className='rounded-l-none px-2'
-                    aria-label='More options'
+                    aria-label={t('common.moreOptions')}
                     disabled={insightLoading}
                   >
                     <ChevronDown className='h-4 w-4' aria-hidden='true' />
@@ -104,11 +105,11 @@ export default function InsightsListSection() {
                           disabled={insightLoading || !canGenerateAI}
                         >
                           <Sparkles className='h-4 w-4' aria-hidden='true' />
-                          Generate insight with AI
+                          {t('insightsUi.generateWithAi')}
                         </DropdownMenuItem>
                       </div>
                     </TooltipTrigger>
-                    {!canGenerateAI && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+                    {!canGenerateAI && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -118,11 +119,11 @@ export default function InsightsListSection() {
                           disabled={insightLoading || !canCreate}
                         >
                           <Plus className='h-4 w-4' aria-hidden='true' />
-                          Blank insight
+                          {t('insightsUi.blankInsight')}
                         </DropdownMenuItem>
                       </div>
                     </TooltipTrigger>
-                    {!canCreate && <TooltipContent>{NO_PERMISSION_MESSAGE}</TooltipContent>}
+                    {!canCreate && <TooltipContent>{t('common.noPermission')}</TooltipContent>}
                   </Tooltip>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -132,9 +133,9 @@ export default function InsightsListSection() {
       </CollapsibleCardHeader>
       <CollapsibleCardContent>
         {isLoading && !hasInsights ? (
-          <div className='text-muted-foreground p-4 text-sm'>Loading insights…</div>
+          <div className='text-muted-foreground p-4 text-sm'>{t('insightsUi.loadingInsights')}</div>
         ) : error ? (
-          <div className='text-destructive p-4 text-sm'>Failed to load insights</div>
+          <div className='text-destructive p-4 text-sm'>{t('insightsUi.errors.loadProject')}</div>
         ) : hasInsights ? (
           <InsightsTable
             items={insights.map(r => ({
@@ -156,10 +157,10 @@ export default function InsightsListSection() {
           onOpenChange={open => {
             if (!open) setDeleteId(null);
           }}
-          title='Delete Insight'
-          description='Are you sure you want to delete this insight? This action cannot be undone.'
-          confirmLabel='Delete'
-          cancelLabel='Cancel'
+          title={t('insightsUi.deleteInsightTitle')}
+          description={t('insightsUi.deleteInsightConfirm')}
+          confirmLabel={t('common.delete')}
+          cancelLabel={t('common.cancel')}
           variant='destructive'
           onConfirm={handleConfirmDelete}
         />

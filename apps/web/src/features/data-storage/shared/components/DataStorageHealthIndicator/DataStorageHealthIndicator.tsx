@@ -18,6 +18,8 @@ import {
 } from '../../services/data-storage-health-status.service';
 import { DataStorageHealthStatusView } from './DataStorageHealthStatusView';
 import { DataStorageHealthDot } from './DataStorageHealthDot';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 interface DataStorageHealthIndicatorProps {
   storageId: string;
@@ -65,27 +67,31 @@ const HEALTH_STATUS_NOT_FETCHED: HealthStatusDisplayConfig = {
   ringClass: 'ring-neutral-300/50 dark:ring-neutral-600/50',
 };
 
-const COMPACT_INVALID_STATUS_LABEL = 'Storage access failed. Check Storage settings.';
-const COMPACT_REAUTH_REQUIRED_STATUS_LABEL = 'Reconnect Storage';
+function getTooltipText(params: { status: DataStorageHealthStatus; isLoading: boolean; t: TFunction }): string {
+  const { status, isLoading, t } = params;
 
-function getTooltipText(params: { status: DataStorageHealthStatus; isLoading: boolean }): string {
-  const { status, isLoading } = params;
+  if (isLoading) return t('storageHealth.validating');
 
-  if (isLoading) return 'Validating storage access...';
-
-  return HEALTH_STATUS_CONFIG[status].text;
+  const labels: Record<DataStorageHealthStatus, string> = {
+    [DataStorageHealthStatus.VALID]: t('storageHealth.validTooltip'),
+    [DataStorageHealthStatus.INVALID]: t('storageHealth.invalid'),
+    [DataStorageHealthStatus.UNCONFIGURED]: t('storageHealth.unconfigured'),
+    [DataStorageHealthStatus.REAUTH_REQUIRED]: t('storageHealth.reconnect'),
+  };
+  return labels[status];
 }
 
 function getCompactStatusMessage(
   status: DataStorageHealthStatus,
-  errorMessage?: string
+  errorMessage: string | undefined,
+  t: TFunction
 ): string | undefined {
   if (status === DataStorageHealthStatus.INVALID) {
-    return COMPACT_INVALID_STATUS_LABEL;
+    return t('storageHealth.compactInvalid');
   }
 
   if (status === DataStorageHealthStatus.REAUTH_REQUIRED) {
-    return COMPACT_REAUTH_REQUIRED_STATUS_LABEL;
+    return t('storageHealth.reconnect');
   }
 
   return errorMessage;
@@ -97,6 +103,7 @@ export function DataStorageHealthIndicator({
   hovercardSide = 'bottom',
   variant = 'default',
 }: DataStorageHealthIndicatorProps) {
+  const { t } = useTranslation();
   const { status, errorMessage, isLoading, isFetched } = useDataStorageHealthStatus(storageId);
 
   const { dotClass, ringClass } = isFetched
@@ -118,7 +125,7 @@ export function DataStorageHealthIndicator({
               </TooltipTrigger>
 
               <TooltipContent side='top' align='center'>
-                {getTooltipText({ status, isLoading })}
+                {getTooltipText({ status, isLoading, t })}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -128,8 +135,8 @@ export function DataStorageHealthIndicator({
           <HoverCardContent side={hovercardSide} align='start'>
             <HoverCardHeader>
               <HoverCardHeaderText>
-                <HoverCardHeaderTitle>{storageTitle ?? 'Storage Validation'}</HoverCardHeaderTitle>
-                <HoverCardHeaderDescription>Storage validation result</HoverCardHeaderDescription>
+                <HoverCardHeaderTitle>{storageTitle ?? t('storageHealth.validationTitle')}</HoverCardHeaderTitle>
+                <HoverCardHeaderDescription>{t('storageHealth.validationResult')}</HoverCardHeaderDescription>
               </HoverCardHeaderText>
             </HoverCardHeader>
 
@@ -138,7 +145,7 @@ export function DataStorageHealthIndicator({
                 <HoverCardItemValue>
                   <DataStorageHealthStatusView
                     status={status}
-                    errorMessage={getCompactStatusMessage(status, errorMessage)}
+                    errorMessage={getCompactStatusMessage(status, errorMessage, t)}
                   />
                 </HoverCardItemValue>
               </HoverCardItem>

@@ -5,27 +5,27 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Accordion with an explanation of the Connector State.
  */
 export default function ConnectorStateDescription() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='connector-state-details'>
-        <AccordionTrigger>What’s connector state?</AccordionTrigger>
+        <AccordionTrigger>{t('connectorRun.stateQuestion')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            The connector state stores internal data between runs and updates automatically with
-            each execution. It’s used to track progress and ensure consistent data processing across
-            runs.
+            {t('connectorRun.stateDescription')}
           </p>
           <p className='mb-2'>
-            Connector state is available only for connectors that support incremental runs, helping
-            add only new or updated records since the last run without reloading existing data.
+            {t('connectorRun.stateIncrementalDescription')}
           </p>
           <p className='mb-2'>
-            For more details, see the{' '}
+            {t('destinationHelp.common.moreDetails')}{' '}
             <ExternalAnchor
               className='underline'
               href='https://docs.p2pdigital.vn/?utm_source=owox_data_marts&utm_medium=manual_run_sheet&utm_campaign=tooltip_connector_state'

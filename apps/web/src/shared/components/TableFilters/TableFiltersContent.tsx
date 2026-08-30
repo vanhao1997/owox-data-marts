@@ -12,6 +12,7 @@ import { FiltersForm, type FiltersFormRef } from './FiltersForm';
 import { isFilterRowValid } from './filter-utils';
 import { DEFAULT_FILTERS_STATE, type FiltersState } from './types';
 import type { FilterConfigItem } from './types';
+import { useTranslation } from 'react-i18next';
 
 interface TableFiltersContentProps {
   config: FilterConfigItem[];
@@ -21,9 +22,10 @@ interface TableFiltersContentProps {
 
 export function TableFiltersContent({
   config,
-  title = 'Filters',
-  description = 'Filter your table to narrow down your data',
+  title,
+  description,
 }: TableFiltersContentProps) {
+  const { t } = useTranslation();
   const { open, setOpen, appliedState, onApply, onClear } = useTableFilters();
 
   const formRef = useRef<FiltersFormRef>(null);
@@ -69,8 +71,10 @@ export function TableFiltersContent({
   return (
     <PopoverContent variant='light' align='start' className='bg-background'>
       <PopoverHeader>
-        <PopoverTitle>{title}</PopoverTitle>
-        <PopoverDescription>{description}</PopoverDescription>
+        <PopoverTitle>{title ?? t('tableFilters.title', 'Filters')}</PopoverTitle>
+        <PopoverDescription>
+          {description ?? t('tableFilters.description', 'Filter your table to narrow down your data')}
+        </PopoverDescription>
       </PopoverHeader>
 
       <AppForm
@@ -103,10 +107,10 @@ export function TableFiltersContent({
 
         <FormActions variant='inline'>
           <Button size='sm' type='submit' disabled={!canApply}>
-            Apply filters
+            {t('tableFilters.apply', 'Apply filters')}
           </Button>
           <Button variant='outline' size='sm' type='button' onClick={handleClear}>
-            Clear all
+            {t('tableFilters.clearAll', 'Clear all')}
           </Button>
         </FormActions>
       </AppForm>

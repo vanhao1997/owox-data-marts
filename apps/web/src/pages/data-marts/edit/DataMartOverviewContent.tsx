@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router';
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { DataMartOverview } from '../../../features/data-marts/edit';
 import { OwnersEditor } from '../../../features/data-marts/edit/components/OwnersEditor';
@@ -62,6 +63,7 @@ interface OutletContextType {
 }
 
 export default function DataMartOverviewContent() {
+  const { t, i18n } = useTranslation();
   const { dataMart, updateDataMartOwners, getDataMart, projectId } =
     useOutletContext<OutletContextType>();
 
@@ -97,7 +99,7 @@ export default function DataMartOverviewContent() {
   // stay mounted, and without the reset mart A's fresh result would render on mart B.
   useEffect(() => {
     setRefreshedDataLastUpdated(null);
-  }, [dataMart.id]);
+  }, [dataMart.id, t]);
 
   const handleRefreshDataLastUpdated = useCallback(async () => {
     setIsRefreshingDataLastUpdated(true);
@@ -111,11 +113,15 @@ export default function DataMartOverviewContent() {
         setRefreshedDataLastUpdated(fresh);
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to check Data Last Updated');
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : t('dataMartOverview.errors.checkLastUpdated', 'Failed to check Data Last Updated')
+      );
     } finally {
       setIsRefreshingDataLastUpdated(false);
     }
-  }, [dataMart.id]);
+  }, [dataMart.id, t]);
 
   const handleAvailabilityChange = useCallback(
     async (reporting: boolean, maintenance: boolean) => {
@@ -124,14 +130,18 @@ export default function DataMartOverviewContent() {
           availableForReporting: reporting,
           availableForMaintenance: maintenance,
         });
-        toast.success('Sharing updated');
+        toast.success(t('dataMartOverview.toasts.sharingUpdated', 'Sharing updated'));
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : 'Failed to update sharing');
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : t('dataMartOverview.errors.updateSharing', 'Failed to update sharing')
+      );
       } finally {
         void getDataMart(dataMart.id);
       }
     },
-    [dataMart.id, getDataMart]
+    [dataMart.id, getDataMart, t]
   );
 
   const persistContexts = useCallback(
@@ -140,15 +150,19 @@ export default function DataMartOverviewContent() {
       void (async () => {
         try {
           await dataMartService.updateContexts(dataMart.id, next);
-          toast.success('Contexts updated');
+          toast.success(t('dataMartOverview.toasts.contextsUpdated', 'Contexts updated'));
           void getDataMart(dataMart.id);
         } catch (error) {
-          toast.error(error instanceof Error ? error.message : 'Failed to update contexts');
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : t('dataMartOverview.errors.updateContexts', 'Failed to update contexts')
+          );
           void getDataMart(dataMart.id);
         }
       })();
     },
-    [dataMart.id, getDataMart]
+    [dataMart.id, getDataMart, t]
   );
 
   const inlineContext = useInlineContextCreate({
@@ -167,8 +181,11 @@ export default function DataMartOverviewContent() {
     <div data-testid='datamartTabOverview' className='flex flex-col gap-4'>
       <CollapsibleCard collapsible name='dm-description'>
         <CollapsibleCardHeader>
-          <CollapsibleCardHeaderTitle icon={BookOpenIcon} tooltip='Description of this Data Mart'>
-            Description
+          <CollapsibleCardHeaderTitle
+            icon={BookOpenIcon}
+            tooltip={t('dataMartOverview.descriptionTooltip', 'Description of this Data Mart')}
+          >
+            {t('dataMartOverview.description', 'Description')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
@@ -181,23 +198,26 @@ export default function DataMartOverviewContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={Users}
-            tooltip='Define who owns and maintains this Data Mart'
+            tooltip={t(
+              'dataMartOverview.ownershipTooltip',
+              'Define who owns and maintains this Data Mart'
+            )}
           >
-            Ownership
+            {t('dataMartOverview.ownership', 'Ownership')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
           <div className='flex gap-4'>
             <div className='group flex w-full flex-col gap-4 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <div className='text-foreground flex items-center justify-between gap-2 text-sm font-medium'>
-                <span>Technical Owner</span>
+                <span>{t('dataMartOverview.technicalOwner', 'Technical owner')}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type='button'
                       tabIndex={-1}
                       className='pointer-events-none opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100'
-                      aria-label='Help information'
+                      aria-label={t('dataMartOverview.helpInformation', 'Help information')}
                     >
                       <Info
                         className='text-muted-foreground/50 hover:text-muted-foreground size-4 shrink-0 transition-colors'
@@ -206,7 +226,7 @@ export default function DataMartOverviewContent() {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side='top' align='center' role='tooltip'>
-                    Responsible for data sources and schema
+                    {t('dataMartOverview.technicalOwnerHelp', 'Responsible for data sources and schema')}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -223,17 +243,27 @@ export default function DataMartOverviewContent() {
               />
               <Accordion variant='common' type='single' collapsible>
                 <AccordionItem value='technical-owner-help'>
-                  <AccordionTrigger>What is a Technical Owner?</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dataMartOverview.technicalOwnerQuestion', 'What is a Technical Owner?')}
+                  </AccordionTrigger>
                   <AccordionContent>
-                    <p>Technical Owner is direct maintenance ownership of this Data Mart.</p>
                     <p>
-                      When the owner&apos;s role is Technical User or Project Admin, they may edit
-                      and delete the Data Mart, configure its Sharing, and maintain its Triggers,
-                      Reports and nested Report Triggers — regardless of Sharing settings.
+                      {t(
+                        'dataMartOverview.technicalOwnerIntro',
+                        'Technical Owner is direct maintenance ownership of this Data Mart.'
+                      )}
                     </p>
                     <p>
-                      Assigning Technical Owner to a Business User stores the assignment but grants
-                      no maintenance permissions until the role changes.
+                      {t(
+                        'dataMartOverview.technicalOwnerPermissions',
+                        "When the owner's role is Technical User or Project Admin, they may edit and delete the Data Mart, configure its Sharing, and maintain its Triggers, Reports and nested Report Triggers — regardless of Sharing settings."
+                      )}
+                    </p>
+                    <p>
+                      {t(
+                        'dataMartOverview.technicalOwnerBusinessUser',
+                        'Assigning Technical Owner to a Business User stores the assignment but grants no maintenance permissions until the role changes.'
+                      )}
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -241,14 +271,14 @@ export default function DataMartOverviewContent() {
             </div>
             <div className='group flex w-full flex-col gap-4 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <div className='text-foreground flex items-center justify-between gap-2 text-sm font-medium'>
-                <span>Business Owner</span>
+                <span>{t('dataMartOverview.businessOwner', 'Business owner')}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type='button'
                       tabIndex={-1}
                       className='pointer-events-none opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100'
-                      aria-label='Help information'
+                      aria-label={t('dataMartOverview.helpInformation', 'Help information')}
                     >
                       <Info
                         className='text-muted-foreground/50 hover:text-muted-foreground size-4 shrink-0 transition-colors'
@@ -257,7 +287,7 @@ export default function DataMartOverviewContent() {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side='top' align='center' role='tooltip'>
-                    Responsible for business requirements
+                    {t('dataMartOverview.businessOwnerHelp', 'Responsible for business requirements')}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -274,17 +304,27 @@ export default function DataMartOverviewContent() {
               />
               <Accordion variant='common' type='single' collapsible>
                 <AccordionItem value='business-owner-help'>
-                  <AccordionTrigger>What is a Business Owner?</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dataMartOverview.businessOwnerQuestion', 'What is a Business Owner?')}
+                  </AccordionTrigger>
                   <AccordionContent>
-                    <p>Business Owner is direct reporting ownership of this Data Mart.</p>
                     <p>
-                      Business Owners may see the Data Mart in the catalog, open it, use it for
-                      reporting, and see its Triggers, Reports and nested Report Triggers —
-                      regardless of Sharing settings.
+                      {t(
+                        'dataMartOverview.businessOwnerIntro',
+                        'Business Owner is direct reporting ownership of this Data Mart.'
+                      )}
                     </p>
                     <p>
-                      This role does not grant editing, deleting, Sharing management, Trigger
-                      maintenance, or changing owners.
+                      {t(
+                        'dataMartOverview.businessOwnerPermissions',
+                        'Business Owners may see the Data Mart in the catalog, open it, use it for reporting, and see its Triggers, Reports and nested Report Triggers — regardless of Sharing settings.'
+                      )}
+                    </p>
+                    <p>
+                      {t(
+                        'dataMartOverview.businessOwnerRestrictions',
+                        'This role does not grant editing, deleting, Sharing management, Trigger maintenance, or changing owners.'
+                      )}
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -299,9 +339,12 @@ export default function DataMartOverviewContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={availableForReporting || availableForMaintenance ? Globe : Lock}
-            tooltip='Control who can see and work with this Data Mart'
+            tooltip={t(
+              'dataMartOverview.sharingTooltip',
+              'Control who can see and work with this Data Mart'
+            )}
           >
-            Sharing
+            {t('dataMartOverview.sharing', 'Sharing')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
@@ -320,23 +363,33 @@ export default function DataMartOverviewContent() {
                   htmlFor='available-for-maintenance'
                   className='text-foreground cursor-pointer text-sm font-medium select-none'
                 >
-                  Shared for maintenance
+                  {t('dataMartOverview.sharedForMaintenance', 'Shared for maintenance')}
                 </label>
               </div>
               <p className='text-muted-foreground text-xs'>
-                Technical users can edit, delete, and manage triggers for this Data Mart
+                {t(
+                  'dataMartOverview.maintenanceDescription',
+                  'Technical users can edit, delete, and manage triggers for this Data Mart'
+                )}
               </p>
               <Accordion variant='common' type='single' collapsible>
                 <AccordionItem value='maintenance-help'>
                   <AccordionTrigger>
-                    What does &quot;Shared for maintenance&quot; mean?
+                    {t('dataMartOverview.maintenanceQuestion', 'What does "Shared for maintenance" mean?')}
                   </AccordionTrigger>
                   <AccordionContent>
                     <p>
-                      When enabled, Technical Users who are not owners can edit the Data Mart
-                      definition, delete it, and manage its scheduled triggers.
+                      {t(
+                        'dataMartOverview.maintenanceEnabled',
+                        'When enabled, Technical Users who are not owners can edit the Data Mart definition, delete it, and manage its scheduled triggers.'
+                      )}
                     </p>
-                    <p>Business Users are not affected by this setting.</p>
+                    <p>
+                      {t(
+                        'dataMartOverview.maintenanceBusinessUsers',
+                        'Business Users are not affected by this setting.'
+                      )}
+                    </p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -355,23 +408,33 @@ export default function DataMartOverviewContent() {
                   htmlFor='available-for-reporting'
                   className='text-foreground cursor-pointer text-sm font-medium select-none'
                 >
-                  Shared for reporting
+                  {t('dataMartOverview.sharedForReporting', 'Shared for reporting')}
                 </label>
               </div>
               <p className='text-muted-foreground text-xs'>
-                All project members can see this Data Mart and build reports on it
+                {t(
+                  'dataMartOverview.reportingDescription',
+                  'All project members can see this Data Mart and build reports on it'
+                )}
               </p>
               <Accordion variant='common' type='single' collapsible>
                 <AccordionItem value='reporting-help'>
                   <AccordionTrigger>
-                    What does &quot;Shared for reporting&quot; mean?
+                    {t('dataMartOverview.reportingQuestion', 'What does "Shared for reporting" mean?')}
                   </AccordionTrigger>
                   <AccordionContent>
                     <p>
-                      When enabled, all project members (both Technical and Business Users) can see
-                      this Data Mart in the catalog and use it to create reports.
+                      {t(
+                        'dataMartOverview.reportingEnabled',
+                        'When enabled, all project members (both Technical and Business Users) can see this Data Mart in the catalog and use it to create reports.'
+                      )}
                     </p>
-                    <p>Owners always have access regardless of this setting.</p>
+                    <p>
+                      {t(
+                        'dataMartOverview.reportingOwners',
+                        'Owners always have access regardless of this setting.'
+                      )}
+                    </p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -385,9 +448,12 @@ export default function DataMartOverviewContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={Tags}
-            tooltip='Business domain contexts assigned to this Data Mart'
+            tooltip={t(
+              'dataMartOverview.contextsTooltip',
+              'Business domain contexts assigned to this Data Mart'
+            )}
           >
-            Contexts
+            {t('dataMartOverview.contexts', 'Contexts')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
@@ -402,19 +468,27 @@ export default function DataMartOverviewContent() {
             </div>
             <Accordion variant='common' type='single' collapsible>
               <AccordionItem value='contexts-help'>
-                <AccordionTrigger>What are Contexts?</AccordionTrigger>
+                <AccordionTrigger>
+                  {t('dataMartOverview.contextsQuestion', 'What are Contexts?')}
+                </AccordionTrigger>
                 <AccordionContent>
                   <p>
-                    Contexts are business domains (e.g. Marketing, Finance, Sales) used to group
-                    Data Marts, Storages and Destinations.
+                    {t(
+                      'dataMartOverview.contextsIntro',
+                      'Contexts are business domains (e.g. Marketing, Finance, Sales) used to group Data Marts, Storages and Destinations.'
+                    )}
                   </p>
                   <p>
-                    They also control access: a member with the role scope limited to specific
-                    contexts will only see resources assigned to those contexts.
+                    {t(
+                      'dataMartOverview.contextsAccess',
+                      'They also control access: a member with the role scope limited to specific contexts will only see resources assigned to those contexts.'
+                    )}
                   </p>
                   <p>
-                    Assign one or more contexts to make this Data Mart discoverable to the right
-                    people.
+                    {t(
+                      'dataMartOverview.contextsAssign',
+                      'Assign one or more contexts to make this Data Mart discoverable to the right people.'
+                    )}
                   </p>
                 </AccordionContent>
               </AccordionItem>
@@ -426,22 +500,25 @@ export default function DataMartOverviewContent() {
 
       <CollapsibleCard collapsible name='dm-details'>
         <CollapsibleCardHeader>
-          <CollapsibleCardHeaderTitle icon={Info} tooltip='Metadata and additional details'>
-            Details
+          <CollapsibleCardHeaderTitle
+            icon={Info}
+            tooltip={t('dataMartOverview.detailsTooltip', 'Metadata and additional details')}
+          >
+            {t('dataMartOverview.details', 'Details')}
           </CollapsibleCardHeaderTitle>
         </CollapsibleCardHeader>
         <CollapsibleCardContent>
           <div className='flex gap-4'>
             <div className='group flex w-full flex-col gap-4 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <div className='text-foreground flex items-center justify-between gap-2 text-sm font-medium'>
-                <span>Created On</span>
+                <span>{t('dataMartOverview.createdOn', 'Created on')}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type='button'
                       tabIndex={-1}
                       className='pointer-events-none opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100'
-                      aria-label='Help information'
+                      aria-label={t('dataMartOverview.helpInformation', 'Help information')}
                     >
                       <Info
                         className='text-muted-foreground/50 hover:text-muted-foreground size-4 shrink-0 transition-colors'
@@ -450,7 +527,7 @@ export default function DataMartOverviewContent() {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side='top' align='center' role='tooltip'>
-                    When this Data Mart was created
+                    {t('dataMartOverview.createdOnHelp', 'When this Data Mart was created')}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -463,7 +540,7 @@ export default function DataMartOverviewContent() {
                     />
                   </div>
                   <div className='text-muted-foreground min-w-0 truncate text-sm leading-tight'>
-                    {new Intl.DateTimeFormat('en-US', {
+                    {new Intl.DateTimeFormat(i18n.resolvedLanguage ?? 'en-US', {
                       year: 'numeric',
                       month: 'short',
                       day: 'numeric',
@@ -474,14 +551,14 @@ export default function DataMartOverviewContent() {
             </div>
             <div className='group flex w-full flex-col gap-4 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
               <div className='text-foreground flex items-center justify-between gap-2 text-sm font-medium'>
-                <span>Data Last Updated</span>
+                <span>{t('dataMartOverview.dataLastUpdated', 'Data last updated')}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type='button'
                       tabIndex={-1}
                       className='pointer-events-none opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100'
-                      aria-label='Help information'
+                      aria-label={t('dataMartOverview.helpInformation', 'Help information')}
                     >
                       <Info
                         className='text-muted-foreground/50 hover:text-muted-foreground size-4 shrink-0 transition-colors'
@@ -490,8 +567,10 @@ export default function DataMartOverviewContent() {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side='top' align='center' role='tooltip'>
-                    When this Data Mart&apos;s source tables last changed in the storage — not which
-                    period the data covers
+                    {t(
+                      'dataMartOverview.dataLastUpdatedHelp',
+                      "When this Data Mart's source tables last changed in the storage — not which period the data covers"
+                    )}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -511,8 +590,11 @@ export default function DataMartOverviewContent() {
                   type='button'
                   onClick={() => void handleRefreshDataLastUpdated()}
                   disabled={isRefreshingDataLastUpdated}
-                  aria-label='Check Data Last Updated now'
-                  title='Check now'
+                  aria-label={t(
+                    'dataMartOverview.checkLastUpdated',
+                    'Check Data Last Updated now'
+                  )}
+                  title={t('dataMartOverview.checkNow', 'Check now')}
                   className='text-muted-foreground hover:text-foreground flex aspect-square h-7 w-7 items-center justify-center rounded-full border bg-white transition-colors disabled:opacity-50 dark:bg-white/10'
                 >
                   <RefreshCw
@@ -525,14 +607,14 @@ export default function DataMartOverviewContent() {
             {dataMart.createdByUser && (
               <div className='group flex w-full flex-col gap-4 rounded-md border-b border-gray-200 bg-white p-4 transition-shadow duration-200 hover:shadow-xs dark:border-0 dark:bg-white/2'>
                 <div className='text-foreground flex items-center justify-between gap-2 text-sm font-medium'>
-                  <span>Created By</span>
+                  <span>{t('dataMartOverview.createdBy', 'Created by')}</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
                         type='button'
                         tabIndex={-1}
                         className='pointer-events-none opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100'
-                        aria-label='Help information'
+                        aria-label={t('dataMartOverview.helpInformation', 'Help information')}
                       >
                         <Info
                           className='text-muted-foreground/50 hover:text-muted-foreground size-4 shrink-0 transition-colors'
@@ -541,7 +623,7 @@ export default function DataMartOverviewContent() {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side='top' align='center' role='tooltip'>
-                      The user who created this Data Mart
+                      {t('dataMartOverview.createdByHelp', 'The user who created this Data Mart')}
                     </TooltipContent>
                   </Tooltip>
                 </div>

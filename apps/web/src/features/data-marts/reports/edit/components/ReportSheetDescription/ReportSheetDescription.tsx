@@ -4,6 +4,7 @@ import { CopyLinkButton } from '@owox/ui/components/common/copy-link-button';
 import { ReportFormMode } from '../../../shared';
 import type { DataMartReport } from '../../../shared/model/types/data-mart-report';
 import { useReportDeepLink } from '../../hooks/useReportDeepLink';
+import { useTranslation } from 'react-i18next';
 
 interface ReportSheetDescriptionProps {
   mode: ReportFormMode;
@@ -17,12 +18,18 @@ interface ReportSheetDescriptionProps {
  * with the report's deep link.
  */
 export function ReportSheetDescription({ mode, report, children }: ReportSheetDescriptionProps) {
+  const { t } = useTranslation();
   const reportLink = useReportDeepLink(mode === ReportFormMode.EDIT ? report : undefined);
 
   return (
     <div className='flex w-full items-center gap-4'>
       <SheetDescription>{children}</SheetDescription>
-      {reportLink && <CopyLinkButton link={reportLink} ariaLabel='Copy link to this report' />}
+      {reportLink && (
+        <CopyLinkButton
+          link={reportLink}
+          ariaLabel={t('reportsUi.copyLinkToReport', 'Sao chép liên kết tới báo cáo này')}
+        />
+      )}
     </div>
   );
 }

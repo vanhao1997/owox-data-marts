@@ -5,22 +5,25 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
+import { useTranslation } from 'react-i18next';
 
 export default function StorageTypeLegacyBigQueryDescription() {
+  const { t } = useTranslation();
+
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='legacy-bigquery-storage-type-details'>
-        <AccordionTrigger>What is this storage type?</AccordionTrigger>
+        <AccordionTrigger>{t('storageHelp.legacyBigQuery.title')}</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            This system storage type is created automatically to maintain compatibility with the{' '}
+            {t('storageHelp.legacyBigQuery.intro')}{' '}
             <ExternalAnchor
               className='underline'
               href='https://workspace.google.com/marketplace/app/owox_bigquery_data_marts/263000453832'
             >
-              P2PDigital extension
+              {t('storageHelp.legacyBigQuery.extension')}
             </ExternalAnchor>{' '}
-            for Google Sheets. It cannot be manually added or deleted.
+            {t('storageHelp.legacyBigQuery.suffix')}
           </p>
         </AccordionContent>
       </AccordionItem>

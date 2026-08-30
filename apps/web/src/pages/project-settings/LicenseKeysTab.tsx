@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate } from 'react-router';
 import { AlertCircle, Plus, ShieldCheck } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@owox/ui/components/alert';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@owox/ui/components/button';
 import { useFlags } from '../../app/store/hooks';
 import { useIsAdmin } from '../../features/idp/hooks/useRole';
@@ -15,6 +16,7 @@ import { useLicenseKeys } from '../../features/license-keys/hooks/useLicenseKeys
 import type { CreateLicenseKeyResponse, LicenseKey } from '../../features/license-keys/types';
 
 export function LicenseKeysTab() {
+  const { t } = useTranslation();
   const { flags } = useFlags();
   const isAdmin = useIsAdmin();
   const enabled = !!flags && checkVisible('LICENSE_ISSUANCE_ENABLED', 'true', flags);
@@ -45,11 +47,11 @@ export function LicenseKeysTab() {
   return (
     <div className='dm-page-content'>
       {loading ? (
-        <div className='text-muted-foreground p-4'>Loading...</div>
+        <div className='text-muted-foreground p-4'>{t('common.loading')}</div>
       ) : error ? (
         <Alert variant='destructive'>
           <AlertCircle className='h-4 w-4' />
-          <AlertTitle>Could not load license keys</AlertTitle>
+          <AlertTitle>{t('licenseKeysPage.loadError')}</AlertTitle>
           <AlertDescription className='flex items-center gap-3'>
             {error}
             <Button
@@ -59,7 +61,7 @@ export function LicenseKeysTab() {
                 void fetchKeys();
               }}
             >
-              Retry
+              {t('common.retry')}
             </Button>
           </AlertDescription>
         </Alert>
@@ -70,10 +72,10 @@ export function LicenseKeysTab() {
               <div className='dm-empty-state'>
                 <ShieldCheck className='dm-empty-state-ico' strokeWidth={1} />
                 <h2 className='dm-empty-state-title'>
-                  This project doesn&apos;t have any license keys yet
+                  {t('licenseKeysPage.emptyTitle')}
                 </h2>
                 <p className='dm-empty-state-subtitle'>
-                  Create one to let a deployment run reports and bill them to this project.
+                  {t('licenseKeysPage.emptySubtitle')}
                 </p>
                 {isAdmin && (
                   <Button
@@ -83,7 +85,7 @@ export function LicenseKeysTab() {
                     }}
                   >
                     <Plus className='h-4 w-4' />
-                    Create license key
+                    {t('licenseKeysPage.createButton')}
                   </Button>
                 )}
               </div>
@@ -104,9 +106,7 @@ export function LicenseKeysTab() {
           )}
           <div className='bg-muted/50 rounded-md border-b border-gray-200 px-4 py-3 dark:border-white/2 dark:bg-white/2'>
             <p className='text-muted-foreground text-sm'>
-              A license key authorizes Report Runs for a single deployment origin and bills them to
-              this project. To rotate, create a new key, update the deployment, then revoke the old
-              one.
+              {t('licenseKeysPage.infoNote')}
             </p>
           </div>
         </div>
@@ -144,14 +144,14 @@ export function LicenseKeysTab() {
         onOpenChange={open => {
           if (!open) setRevokingKey(null);
         }}
-        title='Revoke license key'
+        title={t('licenseKeysPage.revokeTitle')}
         description={
           <>
-            Are you sure you want to revoke <strong>{revokingKey?.name}</strong>? This action cannot
-            be undone. The deployment using this key will stop running reports immediately.
+            {t('licenseKeysPage.revokeConfirm')} <strong>{revokingKey?.name}</strong>?{' '}
+            {t('licenseKeysPage.revokeWarning')}
           </>
         }
-        confirmLabel='Revoke'
+        confirmLabel={t('licenseKeysPage.revokeButton')}
         variant='destructive'
         onConfirm={() => {
           void handleRevokeConfirm();

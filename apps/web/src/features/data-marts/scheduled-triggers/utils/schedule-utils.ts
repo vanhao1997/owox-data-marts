@@ -1,4 +1,5 @@
 import { cronToScheduleConfig } from '../components/ScheduleConfig/cron-parser';
+import i18n from '../../../../i18n';
 
 export interface ScheduleConfig {
   type: 'daily' | 'weekly' | 'monthly' | 'interval' | 'custom';
@@ -30,41 +31,56 @@ export const getBrowserTimezone = (): string => {
 };
 
 export function getScheduleDescription(config: ScheduleConfig, isEnabled: boolean): string {
-  if (!isEnabled) return 'Schedule is disabled';
+  const t = i18n.t.bind(i18n);
+  if (!isEnabled) return t('scheduleDescription.disabled', 'Schedule is disabled');
 
   const timeStr = config.time;
 
   switch (config.type) {
     case 'daily':
-      return `Daily at ${timeStr}`;
+      return t('scheduleDescription.daily', 'Daily at {{time}}', { time: timeStr });
     case 'weekly': {
       const selectedDays = config.weekdays
-        .map(day => WEEKDAYS.find(w => w.value === day)?.label)
+        .map(day =>
+          t(`scheduleConfig.weekday${day}`, WEEKDAYS.find(w => w.value === day)?.label ?? String(day))
+        )
         .join(', ');
-      return `Weekly on ${selectedDays} at ${timeStr}`;
+      return t('scheduleDescription.weekly', 'Weekly on {{days}} at {{time}}', {
+        days: selectedDays,
+        time: timeStr,
+      });
     }
     case 'monthly': {
       const sortedDays = [...config.monthDays].sort((a, b) => a - b);
       const dayStrings = sortedDays.map(day => {
-        if (day === 1) return '1st';
-        if (day === 2) return '2nd';
-        if (day === 3) return '3rd';
-        return `${String(day)}th`;
+        if (day === 1) return t('scheduleDescription.ordinal1', '1st');
+        if (day === 2) return t('scheduleDescription.ordinal2', '2nd');
+        if (day === 3) return t('scheduleDescription.ordinal3', '3rd');
+        return t('scheduleDescription.ordinalOther', '{{day}}th', { day });
       });
       const daysText =
         dayStrings.length === 1
           ? dayStrings[0]
           : dayStrings.length === 2
-            ? `${dayStrings[0]} and ${dayStrings[1]}`
-            : `${dayStrings.slice(0, -1).join(', ')}, and ${dayStrings[dayStrings.length - 1]}`;
-      return `Monthly on the ${daysText} at ${timeStr}`;
+            ? `${dayStrings[0]} ${t('scheduleDescription.and', 'and')} ${dayStrings[1]}`
+            : `${dayStrings.slice(0, -1).join(', ')}, ${t('scheduleDescription.and', 'and')} ${dayStrings[dayStrings.length - 1]}`;
+      return t('scheduleDescription.monthly', 'Monthly on the {{days}} at {{time}}', {
+        days: daysText,
+        time: timeStr,
+      });
     }
     case 'interval':
       return config.intervalType === 'minutes'
-        ? `Every ${String(config.intervalValue)} minute${config.intervalValue !== 1 ? 's' : ''}`
-        : `Every ${String(config.intervalValue)} hour${config.intervalValue !== 1 ? 's' : ''}`;
+        ? t('scheduleDescription.everyMinutes', 'Every {{count}} minute{{suffix}}', {
+            count: config.intervalValue,
+            suffix: config.intervalValue !== 1 ? 's' : '',
+          })
+        : t('scheduleDescription.everyHours', 'Every {{count}} hour{{suffix}}', {
+            count: config.intervalValue,
+            suffix: config.intervalValue !== 1 ? 's' : '',
+          });
     case 'custom':
-      return `Custom schedule`;
+      return t('scheduleDescription.custom', 'Custom schedule');
     default:
       return '';
   }

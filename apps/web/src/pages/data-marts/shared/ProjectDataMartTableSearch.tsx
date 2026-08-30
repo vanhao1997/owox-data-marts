@@ -1,5 +1,6 @@
 import { Input } from '@owox/ui/components/input';
 import { Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ProjectDataMartTableSearchProps {
   value: string;
@@ -10,8 +11,9 @@ interface ProjectDataMartTableSearchProps {
 export function ProjectDataMartTableSearch({
   value,
   onChange,
-  placeholder = 'Search',
+  placeholder,
 }: ProjectDataMartTableSearchProps) {
+  const { t } = useTranslation();
   return (
     <div className='relative max-w-md min-w-0 flex-1'>
       <Search
@@ -19,8 +21,8 @@ export function ProjectDataMartTableSearch({
         aria-hidden='true'
       />
       <Input
-        aria-label={placeholder}
-        placeholder={placeholder}
+        aria-label={placeholder ?? t('search.button', 'Search')}
+        placeholder={placeholder ?? t('search.button', 'Search')}
         value={value}
         onChange={event => {
           onChange(event.target.value);

@@ -5,6 +5,7 @@ import { UserAvatarGroup } from '../../../../shared/components/UserAvatarGroup/U
 import type { UserProjection } from '../../../../shared/types';
 import type { ContextDto } from '../../types/context.types';
 import { ContextsActionsCell } from './ContextsActionsCell';
+import type { TFunction } from 'i18next';
 
 export interface ContextsTableItem extends ContextDto {
   memberCount: number;
@@ -31,20 +32,22 @@ interface ContextsColumnsProps {
   onEdit?: (contextId: string) => void;
   onDelete?: (contextId: string) => void;
   isAdmin?: boolean;
+  t: TFunction;
 }
 
 export const getContextsColumns = ({
   onEdit,
   onDelete,
   isAdmin = false,
-}: ContextsColumnsProps = {}): ColumnDef<ContextsTableItem>[] => [
+  t,
+}: ContextsColumnsProps): ColumnDef<ContextsTableItem>[] => [
   {
     accessorKey: ContextsColumnKey.NAME,
     size: 240,
-    meta: { title: contextsColumnLabels[ContextsColumnKey.NAME] },
+    meta: { title: t('common.name') },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {contextsColumnLabels[ContextsColumnKey.NAME]}
+        {t('common.name')}
       </SortableHeader>
     ),
     cell: ({ row }) => <div className='font-medium'>{row.original.name}</div>,
@@ -53,10 +56,10 @@ export const getContextsColumns = ({
     accessorKey: ContextsColumnKey.MEMBERS,
     size: 160,
     sortingFn: (a, b) => a.original.memberCount - b.original.memberCount,
-    meta: { title: contextsColumnLabels[ContextsColumnKey.MEMBERS] },
+    meta: { title: t('membersPage.title') },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {contextsColumnLabels[ContextsColumnKey.MEMBERS]}
+        {t('membersPage.title')}
       </SortableHeader>
     ),
     cell: ({ row }) => <UserAvatarGroup users={row.original.memberUsers} />,
@@ -65,8 +68,8 @@ export const getContextsColumns = ({
     accessorKey: ContextsColumnKey.DESCRIPTION,
     size: 360,
     enableSorting: false,
-    meta: { title: contextsColumnLabels[ContextsColumnKey.DESCRIPTION] },
-    header: contextsColumnLabels[ContextsColumnKey.DESCRIPTION],
+    meta: { title: t('common.description') },
+    header: t('common.description'),
     cell: ({ row }) => {
       const desc = row.original.description;
       if (!desc) return <span className='text-muted-foreground'>—</span>;
@@ -77,10 +80,10 @@ export const getContextsColumns = ({
     id: ContextsColumnKey.CREATED_BY,
     accessorFn: row => row.createdByUser?.fullName ?? row.createdByUser?.email ?? '',
     size: 200,
-    meta: { title: contextsColumnLabels[ContextsColumnKey.CREATED_BY] },
+    meta: { title: t('common.createdBy') },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {contextsColumnLabels[ContextsColumnKey.CREATED_BY]}
+        {t('common.createdBy')}
       </SortableHeader>
     ),
     cell: ({ row }) => {
@@ -102,10 +105,10 @@ export const getContextsColumns = ({
     accessorKey: ContextsColumnKey.CREATED_AT,
     size: 140,
     sortDescFirst: true,
-    meta: { title: contextsColumnLabels[ContextsColumnKey.CREATED_AT] },
+    meta: { title: t('common.createdAt') },
     header: ({ column }) => (
       <SortableHeader column={column}>
-        {contextsColumnLabels[ContextsColumnKey.CREATED_AT]}
+        {t('common.createdAt')}
       </SortableHeader>
     ),
     cell: ({ row }) => {

@@ -18,9 +18,11 @@ import { useDataMartContext } from '../../../features/data-marts/edit/model';
 import { ConnectorContextProvider } from '../../../features/connectors/shared/model/context';
 import { DataMartDefinitionType } from '../../../features/data-marts/shared';
 import { ScheduledTriggerType } from '../../../features/data-marts/scheduled-triggers/enums';
+import { useTranslation } from 'react-i18next';
 
 export default function DataMartTriggersContent() {
   const { dataMart } = useDataMartContext();
+  const { t } = useTranslation();
   const [isFormSheetOpen, setIsFormSheetOpen] = useState(false);
   const hasConnector = dataMart?.definitionType === DataMartDefinitionType.CONNECTOR;
 
@@ -38,19 +40,19 @@ export default function DataMartTriggersContent() {
         <CollapsibleCardHeader>
           <CollapsibleCardHeaderTitle
             icon={CalendarClock}
-            tooltip='Time triggers allow you to schedule Data Mart runs at specific times'
+            tooltip={t('scheduledTriggers.timeTooltip', 'Time triggers allow you to schedule Data Mart runs at specific times')}
           >
-            Time triggers
+            {t('scheduledTriggers.timeTitle', 'Time triggers')}
           </CollapsibleCardHeaderTitle>
           <CollapsibleCardHeaderActions>
             <Button
               variant='outline'
               onClick={handleOpenFormSheet}
-              aria-label='Add new trigger'
+              aria-label={t('scheduledTriggers.add', 'Add new trigger')}
               data-testid='triggerCreateButton'
             >
               <Plus className='h-4 w-4' aria-hidden='true' />
-              New Trigger
+              {t('scheduledTriggers.new', 'New trigger')}
             </Button>
           </CollapsibleCardHeaderActions>
         </CollapsibleCardHeader>

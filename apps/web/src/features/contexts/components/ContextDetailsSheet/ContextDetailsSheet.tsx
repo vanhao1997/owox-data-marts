@@ -32,6 +32,7 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { contextService } from '../../services/context.service';
 import { MembersAssignmentField } from '../../../../shared/components/MembersAssignmentField';
@@ -80,6 +81,7 @@ export function ContextDetailsSheet({
   onClose,
   onSaved,
 }: ContextDetailsSheetProps) {
+  const { t } = useTranslation();
   const form = useForm<ContextDetailsFormValues>({
     resolver: zodResolver(contextDetailsSchema),
     defaultValues: { name: '', description: '' },
@@ -153,8 +155,8 @@ export function ContextDetailsSheet({
       >
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Configure context</SheetTitle>
-            <SheetDescription>Customize settings for this context</SheetDescription>
+            <SheetTitle>{t('contextsPage.configureTitle')}</SheetTitle>
+            <SheetDescription>{t('contextsPage.configureDescription')}</SheetDescription>
           </SheetHeader>
 
           <Form {...form}>
@@ -164,7 +166,7 @@ export function ContextDetailsSheet({
               }}
             >
               <FormLayout>
-                <FormSection title='General' name='ctx-details-general'>
+                <FormSection title={t('formCommon.general')} name='ctx-details-general'>
                   <FormField
                     control={control}
                     name='name'
@@ -203,7 +205,7 @@ export function ContextDetailsSheet({
                   />
                 </FormSection>
 
-                <FormSection title='Members' name='ctx-details-members'>
+                <FormSection title={t('membersPage.title')} name='ctx-details-members'>
                   <MembersAssignmentField
                     idPrefix='ctx-mem'
                     label='Assigned members'
@@ -221,19 +223,15 @@ export function ContextDetailsSheet({
                     onToggle={handleToggleMember}
                     onSetSelected={setSelectedMemberIds}
                     disabled={saving}
-                    emptyText='No project members to assign yet.'
+                    emptyText={t('contextsPage.noMembers')}
                     footer={
                       <FormDescription>
                         <Accordion variant='common' type='single' collapsible>
                           <AccordionItem value='ctx-members-help'>
-                            <AccordionTrigger>Why are some members locked?</AccordionTrigger>
+                            <AccordionTrigger>{t('contextsPage.lockedMembersQuestion')}</AccordionTrigger>
                             <AccordionContent>
                               <p className='mb-2'>
-                                Admins and members with project-wide scope already see every
-                                resource, regardless of context assignments. They appear here as a
-                                reminder, but their context membership can&apos;t be changed from
-                                this screen — adjust their role scope in Project settings → Members
-                                instead.
+                                {t('contextsPage.lockedMembersAnswer')}
                               </p>
                             </AccordionContent>
                           </AccordionItem>
@@ -243,9 +241,9 @@ export function ContextDetailsSheet({
                   />
                 </FormSection>
 
-                <FormSection title='Details' name='ctx-details-meta' defaultOpen={false}>
+                <FormSection title={t('common.viewDetails')} name='ctx-details-meta' defaultOpen={false}>
                   <FormItem>
-                    <FormLabel>Created by</FormLabel>
+                    <FormLabel>{t('common.createdBy')}</FormLabel>
                     {context.createdByUser ? (
                       <UserReference userProjection={context.createdByUser} />
                     ) : (
@@ -253,13 +251,13 @@ export function ContextDetailsSheet({
                     )}
                   </FormItem>
                   <FormItem>
-                    <FormLabel>Created at</FormLabel>
+                    <FormLabel>{t('common.createdAt')}</FormLabel>
                     <span className='text-muted-foreground text-sm'>
                       {formatDate(context.createdAt)}
                     </span>
                   </FormItem>
                   <FormItem>
-                    <FormLabel>Last modified</FormLabel>
+                    <FormLabel>{t('contextsPage.lastModified')}</FormLabel>
                     <span className='text-muted-foreground text-sm'>
                       {formatDate(context.modifiedAt)}
                     </span>
@@ -274,7 +272,7 @@ export function ContextDetailsSheet({
                   disabled={saving || (!formState.isDirty && !memberSelectionDirty)}
                 >
                   {saving && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-                  Save
+                  {t('common.save')}
                 </Button>
                 <Button
                   type='button'
@@ -283,7 +281,7 @@ export function ContextDetailsSheet({
                   onClick={onClose}
                   disabled={saving}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               </FormActions>
             </AppForm>

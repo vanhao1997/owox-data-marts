@@ -15,6 +15,7 @@ import {
   type ObjectLabelsHidden,
 } from './object-labels';
 import { VIEW_MODE_OPTIONS, type CanvasViewMode } from './view-mode';
+import { useTranslation } from 'react-i18next';
 
 const OBJECT_LABEL_META: Record<ObjectLabelPart, { label: string; helper: string }> = {
   source: {
@@ -61,12 +62,27 @@ export function CanvasSettingsPanel({
   objectLabels,
   onObjectLabelsChange,
 }: CanvasSettingsPanelProps) {
+  const { t } = useTranslation();
+  const objectLabelMeta: Record<ObjectLabelPart, { label: string; helper: string }> = {
+    source: {
+      label: t('canvasSettings.inputSource', OBJECT_LABEL_META.source.label),
+      helper: t('canvasSettings.inputSourceHelp', OBJECT_LABEL_META.source.helper),
+    },
+    fields: {
+      label: t('canvasSettings.fieldCount', OBJECT_LABEL_META.fields.label),
+      helper: t('canvasSettings.fieldCountHelp', OBJECT_LABEL_META.fields.helper),
+    },
+    status: {
+      label: t('canvasSettings.statusDot', OBJECT_LABEL_META.status.label),
+      helper: t('canvasSettings.statusDotHelp', OBJECT_LABEL_META.status.helper),
+    },
+  };
   return (
     <>
-      <PopoverTitle>View</PopoverTitle>
+      <PopoverTitle>{t('canvasSettings.view', 'View')}</PopoverTitle>
       <div
         role='radiogroup'
-        aria-label='Card view mode'
+        aria-label={t('canvasSettings.cardViewMode', 'Card view mode')}
         className='bg-muted mt-2 grid grid-cols-2 gap-0.5 rounded-md p-0.5'
       >
         {VIEW_MODE_OPTIONS.map(option => (
@@ -84,12 +100,12 @@ export function CanvasSettingsPanel({
               onViewModeChange(option.value);
             }}
           >
-            {option.label}
+            {t(`canvasSettings.viewModes.${option.value}`, option.label)}
           </button>
         ))}
       </div>
-      <PopoverTitle className='mt-3 border-t pt-3'>Layout algorithm</PopoverTitle>
-      <div role='radiogroup' aria-label='Layout algorithm' className='mt-2 space-y-0.5'>
+      <PopoverTitle className='mt-3 border-t pt-3'>{t('canvasSettings.layoutAlgorithm', 'Layout algorithm')}</PopoverTitle>
+      <div role='radiogroup' aria-label={t('canvasSettings.layoutAlgorithm', 'Layout algorithm')} className='mt-2 space-y-0.5'>
         {CANVAS_DIRECTION_OPTIONS.map(option => (
           <button
             key={option.value}
@@ -101,14 +117,14 @@ export function CanvasSettingsPanel({
               onDirectionChange(option.value);
             }}
           >
-            <span>{option.label}</span>
+            <span>{t(`canvasSettings.directions.${option.value}`, option.label)}</span>
             {direction === option.value && <Check className='h-4 w-4' />}
           </button>
         ))}
       </div>
       <div className='mt-3 flex items-center justify-between gap-2 border-t pt-3'>
         <label htmlFor={joinFieldsSwitchId} className='text-sm'>
-          Show join fields
+          {t('canvasSettings.showJoinFields', 'Show join fields')}
         </label>
         <Switch
           id={joinFieldsSwitchId}
@@ -116,15 +132,15 @@ export function CanvasSettingsPanel({
           onCheckedChange={onShowJoinFieldsChange}
         />
       </div>
-      <PopoverTitle className='mt-3 border-t pt-3'>Object labels</PopoverTitle>
+      <PopoverTitle className='mt-3 border-t pt-3'>{t('canvasSettings.objectLabels', 'Object labels')}</PopoverTitle>
       <p className='text-muted-foreground mt-1 text-xs leading-snug'>
-        Tick what every object shows — untick to hide it.
+        {t('canvasSettings.objectLabelsHelp', 'Tick what every object shows — untick to hide it.')}
       </p>
       <div className='mt-2 space-y-0.5'>
         {/* A checked box means the part is VISIBLE — unchecking hides it.
             The stored state is the hidden set, hence the inversion here. */}
         {OBJECT_LABEL_PARTS.map(part => {
-          const meta = OBJECT_LABEL_META[part];
+          const meta = objectLabelMeta[part];
           const shown = !objectLabels[part];
           return (
             <button
@@ -176,7 +192,7 @@ export function CanvasSettingsPanel({
           <span className='w-4 shrink-0 text-center font-bold' aria-hidden='true'>
             ≡
           </span>
-          Check all — show everything
+          {t('canvasSettings.showEverything', 'Check all — show everything')}
         </button>
         <button
           type='button'
@@ -193,7 +209,7 @@ export function CanvasSettingsPanel({
           <span className='w-4 shrink-0 text-center font-bold' aria-hidden='true'>
             ⊘
           </span>
-          Uncheck all — title only
+          {t('canvasSettings.titleOnly', 'Uncheck all — title only')}
         </button>
       </div>
     </>
@@ -208,12 +224,13 @@ export type CanvasSettingsPopoverProps = Omit<CanvasSettingsPanelProps, 'joinFie
  * aria-label, popover placement) can never drift between them.
  */
 export function CanvasSettingsPopover(props: CanvasSettingsPopoverProps) {
+  const { t } = useTranslation();
   // Unique per instance — the inline and fullscreen canvases mount together.
   const joinFieldsSwitchId = useId();
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant='outline' size='icon' className='h-12 w-12' aria-label='Canvas settings'>
+        <Button variant='outline' size='icon' className='h-12 w-12' aria-label={t('canvasSettings.title', 'Canvas settings')}>
           <Settings className='h-6 w-6' />
         </Button>
       </PopoverTrigger>

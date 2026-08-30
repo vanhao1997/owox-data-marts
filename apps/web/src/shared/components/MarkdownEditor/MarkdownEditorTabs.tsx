@@ -1,4 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from '@owox/ui/components/tabs';
+import { useTranslation } from 'react-i18next';
 
 export interface MarkdownEditorTabsProps {
   value: 'markdown' | 'preview';
@@ -6,6 +7,7 @@ export interface MarkdownEditorTabsProps {
 }
 
 export function MarkdownEditorTabs({ value, onChange }: MarkdownEditorTabsProps) {
+  const { t } = useTranslation();
   return (
     <Tabs
       value={value}
@@ -14,8 +16,8 @@ export function MarkdownEditorTabs({ value, onChange }: MarkdownEditorTabsProps)
       }}
     >
       <TabsList>
-        <TabsTrigger value='markdown'>Markdown</TabsTrigger>
-        <TabsTrigger value='preview'>Preview</TabsTrigger>
+        <TabsTrigger value='markdown'>{t('markdownEditor.markdown', 'Markdown')}</TabsTrigger>
+        <TabsTrigger value='preview'>{t('markdownEditor.preview', 'Preview')}</TabsTrigger>
       </TabsList>
     </Tabs>
   );

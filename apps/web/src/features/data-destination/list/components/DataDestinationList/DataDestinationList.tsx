@@ -16,6 +16,7 @@ import {
   type DataDestinationTableItem,
   getDataDestinationColumns,
 } from '../DataDestinationTable';
+import { useTranslation } from 'react-i18next';
 
 interface DataDestinationListProps {
   isCreateSheetInitiallyOpen?: boolean;
@@ -34,6 +35,7 @@ export const DataDestinationList = ({
   isCreateSheetInitiallyOpen = false,
   onCreateSheetClose,
 }: DataDestinationListProps) => {
+  const { t } = useTranslation();
   const {
     dataDestinations,
     currentDataDestination,
@@ -83,12 +85,14 @@ export const DataDestinationList = ({
       if (destination) {
         void handleEdit(deepLinkId);
       } else {
-        toast.error(`Destination not found by id ${deepLinkId}`);
+        toast.error(
+          t('dataDestinationList.notFound', 'Destination not found by id {{id}}', { id: deepLinkId })
+        );
         removeIdParam();
       }
       hasAttemptedDeepLink.current = true;
     }
-  }, [loading, dataDestinations, deepLinkId, removeIdParam, handleEdit]);
+  }, [loading, dataDestinations, deepLinkId, removeIdParam, handleEdit, t]);
 
   useEffect(() => {
     void fetchDataDestinations();
@@ -129,7 +133,7 @@ export const DataDestinationList = ({
       try {
         const updatedDestination = await rotateSecretKey(destinationToRotateSecretKey);
         if (isLookerStudioCredentials(updatedDestination.credentials)) {
-          toast.success('New JSON Config copied to clipboard');
+          toast.success(t('dataDestinationList.newConfigCopied', 'New JSON Config copied to clipboard'));
           const jsonConfig = generateLookerStudioJsonConfig(updatedDestination.credentials);
           void navigator.clipboard.writeText(jsonConfig);
         }
@@ -195,6 +199,7 @@ export const DataDestinationList = ({
     onEdit: handleEdit,
     onDelete: onDeleteCallback,
     onRotateSecretKey: handleRotateSecretKey,
+    t,
   });
 
   return (
@@ -220,7 +225,7 @@ export const DataDestinationList = ({
         onOpenChange={open => {
           if (!open) setBlocked(null);
         }}
-        title='Cannot delete destination'
+        title={t('dataDestinationList.cannotDelete', 'Cannot delete destination')}
         description={
           blocked ? (
             <span className='block space-y-2'>
@@ -233,19 +238,26 @@ export const DataDestinationList = ({
                     setBlocked(null);
                   }}
                 >
-                  {blocked.impact.reportsCount} Report
-                  {blocked.impact.reportsCount === 1 ? '' : 's'}
+                  {t('dataDestinationList.referencedReports', '{{reports}} Report{{reportSuffix}}', {
+                    reports: blocked.impact.reportsCount,
+                    reportSuffix: blocked.impact.reportsCount === 1 ? '' : 's',
+                  })}
                 </Link>{' '}
-                across {blocked.impact.dataMartCount} Data Mart
-                {blocked.impact.dataMartCount === 1 ? '' : 's'}.
+                {t('dataDestinationList.acrossDataMarts', 'across {{dataMarts}} Data Mart{{dataMartSuffix}}.', {
+                    dataMarts: blocked.impact.dataMartCount,
+                    dataMartSuffix: blocked.impact.dataMartCount === 1 ? '' : 's',
+                  })}
               </span>
               <span className='text-muted-foreground block'>
-                Remove or repoint those reports before deleting the destination.
+                {t(
+                  'dataDestinationList.removeBeforeDelete',
+                  'Remove or repoint those reports before deleting the destination.'
+                )}
               </span>
             </span>
           ) : null
         }
-        confirmLabel='Got it'
+        confirmLabel={t('dataDestinationList.gotIt', 'Got it')}
         variant='default'
         onConfirm={() => {
           setBlocked(null);
@@ -255,10 +267,13 @@ export const DataDestinationList = ({
       <ConfirmationDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title='Delete Destination'
-        description='Are you sure you want to delete this  destination? This action cannot be undone.'
-        confirmLabel='Delete'
-        cancelLabel='Cancel'
+        title={t('dataDestinationList.deleteTitle', 'Delete Destination')}
+        description={t(
+          'dataDestinationList.deleteDescription',
+          'Are you sure you want to delete this destination? This action cannot be undone.'
+        )}
+        confirmLabel={t('common.delete', 'Delete')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => {
           void handleConfirmDelete();
         }}
@@ -271,10 +286,13 @@ export const DataDestinationList = ({
       <ConfirmationDialog
         open={isRotateSecretKeyDialogOpen}
         onOpenChange={setRotateSecretKeyDialogOpen}
-        title='Rotate Secret Key'
-        description={'Rotating the secret key will invalidate the previous key'}
-        confirmLabel='Rotate Key'
-        cancelLabel='Cancel'
+        title={t('dataDestinationList.rotateTitle', 'Rotate Secret Key')}
+        description={t(
+          'dataDestinationList.rotateDescription',
+          'Rotating the secret key will invalidate the previous key'
+        )}
+        confirmLabel={t('dataDestinationList.rotateKey', 'Rotate Key')}
+        cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => void handleConfirmRotateSecretKey()}
         onCancel={() => {
           setRotateSecretKeyDialogOpen(false);
@@ -282,14 +300,16 @@ export const DataDestinationList = ({
         variant='destructive'
       >
         <div className='text-sm'>
-          <p className='mb-2'>After rotation, you will need to:</p>
+          <p className='mb-2'>{t('dataDestinationList.afterRotation', 'After rotation, you will need to:')}</p>
           <ol className='mb-2 list-decimal pl-5'>
-            <li>The new JSON Config will be automatically copied to your clipboard</li>
-            <li>Go to your Data Studio Connector</li>
-            <li>Update the configuration with the new JSON Config</li>
-            <li>Save the changes to restore access to your data marts</li>
+            <li>{t('dataDestinationList.newConfigStep', 'The new JSON Config will be automatically copied to your clipboard')}</li>
+            <li>{t('dataDestinationList.connectorStep', 'Go to your Data Studio Connector')}</li>
+            <li>{t('dataDestinationList.updateConfigStep', 'Update the configuration with the new JSON Config')}</li>
+            <li>{t('dataDestinationList.saveChangesStep', 'Save the changes to restore access to your data marts')}</li>
           </ol>
-          <p className='font-semibold'>Are you sure you want to rotate the secret key?</p>
+          <p className='font-semibold'>
+            {t('dataDestinationList.rotateQuestion', 'Are you sure you want to rotate the secret key?')}
+          </p>
         </div>
       </ConfirmationDialog>
     </div>

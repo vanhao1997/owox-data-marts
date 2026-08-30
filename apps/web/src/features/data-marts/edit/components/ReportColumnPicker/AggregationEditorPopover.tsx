@@ -14,6 +14,7 @@ import { DATE_TRUNC_UNITS, type DateTruncUnit } from '../../../shared/types/outp
 import type { ReportAggregateFunction } from '../../../shared/types/relationship.types';
 import { aggregateFunctionLabel } from '../../../shared/utils/aggregation-labels';
 import { isDateType, isTimestampType } from './output-controls-operators';
+import { useTranslation } from 'react-i18next';
 
 /**
  * What the per-field popover edits for ONE column. A column can carry several
@@ -89,6 +90,7 @@ export interface AggregationEditorPopoverProps {
 }
 
 export function AggregationEditorPopover(props: AggregationEditorPopoverProps) {
+  const { t } = useTranslation();
   // Everything downstream reads `isDate` as "this column offers a bucket", including the mutual
   // exclusion with the functions and the bucket `handleApply` emits — so a forbidden bucket is
   // withheld here, once, rather than only hidden from the markup.
@@ -179,15 +181,15 @@ export function AggregationEditorPopover(props: AggregationEditorPopoverProps) {
 
         {isDate && (
           <div className='space-y-1'>
-            <Label>Group by bucket</Label>
+            <Label>{t('reportColumnPicker.groupByBucket', 'Group by bucket')}</Label>
             <Select
               value={bucket ?? undefined}
               onValueChange={value => {
                 chooseBucket(value as DateTruncUnit);
               }}
             >
-              <SelectTrigger className='w-full' aria-label='Group by bucket'>
-                <SelectValue placeholder='No bucket' />
+              <SelectTrigger className='w-full' aria-label={t('reportColumnPicker.groupByBucket', 'Group by bucket')}>
+                <SelectValue placeholder={t('reportColumnPicker.noBucket', 'No bucket')} />
               </SelectTrigger>
               <SelectContent>
                 {DATE_TRUNC_UNITS.map(unit => (
@@ -204,24 +206,24 @@ export function AggregationEditorPopover(props: AggregationEditorPopoverProps) {
                 className='text-muted-foreground hover:text-foreground h-6 px-1 text-xs'
                 onClick={clearBucket}
               >
-                Clear bucket
+                {t('reportColumnPicker.clearBucket', 'Clear bucket')}
               </Button>
             )}
             {bucketActive && supportsTimeZone && (
               <div className='space-y-1 pt-1'>
-                <Label>Time zone (optional)</Label>
+                <Label>{t('reportColumnPicker.timeZoneOptional', 'Time zone (optional)')}</Label>
                 <Select
-                  aria-label='Time zone'
+                  aria-label={t('reportColumnPicker.timeZone', 'Time zone')}
                   value={timeZone ?? NO_TIME_ZONE_VALUE}
                   onValueChange={value => {
                     setTimeZone(value === NO_TIME_ZONE_VALUE ? null : value);
                   }}
                 >
-                  <SelectTrigger className='w-full' aria-label='Time zone'>
-                    <SelectValue placeholder='No conversion' />
+                  <SelectTrigger className='w-full' aria-label={t('reportColumnPicker.timeZone', 'Time zone')}>
+                    <SelectValue placeholder={t('reportColumnPicker.noConversion', 'No conversion')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={NO_TIME_ZONE_VALUE}>No conversion</SelectItem>
+                    <SelectItem value={NO_TIME_ZONE_VALUE}>{t('reportColumnPicker.noConversion', 'No conversion')}</SelectItem>
                     {DATE_TRUNC_TIME_ZONES.map(tz => (
                       <SelectItem key={tz} value={tz}>
                         {tz}
@@ -236,7 +238,11 @@ export function AggregationEditorPopover(props: AggregationEditorPopoverProps) {
 
         {props.allowedAggregations.length > 0 && (
           <div className='space-y-1'>
-            <Label>{isDate ? 'Or aggregate by' : 'Aggregate by'}</Label>
+            <Label>
+              {isDate
+                ? t('reportColumnPicker.orAggregateBy', 'Or aggregate by')
+                : t('reportColumnPicker.aggregateBy', 'Aggregate by')}
+            </Label>
             <div className='max-h-48 space-y-1 overflow-y-auto'>
               {props.allowedAggregations.map(fn => {
                 const checked = !bucketActive && functions.includes(fn) && allowedSet.has(fn);
@@ -262,10 +268,10 @@ export function AggregationEditorPopover(props: AggregationEditorPopoverProps) {
 
         <div className='flex justify-end gap-2'>
           <Button variant='outline' size='sm' onClick={handleCancel}>
-            Cancel
+            {t('common.cancel', 'Cancel')}
           </Button>
           <Button size='sm' onClick={handleApply} disabled={!canApply}>
-            Apply
+            {t('reportColumnPicker.apply', 'Apply')}
           </Button>
         </div>
       </PopoverContent>

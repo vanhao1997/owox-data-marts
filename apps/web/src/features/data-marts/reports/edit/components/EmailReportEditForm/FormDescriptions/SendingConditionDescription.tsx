@@ -5,23 +5,20 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 
-/**
- * Accordion with information about Data Mart Run results.
- */
 export default function SendingConditionDescription() {
   return (
     <Accordion variant='common' type='single' collapsible>
       <AccordionItem value='sending-condition-details'>
-        <AccordionTrigger>What are Data Mart Run results?</AccordionTrigger>
+        <AccordionTrigger>Kết quả chạy Data Mart là gì?</AccordionTrigger>
         <AccordionContent>
           <p className='mb-2'>
-            A Data Mart Run result is the outcome of processing your Data Mart — for example,
-            running an SQL query that retrieves data for your report.
+            Kết quả chạy Data Mart là kết quả sau khi xử lý Data Mart của bạn — ví dụ như chạy một
+            truy vấn SQL để lấy dữ liệu cho báo cáo.
           </p>
           <p>
-            Before sending a report, P2PDigital automatically runs the Data Mart and checks its
-            result. Depending on your settings, the report can be sent always, only if the result is
-            not empty, or only if it’s empty.
+            Trước khi gửi báo cáo, P2PDigital sẽ tự động chạy Data Mart và kiểm tra kết quả. Tùy
+            theo cài đặt, báo cáo có thể được gửi luôn, chỉ khi kết quả không trống, hoặc chỉ khi
+            kết quả trống.
           </p>
         </AccordionContent>
       </AccordionItem>

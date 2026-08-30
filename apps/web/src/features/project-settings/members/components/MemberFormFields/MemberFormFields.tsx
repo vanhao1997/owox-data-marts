@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import {
   FormControl,
   FormDescription,
@@ -42,11 +43,6 @@ interface FormShape {
   roleScope: RoleScope;
 }
 
-const ROLE_SCOPE_LABELS: Record<RoleScope, string> = {
-  entire_project: 'Entire project',
-  selected_contexts: 'Selected contexts only',
-};
-
 export function MemberFormFields({
   contexts,
   selectedContextIds,
@@ -55,6 +51,7 @@ export function MemberFormFields({
   onRequestCreateContext,
   contextIdPrefix,
 }: MemberFormFieldsProps) {
+  const { t } = useTranslation();
   const { control, watch } = useFormContext<FormShape>();
   const role = watch('role');
   const roleScope = watch('roleScope');
@@ -70,7 +67,7 @@ export function MemberFormFields({
           name='role'
           render={({ field }) => (
             <FormItem>
-              <FormLabel tooltip='Project role granted to this member'>Role</FormLabel>
+              <FormLabel tooltip={t('membersPage.roleTooltip')}>{t('membersPage.role')}</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange} disabled={disabled}>
                   <SelectTrigger className='w-full'>
@@ -95,22 +92,22 @@ export function MemberFormFields({
       </FormSection>
 
       {isAdminRole ? (
-        <FormSection title='Access' collapsible={false} name='member-admin-access'>
+        <FormSection title={t('membersPage.access')} collapsible={false} name='member-admin-access'>
           <FormItem>
             <p className='text-muted-foreground text-sm'>
-              Project Admin has project-wide access. Scope and context assignments do not apply.
+              {t('membersPage.adminAccessDescription')}
             </p>
           </FormItem>
         </FormSection>
       ) : (
-        <FormSection title='Scope' name='member-scope'>
+        <FormSection title={t('membersPage.scope')} name='member-scope'>
           <FormField
             control={control}
             name='roleScope'
             render={({ field }) => (
               <FormItem>
-                <FormLabel tooltip='Controls what resources this member can see by default'>
-                  Role scope
+                <FormLabel tooltip={t('membersPage.scopeTooltip')}>
+                  {t('membersPage.roleScope')}
                 </FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange} disabled={disabled}>
@@ -120,7 +117,7 @@ export function MemberFormFields({
                     <SelectContent>
                       {ROLE_SCOPE_VALUES.map(s => (
                         <SelectItem key={s} value={s}>
-                          {ROLE_SCOPE_LABELS[s]}
+                          {s === 'entire_project' ? t('membersPage.entireProject') : t('membersPage.selectedContextsOnly')}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -137,10 +134,10 @@ export function MemberFormFields({
       )}
 
       {showContexts && (
-        <FormSection title='Contexts' name='member-contexts'>
+        <FormSection title={t('membersPage.contexts')} name='member-contexts'>
           <FormItem>
-            <FormLabel tooltip='Contexts this member can see'>
-              Assign to contexts (optional)
+            <FormLabel tooltip={t('membersPage.contextsTooltip')}>
+              {t('membersPage.assignContextsOptional')}
             </FormLabel>
             <ContextsCheckboxList
               idPrefix={contextIdPrefix}

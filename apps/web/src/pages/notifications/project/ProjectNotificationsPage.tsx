@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@owox/ui/components/alert';
 import { AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useProjectId } from '../../../shared/hooks';
 import {
   useNotificationSettings,
@@ -14,6 +15,7 @@ import type {
 } from '../../../features/project-settings/notifications';
 
 export function ProjectNotificationsPage() {
+  const { t } = useTranslation();
   const projectId = useProjectId();
   const { settings, error, updateSetting } = useNotificationSettings(projectId);
 
@@ -48,12 +50,12 @@ export function ProjectNotificationsPage() {
     return (
       <div className='dm-page'>
         <header className='dm-page-header'>
-          <h1 className='dm-page-header-title'>Notification settings</h1>
+          <h1 className='dm-page-header-title'>{t('notificationsPage.title')}</h1>
         </header>
         <div className='dm-page-content'>
           <Alert variant='destructive'>
             <AlertCircle className='h-4 w-4' />
-            <AlertTitle>Error</AlertTitle>
+            <AlertTitle>{t('common.error')}</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         </div>
@@ -64,7 +66,7 @@ export function ProjectNotificationsPage() {
   return (
     <div className='dm-page' data-testid='notifPage'>
       <header className='dm-page-header'>
-        <h1 className='dm-page-header-title'>Notification settings</h1>
+        <h1 className='dm-page-header-title'>{t('notificationsPage.title')}</h1>
       </header>
       <div className='dm-page-content'>
         <NotificationSettingsTable

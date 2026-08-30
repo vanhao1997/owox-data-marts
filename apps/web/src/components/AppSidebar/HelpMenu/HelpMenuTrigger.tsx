@@ -1,11 +1,13 @@
 import { DropdownMenuTrigger } from '@owox/ui/components/dropdown-menu';
 import { ChevronDown, MessageCircleQuestionIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface HelpMenuTriggerProps {
   isOpen: boolean;
 }
 
 export function HelpMenuTrigger({ isOpen }: HelpMenuTriggerProps) {
+  const { t } = useTranslation();
   return (
     <DropdownMenuTrigger asChild>
       <button
@@ -28,8 +30,10 @@ export function HelpMenuTrigger({ isOpen }: HelpMenuTriggerProps) {
         </div>
 
         <div className='grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden'>
-          <span className='truncate font-medium'>Help</span>
-          <span className='text-muted-foreground hidden truncate text-xs'>Chat, Docs, Videos</span>
+          <span className='truncate font-medium'>{t('helpMenu.title', 'Help')}</span>
+          <span className='text-muted-foreground hidden truncate text-xs'>
+            {t('helpMenu.triggerSubtitle', 'Chat, Docs, Videos')}
+          </span>
         </div>
 
         <ChevronDown

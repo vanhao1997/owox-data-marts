@@ -124,7 +124,7 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
   })();
 </script>
 
-<script>
+<script is:inline>
   const viSidebarLabels = {
     Intro: 'Giới thiệu',
     'Getting started': 'Bắt đầu',
@@ -141,6 +141,7 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
     'Setup Guide': 'Hướng dẫn thiết lập',
     Insights: 'Thông tin chuyên sâu',
     'Using Data Marts from OWOX Extension': 'Sử dụng Data Mart từ tiện ích Google Sheets',
+    'Using Data Marts from P2PDigital Extension': 'Sử dụng Data Mart từ tiện ích Google Sheets',
     'Connector-based Data Mart': 'Data Mart dựa trên connector',
     'SQL-based Data Mart': 'Data Mart dựa trên SQL',
     'Table-based Data Mart': 'Data Mart dựa trên bảng',
@@ -172,6 +173,8 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
     'Supported Destinations': 'Điểm đến được hỗ trợ',
     Storages: 'Kho lưu trữ',
     'Supported Storages': 'Kho lưu trữ được hỗ trợ',
+    'Storage Management': 'Quản lý kho lưu trữ',
+    'Destination Management': 'Quản lý điểm đến',
     Sources: 'Nguồn dữ liệu',
     API: 'API',
     Plugins: 'Plugin',
@@ -183,6 +186,15 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
     'Web Application': 'Ứng dụng web',
     'Backend Application': 'Ứng dụng backend',
     Licenses: 'Giấy phép',
+    'Google BigQuery (used in OWOX extension)': 'Google BigQuery (dùng cho tiện ích Google Sheets)',
+    'Google BigQuery (used in P2PDigital extension)': 'Google BigQuery (dùng cho tiện ích Google Sheets)',
+    'TypeScript/JavaScript API Client': 'API client TypeScript/JavaScript',
+    'OpenAPI and Swagger UI': 'OpenAPI và Swagger UI',
+    'Support Matrix': 'Ma trận hỗ trợ',
+    'Build a plugin with AI': 'Xây dựng plugin với AI',
+    'Prepare your plugin project': 'Chuẩn bị dự án plugin',
+    'Plugin authoring guide': 'Hướng dẫn phát triển plugin',
+    Changelog: 'Nhật ký thay đổi',
   };
 
   function localizeVietnameseSidebar() {
@@ -196,6 +208,8 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
       if (translated && element.children.length === 0) element.textContent = translated;
     });
 
+    // Point translated MVP pages at their localized namespace. Other pages keep
+    // the English route so community links and technical references remain stable.
     const localizedRoutes = [
       'quick-start',
       'core-concepts',
@@ -209,6 +223,13 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
       const route = localizedRoutes.find((candidate) => href?.includes(`/vi/docs/getting-started/${candidate}/`));
       if (route) link.setAttribute('href', `/vi/getting-started/${route}/`);
     });
+
+  }
+
+  function scheduleSidebarLocalization() {
+    localizeVietnameseSidebar();
+    window.setTimeout(localizeVietnameseSidebar, 0);
+    window.setTimeout(localizeVietnameseSidebar, 250);
   }
 
   function initSidebarToggle() {
@@ -219,7 +240,7 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
     
     if (!toggleBtn || !sidebar || !container || !mainPane) return;
 
-    localizeVietnameseSidebar();
+    scheduleSidebarLocalization();
 
     // Remove initial class to allow normal styles to work
     document.documentElement.classList.remove('sidebar-initially-collapsed');
@@ -244,11 +265,10 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
     });
   }
 
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', initSidebarToggle);
-  
-  // Re-initialize on Astro page transitions
+  // Starlight can render or replace the sidebar after this component loads.
+  document.addEventListener('DOMContentLoaded', initSidebarToggle, { once: true });
   document.addEventListener('astro:page-load', initSidebarToggle);
-  document.addEventListener('DOMContentLoaded', localizeVietnameseSidebar);
-  document.addEventListener('astro:page-load', localizeVietnameseSidebar);
+  scheduleSidebarLocalization();
+  const sidebarObserver = new MutationObserver(scheduleSidebarLocalization);
+  sidebarObserver.observe(document.body, { childList: true, subtree: true });
 </script>

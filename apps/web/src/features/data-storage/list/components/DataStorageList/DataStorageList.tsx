@@ -86,7 +86,9 @@ export const DataStorageList = ({
       if (storage) {
         void handleEdit(deepLinkId);
       } else {
-        toast.error(t('dataStorageList.notFound', 'Storage not found by id {{id}}', { id: deepLinkId }));
+        toast.error(
+          t('dataStorageList.notFound', 'Storage not found by id {{id}}', { id: deepLinkId })
+        );
         removeIdParam();
       }
       hasAttemptedDeepLink.current = true;
@@ -117,17 +119,30 @@ export const DataStorageList = ({
     }
   };
 
-  const handleViewDetails = (id: string) => {
-    setSelectedStorageId(id);
-    setIsDetailsDialogOpen(true);
-
-    setIdParam(id);
-  };
+  const handleViewDetails = useCallback(
+    async (id: string) => {
+      setIsDetailsDialogOpen(false);
+      setSelectedStorageId(null);
+      clearCurrentDataStorage();
+      try {
+        // Resolve the detail before opening the dialog so a failed request cannot
+        // leave an empty, non-loading dialog on screen.
+        const dataStorage = await getDataStorageById(id);
+        if (!dataStorage) return;
+        setSelectedStorageId(id);
+        setIsDetailsDialogOpen(true);
+      } catch {
+        // The hook records the error and the HTTP layer surfaces the user-facing toast.
+        // Do not open the dialog with stale or empty storage data.
+      }
+    },
+    [clearCurrentDataStorage, getDataStorageById]
+  );
 
   const handleDetailsDialogClose = () => {
     setIsDetailsDialogOpen(false);
     setSelectedStorageId(null);
-    removeIdParam();
+    clearCurrentDataStorage();
   };
 
   const handleDelete = (id: string) => {
@@ -239,7 +254,9 @@ export const DataStorageList = ({
   }));
 
   const columns = getDataStorageColumns({
-    onViewDetails: handleViewDetails,
+    onViewDetails: id => {
+      void handleViewDetails(id);
+    },
     onEdit: handleEdit,
     onDelete: handleDelete,
     onPublishDrafts: handlePublishDraftsRequest,
@@ -260,7 +277,8 @@ export const DataStorageList = ({
       <DataStorageDetailsDialog
         isOpen={isDetailsDialogOpen}
         onClose={handleDetailsDialogClose}
-        id={selectedStorageId ?? ''}
+        dataStorage={selectedStorageId ? currentDataStorage : null}
+        isLoading={loading}
       />
 
       <DataStorageTypeDialog
@@ -302,16 +320,22 @@ export const DataStorageList = ({
                   {t('dataStorageList.referencedBy', '{{count}} Data Mart{{suffix}}', {
                     count: blocked.publishedDataMartsCount + blocked.draftDataMartsCount,
                     suffix:
-                      blocked.publishedDataMartsCount + blocked.draftDataMartsCount === 1 ? '' : 's',
+                      blocked.publishedDataMartsCount + blocked.draftDataMartsCount === 1
+                        ? ''
+                        : 's',
                   })}
                 </Link>
                 {blocked.draftDataMartsCount > 0 && blocked.publishedDataMartsCount > 0 ? (
                   <>
                     {' '}
-                    {t('dataStorageList.publishedDraftSummary', '({{published}} published, {{draft}} draft)', {
-                      published: blocked.publishedDataMartsCount,
-                      draft: blocked.draftDataMartsCount,
-                    })}
+                    {t(
+                      'dataStorageList.publishedDraftSummary',
+                      '({{published}} published, {{draft}} draft)',
+                      {
+                        published: blocked.publishedDataMartsCount,
+                        draft: blocked.draftDataMartsCount,
+                      }
+                    )}
                   </>
                 ) : null}
                 .

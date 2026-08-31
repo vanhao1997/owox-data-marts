@@ -64,5 +64,5 @@ export type DataStorageAction =
 export interface DataStorageContextValue {
   state: DataStorageState;
   dispatch: React.Dispatch<DataStorageAction>;
-  detailRequestGenerationRef: React.RefObject<number>;
+  detailRequestGenerationRef: { current: number };
 }

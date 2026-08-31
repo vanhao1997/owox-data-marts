@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useOutletContext } from 'react-router';
 import type { DataMartContextType } from '../../../../data-marts/edit/model/context/types';
 import { useReport } from '../../../../data-marts/reports/shared/model/hooks';
@@ -26,24 +26,34 @@ export function useDataDestinationsWithReports() {
 
   // Local loading state for combined fetch
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const requestGenerationRef = useRef(0);
+
+  const fetchData = useCallback(async () => {
+    if (!dataMartId) return;
+
+    const requestGeneration = ++requestGenerationRef.current;
+    setIsLoading(true);
+    setLoadError(false);
+    const results = await Promise.allSettled([
+      fetchDataDestinations(),
+      fetchReportsByDataMartId(dataMartId),
+    ]);
+    if (requestGeneration !== requestGenerationRef.current) return;
+
+    const failed = results.some(
+      result => result.status === 'rejected' || result.value === undefined || result.value === false
+    );
+    setLoadError(failed);
+    setIsLoading(false);
+  }, [dataMartId, fetchDataDestinations, fetchReportsByDataMartId]);
 
   useEffect(() => {
-    if (!dataMartId) return; // If no Data Mart, exit early
-
-    const fetchData = async () => {
-      setIsLoading(true); // Start combined loading
-      try {
-        // Fetch both destinations and reports concurrently
-        await Promise.all([fetchDataDestinations(), fetchReportsByDataMartId(dataMartId)]);
-      } catch (err) {
-        console.error('Failed to fetch Data Mart destinations or reports:', err);
-      } finally {
-        setIsLoading(false); // End combined loading
-      }
-    };
-
     void fetchData();
-  }, [dataMartId, fetchDataDestinations, fetchReportsByDataMartId]);
+    return () => {
+      requestGenerationRef.current += 1;
+    };
+  }, [fetchData]);
 
   // Combine local loading with destinationsLoading from the DataDestination hook
   const combinedLoading = isLoading || destinationsLoading;
@@ -52,5 +62,7 @@ export function useDataDestinationsWithReports() {
     dataDestinations,
     isLoading: combinedLoading,
     fetchDataDestinations,
+    hasLoadError: loadError,
+    retry: fetchData,
   };
 }

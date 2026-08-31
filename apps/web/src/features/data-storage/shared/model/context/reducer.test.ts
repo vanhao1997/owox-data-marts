@@ -1,19 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { DataStorageActionType } from './types';
+import { DataStorageActionType, type DataStorageAction } from './types';
 import { initialDataStorageState, reducer } from './reducer';
 
 describe('data storage reducer', () => {
-  it.each([
-    DataStorageActionType.FETCH_STORAGES_START,
-    DataStorageActionType.FETCH_STORAGE_START,
-    DataStorageActionType.CREATE_STORAGE_START,
-    DataStorageActionType.UPDATE_STORAGE_START,
-    DataStorageActionType.DELETE_STORAGE_START,
-    DataStorageActionType.PUBLISH_DRAFTS_START,
-  ])('marks %s as loading', type => {
+  const startActions: DataStorageAction[] = [
+    { type: DataStorageActionType.FETCH_STORAGES_START },
+    { type: DataStorageActionType.CREATE_STORAGE_START },
+    { type: DataStorageActionType.UPDATE_STORAGE_START },
+    { type: DataStorageActionType.DELETE_STORAGE_START },
+    { type: DataStorageActionType.PUBLISH_DRAFTS_START },
+  ];
+
+  it.each(startActions)('marks $type as loading', action => {
     const state = reducer(
       { ...initialDataStorageState, error: { message: 'stale error' } as never },
-      { type } as never
+      action
     );
 
     expect(state.loading).toBe(true);

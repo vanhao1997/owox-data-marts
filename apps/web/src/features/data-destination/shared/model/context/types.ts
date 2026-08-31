@@ -56,5 +56,5 @@ export type DataDestinationAction =
 export interface DataDestinationContextValue {
   state: DataDestinationState;
   dispatch: React.Dispatch<DataDestinationAction>;
-  detailRequestGenerationRef: React.RefObject<number>;
+  detailRequestGenerationRef: { current: number };
 }

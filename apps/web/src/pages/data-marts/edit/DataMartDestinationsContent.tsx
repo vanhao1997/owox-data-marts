@@ -25,10 +25,13 @@ import { GoogleSheetsIcon } from '../../../shared/icons/google-sheets-icon';
 import { InviteTeammatesCard } from '../../../shared/components/InviteTeammatesCard';
 import { useProjectRoute } from '../../../shared/hooks/useProjectRoute';
 import { useUrlParam } from '../../../shared/hooks';
+import { useTranslation } from 'react-i18next';
 
 function DataMartDestinationsContentInner() {
+  const { t } = useTranslation();
   const { dataMart, publishDataMartWithEffects } = useOutletContext<DataMartContextType>();
-  const { dataDestinations, isLoading, fetchDataDestinations } = useDataDestinationsWithReports();
+  const { dataDestinations, isLoading, hasLoadError, retry, fetchDataDestinations } =
+    useDataDestinationsWithReports();
   const [isCreateDestinationOpen, setIsCreateDestinationOpen] = useState(false);
   const { scope, navigate } = useProjectRoute();
   const handleOpenCreateDestination = useCallback(() => {
@@ -39,7 +42,7 @@ function DataMartDestinationsContentInner() {
     setIsCreateDestinationOpen(false);
   }, []);
   // Centralized reports polling for this Data Mart
-  useDataMartReportsAutoRefresh({ enabled: true, intervalMs: 5000 });
+  useDataMartReportsAutoRefresh({ enabled: true, intervalMs: 5000, initialFetch: false });
 
   // Deep link handling: DestinationCard opens the report sidesheet for a matching
   // reportId query param; here we only clean up a param that matches no report.
@@ -90,6 +93,22 @@ function DataMartDestinationsContentInner() {
     <div className='flex flex-col gap-4' data-testid='destTab'>
       {isLoading ? (
         <SkeletonList />
+      ) : hasLoadError ? (
+        <div className='dm-card-block flex flex-col items-center gap-3 text-center text-sm'>
+          <p className='text-muted-foreground'>
+            {t(
+              'reportsUi.loadFailed',
+              'Failed to load destinations and reports. Please try again.'
+            )}
+          </p>
+          <button
+            type='button'
+            className='border-input hover:bg-muted rounded-md border px-3 py-1.5 transition-colors'
+            onClick={() => void retry()}
+          >
+            {t('common.retry', 'Retry')}
+          </button>
+        </div>
       ) : dataDestinations.length === 0 ? (
         <EmptyDataMartDestinationsState
           variant={isPublished ? 'promo' : 'default'}
@@ -150,8 +169,12 @@ function DataMartDestinationsContentInner() {
         }}
         allowedDestinationTypes={[DataDestinationType.GOOGLE_SHEETS]}
         onSaveSuccess={() => {
-          void fetchDataDestinations().then(() => {
-            setIsCreateDestinationOpen(false);
+          void fetchDataDestinations().then(destinations => {
+            // Keep the sheet open when the refresh fails so the user can retry
+            // without losing the successful form state.
+            if (destinations !== undefined) {
+              setIsCreateDestinationOpen(false);
+            }
           });
         }}
       />

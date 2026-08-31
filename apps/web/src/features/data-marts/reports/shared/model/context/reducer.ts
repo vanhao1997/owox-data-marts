@@ -10,6 +10,7 @@ export interface ReportState {
   loading: boolean;
   error: string | null;
   polledReportIds: string[];
+  reportsRequestId: number | null;
 }
 
 export const initialReportState: ReportState = {
@@ -19,11 +20,11 @@ export const initialReportState: ReportState = {
   loading: false,
   error: null,
   polledReportIds: [],
+  reportsRequestId: null,
 };
 
 export function reducer(state: ReportState, action: ReportAction): ReportState {
   switch (action.type) {
-    case ReportActionType.FETCH_REPORTS_START:
     case ReportActionType.FETCH_REPORT_START:
     case ReportActionType.CREATE_REPORT_START:
     case ReportActionType.UPDATE_REPORT_START:
@@ -33,12 +34,23 @@ export function reducer(state: ReportState, action: ReportAction): ReportState {
         loading: true,
         error: null,
       };
-    case ReportActionType.FETCH_REPORTS_SUCCESS:
+    case ReportActionType.FETCH_REPORTS_START:
       return {
         ...state,
-        reports: action.payload,
+        reportsRequestId: action.payload.requestId,
+        loading: action.payload.silent ? state.loading : true,
+        error: action.payload.silent ? state.error : null,
+      };
+    case ReportActionType.FETCH_REPORTS_SUCCESS:
+      if (action.payload.requestId !== state.reportsRequestId) {
+        return state;
+      }
+      return {
+        ...state,
+        reports: action.payload.reports,
+        reportsRequestId: null,
         loading: false,
-        error: null,
+        error: action.payload.silent ? state.error : null,
       };
     case ReportActionType.FETCH_DESTINATIONS_SUCCESS:
       return {
@@ -78,7 +90,6 @@ export function reducer(state: ReportState, action: ReportAction): ReportState {
         loading: false,
         error: null,
       };
-    case ReportActionType.FETCH_REPORTS_ERROR:
     case ReportActionType.FETCH_REPORT_ERROR:
     case ReportActionType.FETCH_DESTINATIONS_ERROR:
     case ReportActionType.CREATE_REPORT_ERROR:
@@ -88,6 +99,16 @@ export function reducer(state: ReportState, action: ReportAction): ReportState {
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case ReportActionType.FETCH_REPORTS_ERROR:
+      if (action.payload.requestId !== state.reportsRequestId) {
+        return state;
+      }
+      return {
+        ...state,
+        reportsRequestId: null,
+        loading: false,
+        error: action.payload.silent ? state.error : action.payload.error,
       };
 
     case ReportActionType.CLEAR_CURRENT_REPORT:

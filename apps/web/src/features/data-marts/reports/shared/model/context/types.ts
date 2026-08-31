@@ -38,9 +38,15 @@ export enum ReportActionType {
 }
 
 export type ReportAction =
-  | { type: ReportActionType.FETCH_REPORTS_START }
-  | { type: ReportActionType.FETCH_REPORTS_SUCCESS; payload: DataMartReport[] }
-  | { type: ReportActionType.FETCH_REPORTS_ERROR; payload: string }
+  | { type: ReportActionType.FETCH_REPORTS_START; payload: { requestId: number; silent: boolean } }
+  | {
+      type: ReportActionType.FETCH_REPORTS_SUCCESS;
+      payload: { requestId: number; reports: DataMartReport[]; silent: boolean };
+    }
+  | {
+      type: ReportActionType.FETCH_REPORTS_ERROR;
+      payload: { requestId: number; error: string; silent: boolean };
+    }
   | { type: ReportActionType.FETCH_DESTINATIONS_START }
   | { type: ReportActionType.FETCH_DESTINATIONS_SUCCESS; payload: DataDestinationResponseDto[] }
   | { type: ReportActionType.FETCH_DESTINATIONS_ERROR; payload: string }
@@ -66,4 +72,5 @@ export type ReportAction =
 export interface ReportsContextValue {
   state: ReportState;
   dispatch: React.Dispatch<ReportAction>;
+  reportsRequestGenerationRef: { current: number };
 }

@@ -11,7 +11,7 @@ import { useRefreshSetupProgress } from '../../../../../../components/AppSidebar
 import { ReportStatusEnum } from '../../enums';
 
 export function useReport() {
-  const { state, dispatch } = useReportContext();
+  const { state, dispatch, reportsRequestGenerationRef } = useReportContext();
   const refreshSetupProgress = useRefreshSetupProgress();
 
   const fetchDestinations = useCallback(async () => {
@@ -35,16 +35,24 @@ export function useReport() {
   }, [dispatch]);
 
   const fetchReports = useCallback(async () => {
-    dispatch({ type: ReportActionType.FETCH_REPORTS_START });
+    const requestId = ++reportsRequestGenerationRef.current;
+    dispatch({
+      type: ReportActionType.FETCH_REPORTS_START,
+      payload: { requestId, silent: false },
+    });
     try {
       const reports = await reportService.getReportsByProject();
       const mappedReports = reports.map(mapReportDtoToEntity);
-      dispatch({ type: ReportActionType.FETCH_REPORTS_SUCCESS, payload: mappedReports });
+      dispatch({
+        type: ReportActionType.FETCH_REPORTS_SUCCESS,
+        payload: { requestId, reports: mappedReports, silent: false },
+      });
+      return true;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to fetch reports';
       dispatch({
         type: ReportActionType.FETCH_REPORTS_ERROR,
-        payload: message,
+        payload: { requestId, error: message, silent: false },
       });
       trackEvent({
         event: 'report_error',
@@ -52,26 +60,34 @@ export function useReport() {
         action: 'ListError',
         error: message,
       });
+      return false;
     }
-  }, [dispatch]);
+  }, [dispatch, reportsRequestGenerationRef]);
 
   const fetchReportsByDataMartId = useCallback(
     async (dataMartId: string, options?: { silent?: boolean }) => {
-      if (!options?.silent) {
-        dispatch({ type: ReportActionType.FETCH_REPORTS_START });
-      }
+      const requestId = ++reportsRequestGenerationRef.current;
+      const silent = options?.silent === true;
+      dispatch({
+        type: ReportActionType.FETCH_REPORTS_START,
+        payload: { requestId, silent },
+      });
       try {
         const reports = await reportService.getReportsByDataMartId(
           dataMartId,
           options?.silent ? { skipLoadingIndicator: true } : undefined
         );
         const mappedReports = reports.map(mapReportDtoToEntity);
-        dispatch({ type: ReportActionType.FETCH_REPORTS_SUCCESS, payload: mappedReports });
+        dispatch({
+          type: ReportActionType.FETCH_REPORTS_SUCCESS,
+          payload: { requestId, reports: mappedReports, silent },
+        });
+        return true;
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to fetch reports';
         dispatch({
           type: ReportActionType.FETCH_REPORTS_ERROR,
-          payload: message,
+          payload: { requestId, error: message, silent },
         });
         trackEvent({
           event: 'report_error',
@@ -79,9 +95,10 @@ export function useReport() {
           action: 'ListError',
           error: message,
         });
+        return false;
       }
     },
-    [dispatch]
+    [dispatch, reportsRequestGenerationRef]
   );
 
   const fetchReportById = useCallback(

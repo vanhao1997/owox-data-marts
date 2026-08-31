@@ -4,6 +4,7 @@ interface UseAutoRefreshOptions {
   enabled: boolean;
   intervalMs?: number;
   onlyWhenVisible?: boolean;
+  runImmediately?: boolean;
   onTick: (signal: AbortSignal) => void | Promise<void>;
 }
 
@@ -13,6 +14,7 @@ interface UseAutoRefreshOptions {
  * @param enabled - Whether auto-refresh is enabled
  * @param intervalMs - Interval in milliseconds (default: 5000)
  * @param onlyWhenVisible - Only refresh when tab is visible (default: true)
+ * @param runImmediately - Run once when the timer starts (default: true)
  * @param onTick - Callback function to execute on each tick, receives AbortSignal
  *
  * @example
@@ -27,6 +29,7 @@ export function useAutoRefresh({
   enabled,
   intervalMs = 5000,
   onlyWhenVisible = true,
+  runImmediately = true,
   onTick,
 }: UseAutoRefreshOptions) {
   const onTickRef = useRef(onTick);
@@ -47,12 +50,14 @@ export function useAutoRefresh({
       }
     };
 
-    tick();
+    if (runImmediately) {
+      tick();
+    }
     const intervalId = window.setInterval(tick, intervalMs);
 
     return () => {
       window.clearInterval(intervalId);
       abortControllerRef.current?.abort();
     };
-  }, [enabled, intervalMs, onlyWhenVisible]);
+  }, [enabled, intervalMs, onlyWhenVisible, runImmediately]);
 }

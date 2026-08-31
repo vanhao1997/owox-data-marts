@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { initialReportState, reducer } from './reducer.ts';
 import { ReportsContext } from './context.ts';
 
@@ -16,5 +16,10 @@ interface ReportsProviderProps {
  */
 export function ReportsProvider({ children }: ReportsProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialReportState);
-  return <ReportsContext.Provider value={{ state, dispatch }}>{children}</ReportsContext.Provider>;
+  const reportsRequestGenerationRef = useRef(0);
+  return (
+    <ReportsContext.Provider value={{ state, dispatch, reportsRequestGenerationRef }}>
+      {children}
+    </ReportsContext.Provider>
+  );
 }

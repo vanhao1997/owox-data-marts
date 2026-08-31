@@ -7,7 +7,7 @@ import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
  */
 export class GenerateAuthorizationUrlRequestDto {
   @ApiProperty({
-    example: 'https://app.p2pdigital.vn/oauth-callback',
+    example: 'https://digitalreport.p2pdigital.io.vn/oauth-callback',
     description: 'Frontend callback URL (must match registered redirect URI in Google Console)',
   })
   @IsNotEmpty()

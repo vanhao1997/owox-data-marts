@@ -14,13 +14,13 @@ function encodeFixture(payload: ApiKeyPayload): string {
 describe('parseOWOXApiKey', () => {
   it('parses a valid prefixed base64url JSON API key', () => {
     const apiKey = encodeFixture({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       apiKeySecret: 'secret-value',
     });
 
     expect(parseOWOXApiKey(apiKey)).toEqual({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       apiKeySecret: 'secret-value',
     });
@@ -48,11 +48,11 @@ describe('parseOWOXApiKey', () => {
       'apiOrigin',
       { apiOrigin: '', apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv', apiKeySecret: 'secret' },
     ],
-    ['apiKeyId', { apiOrigin: 'https://app.p2pdigital.vn', apiKeyId: '', apiKeySecret: 'secret' }],
+    ['apiKeyId', { apiOrigin: 'https://digitalreport.p2pdigital.io.vn', apiKeyId: '', apiKeySecret: 'secret' }],
     [
       'apiKeySecret',
       {
-        apiOrigin: 'https://app.p2pdigital.vn',
+        apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
         apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
         apiKeySecret: '',
       },

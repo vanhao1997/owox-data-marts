@@ -14,13 +14,14 @@ import {
 } from '../../../features/data-marts/shared/components/RunActivityIndicator';
 import { useProjectRoute } from '../../../shared/hooks';
 import { useDataQualitySummaries } from '../../../features/data-marts/data-quality';
+import { DataMartsOverviewPanel } from '../../../features/data-marts/list/components/DataMartsOverviewPanel';
 
 const DataMartsPageContent = () => {
   const { t } = useTranslation();
   const { items, loadDataMarts, deleteDataMart, publishDataMart, refreshList, loading } =
     useDataMartList();
   const { connectors, fetchAvailableConnectors } = useConnector();
-  const { navigate, projectId } = useProjectRoute();
+  const { navigate, scope, projectId } = useProjectRoute();
   const [visibleDataMartIds, setVisibleDataMartIds] = useState<string[]>([]);
   const qualitySummariesQuery = useDataQualitySummaries(projectId ?? '', visibleDataMartIds);
   const hasActiveQualityRun = Object.values(qualitySummariesQuery.data ?? {}).some(summary =>
@@ -49,6 +50,14 @@ const DataMartsPageContent = () => {
           />
         </div>
       </header>
+      <div className='px-4 md:px-8'>
+        <DataMartsOverviewPanel
+          items={items}
+          qualitySummaries={qualitySummariesQuery.data}
+          onViewRuns={scope('/data-marts/runs')}
+          onCreateDataMart={scope('/data-marts/create')}
+        />
+      </div>
       <div className='dm-page-content'>
         <DataMartTable
           connectors={connectors}

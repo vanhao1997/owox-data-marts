@@ -1,6 +1,6 @@
 # How to Import Data from the Open Holidays Source
 
-Before proceeding, please make sure that you have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+Before proceeding, please make sure that you have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Open Holidays Storage](res/holidays_storage.png)
 
@@ -15,7 +15,7 @@ Before proceeding, please make sure that you have [set up **P2PDigital Data Mart
 ## Set Up the Connector
 
 1. Select **Connector** as the input source type.
-2. Click **Set up connector** and choose **Open Holidays**.  
+2. Click **Set up connector** and choose **Open Holidays**.
 3. Fill in the required fields:
     - **Country ISO Code** – ISO country code for which to fetch holidays (e.g., CH, US, GB).
     - **Language ISO Code** – ISO language code for holiday names (e.g., EN, DE, FR).
@@ -27,16 +27,16 @@ Before proceeding, please make sure that you have [set up **P2PDigital Data Mart
 
 ## Configure Data Import
 
-1. Choose available **endpoint**.  
-2. Select the required **fields**.  
-3. Specify the **dataset** where the data will be stored (or leave the default).  
+1. Choose available **endpoint**.
+2. Select the required **fields**.
+3. Specify the **dataset** where the data will be stored (or leave the default).
 4. Click **Finish**, then **Publish Data Mart**.
 
 ![Open Holidays Publish Data Mart](res/holidays_publish.png)
 
 ## Run the Data Mart
 
-You now have two options for importing data from Open Holidays:  
+You now have two options for importing data from Open Holidays:
 
 Option 1: Import Current Day's Data
 
@@ -46,22 +46,22 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![Open Holidays Incremental Load](res/holidays_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![Open Holidays Reimport](res/holidays_reimportwindow.png)
 
 Option 2: Manual Backfill for Specific Date Range
 
-Choose **Backfill (custom period)** to load historical data.  
+Choose **Backfill (custom period)** to load historical data.
 
 1. Select the **Start Date** and **End Date**.
 2. Click the **Run** button.
 
 ![Open Holidays Backfill](res/holidays_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![Open Holidays Success](res/holidays_successrun.png)
 

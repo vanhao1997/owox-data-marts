@@ -14,7 +14,7 @@ describe('GetDataMartDetailsTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
+    getPublicOrigin: jest.fn(() => 'https://digitalreport.p2pdigital.io.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   it('returns enriched details with url and the operator matrix (with_joined_fields)', async () => {
@@ -83,7 +83,7 @@ describe('GetDataMartDetailsTool', () => {
         description: 'Each order is placed by one organization',
       },
     ]);
-    expect(sc.url).toBe('https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup');
+    expect(sc.url).toBe('https://digitalreport.p2pdigital.io.vn/ui/project-1/data-marts/dm_1/data-setup');
     expect(sc.joined_fields_included).toBe(true);
     // Governance defaults, not the full type menu: DATE → MIN/MAX, STRING → COUNT/COUNT_DISTINCT.
     expect(sc.fields[0]).toMatchObject({

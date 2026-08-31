@@ -55,7 +55,7 @@ export default function GoogleBigQueryOAuthDescription() {
             </a>
             . See the{' '}
             <a
-              href='https://docs.p2pdigital.vn/docs/storages/supported-storages/google-bigquery/#option-b-google-oauth'
+              href='https://docs.p2pdigital.io.vn/docs/storages/supported-storages/google-bigquery/#option-b-google-oauth'
               target='_blank'
               rel='noopener noreferrer'
               className='underline'

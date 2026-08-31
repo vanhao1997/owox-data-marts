@@ -75,6 +75,17 @@
   --brand-blue-800: oklch(0.36 0.17 250.87);
   --brand-blue-800-foreground: oklch(0.985 0 0);
   --brand-blue-900: oklch(0.28 0.14 250.87);
+  /* P2PDigital yellow mark: use as an accent unless contrast is sufficient for text. */
+  --brand-yellow-50: oklch(0.985 0.035 95);
+  --brand-yellow-100: oklch(0.955 0.08 95);
+  --brand-yellow-300: oklch(0.86 0.17 90);
+  --brand-yellow-500: oklch(0.82 0.18 88);
+  --brand-yellow-700: oklch(0.62 0.16 78);
+  --brand-yellow-foreground: oklch(0.22 0.03 80);
+  --surface-elevated: oklch(1 0 0);
+  --surface: oklch(0.99 0 0);
+  --text-subtle: oklch(0.46 0.015 275);
+  --focus-ring: oklch(0.6179 0.2295 250.87);
   --brand-blue-900-foreground: oklch(0.985 0 0);
 }
 
@@ -145,6 +156,16 @@
   --brand-blue-800: oklch(0.36 0.17 250.87);
   --brand-blue-800-foreground: oklch(0.985 0 0);
   --brand-blue-900: oklch(0.28 0.14 250.87);
+  --brand-yellow-50: oklch(0.35 0.09 88);
+  --brand-yellow-100: oklch(0.42 0.11 88);
+  --brand-yellow-300: oklch(0.72 0.16 88);
+  --brand-yellow-500: oklch(0.82 0.18 88);
+  --brand-yellow-700: oklch(0.9 0.14 88);
+  --brand-yellow-foreground: oklch(0.18 0.03 80);
+  --surface-elevated: oklch(0.18 0 0);
+  --surface: oklch(0.16 0 0);
+  --text-subtle: oklch(0.74 0.01 275);
+  --focus-ring: oklch(0.72 0.16 88);
   --brand-blue-900-foreground: oklch(0.985 0 0);
 }
 
@@ -208,6 +229,16 @@
   --color-brand-blue-700: var(--brand-blue-700);
   --color-brand-blue-800: var(--brand-blue-800);
   --color-brand-blue-900: var(--brand-blue-900);
+  --color-brand-yellow-50: var(--brand-yellow-50);
+  --color-brand-yellow-100: var(--brand-yellow-100);
+  --color-brand-yellow-300: var(--brand-yellow-300);
+  --color-brand-yellow-500: var(--brand-yellow-500);
+  --color-brand-yellow-700: var(--brand-yellow-700);
+  --color-brand-yellow-foreground: var(--brand-yellow-foreground);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface: var(--surface);
+  --color-text-subtle: var(--text-subtle);
+  --color-focus-ring: var(--focus-ring);
   --color-brand-blue-50-foreground: var(--brand-blue-50-foreground);
   --color-brand-blue-100-foreground: var(--brand-blue-100-foreground);
   --color-brand-blue-200-foreground: var(--brand-blue-200-foreground);

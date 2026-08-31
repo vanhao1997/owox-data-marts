@@ -109,7 +109,7 @@ export function EmptyDataMartsState() {
               target='_blank'
             />
             <EmptyStateCardActionButton
-              href='https://docs.p2pdigital.vn/docs/getting-started/core-concepts/?utm_source=owox_data_marts&utm_medium=empty_data_marts_page&utm_campaign=help_buttons'
+              href='https://docs.p2pdigital.io.vn/docs/getting-started/core-concepts/?utm_source=owox_data_marts&utm_medium=empty_data_marts_page&utm_campaign=help_buttons'
               icon={<GraduationCap className='h-4 w-4' />}
               title={t('dataMartEmptyState.coreConcepts', 'Core concepts')}
               variant='ghost'

@@ -1,7 +1,7 @@
 import { SecretRevealDialog as RevealDialog } from '../../../shared/components/SecretRevealDialog/SecretRevealDialog';
 import type { CreateProjectMemberApiKeyResponse } from '../types';
 
-const API_KEYS_DOCS_URL = 'https://docs.p2pdigital.vn/docs/api/api-keys/';
+const API_KEYS_DOCS_URL = 'https://docs.p2pdigital.io.vn/docs/api/api-keys/';
 
 interface SecretRevealDialogProps {
   data: CreateProjectMemberApiKeyResponse | null;

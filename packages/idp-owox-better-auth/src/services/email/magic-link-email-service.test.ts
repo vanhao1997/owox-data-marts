@@ -23,14 +23,13 @@ describe('MagicLinkEmailService', () => {
       { bodyText: string; categories: string[] },
     ];
     expect(to).toBe('user@example.com');
-    expect(subject).toBe('Confirm your email');
-    expect(html).toContain('Confirm your email');
-    expect(html).toContain('Confirm email');
+    expect(subject).toBe('Xác nhận email');
+    expect(html).toContain('Xác nhận email');
     expect(html).toContain('https://auth.example.com/auth/magic-link?token=t1');
     expect(options.categories).toEqual(['transactional', 'auth']);
-    expect(options.bodyText).toContain('Confirm your email');
+    expect(options.bodyText).toContain('Xác nhận email');
     expect(options.bodyText).toContain(
-      'Confirm email: https://auth.example.com/auth/magic-link?token=t1'
+      'Xác nhận email: https://auth.example.com/auth/magic-link?token=t1'
     );
   });
 
@@ -53,14 +52,13 @@ describe('MagicLinkEmailService', () => {
       { bodyText: string; categories: string[] },
     ];
     expect(to).toBe('user@example.com');
-    expect(subject).toBe('Reset your password');
-    expect(html).toContain('Reset your password');
-    expect(html).toContain('Reset password');
+    expect(subject).toBe('Đặt lại mật khẩu');
+    expect(html).toContain('Đặt lại mật khẩu');
     expect(html).toContain('https://auth.example.com/auth/magic-link?token=t2');
     expect(options.categories).toEqual(['transactional', 'auth']);
-    expect(options.bodyText).toContain('Reset your password');
+    expect(options.bodyText).toContain('Đặt lại mật khẩu');
     expect(options.bodyText).toContain(
-      'Reset password: https://auth.example.com/auth/magic-link?token=t2'
+      'Đặt lại mật khẩu: https://auth.example.com/auth/magic-link?token=t2'
     );
   });
 });

@@ -24,7 +24,7 @@ describe('AddDestinationTool', () => {
       createDestination: jest.fn(),
     };
     publicOriginService = {
-      getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
+      getPublicOrigin: jest.fn(() => 'https://digitalreport.p2pdigital.io.vn'),
     } as unknown as jest.Mocked<PublicOriginService>;
 
     tool = new AddDestinationTool(destinationsFacade, publicOriginService);
@@ -91,7 +91,7 @@ describe('AddDestinationTool', () => {
 
     const structured = result.structuredContent as any;
     expect(structured.authorization_url).toBe(
-      'https://app.p2pdigital.vn/ui/project-1/connect/google-sheets'
+      'https://digitalreport.p2pdigital.io.vn/ui/project-1/connect/google-sheets'
     );
     expect(structured.instructions).toContain('signed in to OWOX');
     expect(structured.instructions).toContain('member of');

@@ -3,7 +3,7 @@
 Before proceeding, please make sure that:
 
 - You have already created an **access token**, as described in [CREDENTIALS.md](CREDENTIALS.md).
-- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![TikTok Storage](res/tiktok_storage.png)
 
@@ -17,12 +17,12 @@ Before proceeding, please make sure that:
 
 ## Set Up the Connector
 
-1. Select **Connector** as the input source type.  
-2. Click **Set up connector** and choose **TikTok Ads**.  
-3. Fill in the required fields:  
-   - **Access Token** – paste the token you generated earlier.  
-   - **App ID** and **App Secret** – available in the **Basic Information** section of your TikTok app.  
-   - **Advertiser ID** – paste the ID you received together with the access token, or retrieve it directly from [TikTok Ads Manager](https://ads.tiktok.com/).  
+1. Select **Connector** as the input source type.
+2. Click **Set up connector** and choose **TikTok Ads**.
+3. Fill in the required fields:
+   - **Access Token** – paste the token you generated earlier.
+   - **App ID** and **App Secret** – available in the **Basic Information** section of your TikTok app.
+   - **Advertiser ID** – paste the ID you received together with the access token, or retrieve it directly from [TikTok Ads Manager](https://ads.tiktok.com/).
 4. Set **Data Level** if you need a performance reporting grain other than the default. It applies to `ad_insights` and `ad_insights_by_country` and supports:
    - `AUCTION_ADVERTISER`
    - `AUCTION_CAMPAIGN`
@@ -62,7 +62,7 @@ You can add any supported metrics to the required fields, but do not remove the 
 
 1. Choose one of the available **endpoints**. For performance reporting, use `ad_insights`; use `ad_insights_by_country` when you also need the `country_code` breakdown.
 2. Select the required **fields**. For performance endpoints, the required unique-key fields are pinned based on the **Data Level** value you selected during connector setup.
-3. Specify the **dataset** where the data will be stored (or leave the default).  
+3. Specify the **dataset** where the data will be stored (or leave the default).
 4. Click **Finish**, then **Publish Data Mart**.
 
 For the full required-fields table per level, see the **Data Level for Performance Nodes** section in [README](README.md).
@@ -71,7 +71,7 @@ For the full required-fields table per level, see the **Data Level for Performan
 
 ## Run the Data Mart
 
-You now have two options for importing data from TikTok Ads:  
+You now have two options for importing data from TikTok Ads:
 
 Option 1: Import Current Day's Data
 
@@ -81,22 +81,22 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![TikTok Ads Incremental Load](res/tiktok_ads_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![TikTok Ads Reimport](res/tiktok_ads_reimportwindow.png)
 
 Option 2: Manual Backfill for Specific Date Range
 
-Choose **Backfill (custom period)** to load historical data.  
+Choose **Backfill (custom period)** to load historical data.
 
 1. Select the **Start Date** and **End Date**.
 2. Click the **Run** button.
 
 ![TikTok Ads Backfill](res/tiktok_ads_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![TikTok Ads Success](res/tiktok_ads_successrun.png)
 

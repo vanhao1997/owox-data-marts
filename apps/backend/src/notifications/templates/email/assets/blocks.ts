@@ -8,7 +8,7 @@ export const emailHeader = `
               <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="stack-column" style="vertical-align:middle;text-align:left;">
-                    <a href="https://app.p2pdigital.vn" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;color:#1E88E5;font-size:14px;font-weight:bold;">
+                    <a href="https://digitalreport.p2pdigital.io.vn" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;color:#1E88E5;font-size:14px;font-weight:bold;">
                       <span style="display:inline-block;padding:0px 4px;height:30px;border-radius:6px;border:1px solid #e6e9ee;background-color:#ffffff;text-align:center;line-height:28px;">
                         ${OWOX_LOGO}
                       </span>
@@ -34,7 +34,7 @@ export const emailFooter = `
                   </td>
                   <td style="vertical-align:middle;text-align:right;font-size:13px;color:#6b7280;">
                     Need help?
-                    <a href="https://docs.p2pdigital.vn/docs/notifications/notification-settings/?utm_source=notifications&utm_medium=email&utm_campaign=service_notifications" target="_blank" rel="noopener noreferrer" style="color:#1E88E5;text-decoration:none;">Visit docs.p2pdigital.vn</a>
+                    <a href="https://docs.p2pdigital.io.vn/docs/notifications/notification-settings/?utm_source=notifications&utm_medium=email&utm_campaign=service_notifications" target="_blank" rel="noopener noreferrer" style="color:#1E88E5;text-decoration:none;">Visit P2PDigital docs</a>
                   </td>
                 </tr>
               </table>

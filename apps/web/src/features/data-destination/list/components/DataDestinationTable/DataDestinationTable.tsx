@@ -95,7 +95,7 @@ export function DataDestinationTable<TData, TValue>({
         <InviteTeammatesCard
           hint={t('destinationsPage.inviteHint')}
           docsLabel={t('destinationsPage.learnMore')}
-          docsHref='https://docs.p2pdigital.vn/docs/destinations/manage-destinations/'
+          docsHref='https://docs.p2pdigital.io.vn/docs/destinations/manage-destinations/'
         />
       </div>
     );

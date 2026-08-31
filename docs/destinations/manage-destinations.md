@@ -8,7 +8,7 @@ Supported destinations include **Google Sheets**, **Data Studio**, **Microsoft E
 
 ![Destinations](../res/screens/destinations-table.png)
 
-> ☝️ **Email**, **Slack**, **Microsoft Teams**, and **Google Chat** Destinations available in the **Team plan** for [OWOX Cloud Editions](../editions/owox-cloud-editions.md), and in the **Enterprise plan** for the [Self-Managed Editions](../editions/self-managed-editions.md).
+> ☝️ **Email**, **Slack**, **Microsoft Teams**, and **Google Chat** Destinations available in the **Team plan** for [P2PDigital Cloud Editions](../editions/owox-cloud-editions.md), and in the **Enterprise plan** for the [Self-Managed Editions](../editions/self-managed-editions.md).
 
 ## Created Destinations on the Data Mart page
 
@@ -84,4 +84,4 @@ Each Destination has an **Owners** list — the team members responsible for its
 ## Key Considerations
 
 - Each **Report** requires a single **Destination** association.
-- For additional guidance or troubleshooting, explore the supported **Destination** configuration pages or join the [OWOX Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).
+- For additional guidance or troubleshooting, explore the supported **Destination** configuration pages or join the [P2PDigital Community](https://github.com/vanhao1997/p2pdigital-data-marts/discussions).

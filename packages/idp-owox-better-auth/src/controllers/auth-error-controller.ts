@@ -8,49 +8,48 @@ import { AUTH_BASE_PATH } from '../core/constants.js';
 import { TemplateService } from '../services/rendering/template-service.js';
 import { readQueryString } from '../utils/request-utils.js';
 
-const DEFAULT_AUTH_ERROR_MESSAGE = 'Unable to complete sign in. Please try again.';
+const DEFAULT_AUTH_ERROR_MESSAGE = 'Không thể hoàn tất đăng nhập. Vui lòng thử lại.';
 
 /**
  * Covers OAuth RFC errors, Better Auth callback errors and common provider-specific OAuth errors.
  */
 const KNOWN_AUTH_ERROR_MESSAGES: Record<string, string> = {
   // OAuth/OIDC standard errors
-  access_denied: 'Access was denied. Please try again and grant the required permissions.',
-  invalid_request: 'The sign-in request is invalid. Please try again.',
-  unauthorized_client: 'This application is not authorized for this sign-in request.',
-  unsupported_response_type: 'The identity provider returned an unsupported response type.',
-  invalid_scope: 'Requested permissions are invalid or unavailable.',
-  server_error: 'The identity provider encountered an error. Please try again later.',
-  temporarily_unavailable: 'Sign in is temporarily unavailable. Please try again later.',
-  invalid_client: 'Authentication client configuration is invalid.',
-  invalid_grant: 'The sign-in grant is invalid or has expired. Please try again.',
-  interaction_required: 'Additional interaction is required to complete sign in.',
-  login_required: 'Please sign in with your account to continue.',
-  account_selection_required: 'Please select an account to continue.',
-  consent_required: 'Additional consent is required to continue.',
-  admin_consent_required: 'Administrator approval is required for this sign in.',
-  invalid_resource: 'Requested resource is unavailable for this account.',
+  access_denied: 'Quyền truy cập bị từ chối. Vui lòng thử lại và cấp các quyền cần thiết.',
+  invalid_request: 'Yêu cầu đăng nhập không hợp lệ. Vui lòng thử lại.',
+  unauthorized_client: 'Ứng dụng chưa được cấp quyền cho yêu cầu đăng nhập này.',
+  unsupported_response_type: 'Nhà cung cấp danh tính trả về kiểu phản hồi không được hỗ trợ.',
+  invalid_scope: 'Các quyền được yêu cầu không hợp lệ hoặc không khả dụng.',
+  server_error: 'Nhà cung cấp danh tính gặp lỗi. Vui lòng thử lại sau.',
+  temporarily_unavailable: 'Đăng nhập tạm thời không khả dụng. Vui lòng thử lại sau.',
+  invalid_client: 'Cấu hình ứng dụng xác thực không hợp lệ.',
+  invalid_grant: 'Mã cấp quyền đăng nhập không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.',
+  interaction_required: 'Cần thêm thao tác để hoàn tất đăng nhập.',
+  login_required: 'Vui lòng đăng nhập để tiếp tục.',
+  account_selection_required: 'Vui lòng chọn tài khoản để tiếp tục.',
+  consent_required: 'Cần chấp thuận thêm để tiếp tục.',
+  admin_consent_required: 'Cần quản trị viên phê duyệt cho lần đăng nhập này.',
+  invalid_resource: 'Tài nguyên được yêu cầu không khả dụng cho tài khoản này.',
 
   // Better Auth callback errors
-  signup_disabled: 'Sign up is currently disabled.',
-  account_already_linked_to_different_user:
-    'This social account is already linked to another user.',
-  unable_to_link_account: 'Unable to link this social account. Please try again.',
-  unable_to_get_user_info: 'Unable to get account data from the identity provider.',
-  email_doesnt_match: 'The returned email does not match the expected account.',
-  email_not_found: 'Email was not returned by the identity provider.',
-  oauth_provider_not_found: 'Requested sign-in provider is not configured.',
-  no_callback_url: 'Sign-in callback URL is missing.',
-  no_code: 'Authorization code is missing from the callback.',
-  state_mismatch: 'Sign-in state mismatch detected. Please try again.',
-  state_not_found: 'Sign-in state was not found. Please restart sign in.',
-  invalid_callback_request: 'OAuth callback request is invalid.',
+  signup_disabled: 'Tính năng đăng ký hiện đang bị tắt.',
+  account_already_linked_to_different_user: 'Tài khoản mạng xã hội này đã liên kết với người dùng khác.',
+  unable_to_link_account: 'Không thể liên kết tài khoản mạng xã hội. Vui lòng thử lại.',
+  unable_to_get_user_info: 'Không thể lấy dữ liệu tài khoản từ nhà cung cấp danh tính.',
+  email_doesnt_match: 'Email trả về không khớp với tài khoản dự kiến.',
+  email_not_found: 'Nhà cung cấp danh tính không trả về email.',
+  oauth_provider_not_found: 'Nhà cung cấp đăng nhập được yêu cầu chưa được cấu hình.',
+  no_callback_url: 'Thiếu URL callback đăng nhập.',
+  no_code: 'Thiếu mã ủy quyền trong callback.',
+  state_mismatch: 'Phát hiện trạng thái đăng nhập không khớp. Vui lòng thử lại.',
+  state_not_found: 'Không tìm thấy trạng thái đăng nhập. Vui lòng bắt đầu lại.',
+  invalid_callback_request: 'Yêu cầu callback OAuth không hợp lệ.',
 
   // Common Google and Microsoft provider error hints
-  redirect_uri_mismatch: 'Authentication redirect URL configuration is incorrect.',
-  org_internal: 'This sign-in is restricted to organization accounts.',
-  admin_policy_enforced: 'Your organization policy blocked the requested access.',
-  disallowed_useragent: 'This browser is not allowed for this sign-in flow.',
+  redirect_uri_mismatch: 'Cấu hình URL chuyển hướng xác thực không chính xác.',
+  org_internal: 'Lần đăng nhập này chỉ dành cho tài khoản tổ chức.',
+  admin_policy_enforced: 'Chính sách tổ chức đã chặn quyền truy cập được yêu cầu.',
+  disallowed_useragent: 'Trình duyệt này không được phép dùng cho luồng đăng nhập.',
 };
 
 /**
@@ -74,10 +73,10 @@ export class AuthErrorController {
     sendSecureHtml(
       res,
       TemplateService.renderAuthError({
-        heading: 'Sign in failed',
+        heading: 'Đăng nhập thất bại',
         errorMessage,
         homeHref: '/',
-        homeLabel: 'Go to home',
+        homeLabel: 'Về trang chủ',
         gtmContainerId: this.gtmContainerId,
       })
     );

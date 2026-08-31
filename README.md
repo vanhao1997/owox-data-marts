@@ -5,7 +5,7 @@
 Stop shipping reports. Hire a reporting data analyst for each of the team members.
 P2PDigital Data Marts automates what reporting data analysts do — governed by data teams, consumed by business users with NO AI Hallycinations.
 
-[**📘 Quick Start Guide**](./docs/getting-started/quick-start.md) · [**📚 Docs**](https://docs.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🌐 Website**](https://www.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🆘 Issues**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
+[**📘 Quick Start Guide**](./docs/getting-started/quick-start.md) · [**📚 Docs**](https://docs.p2pdigital.io.vn?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🌐 Website**](https://www.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=readme) · [**🆘 Issues**](https://github.com/vanhao1997/p2pdigital-data-marts/issues)
 
 ## ✨ Why We Built This
 
@@ -37,7 +37,7 @@ We analyzed **1,438 job postings** for reporting data analysts at US ecommerce S
 
 **What stays with your analysts** (and becomes more valuable): data integrity validation, business logic mapping, variance diagnosis, metric definitions and standardization, stakeholder requests translation, and orchestrating AI-assisted workflows.
 
-## Why Teams Choose OWOX Over Alternatives
+## Vì sao đội ngũ chọn P2PDigital thay cho các giải pháp khác
 
 ### 1. No AI Hallucinations. Ever
 
@@ -77,12 +77,12 @@ Your data never leaves your infrastructure. Once normalized into your warehouse,
 - Meta cut historical data on unique-count fields to 13 months and removed 7/28-day attribution windows entirely ([Supermetrics docs, Jan 2026](https://docs.supermetrics.com/docs/facebook-ads-new-historical-limitations-attribution-window-and-metric-removals-january-12-2026))
 - 53.7% of CDOs serve less than 3 years; boards hold data leaders personally accountable for compliance and vendor risk ([MIT Sloan, 2025](https://sloanreview.mit.edu/article/the-chief-data-officer-role-whats-next/))
 
-## Who Is OWOX For?
+## Who Is P2PDigital For?
 
 | | Data Analysts | Business Users | C-Suite |
 |---|---|---|---|
 | **Problem** | Buried in a reporting backlog — tickets, CSVs, one-off dashboards | Wait days for "just one more column" or trust ChatGPT with company numbers | Need AI-era throughput but can't afford hallucinated numbers at board level |
-| **OWOX gives you** | Define once, publish everywhere. Full SQL audit trail. Stay in control. | Self-serve from a governed data mart library in Google Sheets — no SQL, no tickets | Visible value in weeks. Auditable accuracy. No vendor lock-in. Open-source core. |
+| **P2PDigital gives you** | Define once, publish everywhere. Full SQL audit trail. Stay in control. | Self-serve from a governed data mart library in Google Sheets — no SQL, no tickets | Visible value in weeks. Auditable accuracy. No vendor lock-in. Open-source core. |
 
 ## 🚀 What You Can Do
 

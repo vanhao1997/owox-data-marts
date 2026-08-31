@@ -62,8 +62,8 @@ export class TemplateService {
     data: Record<string, unknown> & { providers: UiAuthProviders; gtmContainerId?: string }
   ): string {
     return this.renderWithLayout('pages/sign-in.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Sign In - P2PDigital Data Marts',
-      heading: 'Sign in to OWOX',
+      pageTitle: 'Đăng nhập - P2PDigital Data Marts',
+      heading: 'Đăng nhập P2PDigital',
       ...data,
       providers: data.providers,
       gtmContainerId: data.gtmContainerId,
@@ -74,8 +74,8 @@ export class TemplateService {
     data: Record<string, unknown> & { providers: UiAuthProviders; gtmContainerId?: string }
   ): string {
     return this.renderWithLayout('pages/sign-up.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Sign Up - P2PDigital Data Marts',
-      heading: 'Create your OWOX account',
+      pageTitle: 'Đăng ký - P2PDigital Data Marts',
+      heading: 'Tạo tài khoản P2PDigital',
       magicLinkSignupIntent: MAGIC_LINK_INTENT.SIGNUP,
       ...data,
       providers: data.providers,
@@ -87,8 +87,8 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/magic-link-confirm.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Confirm your email',
-      heading: 'Confirm your email',
+      pageTitle: 'Xác nhận email',
+      heading: 'Xác nhận email',
       magicLinkResetIntent: MAGIC_LINK_INTENT.RESET,
       ...data,
       gtmContainerId: data.gtmContainerId,
@@ -99,8 +99,8 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/password-setup.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Set password',
-      heading: 'Set your password',
+      pageTitle: 'Thiết lập mật khẩu',
+      heading: 'Thiết lập mật khẩu',
       intent: MAGIC_LINK_INTENT.SIGNUP,
       magicLinkResetIntent: MAGIC_LINK_INTENT.RESET,
       resetToken: '',
@@ -115,8 +115,8 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/password-success.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Password updated',
-      heading: 'Password updated',
+      pageTitle: 'Đã cập nhật mật khẩu',
+      heading: 'Đã cập nhật mật khẩu',
       ...data,
       gtmContainerId: data.gtmContainerId,
     });
@@ -126,12 +126,12 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/auth-error.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Sign in failed',
-      heading: 'Sign in failed',
-      errorMessage: 'Unable to complete sign in. Please try again.',
+      pageTitle: 'Đăng nhập thất bại',
+      heading: 'Đăng nhập thất bại',
+      errorMessage: 'Không thể hoàn tất đăng nhập. Vui lòng thử lại.',
       errorCode: '',
       homeHref: '/',
-      homeLabel: 'Go to home',
+      homeLabel: 'Về trang chủ',
       ...data,
       gtmContainerId: data.gtmContainerId,
     });
@@ -141,8 +141,8 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/forgot-password.ejs', 'layouts/auth.ejs', {
-      pageTitle: 'Forgot password',
-      heading: 'Reset your password',
+      pageTitle: 'Quên mật khẩu',
+      heading: 'Đặt lại mật khẩu',
       magicLinkResetIntent: MAGIC_LINK_INTENT.RESET,
       ...data,
       gtmContainerId: data.gtmContainerId,
@@ -153,8 +153,8 @@ export class TemplateService {
     data: Record<string, unknown> & { gtmContainerId?: string } = {}
   ): string {
     return this.renderWithLayout('pages/onboarding.ejs', 'layouts/onboarding.ejs', {
-      pageTitle: 'Welcome - P2PDigital Data Marts',
-      heading: 'Help us personalize your experience',
+      pageTitle: 'Chào mừng - P2PDigital Data Marts',
+      heading: 'Cá nhân hóa trải nghiệm của bạn',
       useCaseOptions: USE_CASE_OPTIONS,
       primaryRoleOptions: PRIMARY_ROLE_OPTIONS,
       primaryStorageOptions: PRIMARY_STORAGE_OPTIONS,

@@ -12,9 +12,9 @@ describe('package README', () => {
 
     expect(readme).toContain('# @owox/api-client');
     expect(readme).toContain('npm install @owox/api-client');
-    expect(readme).toContain('https://docs.p2pdigital.vn/docs/api/api-client/');
-    expect(readme).toContain('https://docs.p2pdigital.vn/docs/api/api-keys/');
-    expect(readme).toContain('https://docs.p2pdigital.vn/docs/api/openapi/');
+    expect(readme).toContain('https://docs.p2pdigital.io.vn/docs/api/api-client/');
+    expect(readme).toContain('https://docs.p2pdigital.io.vn/docs/api/api-keys/');
+    expect(readme).toContain('https://docs.p2pdigital.io.vn/docs/api/openapi/');
     expect(readme).toContain('patchJson');
     expect(readme).toContain('deleteJson');
     expect(readme).toContain('does not validate the response at runtime');

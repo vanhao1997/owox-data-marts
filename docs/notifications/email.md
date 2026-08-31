@@ -1,6 +1,6 @@
 # Email Notifications
 
-Email notifications keep your team informed about Data Mart run results without having to check the dashboard manually. OWOX sends a single batched email covering all relevant runs within the configured [Grouping Delay](./notification-settings.md#grouping-delay) window.
+Email notifications keep your team informed about Data Mart run results without having to check the dashboard manually. P2PDigital sends a single batched email covering all relevant runs within the configured [Grouping Delay](./notification-settings.md#grouping-delay) window.
 
 ---
 
@@ -12,7 +12,7 @@ An email is sent when:
 - The notification is enabled, **and**
 - At least one receiver is configured.
 
-> ☝️ Make sure that the `service@e.owox.com` address is not in your block list, and that emails do not end up in your spam folder.
+> ☝️ Make sure that the configured notification sender is not in your block list, and that emails do not end up in your spam folder.
 
 ---
 

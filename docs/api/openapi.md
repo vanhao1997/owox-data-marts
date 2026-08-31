@@ -2,11 +2,11 @@
 
 P2PDigital Data Marts exposes OpenAPI specifications and Swagger UI for the HTTP API.
 
-For P2PDigital Data Marts Cloud at [https://app.p2pdigital.vn](https://app.p2pdigital.vn), API documentation is available at:
+For P2PDigital Data Marts Cloud at [https://digitalreport.p2pdigital.io.vn](https://digitalreport.p2pdigital.io.vn), API documentation is available at:
 
-- [https://app.p2pdigital.vn/api/openapi.json](https://app.p2pdigital.vn/api/openapi.json)
-- [https://app.p2pdigital.vn/api/openapi.yaml](https://app.p2pdigital.vn/api/openapi.yaml)
-- [https://app.p2pdigital.vn/api/swagger-ui](https://app.p2pdigital.vn/api/swagger-ui)
+- [https://digitalreport.p2pdigital.io.vn/api/openapi.json](https://digitalreport.p2pdigital.io.vn/api/openapi.json)
+- [https://digitalreport.p2pdigital.io.vn/api/openapi.yaml](https://digitalreport.p2pdigital.io.vn/api/openapi.yaml)
+- [https://digitalreport.p2pdigital.io.vn/api/swagger-ui](https://digitalreport.p2pdigital.io.vn/api/swagger-ui)
 
 For a self-managed P2PDigital Data Marts deployment at `https://your-owox.example.com`, use:
 
@@ -49,7 +49,7 @@ X-OWOX-Api-Key-Id: <apiKeyId>
 ```
 
 Send this request to the decoded `apiOrigin`, for example
-`https://app.p2pdigital.vn/api/auth/api-keys/exchange`.
+`https://digitalreport.p2pdigital.io.vn/api/auth/api-keys/exchange`.
 
 The response contains an access token:
 

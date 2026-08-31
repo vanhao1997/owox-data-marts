@@ -3,7 +3,7 @@
 Before proceeding, please make sure that:
 
 - You have already created a credentials, as described in [CREDENTIALS](CREDENTIALS.md).  
-- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
+- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Google Ads Storage](res/googleads_storage.png)
 

@@ -7,7 +7,7 @@ import { getMissingConfigStatus, getStatus } from './status.js';
 describe('status', () => {
   const apiKey = `owox_key_${Buffer.from(
     JSON.stringify({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       apiKeySecret: 'secret-value-that-must-not-leak',
     }),
@@ -18,7 +18,7 @@ describe('status', () => {
     const status = await getStatus(
       {
         apiKey,
-        apiOrigin: 'https://app.p2pdigital.vn',
+        apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
         apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       },
       '/work/.env',
@@ -47,7 +47,7 @@ describe('status', () => {
     );
 
     expect(status).toEqual({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       authenticated: true,
       envFile: '/work/.env',
@@ -74,7 +74,7 @@ describe('status', () => {
       getStatus(
         {
           apiKey,
-          apiOrigin: 'https://app.p2pdigital.vn',
+          apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
           apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
         },
         null,
@@ -130,7 +130,7 @@ describe('status', () => {
     const status = await getStatus(
       {
         apiKey,
-        apiOrigin: 'https://app.p2pdigital.vn',
+        apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
         apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       },
       '/work/.env',
@@ -147,7 +147,7 @@ describe('status', () => {
     );
 
     expect(status).toEqual({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       authenticated: false,
       envFile: '/work/.env',
@@ -169,7 +169,7 @@ describe('status', () => {
     const status = await getStatus(
       {
         apiKey,
-        apiOrigin: 'https://app.p2pdigital.vn',
+        apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
         apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       },
       '/work/.env',
@@ -187,7 +187,7 @@ describe('status', () => {
 
     expect(authenticate).toHaveBeenCalledTimes(1);
     expect(status).toEqual({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       authenticated: true,
       envFile: '/work/.env',
@@ -200,7 +200,7 @@ describe('status', () => {
     const status = await getStatus(
       {
         apiKey,
-        apiOrigin: 'https://app.p2pdigital.vn',
+        apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
         apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       },
       '/work/.env',
@@ -218,7 +218,7 @@ describe('status', () => {
 
     expect(authenticate).not.toHaveBeenCalled();
     expect(status).toEqual({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       authenticated: false,
       envFile: '/work/.env',
@@ -235,7 +235,7 @@ describe('status', () => {
     const status = await getStatus(
       {
         apiKey,
-        apiOrigin: 'https://app.p2pdigital.vn',
+        apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
         apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       },
       '/work/.env',
@@ -254,7 +254,7 @@ describe('status', () => {
     );
 
     expect(status).toEqual({
-      apiOrigin: 'https://app.p2pdigital.vn',
+      apiOrigin: 'https://digitalreport.p2pdigital.io.vn',
       apiKeyId: 'pmk_AbCdEfGhIjKlMnOpQrStUv',
       authenticated: false,
       envFile: '/work/.env',

@@ -53,6 +53,6 @@ await client.deleteJson('/api/example-resource/item-123'); // Empty or 204 respo
 
 ## Documentation
 
-- [@owox/api-client guide](https://docs.p2pdigital.vn/docs/api/api-client/)
-- [API Keys](https://docs.p2pdigital.vn/docs/api/api-keys/)
-- [OpenAPI and Swagger UI](https://docs.p2pdigital.vn/docs/api/openapi/)
+- [@owox/api-client guide](https://docs.p2pdigital.io.vn/docs/api/api-client/)
+- [API Keys](https://docs.p2pdigital.io.vn/docs/api/api-keys/)
+- [OpenAPI and Swagger UI](https://docs.p2pdigital.io.vn/docs/api/openapi/)

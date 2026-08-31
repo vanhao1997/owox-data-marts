@@ -12,7 +12,7 @@ const COVERED_TARGETS = new Map([
     'GET /api/auth/context',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/Authentication/AuthContextController_getContext',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Authentication/AuthContextController_getContext',
       'API client': './api-client/#get-auth-context',
     },
   ],
@@ -20,49 +20,49 @@ const COVERED_TARGETS = new Map([
     'GET /api/data-marts/insight-templates',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Insights/ProjectInsightTemplatesController_list',
       'API client': './api-client/#list-project-insight-templates',
     },
   ],
   [
     'GET /api/data-marts',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_list',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/DataMarts/DataMartController_list',
       'API client': './api-client/#list-data-marts',
     },
   ],
   [
     'POST /api/data-marts/{id}/manual-run',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_manualRun',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/DataMarts/DataMartController_manualRun',
       'API client': './api-client/#manage-data-mart-runs',
     },
   ],
   [
     'GET /api/data-marts/{id}/runs',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_getRunHistory',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/DataMarts/DataMartController_getRunHistory',
       'API client': './api-client/#manage-data-mart-runs',
     },
   ],
   [
     'GET /api/data-marts/{id}/runs/{runId}',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_getRunById',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/DataMarts/DataMartController_getRunById',
       'API client': './api-client/#manage-data-mart-runs',
     },
   ],
   [
     'POST /api/data-marts/{id}/runs/{runId}/cancel',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/DataMarts/DataMartController_cancelRun',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/DataMarts/DataMartController_cancelRun',
       'API client': './api-client/#manage-data-mart-runs',
     },
   ],
   [
     'GET /api/external/http-data/data-marts/{dataMartId}.ndjson',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/HTTP%20Data/HttpDataController_stream',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/HTTP%20Data/HttpDataController_stream',
       'API client': './api-client/#stream-data-mart-rows',
     },
   ],
@@ -70,14 +70,14 @@ const COVERED_TARGETS = new Map([
     'GET /api/model-canvas/data-marts',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getDataMarts',
       'API client': './api-client/#read-the-models-canvas',
     },
   ],
   [
     'GET /api/model-canvas/edges',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getEdges',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Model%20Canvas/ModelCanvasController_getEdges',
       'API client': './api-client/#read-the-models-canvas',
     },
   ],
@@ -85,7 +85,7 @@ const COVERED_TARGETS = new Map([
     'GET /api/projects/settings',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_getSettings',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_getSettings',
       'API client': './api-client/#manage-project-settings',
     },
   ],
@@ -93,7 +93,7 @@ const COVERED_TARGETS = new Map([
     'PUT /api/projects/settings/description',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_updateDescription',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/ProjectSettings/ProjectSettingsController_updateDescription',
       'API client': './api-client/#manage-project-settings',
     },
   ],
@@ -101,7 +101,7 @@ const COVERED_TARGETS = new Map([
     'GET /api/data-marts/runs',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/Run%20History/ProjectDataMartRunsController_list',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Run%20History/ProjectDataMartRunsController_list',
       'API client': './api-client/#read-project-run-history',
     },
   ],
@@ -109,21 +109,21 @@ const COVERED_TARGETS = new Map([
     'GET /api/project-setup-progress',
     {
       OpenAPI:
-        'https://app.p2pdigital.vn/api/swagger-ui#/project-setup-progress/ProjectSetupProgressController_getProgress',
+        'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/project-setup-progress/ProjectSetupProgressController_getProgress',
       'API client': './api-client/#check-project-setup-progress',
     },
   ],
   [
     'POST /api/markdown/parse-to-html',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Utils/MarkdownParserController_parseToHtml',
       'API client': './api-client/#convert-markdown-to-html',
     },
   ],
   [
     'GET /api/search',
     {
-      OpenAPI: 'https://app.p2pdigital.vn/api/swagger-ui#/Search/SearchController_search',
+      OpenAPI: 'https://digitalreport.p2pdigital.io.vn/api/swagger-ui#/Search/SearchController_search',
       'API client': './api-client/#search-project-entities',
     },
   ],
@@ -212,7 +212,7 @@ function assertValidOpenApiTarget(target, endpoint) {
 
   if (
     url.protocol !== 'https:' ||
-    url.origin !== 'https://app.p2pdigital.vn' ||
+    url.origin !== 'https://digitalreport.p2pdigital.io.vn' ||
     url.pathname !== '/api/swagger-ui' ||
     url.search !== '' ||
     fragmentParts.length !== 3 ||

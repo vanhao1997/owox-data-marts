@@ -36,10 +36,10 @@ describe('AuthErrorController.errorPage', () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     const html = String(res.body ?? '');
-    expect(html).toContain('Sign in failed');
-    expect(html).toContain('Go to home');
+    expect(html).toContain('Đăng nhập thất bại');
+    expect(html).toContain('Về trang chủ');
     expect(html).toContain(
-      'Access was denied. Please try again and grant the required permissions.'
+      'Quyền truy cập bị từ chối. Vui lòng thử lại và cấp các quyền cần thiết.'
     );
     expect(html).not.toContain('access_denied');
     expect(html).not.toContain('User denied access');
@@ -59,7 +59,7 @@ describe('AuthErrorController.errorPage', () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     const html = String(res.body ?? '');
-    expect(html).toContain('Sign-in state mismatch detected. Please try again.');
+    expect(html).toContain('Phát hiện trạng thái đăng nhập không khớp. Vui lòng thử lại.');
     expect(html).not.toContain('state_mismatch');
   });
 
@@ -75,7 +75,7 @@ describe('AuthErrorController.errorPage', () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     const html = String(res.body ?? '');
-    expect(html).toContain('Unable to complete sign in. Please try again.');
+    expect(html).toContain('Không thể hoàn tất đăng nhập. Vui lòng thử lại.');
     expect(html).not.toContain('STATE_MISMATCH');
   });
 
@@ -87,7 +87,7 @@ describe('AuthErrorController.errorPage', () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     const html = String(res.body ?? '');
-    expect(html).toContain('Unable to complete sign in. Please try again.');
+    expect(html).toContain('Không thể hoàn tất đăng nhập. Vui lòng thử lại.');
     expect(html).not.toContain('Error code');
   });
 
@@ -103,7 +103,7 @@ describe('AuthErrorController.errorPage', () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     const html = String(res.body ?? '');
-    expect(html).toContain('Unable to complete sign in. Please try again.');
+    expect(html).toContain('Không thể hoàn tất đăng nhập. Vui lòng thử lại.');
     expect(html).not.toContain('Provider specific text');
   });
 });

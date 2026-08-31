@@ -117,7 +117,7 @@ describe('McpAuthGuard', () => {
     [
       'wrong resource',
       'Bearer wrong-resource',
-      { ...tokenPayload, resource: 'https://app.p2pdigital.vn/api' },
+      { ...tokenPayload, resource: 'https://digitalreport.p2pdigital.io.vn/api' },
     ],
     ['missing project id', 'Bearer missing-project', { ...tokenPayload, projectId: '' }],
     ['empty roles', 'Bearer empty-roles', { ...tokenPayload, roles: [] }],

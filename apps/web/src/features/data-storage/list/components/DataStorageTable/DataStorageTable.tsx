@@ -97,7 +97,7 @@ export function DataStorageTable<TData, TValue>({
         <InviteTeammatesCard
           hint={t('storagesPage.inviteHint')}
           docsLabel={t('storagesPage.learnMore')}
-          docsHref='https://docs.p2pdigital.vn/docs/storages/manage-storages/'
+          docsHref='https://docs.p2pdigital.io.vn/docs/storages/manage-storages/'
         />
       </div>
     );

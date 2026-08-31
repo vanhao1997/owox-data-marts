@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import DataMartsPage from './DataMartsPage';
 
@@ -61,7 +62,11 @@ vi.mock('../../../features/connectors/shared/model/hooks/useConnector.ts', () =>
 }));
 
 vi.mock('../../../shared/hooks', () => ({
-  useProjectRoute: () => ({ navigate: mocks.navigate, projectId: 'project-1' }),
+  useProjectRoute: () => ({
+    navigate: mocks.navigate,
+    projectId: 'project-1',
+    scope: (path: string) => `/ui/project-1${path}`,
+  }),
 }));
 
 describe('DataMartsPage Data Quality activity', () => {
@@ -87,7 +92,11 @@ describe('DataMartsPage Data Quality activity', () => {
       mocks.items = [{ id: 'visible-mart' }, { id: 'hidden-mart' }];
       mocks.summaries = { 'visible-mart': { state } };
 
-      render(<DataMartsPage />);
+      render(
+        <MemoryRouter>
+          <DataMartsPage />
+        </MemoryRouter>
+      );
       fireEvent.click(screen.getByRole('button', { name: 'Report visible rows' }));
 
       expect(screen.getByRole('status')).toHaveTextContent('Checking data quality');
@@ -104,7 +113,11 @@ describe('DataMartsPage Data Quality activity', () => {
       'hidden-mart': { state: 'RUNNING' },
     };
 
-    render(<DataMartsPage />);
+    render(
+      <MemoryRouter>
+        <DataMartsPage />
+      </MemoryRouter>
+    );
     fireEvent.click(screen.getByRole('button', { name: 'Report visible rows' }));
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument();

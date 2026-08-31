@@ -53,8 +53,8 @@ describe('McpMetadataController', () => {
     const values = new Map([
       ['MCP_PUBLIC_BASE_URL', 'https://mcp.owox.com'],
       ['MCP_OAUTH_RESOURCE', 'https://mcp.owox.com/mcp'],
-      ['OWOX_AUTH_PUBLIC_BASE_URL', 'https://app.p2pdigital.vn'],
-      ['MCP_RESOURCE_DOCUMENTATION_URL', 'https://docs.p2pdigital.vn/mcp'],
+      ['OWOX_AUTH_PUBLIC_BASE_URL', 'https://digitalreport.p2pdigital.io.vn'],
+      ['MCP_RESOURCE_DOCUMENTATION_URL', 'https://docs.p2pdigital.io.vn/mcp'],
     ]);
     const controller = createController(values);
 
@@ -68,7 +68,7 @@ describe('McpMetadataController', () => {
       resource: 'https://8c90f0b0f314bf5f5d6f69d24fd7ee3b.mcp.owox.com/mcp',
       authorization_servers: ['https://8c90f0b0f314bf5f5d6f69d24fd7ee3b.mcp.owox.com'],
       scopes_supported: ['mcp:read', 'mcp:write'],
-      resource_documentation: 'https://docs.p2pdigital.vn/mcp',
+      resource_documentation: 'https://docs.p2pdigital.io.vn/mcp',
     });
   });
 
@@ -76,7 +76,7 @@ describe('McpMetadataController', () => {
     const values = new Map([
       ['MCP_PUBLIC_BASE_URL', 'https://mcp.owox.com'],
       ['MCP_OAUTH_RESOURCE', 'https://mcp.owox.com/mcp'],
-      ['OWOX_AUTH_PUBLIC_BASE_URL', 'https://app.p2pdigital.vn'],
+      ['OWOX_AUTH_PUBLIC_BASE_URL', 'https://digitalreport.p2pdigital.io.vn'],
     ]);
     const controller = createController(values);
 

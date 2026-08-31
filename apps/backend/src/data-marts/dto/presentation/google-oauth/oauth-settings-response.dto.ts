@@ -27,7 +27,7 @@ export class GoogleOAuthSettingsResponseDto {
   clientId?: string;
 
   @ApiProperty({
-    example: 'https://app.p2pdigital.vn/api/google-oauth/callback',
+    example: 'https://digitalreport.p2pdigital.io.vn/api/google-oauth/callback',
     description: 'OAuth redirect URI configured in Google Console',
     required: false,
   })

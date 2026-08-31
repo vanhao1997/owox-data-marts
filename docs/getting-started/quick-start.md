@@ -21,7 +21,7 @@ The table below summarizes the available options
 | Deployment Option | Best For |
 |-------------------|----------|
 | **[Local Deployment](./deployment-guide/local-deployment.md)** | Quick testing, learning, or running a demo on your own computer (macOS/Windows/Linux). |
-| **[Cloud (OWOX SaaS)](https://app.p2pdigital.vn?utm_source=github&utm_medium=referral&utm_campaign=quick-start)** | Fastest start, with no deployment setup required and automatic updates. Free credits to start. |
+| **[Cloud (OWOX SaaS)](https://digitalreport.p2pdigital.io.vn?utm_source=github&utm_medium=referral&utm_campaign=quick-start)** | Fastest start, with no deployment setup required and automatic updates. Free credits to start. |
 | **[DigitalOcean](./deployment-guide/digitalocean.md)** | Teams who want a simple and affordable cloud server setup with full control. |
 | **[Render](./deployment-guide/render.md)** | Teams who prefer a managed platform with built-in scaling and minimal DevOps work. |
 | **[Google Cloud Platform](./deployment-guide/google-cloud-platform.md)** | Teams already using Google Cloud who want a serverless, auto-scaling deployment with minimal ops and tight integration into BigQuery and other GCP services |

@@ -240,6 +240,6 @@ If Unity Catalog is not enabled, you can use the default `hive_metastore` catalo
 
 If you encounter issues not covered in this guide:
 
-1. Check the [OWOX Documentation](https://docs.p2pdigital.vn)
+1. Check the [OWOX Documentation](https://docs.p2pdigital.io.vn)
 2. Contact OWOX Support
 3. Review Databricks documentation for platform-specific issues

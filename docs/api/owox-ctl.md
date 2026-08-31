@@ -53,7 +53,7 @@ Example:
 
 ```json
 {
-  "apiOrigin": "https://app.p2pdigital.vn",
+  "apiOrigin": "https://digitalreport.p2pdigital.io.vn",
   "apiKeyId": "pmk_1234567890abcdef",
   "authenticated": true,
   "envFile": null,
@@ -75,7 +75,7 @@ With auto-loaded `.env`, `envFile` is the default path used:
 
 ```json
 {
-  "apiOrigin": "https://app.p2pdigital.vn",
+  "apiOrigin": "https://digitalreport.p2pdigital.io.vn",
   "apiKeyId": "pmk_1234567890abcdef",
   "authenticated": true,
   "envFile": "/path/to/project/.env",

@@ -11,7 +11,7 @@ export const ONBOARDING_QUESTION = {
 
 export type OnboardingQuestionId = (typeof ONBOARDING_QUESTION)[keyof typeof ONBOARDING_QUESTION];
 
-/** Answer values for "What are you planning to use OWOX for?" (multi-select). */
+/** Answer values for the onboarding use-case question (multi-select). */
 export const USE_CASE_ANSWER = {
   SYNC_DWH_SHEETS: 'sync_dwh_sheets',
   SYNC_DWH_LOOKER: 'sync_dwh_looker',
@@ -30,7 +30,7 @@ export const PRIMARY_ROLE_ANSWER = {
   OTHER: 'other',
 } as const;
 
-/** Answer values for "Your primary Storage" (single-select). */
+/** Answer values for the primary storage question (single-select). */
 export const PRIMARY_STORAGE_ANSWER = {
   GBQ: 'gbq',
   AWS_ATHENA: 'aws_athena',
@@ -58,30 +58,30 @@ export interface OnboardingOption {
 export const USE_CASE_OPTIONS: OnboardingOption[] = [
   {
     value: USE_CASE_ANSWER.SYNC_DWH_SHEETS,
-    label: 'Sync live data from the organization’s warehouse into Sheets',
+    label: 'Đồng bộ dữ liệu trực tiếp từ kho của tổ chức vào Sheets',
   },
   {
     value: USE_CASE_ANSWER.SYNC_DWH_LOOKER,
-    label: 'Sync live data from the organization’s warehouse to Data Studio',
+    label: 'Đồng bộ dữ liệu trực tiếp từ kho của tổ chức đến Data Studio',
   },
-  { value: USE_CASE_ANSWER.AI_INSIGHTS, label: 'Deliver AI Insights to Slack / Teams / Email' },
+  { value: USE_CASE_ANSWER.AI_INSIGHTS, label: 'Gửi thông tin chuyên sâu AI đến Slack / Teams / Email' },
   {
     value: USE_CASE_ANSWER.IMPORT_EXTERNAL_DWH,
-    label: 'Import external data into the organization’s data warehouse',
+    label: 'Nhập dữ liệu bên ngoài vào kho dữ liệu của tổ chức',
   },
   {
     value: USE_CASE_ANSWER.IMPORT_EXTERNAL_SHEETS,
-    label: 'Import external data directly into Sheets',
+    label: 'Nhập dữ liệu bên ngoài trực tiếp vào Sheets',
   },
-  { value: USE_CASE_ANSWER.OTHER, label: 'Something else' },
+  { value: USE_CASE_ANSWER.OTHER, label: 'Mục đích khác' },
 ];
 
 export const PRIMARY_ROLE_OPTIONS: OnboardingOption[] = [
-  { value: PRIMARY_ROLE_ANSWER.DATA_ANALYST_ENGINEER, label: 'Data Analyst / Engineer' },
-  { value: PRIMARY_ROLE_ANSWER.DIGITAL_MARKETER, label: 'Digital Marketer' },
-  { value: PRIMARY_ROLE_ANSWER.HEAD_OF_ANALYTICS, label: 'Head of Analytics / Data' },
-  { value: PRIMARY_ROLE_ANSWER.C_LEVEL, label: 'C-level' },
-  { value: PRIMARY_ROLE_ANSWER.OTHER, label: 'Other' },
+  { value: PRIMARY_ROLE_ANSWER.DATA_ANALYST_ENGINEER, label: 'Chuyên viên phân tích / kỹ sư dữ liệu' },
+  { value: PRIMARY_ROLE_ANSWER.DIGITAL_MARKETER, label: 'Chuyên viên tiếp thị số' },
+  { value: PRIMARY_ROLE_ANSWER.HEAD_OF_ANALYTICS, label: 'Trưởng bộ phận phân tích / dữ liệu' },
+  { value: PRIMARY_ROLE_ANSWER.C_LEVEL, label: 'Cấp điều hành' },
+  { value: PRIMARY_ROLE_ANSWER.OTHER, label: 'Khác' },
 ];
 
 export const PRIMARY_STORAGE_OPTIONS: OnboardingOption[] = [
@@ -91,8 +91,8 @@ export const PRIMARY_STORAGE_OPTIONS: OnboardingOption[] = [
   { value: PRIMARY_STORAGE_ANSWER.SNOWFLAKE, label: 'Snowflake' },
   { value: PRIMARY_STORAGE_ANSWER.DATABRICKS, label: 'Databricks' },
   { value: PRIMARY_STORAGE_ANSWER.AZURE_SYNAPSE, label: 'Azure Synapse' },
-  { value: PRIMARY_STORAGE_ANSWER.OWOX_CLOUD_EU, label: 'OWOX Cloud (EU)' },
-  { value: PRIMARY_STORAGE_ANSWER.OWOX_CLOUD_US, label: 'OWOX Cloud (US)' },
-  { value: PRIMARY_STORAGE_ANSWER.DONT_KNOW, label: "Don't have it yet" },
-  { value: PRIMARY_STORAGE_ANSWER.OTHER, label: 'Other data warehouse' },
+  { value: PRIMARY_STORAGE_ANSWER.OWOX_CLOUD_EU, label: 'P2PDigital Cloud (EU)' },
+  { value: PRIMARY_STORAGE_ANSWER.OWOX_CLOUD_US, label: 'P2PDigital Cloud (US)' },
+  { value: PRIMARY_STORAGE_ANSWER.DONT_KNOW, label: 'Chưa có kho dữ liệu' },
+  { value: PRIMARY_STORAGE_ANSWER.OTHER, label: 'Kho dữ liệu khác' },
 ];

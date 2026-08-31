@@ -4,7 +4,7 @@ Before you start, verify:
 
 - You have [X Ads API credentials](CREDENTIALS.md): Consumer Key, Consumer Secret, Access Token, and Access Token Secret.
 - You have your **Account ID** — find it in your [ads.x.com](https://ads.x.com/) URL (covered in [Set Up the Connector](#set-up-the-connector) below).
-- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/). You also need [at least one storage](https://docs.p2pdigital.vn/docs/storages/manage-storages/) in **Storages** — you can configure it later if needed.
+- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/). You also need [at least one storage](https://docs.p2pdigital.io.vn/docs/storages/manage-storages/) in **Storages** — you can configure it later if needed.
 
 ## Create the Data Mart
 

@@ -23,7 +23,7 @@ export default function LookerStudioDescription() {
         </p>
         <ExternalAnchor
           className='p-0'
-          href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/data-studio/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip'
+          href='https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/data-studio/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip'
         >
           {t('destinationHelp.common.learnMore', 'Learn more')}
         </ExternalAnchor>

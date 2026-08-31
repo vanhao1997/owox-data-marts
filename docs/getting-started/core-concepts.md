@@ -61,7 +61,7 @@ All other types of Data Marts query data directly from the **Storage**.
 
 ### Source
 
-**Source** is a service that holds data you want to manipulate—for example, Facebook Ads, TikTok Ads, Google Analytics, Salesforce, Google Sheets, etc. You can find [the available connectors here](https://docs.p2pdigital.vn/#data-sources).
+**Source** is a service that holds data you want to manipulate—for example, Facebook Ads, TikTok Ads, Google Analytics, Salesforce, Google Sheets, etc. You can find [the available connectors here](https://docs.p2pdigital.io.vn/#data-sources).
 
 > ☝️ By managing a Data Mart’s **Sources**, a Data Analyst controls the origin of the data.
 

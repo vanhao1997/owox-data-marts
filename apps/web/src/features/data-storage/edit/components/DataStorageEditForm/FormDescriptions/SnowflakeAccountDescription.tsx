@@ -71,7 +71,7 @@ export default function SnowflakeAccountDescription() {
             More details in{' '}
             <ExternalAnchor
               className='underline'
-              href='https://docs.p2pdigital.vn/docs/storages/supported-storages/snowflake/'
+              href='https://docs.p2pdigital.io.vn/docs/storages/supported-storages/snowflake/'
             >
               P2PDigital Snowflake documentation
             </ExternalAnchor>

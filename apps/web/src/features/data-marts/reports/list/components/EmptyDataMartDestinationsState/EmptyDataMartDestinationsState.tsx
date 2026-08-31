@@ -45,7 +45,7 @@ export function EmptyDataMartDestinationsState({
         <InviteTeammatesCard
           hint='— Ask colleagues to configure Google Sheets destination'
           docsLabel={t('reportsEmptyDestinations.learnMore', 'Learn more about Google Sheets destination')}
-          docsHref='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=empty_state'
+          docsHref='https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=empty_state'
         />
       </div>
     );
@@ -75,7 +75,7 @@ export function EmptyDataMartDestinationsState({
       <InviteTeammatesCard
         hint='— Not sure which destination to connect? Ask someone with access to help you'
         docsLabel={t('reportsEmptyDestinations.learnMore', 'Learn more about Google Sheets destination')}
-        docsHref='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=empty_state'
+        docsHref='https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=empty_state'
       />
     </div>
   );

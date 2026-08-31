@@ -28,7 +28,7 @@ export default function StorageTypeDatabricksDescription() {
             {t('storageHelp.databricks.learnMore')}{' '}
             <ExternalAnchor
               className='underline'
-              href='https://docs.p2pdigital.vn/docs/storages/supported-storages/databricks/'
+              href='https://docs.p2pdigital.io.vn/docs/storages/supported-storages/databricks/'
             >
               {t('storageHelp.databricks.documentation')}
             </ExternalAnchor>

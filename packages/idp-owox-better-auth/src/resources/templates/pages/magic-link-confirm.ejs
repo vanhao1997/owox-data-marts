@@ -1,22 +1,22 @@
 <div class="space-y-6 min-w-[300px] max-w-md">
   <!-- Page Heading -->
   <h1 class="text-2xl font-semibold text-foreground tracking-tight">
-    <%= intent === magicLinkResetIntent ? 'Confirm to reset your password' : 'Confirm your email to continue' %>
+    <%= intent === magicLinkResetIntent ? 'Xác nhận đặt lại mật khẩu' : 'Xác nhận email để tiếp tục' %>
   </h1>
   <% if (!token || !callbackURL) { %>
     <div class="rounded-md border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
-      Access link is missing or invalid. Please request a new link.
+      Liên kết truy cập bị thiếu hoặc không hợp lệ. Hãy yêu cầu liên kết mới.
     </div>
     <a href="/auth/sign-in" class="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
       </svg>
-      Back to sign in
+      Quay lại đăng nhập
     </a>
   <% } else { %>
     <div class="space-y-3">
       <p class="text-sm text-muted-foreground leading-relaxed">
-        This will verify your email and redirect you to the next step.
+        Email của bạn sẽ được xác minh và chuyển đến bước tiếp theo.
       </p>
     </div>
 
@@ -27,7 +27,7 @@
       data-token="<%= token %>"
       data-callback="<%= callbackURL %>"
     >
-      <span>Confirm and continue</span>
+      <span>Xác nhận và tiếp tục</span>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
       </svg>
@@ -50,7 +50,7 @@
     const token = confirmButton.dataset.token;
     const callbackURL = confirmButton.dataset.callback;
     if (!token || !callbackURL) {
-      setStatus('Access link data is missing.');
+      setStatus('Thiếu dữ liệu liên kết truy cập.');
       return;
     }
 

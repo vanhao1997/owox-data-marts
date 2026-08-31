@@ -16,7 +16,7 @@ describe('GetDataMartReportsTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
+    getPublicOrigin: jest.fn(() => 'https://digitalreport.p2pdigital.io.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   it('lists a data mart reports using token project-member context', async () => {
@@ -50,8 +50,8 @@ describe('GetDataMartReportsTool', () => {
     const structuredContent = {
       reports: reports.map(report => ({
         ...report,
-        report_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm-1/reports',
-        destination_url: 'https://app.p2pdigital.vn/ui/project-1/data-destinations?id=dest-1',
+        report_url: 'https://digitalreport.p2pdigital.io.vn/ui/project-1/data-marts/dm-1/reports',
+        destination_url: 'https://digitalreport.p2pdigital.io.vn/ui/project-1/data-destinations?id=dest-1',
       })),
     };
 

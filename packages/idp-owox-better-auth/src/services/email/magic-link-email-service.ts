@@ -29,18 +29,18 @@ export class MagicLinkEmailService {
     const isReset = intent === MAGIC_LINK_INTENT.RESET;
 
     return {
-      title: isReset ? 'Reset your password' : 'Confirm your email',
+      title: isReset ? 'Đặt lại mật khẩu' : 'Xác nhận email',
       description: isReset
-        ? 'Click the button below to reset your password. This link is valid for 1 hour.'
-        : 'Click the button below to confirm your email and finish setting your password. This link is valid for 1 hour.',
-      buttonText: isReset ? 'Reset password' : 'Confirm email',
+        ? 'Nhấn nút bên dưới để đặt lại mật khẩu. Liên kết có hiệu lực trong 1 giờ.'
+        : 'Nhấn nút bên dưới để xác nhận email và hoàn tất thiết lập mật khẩu. Liên kết có hiệu lực trong 1 giờ.',
+      buttonText: isReset ? 'Đặt lại mật khẩu' : 'Xác nhận email',
       magicLink: payload.magicLink,
-      footer: 'If you did not request this, you can safely ignore this email.',
+      footer: 'Nếu bạn không yêu cầu thao tác này, bạn có thể bỏ qua email.',
     };
   }
 
   private buildSubject(intent: MagicLinkIntent): string {
-    return intent === MAGIC_LINK_INTENT.RESET ? 'Reset your password' : 'Confirm your email';
+    return intent === MAGIC_LINK_INTENT.RESET ? 'Đặt lại mật khẩu' : 'Xác nhận email';
   }
 
   private renderPlainText(viewModel: Record<string, string>): string {

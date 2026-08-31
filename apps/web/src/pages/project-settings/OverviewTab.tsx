@@ -320,7 +320,7 @@ export function OverviewTab() {
                 Codex, ChatGPT, and similar tools. For multi-project workflows, use this
                 project-specific URL as a custom MCP server. See the{' '}
                 <a
-                  href='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/mcp/'
+                  href='https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/mcp/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='text-primary hover:underline'

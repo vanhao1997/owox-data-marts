@@ -1,7 +1,7 @@
 /**
  * Public documentation links surfaced to MCP clients so the agent can hand the
  * user a setup guide. URLs mirror the repo docs layout:
- * docs/<path>.md → https://docs.p2pdigital.vn/docs/<path>/.
+ * docs/<path>.md → https://docs.p2pdigital.io.vn/docs/<path>/.
  */
 
 /**
@@ -10,4 +10,4 @@
  * connector inside Looker Studio. Source: docs/destinations/supported-destinations/data-studio.md.
  */
 export const LOOKER_STUDIO_DESTINATION_GUIDE_URL =
-  'https://docs.p2pdigital.vn/docs/destinations/supported-destinations/data-studio/';
+  'https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/data-studio/';

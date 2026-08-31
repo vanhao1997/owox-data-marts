@@ -3,7 +3,7 @@
 Before proceeding, please make sure that:
 
 - You securely saved your **Client ID** and **Client Secret** as described in [CREDENTIALS](CREDENTIALS).
-- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
+- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Criteo Ads Storage](res/criteo_storage.png)
 

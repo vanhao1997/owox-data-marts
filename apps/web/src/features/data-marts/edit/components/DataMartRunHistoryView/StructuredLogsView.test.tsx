@@ -15,14 +15,14 @@ describe('StructuredLogsView', () => {
             timestamp: '2026-08-18 12:43:25',
             level: LogLevel.ERROR,
             message:
-              'Create a managed license key at https://app.p2pdigital.vn to enable execution.',
+              'Create a managed license key at https://digitalreport.p2pdigital.io.vn to enable execution.',
           },
         ]}
       />
     );
 
-    const link = screen.getByRole('link', { name: 'https://app.p2pdigital.vn' });
-    expect(link).toHaveAttribute('href', 'https://app.p2pdigital.vn');
+    const link = screen.getByRole('link', { name: 'https://digitalreport.p2pdigital.io.vn' });
+    expect(link).toHaveAttribute('href', 'https://digitalreport.p2pdigital.io.vn');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });

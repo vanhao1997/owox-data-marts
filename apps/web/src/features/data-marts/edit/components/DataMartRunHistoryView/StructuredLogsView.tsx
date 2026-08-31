@@ -8,10 +8,11 @@ interface StructuredLogsViewProps {
   logs: LogEntry[];
 }
 
-const OWOX_APP_URL = 'https://app.p2pdigital.vn';
+const OWOX_APP_URL = 'https://digitalreport.p2pdigital.io.vn';
+const OWOX_APP_URL_PATTERN = /(https:\/\/digitalreport\.p2pdigital\.io\.vn)/g;
 
 const renderMessage = (message: string) =>
-  message.split(/(https:\/\/app\.p2pdigital\.vn)/g).map((part, index) =>
+  message.split(OWOX_APP_URL_PATTERN).map((part, index) =>
     part === OWOX_APP_URL ? (
       <a
         key={`${part}-${String(index)}`}

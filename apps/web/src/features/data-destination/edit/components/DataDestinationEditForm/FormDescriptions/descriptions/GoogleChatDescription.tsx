@@ -26,7 +26,7 @@ export default function GoogleChatDescription() {
           {t('destinationHelp.common.moreDetails', 'For more details, read the')}{' '}
           <ExternalAnchor
             className='underline'
-            href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-chat/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-google-chat'
+            href='https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/google-chat/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-google-chat'
           >
             {t('destinationHelp.common.documentation', 'P2PDigital documentation')}
           </ExternalAnchor>

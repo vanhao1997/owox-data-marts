@@ -25,4 +25,4 @@ All command output is JSON. The API origin is encoded inside `OWOX_API_KEY`.
 
 ## Documentation
 
-[owox-ctl API documentation](https://docs.p2pdigital.vn/docs/api/owox-ctl/).
+[owox-ctl API documentation](https://docs.p2pdigital.io.vn/docs/api/owox-ctl/).

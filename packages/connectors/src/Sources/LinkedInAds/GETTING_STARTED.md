@@ -2,8 +2,8 @@
 
 Before proceeding, please make sure that:
 
-- You have created a **refresh token** (as described in [CREDENTIALS](CREDENTIALS)) and securely saved your **Client ID** and **Primary Client Secret**.  
-- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+- You have created a **refresh token** (as described in [CREDENTIALS](CREDENTIALS)) and securely saved your **Client ID** and **Primary Client Secret**.
+- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![LinkedIn Ads Storage](res/linkedin_ads_storage.png)
 
@@ -18,7 +18,7 @@ Before proceeding, please make sure that:
 ## Set Up the Connector
 
 1. Select **Connector** as the input source type.
-2. Click **Set up connector** and choose **LinkedIn Ads**.  
+2. Click **Set up connector** and choose **LinkedIn Ads**.
 3. Fill in the required fields:
     - **Client ID** – paste the ID you saved earlier.
     - **Primary Client Secret** – paste the secret you saved earlier.
@@ -34,16 +34,16 @@ Before proceeding, please make sure that:
 
 ## Configure Data Import
 
-1. Choose one of the available **endpoints**.  
-2. Select the required **fields**.  
-3. Specify the **dataset** where the data will be stored (or leave the default).  
+1. Choose one of the available **endpoints**.
+2. Select the required **fields**.
+3. Specify the **dataset** where the data will be stored (or leave the default).
 4. Click **Finish**, then **Publish Data Mart**.
 
 ![LinkedIn Ads Publish Data Mart](res/linkedin_ads_publish.png)
 
 ## Run the Data Mart
 
-You now have two options for importing data from LinkedIn Pages:  
+You now have two options for importing data from LinkedIn Pages:
 
 Option 1: Import Current Day's Data
 
@@ -53,22 +53,22 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![Linkedin Ads Incremental Load](res/linkedin_ads_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![LinkedIn Ads Reimport](res/linkedin_ads_reimportwindow.png)
 
 Option 2: Manual Backfill for Specific Date Range
 
-Choose **Backfill (custom period)** to load historical data.  
+Choose **Backfill (custom period)** to load historical data.
 
 1. Select the **Start Date** and **End Date**.
 2. Click the **Run** button.
 
 ![LinkedIn Ads Backfill](res/linkedin_ads_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![LinkedIn Ads Success](res/linkedin_ads_successrun.png)
 

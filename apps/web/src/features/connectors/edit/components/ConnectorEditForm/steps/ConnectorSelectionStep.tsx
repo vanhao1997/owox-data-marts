@@ -84,7 +84,7 @@ export function ConnectorSelectionStep({
           variant='inline'
           hint={t('connectorWizard.askTeammate')}
           docsLabel={t('connectorWizard.learnMore')}
-          docsHref='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-data-mart/'
+          docsHref='https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/connector-data-mart/'
         />
       </AppWizardStepSection>
 

@@ -63,7 +63,7 @@ describe('EditApiKeySheet', () => {
     fireEvent.click(screen.getByRole('button', { name: /Documentation/i }));
     expect(screen.getByRole('link', { name: 'API Keys' })).toHaveAttribute(
       'href',
-      'https://docs.p2pdigital.vn/docs/api/api-keys/'
+      'https://docs.p2pdigital.io.vn/docs/api/api-keys/'
     );
   });
 
@@ -237,16 +237,16 @@ describe('EditApiKeySheet', () => {
 
     expect(screen.getByRole('link', { name: 'owox-ctl CLI tool' })).toHaveAttribute(
       'href',
-      'https://docs.p2pdigital.vn/docs/api/owox-ctl/'
+      'https://docs.p2pdigital.io.vn/docs/api/owox-ctl/'
     );
     expect(
       screen.getByRole('link', {
         name: '@owox/api-client TypeScript/JavaScript API Client',
       })
-    ).toHaveAttribute('href', 'https://docs.p2pdigital.vn/docs/api/api-client/');
+    ).toHaveAttribute('href', 'https://docs.p2pdigital.io.vn/docs/api/api-client/');
     expect(screen.getByRole('link', { name: 'OpenAPI and Swagger UI' })).toHaveAttribute(
       'href',
-      'https://docs.p2pdigital.vn/docs/api/openapi/'
+      'https://docs.p2pdigital.io.vn/docs/api/openapi/'
     );
 
     expect(screen.getByText('owox-ctl')).toHaveClass('font-mono');

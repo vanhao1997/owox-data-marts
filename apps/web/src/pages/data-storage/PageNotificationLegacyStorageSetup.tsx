@@ -68,7 +68,7 @@ export function PageNotificationLegacyStorageSetup() {
                 </Button>
                 <Button variant='outline' asChild>
                   <Link
-                    to='https://docs.p2pdigital.vn/docs/getting-started/setup-guide/extension-data-marts/?utm_source=owox-data-marts&utm_medium=ui&utm_campaign=legacy-storage-info-block'
+                    to='https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/extension-data-marts/?utm_source=owox-data-marts&utm_medium=ui&utm_campaign=legacy-storage-info-block'
                     target='_blank'
                     rel='noopener noreferrer'
                   >

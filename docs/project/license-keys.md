@@ -21,7 +21,7 @@ Only Project Admins can create and manage license keys. Other project members ca
 
 The Public origin must match the deployment's `PUBLIC_ORIGIN`. Use `http://localhost:3000` only for local development.
 
-> The full license key is shown once, immediately after creation. OWOX does not store a retrievable copy. If you lose it, create a replacement and revoke the old key.
+> The full license key is shown once, immediately after creation. P2PDigital does not store a retrievable copy. If you lose it, create a replacement and revoke the old key.
 
 Continue with [Configure a Self-Managed License Key](../getting-started/deployment-guide/license-key-setup.md) to activate the key on the deployment.
 

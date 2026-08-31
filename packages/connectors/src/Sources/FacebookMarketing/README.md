@@ -16,9 +16,9 @@ You can:
 - A Facebook ad account with Admin, Advertiser, or Analyst access.
 - An P2PDigital Data Marts storage.
 
-See the OWOX guide to [add a storage](https://docs.p2pdigital.vn/docs/storages/manage-storages/#adding-a-new-storage).
+See the OWOX guide to [add a storage](https://docs.p2pdigital.io.vn/docs/storages/manage-storages/#adding-a-new-storage).
 
-If you create your first connector, read the OWOX guide to [create a connector-based Data Mart](https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-data-mart/).
+If you create your first connector, read the OWOX guide to [create a connector-based Data Mart](https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/connector-data-mart/).
 
 ## Table of Contents
 

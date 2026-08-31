@@ -1,6 +1,6 @@
 # Webhooks
 
-Webhooks allow you to receive real-time notifications when events occur in P2PDigital Data Marts. When an event is triggered, OWOX sends an HTTP POST request with a JSON payload to your configured URL.
+Webhooks allow you to receive real-time notifications when events occur in P2PDigital Data Marts. When an event is triggered, P2PDigital sends an HTTP POST request with a JSON payload to your configured URL.
 
 ## Setting Up a Webhook
 
@@ -79,7 +79,7 @@ Triggered when a data mart run fails.
     "dataMart": {
       "id": "dm-abc123",
       "title": "Sales Report",
-      "url": "https://app.p2pdigital.vn/ui/my-project-id/data-marts/dm-abc123"
+      "url": "https://digitalreport.p2pdigital.io.vn/ui/my-project-id/data-marts/dm-abc123"
     },
     "run": {
       "id": "run-xyz789",
@@ -112,7 +112,7 @@ Triggered when a data mart run completes successfully.
     "dataMart": {
       "id": "dm-abc123",
       "title": "Sales Report",
-      "url": "https://app.p2pdigital.vn/ui/my-project-id/data-marts/dm-abc123"
+      "url": "https://digitalreport.p2pdigital.io.vn/ui/my-project-id/data-marts/dm-abc123"
     },
     "run": {
       "id": "run-xyz789",

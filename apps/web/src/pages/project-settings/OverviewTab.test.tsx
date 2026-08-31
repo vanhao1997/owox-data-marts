@@ -155,7 +155,7 @@ describe('OverviewTab project status', () => {
     const setupGuideLink = screen.getByRole('link', { name: 'MCP setup guide' });
     expect(setupGuideLink).toHaveAttribute(
       'href',
-      'https://docs.p2pdigital.vn/docs/getting-started/setup-guide/mcp/'
+      'https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/mcp/'
     );
 
     fireEvent.click(screen.getByTitle('Copy project-mcp-url to clipboard'));

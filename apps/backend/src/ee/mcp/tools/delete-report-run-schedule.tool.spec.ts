@@ -14,7 +14,7 @@ describe('DeleteReportRunScheduleTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
+    getPublicOrigin: jest.fn(() => 'https://digitalreport.p2pdigital.io.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
 
   it('deletes the schedule and returns trigger_id, report_id, schedule: null', async () => {
@@ -28,7 +28,7 @@ describe('DeleteReportRunScheduleTool', () => {
     const expected = {
       trigger_id: 'trigger-1',
       report_id: 'report-1',
-      schedules_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/schedules',
+      schedules_url: 'https://digitalreport.p2pdigital.io.vn/ui/project-1/data-marts/schedules',
       schedule: null,
     };
 
@@ -56,7 +56,7 @@ describe('DeleteReportRunScheduleTool', () => {
     expect(result.structuredContent).toEqual({
       trigger_id: 'trigger-2',
       report_id: null,
-      schedules_url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/schedules',
+      schedules_url: 'https://digitalreport.p2pdigital.io.vn/ui/project-1/data-marts/schedules',
       schedule: null,
     });
   });

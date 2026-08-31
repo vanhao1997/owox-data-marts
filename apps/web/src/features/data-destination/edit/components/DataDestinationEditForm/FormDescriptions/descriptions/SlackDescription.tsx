@@ -22,7 +22,7 @@ export default function SlackDescription() {
           {t('destinationHelp.common.moreDetails', 'For more details, read the')}{' '}
           <ExternalAnchor
             className='underline'
-            href='https://docs.p2pdigital.vn/docs/destinations/supported-destinations/slack/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-slack'
+            href='https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/slack/?utm_source=owox_data_marts&utm_medium=destination_entity&utm_campaign=tooltip-slack'
           >
             {t('destinationHelp.common.documentation', 'P2PDigital documentation')}
           </ExternalAnchor>

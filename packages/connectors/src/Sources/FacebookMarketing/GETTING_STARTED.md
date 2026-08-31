@@ -12,9 +12,9 @@ Check these items before you create the Data Mart:
 - You know the numeric Facebook Account ID.
 - You chose an authentication method in [Credentials](CREDENTIALS.md).
 
-For storage setup, see [Storage Management](https://docs.p2pdigital.vn/docs/storages/manage-storages/#adding-a-new-storage).
+For storage setup, see [Storage Management](https://docs.p2pdigital.io.vn/docs/storages/manage-storages/#adding-a-new-storage).
 
-For a general connector walkthrough, see [Connector-based Data Mart](https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-data-mart/).
+For a general connector walkthrough, see [Connector-based Data Mart](https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/connector-data-mart/).
 
 ## Create the Data Mart
 
@@ -57,19 +57,19 @@ Then fill in **Account IDs**. Use numeric ad account IDs only, without the `act_
 4. Click **Finish**.
 5. Click **Publish & Run Data Mart**.
 
-OWOX writes the connector tables into this destination. Your storage sets the field label, such as **Dataset** for BigQuery or **Database** for Amazon Redshift. For your storage, see [Supported Storages](https://docs.p2pdigital.vn/docs/storages/supported-storages/).
+OWOX writes the connector tables into this destination. Your storage sets the field label, such as **Dataset** for BigQuery or **Database** for Amazon Redshift. For your storage, see [Supported Storages](https://docs.p2pdigital.io.vn/docs/storages/supported-storages/).
 
 For spend, clicks, impressions, conversions, and ROAS, choose **Ad Account Insights**.
 
 For endpoint details, see [Endpoints and Fields](ENDPOINTS_AND_FIELDS.md).
 
-If OWOX disables **Publish & Run Data Mart**, check the storage. OWOX cannot publish a Data Mart until the selected storage has valid settings. See [Storage Management](https://docs.p2pdigital.vn/docs/storages/manage-storages/#adding-a-new-storage).
+If OWOX disables **Publish & Run Data Mart**, check the storage. OWOX cannot publish a Data Mart until the selected storage has valid settings. See [Storage Management](https://docs.p2pdigital.io.vn/docs/storages/manage-storages/#adding-a-new-storage).
 
 ![Configure Data Import screen with Facebook Ads endpoint, fields, and dataset settings](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/5975a655-aeea-4ec6-d5f6-f74cb5db4500/public)
 
 ## Run the Data Mart
 
-You can run the Data Mart manually after setup. You can also [schedule connector runs](https://docs.p2pdigital.vn/docs/getting-started/setup-guide/connector-triggers/).
+You can run the Data Mart manually after setup. You can also [schedule connector runs](https://docs.p2pdigital.io.vn/docs/getting-started/setup-guide/connector-triggers/).
 
 ### Incremental Load
 
@@ -101,7 +101,7 @@ Open **Run history**. The run has finished when the status shows **Success**.
 
 ![Run history tab showing a successful Facebook Ads import](https://imagedelivery.net/zKr-4bdC5CBGL2DuuEmvYw/da9ea591-9924-4465-091b-90a65c827800/public)
 
-You can query the imported tables in the dataset you selected. You can also send the data to a destination. See [Destination Management](https://docs.p2pdigital.vn/docs/destinations/manage-destinations/) and [Google Sheets](https://docs.p2pdigital.vn/docs/destinations/supported-destinations/google-sheets/).
+You can query the imported tables in the dataset you selected. You can also send the data to a destination. See [Destination Management](https://docs.p2pdigital.io.vn/docs/destinations/manage-destinations/) and [Google Sheets](https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/google-sheets/).
 
 ## Troubleshooting
 

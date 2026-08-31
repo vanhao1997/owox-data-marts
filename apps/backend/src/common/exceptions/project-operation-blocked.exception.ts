@@ -21,7 +21,7 @@ export class ProjectOperationBlockedException extends BusinessViolationException
     }
     if (blockedReasons.includes(ProjectBlockedReason.LICENSE_REQUIRED)) {
       message +=
-        ' Report Runs require an active P2PDigital Data Marts Cloud license. Open https://app.p2pdigital.vn and create a managed license key in Project Settings, then set it as LICENSE_KEY to enable execution.';
+        ' Report Runs require an active P2PDigital Data Marts Cloud license. Open https://digitalreport.p2pdigital.io.vn and create a managed license key in Project Settings, then set it as LICENSE_KEY to enable execution.';
     }
     message = message.trim();
 

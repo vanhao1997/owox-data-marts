@@ -2,8 +2,8 @@
 
 Before you begin, please ensure that:
 
-- You have already obtained all required credentials, as described in [CREDENTIALS](CREDENTIALS.md).  
-- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+- You have already obtained all required credentials, as described in [CREDENTIALS](CREDENTIALS.md).
+- You have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Reddit Ads Storage](res/reddit_storage.png)
 
@@ -18,7 +18,7 @@ Before you begin, please ensure that:
 ## Set Up the Connector
 
 1. Select **Connector** as the input source type.
-2. Click **Setup connector** and choose **Reddit Ads**.  
+2. Click **Setup connector** and choose **Reddit Ads**.
 3. Fill in the required fields:
     - **App ID** – paste the App ID you saved earlier following the [CREDENTIALS](CREDENTIALS) tutorial.
     - **Secret** – paste the Secret you saved earlier following the [CREDENTIALS](CREDENTIALS) tutorial.
@@ -36,16 +36,16 @@ Before you begin, please ensure that:
 
 ## Configure Data Import
 
-1. Choose one of the available **endpoints**.  
-2. Select the required **fields**.  
-3. Specify the **dataset** where the data will be stored (or leave the default).  
+1. Choose one of the available **endpoints**.
+2. Select the required **fields**.
+3. Specify the **dataset** where the data will be stored (or leave the default).
 4. Click **Finish**, then **Publish Data Mart**.
 
 ![Reddit Ads Publish Data Mart](res/reddit_publish.png)
 
 ## Run the Data Mart
 
-You now have two options for importing data from Reddit Ads:  
+You now have two options for importing data from Reddit Ads:
 
 Option 1: Import Current Day's Data
 
@@ -55,22 +55,22 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![Reddit Ads Incremental Load](res/reddit_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![Reddit Ads Reimport](res/reddit_reimportwindow.png)
 
 Option 2: Manual Backfill for Specific Date Range
 
-Choose **Backfill (custom period)** to load historical data.  
+Choose **Backfill (custom period)** to load historical data.
 
 1. Select the **Start Date** and **End Date**.
 2. Click the **Run** button.
 
 ![Reddit Ads Backfill](res/reddit_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![Reddit Ads Success](res/reddit_successrun.png)
 

@@ -8,7 +8,7 @@ Copy this prompt into a new coding-agent task:
 Help me prepare an P2PDigital Data Marts plugin project.
 
 Follow this page with me:
-https://docs.p2pdigital.vn/docs/plugins/project-setup/
+https://docs.p2pdigital.io.vn/docs/plugins/project-setup/
 
 Guide me through the prerequisites, command-line tools, repository creation, and AGENTS.md setup.
 Stop when the repository is ready to build, and report any step that needs me to authenticate or
@@ -77,7 +77,7 @@ Save the following as the root `AGENTS.md` file:
 # P2PDigital Data Marts plugin development
 
 Before changing this plugin, read:
-https://docs.p2pdigital.vn/docs/plugins/authoring-guide/
+https://docs.p2pdigital.io.vn/docs/plugins/authoring-guide/
 
 Use the P2PDigital Data Marts plugin authoring guide as the source of truth for plugin behavior,
 security constraints, manifests, SDK usage, deployment, releases, and publishing.

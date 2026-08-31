@@ -217,13 +217,14 @@ function defineFilePaths(sourcePath) {
   const relativePath = path.relative(MONOREPO_ROOT, sourcePath);
 
   const normalizedRelativePath = normalizePathToKebabCase(relativePath);
+  const localizedRelativePath = normalizeContentRelativePath(normalizedRelativePath);
 
   const destinationPath =
     sourcePath === CHANGELOG_PATH
       ? path.join(CONTENT_DEST_PATH, 'docs/changelog.md')
       : path.join(
           CONTENT_DEST_PATH,
-          normalizedRelativePath === 'readme.md' ? 'index.md' : normalizedRelativePath
+          localizedRelativePath === 'readme.md' ? 'index.md' : localizedRelativePath
         );
 
   return {
@@ -231,6 +232,19 @@ function defineFilePaths(sourcePath) {
     relativePath,
     destinationPath,
   };
+}
+
+/**
+ * Maps localized source docs into Starlight's locale namespace.
+ * `docs/vi/...` must become `vi/...`, while English source paths stay unchanged.
+ * @param {string} relativePath - Repository-relative path
+ * @returns {string} Content-relative path
+ */
+function normalizeContentRelativePath(relativePath) {
+  const portableRelativePath = normalizePathSeparators(relativePath);
+  return portableRelativePath.startsWith('docs/vi/')
+    ? portableRelativePath.slice('docs/'.length)
+    : portableRelativePath;
 }
 
 /**
@@ -291,7 +305,8 @@ function processDocumentLinks(fileContent, filePaths) {
       const absoluteLinkPath = path.join(path.dirname(filePaths.sourcePath), originalLinkPath);
       const relativeLinkPath = path.relative(MONOREPO_ROOT, absoluteLinkPath);
       const normalizedRelativePath = normalizePathToKebabCase(relativeLinkPath);
-      const destLinkAbsPath = path.join(CONTENT_DEST_PATH, normalizedRelativePath);
+      const localizedRelativePath = normalizeContentRelativePath(normalizedRelativePath);
+      const destLinkAbsPath = path.join(CONTENT_DEST_PATH, localizedRelativePath);
       let destLinkUrl = normalizePathSeparators(path.relative(CONTENT_DEST_PATH, destLinkAbsPath));
       destLinkUrl = destLinkUrl === 'readme.md' ? '' : destLinkUrl;
       destLinkUrl = baseURL + '/' + destLinkUrl.replace(/\.md/, '');
@@ -486,7 +501,8 @@ function processFrontmatterMetaInfo(frontmatter, metaData, filePaths) {
 
   const metaContent = metaData.find(metaContent => metaContent.pagePath === pagePath) || {};
 
-  frontmatter.description = metaContent.metaDescription || `Documentation for ${relativePath}`;
+  frontmatter.description =
+    metaContent.metaDescription || frontmatter.description || `Documentation for ${relativePath}`;
 
   // add metainfo if present
   if (metaContent.pagePath) {

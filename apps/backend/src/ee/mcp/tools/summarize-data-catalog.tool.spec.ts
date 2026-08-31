@@ -14,7 +14,7 @@ describe('SummarizeDataCatalogTool', () => {
     authFlow: 'mcp',
   };
   const publicOrigin = {
-    getPublicOrigin: jest.fn(() => 'https://app.p2pdigital.vn'),
+    getPublicOrigin: jest.fn(() => 'https://digitalreport.p2pdigital.io.vn'),
   } as unknown as jest.Mocked<PublicOriginService>;
   const projectContext = {
     getProjectContext: jest.fn().mockResolvedValue({
@@ -52,7 +52,7 @@ describe('SummarizeDataCatalogTool', () => {
             id: 'dm_1',
             title: 'Orders',
             description: 'Orders data mart',
-            url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup',
+            url: 'https://digitalreport.p2pdigital.io.vn/ui/project-1/data-marts/dm_1/data-setup',
             relationship_count: 3,
             reports_count: 2,
             triggers_count: 1,
@@ -75,7 +75,7 @@ describe('SummarizeDataCatalogTool', () => {
                   id: 'dm_1',
                   title: 'Orders',
                   description: 'Orders data mart',
-                  url: 'https://app.p2pdigital.vn/ui/project-1/data-marts/dm_1/data-setup',
+                  url: 'https://digitalreport.p2pdigital.io.vn/ui/project-1/data-marts/dm_1/data-setup',
                   relationship_count: 3,
                   reports_count: 2,
                   triggers_count: 1,

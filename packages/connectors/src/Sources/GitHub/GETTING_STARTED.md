@@ -1,6 +1,6 @@
 # How to Import Data from the GitHub Source
 
-Before proceeding, please make sure that you have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+Before proceeding, please make sure that you have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![GitHub Storage](res/github_storage.png)
 
@@ -15,12 +15,12 @@ Before proceeding, please make sure that you have [set up **P2PDigital Data Mart
 ## Set Up the Connector
 
 1. Select **Connector** as the input source type.
-2. Сhoose **GitHub**.  
+2. Сhoose **GitHub**.
 3. Fill in the required fields:
     - **Access token** – paste the token you generated on [GitHub personal access tokens page](https://github.com/settings/personal-access-tokens).
-    - **Repository Name** – enter the full repository path in the format `owner/repo`.  
-      - You can find this on the main page of your repository on GitHub.  
-      - Example: `OWOX/owox-data-marts`  
+    - **Repository Name** – enter the full repository path in the format `owner/repo`.
+      - You can find this on the main page of your repository on GitHub.
+      - Example: `OWOX/owox-data-marts`
     - Leave the other fields as default and proceed to the next step.
 
 ![GitHub Input Source](res/github_connector.png)
@@ -31,16 +31,16 @@ Before proceeding, please make sure that you have [set up **P2PDigital Data Mart
 
 ## Configure Data Import
 
-1. Choose one of the available **endpoints**.  
-2. Select the required **fields**.  
-3. Specify the **dataset** where the data will be stored (or leave the default).  
+1. Choose one of the available **endpoints**.
+2. Select the required **fields**.
+3. Specify the **dataset** where the data will be stored (or leave the default).
 4. Click **Finish**, then **Save** and **Publish Data Mart**.
 
 ![GitHub Publish Data Mart](res/github_publish.png)
 
 ## Run the Data Mart
 
-You now have two options for importing data from GitHub source:  
+You now have two options for importing data from GitHub source:
 
 Option 1: Import Current Day's Data
 
@@ -50,22 +50,22 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![GitHub Incremental Load](res/github_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![GitHub Reimport](res/github_reimportwindow.png)
 
 Option 2: Manual Backfill for Specific Date Range
 
-Choose **Backfill (custom period)** to load historical data.  
+Choose **Backfill (custom period)** to load historical data.
 
 1. Select the **Start Date** and **End Date**.
 2. Click the **Run** button.
 
 ![GitHub Backfill](res/github_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![GitHub Success](res/github_successrun.png)
 

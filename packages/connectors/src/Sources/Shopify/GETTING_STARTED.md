@@ -2,8 +2,8 @@
 
 Before proceeding, please make sure that:
 
-- You have already created an **Admin API Access Token**, as described in [CREDENTIALS](CREDENTIALS.md).  
-- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+- You have already created an **Admin API Access Token**, as described in [CREDENTIALS](CREDENTIALS.md).
+- You [have run **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Dialog for creating new storage in P2PDigital Data Marts. The left sidebar highlights the Storages section. A modal window titled New Storage displays options to choose the type of storage to create: Google BigQuery, AWS Athena, Snowflake, and AWS Redshift. The wider environment is a dark-themed application interface with navigation and action buttons. The emotional tone is neutral and instructional.](res/shopify_storage.png)
 
@@ -51,7 +51,7 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![Manual Run dialog in Shopify Data Mart showing Incremental load selected as the run type. The description reads: Adds only new or updated records since the last run, using the current state of your Data Mart as a reference. Ideal for keeping data fresh without reloading what is already there. A blue Run button is highlighted at the bottom of the modal. The wider environment is a dark-themed application interface with navigation tabs for Overview, Data Setup, and Destinations. The emotional tone is neutral and instructional.](res/shopify_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![Shopify Data Mart connector configuration screen showing advanced settings for data import. The Reimport Lookback Window field is highlighted and set to 2. The left panel displays the Input Source section with Shopify selected and Edit config circled. The interface uses a dark theme with clear navigation and action buttons. The emotional tone is neutral and instructional.](res/shopify_reimportwindow.png)
@@ -60,13 +60,13 @@ Option 2: Manual Backfill for Specific Date Range
 
 Choose **Backfill (custom period)** to load historical data for a custom time range.
 
-1. Select the **Start Date** and **End Date**  
+1. Select the **Start Date** and **End Date**
 2. Click the **Run** button
 
 ![Manual Run dialog in Shopify Data Mart showing Backfill custom period selected as the run type. The dialog displays fields for Start Date and End Date, both empty, with a calendar icon next to each. Red circles and arrows highlight the Backfill custom period option and the Start Date field. The wider environment is a dark-themed application interface with navigation tabs. The emotional tone is neutral and instructional.](res/shopify_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![Shopify Data Mart Run History screen showing a successful manual connector run. The main panel displays a timestamp 2025-12-22 18:30:05, the connector type Shopify, and the user who ran it. A green Success status indicator is present. The navigation tabs at the top include Overview, Data Setup, Destinations, Triggers, and Run History, with Run History selected. The wider environment uses a dark theme with clear navigation and status indicators. The emotional tone is neutral and instructional. On-screen text includes: Shopify Data Mart, Run History, Manual connector run by, Success, Published.](res/shopify_successrun.png)
 

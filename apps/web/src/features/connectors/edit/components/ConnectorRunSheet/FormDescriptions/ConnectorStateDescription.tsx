@@ -28,7 +28,7 @@ export default function ConnectorStateDescription() {
             {t('destinationHelp.common.moreDetails')}{' '}
             <ExternalAnchor
               className='underline'
-              href='https://docs.p2pdigital.vn/?utm_source=owox_data_marts&utm_medium=manual_run_sheet&utm_campaign=tooltip_connector_state'
+              href='https://docs.p2pdigital.io.vn/?utm_source=owox_data_marts&utm_medium=manual_run_sheet&utm_campaign=tooltip_connector_state'
             >
               P2PDigital documentation
             </ExternalAnchor>

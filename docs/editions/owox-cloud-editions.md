@@ -1,6 +1,6 @@
-# OWOX Cloud Editions
+# P2PDigital Cloud Editions
 
-The tables below outline available features, security, and terms in **OWOX Cloud Editions** of P2PDigital Data Marts.
+The tables below outline available features, security, and terms in **P2PDigital Cloud Editions** of P2PDigital Data Marts.
 
 Legend:
 
@@ -20,8 +20,8 @@ Legend:
 | **Data Storages** [^2]            | ![Google BigQuery](../res/bigquery.svg) ![AWS Athena](../res/athena.svg) ![Databricks](../res/databricks.svg) ![Snowflake](../res/snowflake.svg) ![Amazon Redshift](../res/redshift.svg) | ![Google BigQuery](../res/bigquery.svg) ![AWS Athena](../res/athena.svg) ![Databricks](../res/databricks.svg) ![Snowflake](../res/snowflake.svg) ![Amazon Redshift](../res/redshift.svg) | ![Google BigQuery](../res/bigquery.svg) ![AWS Athena](../res/athena.svg) ![Databricks](../res/databricks.svg) ![Azure Synapse](../res/synapse.svg) ![Snowflake](../res/snowflake.svg) ![Amazon Redshift](../res/redshift.svg) |
 | **Data Destinations** [^3]        | ![Google Sheets](../res/g-sheets.svg) ![Data Studio](../res/data_studio.svg) | ![Google Sheets](../res/g-sheets.svg) ![Data Studio](../res/data_studio.svg) ![Email](../res/email.svg) ![Slack](../res/slack.svg) ![Teams](../res/teams.svg) ![Google Chat](../res/google_chat.svg) | ![Google Sheets](../res/g-sheets.svg) ![Data Studio](../res/data_studio.svg) ![MS Excel](../res/ms-excel.svg) ![Power BI](../res/power-bi.svg) ![Tableau](../res/tableau.svg) ![Email](../res/email.svg) ![Slack](../res/slack.svg) ![Teams](../res/teams.svg) ![Google Chat](../res/google_chat.svg) |
 | **Data Marts Management** [^4]    | ✅ | ✅ | ✅ |
-| **Insights** [^5]              | ❌ | ✅ _OWOX AI_ | ✅ _OWOX AI or Your AI_ |
-| **Conversational AI** [^6]        | ❌ | ❌ | ✅ _OWOX AI or Your AI_ |
+| **Insights** [^5]              | ❌ | ✅ _P2PDigital AI_ | ✅ _P2PDigital AI or Your AI_ |
+| **Conversational AI** [^6]        | ❌ | ❌ | ✅ _P2PDigital AI or Your AI_ |
 | **How to start**                  | [Get started free](https://www.p2pdigital.vn/app-signup) | [Contact our team](https://www.p2pdigital.vn/pricing) | [Contact our team](https://www.p2pdigital.vn/pricing) |
 
 ## Security & Control

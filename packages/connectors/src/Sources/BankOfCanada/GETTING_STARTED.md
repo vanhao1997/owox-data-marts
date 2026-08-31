@@ -1,6 +1,6 @@
 # How to Import Data from the Bank of Canada Source
 
-Before proceeding, please make sure that you have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.  
+Before proceeding, please make sure that you have [set up **P2PDigital Data Marts**](https://docs.p2pdigital.io.vn/docs/getting-started/quick-start/) and created at least one storage in the **Storages** section.
 
 ![Bank of Canada Storage](res/bank_storage.png)
 
@@ -15,7 +15,7 @@ Before proceeding, please make sure that you have [set up **P2PDigital Data Mart
 ## Set Up the Connector
 
 1. Select **Connector** as the input source type.
-2. Choose **Bank of Canada**.  
+2. Choose **Bank of Canada**.
 3. Leave the fields as default and proceed to the next step.
 
 ![Bank of Canada Input Source](res/bank_connector.png)
@@ -24,16 +24,16 @@ Before proceeding, please make sure that you have [set up **P2PDigital Data Mart
 
 ## Configure Data Import
 
-1. Choose available **endpoint**.  
-2. Select the required **fields**.  
-3. Specify the **dataset** where the data will be stored (or leave the default).  
+1. Choose available **endpoint**.
+2. Select the required **fields**.
+3. Specify the **dataset** where the data will be stored (or leave the default).
 4. Click **Finish**, then **Publish Data Mart**.
 
 ![Bank of Canada Publish Data Mart](res/bank_publish.png)
 
 ## Run the Data Mart
 
-You now have two options for importing data from Bank of Canada source:  
+You now have two options for importing data from Bank of Canada source:
 
 Option 1: Import Current Day's Data
 
@@ -43,22 +43,22 @@ Choose **Manual run → Incremental load** to load data for the **current day**.
 
 ![Bank of Canada Incremental Load](res/bank_currentday.png)
 
-> ℹ️ If you click **Incremental load** again after a successful initial load,  
+> ℹ️ If you click **Incremental load** again after a successful initial load,
 > the connector will import: **Current day's data**, plus **Additional days**, based on the value in the **Reimport Lookback Window** field.
 
 ![Bank of Canada Reimport](res/bank_reimportwindow.png)
 
 Option 2: Manual Backfill for Specific Date Range
 
-Choose **Backfill (custom period)** to load historical data.  
+Choose **Backfill (custom period)** to load historical data.
 
 1. Select the **Start Date** and **End Date**.
 2. Click the **Run** button.
 
 ![Bank of Canada Backfill](res/bank_daterange.png)
 
-The process is complete when the **Run history** tab shows the message:  
-**"Success"**  
+The process is complete when the **Run history** tab shows the message:
+**"Success"**
 
 ![Bank of Canada Success](res/bank_successrun.png)
 

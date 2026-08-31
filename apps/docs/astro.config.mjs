@@ -15,9 +15,15 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'P2PDigital Data Marts',
+      locales: {
+        root: { label: 'English', lang: 'en' },
+        vi: { label: 'Tiếng Việt', lang: 'vi' },
+      },
+      defaultLocale: 'root',
       favicon: 'favicon.png',
       logo: {
-        src: './public/logo.svg',
+        src: './public/logo-mark.png',
+        alt: 'Biểu tượng P2PDigital Data Marts',
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/vanhao1997/p2pdigital-data-marts' },

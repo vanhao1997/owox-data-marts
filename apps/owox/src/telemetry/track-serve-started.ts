@@ -2,7 +2,7 @@ import { emitTelemetry } from '@owox/internal-helpers';
 
 import { ServeStartedEvent, type ServeStartedPayload } from './events/serve-started.event.js';
 
-const DOCS_URL = 'https://docs.p2pdigital.vn/docs/editions/self-managed-editions/';
+const DOCS_URL = 'https://docs.p2pdigital.io.vn/docs/editions/self-managed-editions/';
 const FIRST_RUN_NOTICE =
   `OWOX collects anonymous usage telemetry (no personal data). ` +
   `Disable it with OWOX_TELEMETRY_DISABLED=1. Learn more: ${DOCS_URL}`;

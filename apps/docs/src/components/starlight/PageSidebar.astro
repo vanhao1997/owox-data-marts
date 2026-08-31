@@ -125,6 +125,92 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
 </script>
 
 <script>
+  const viSidebarLabels = {
+    Intro: 'Giới thiệu',
+    'Getting started': 'Bắt đầu',
+    'Quick Start 🚀': 'Bắt đầu nhanh 🚀',
+    'Core Concepts': 'Khái niệm cốt lõi',
+    Editions: 'Các phiên bản',
+    'P2PDigital Cloud Editions': 'Phiên bản P2PDigital Cloud',
+    'OWOX Cloud Editions': 'Phiên bản P2PDigital Cloud',
+    'Self-Managed Editions': 'Phiên bản tự quản lý',
+    Agency: 'Đại lý',
+    Billing: 'Thanh toán',
+    'Consumption Units': 'Đơn vị sử dụng',
+    'Deployment Guide': 'Hướng dẫn triển khai',
+    'Setup Guide': 'Hướng dẫn thiết lập',
+    Insights: 'Thông tin chuyên sâu',
+    'Using Data Marts from OWOX Extension': 'Sử dụng Data Mart từ tiện ích Google Sheets',
+    'Connector-based Data Mart': 'Data Mart dựa trên connector',
+    'SQL-based Data Mart': 'Data Mart dựa trên SQL',
+    'Table-based Data Mart': 'Data Mart dựa trên bảng',
+    'View-based Data Mart': 'Data Mart dựa trên khung nhìn',
+    'Pattern-based Data Mart': 'Data Mart dựa trên mẫu',
+    'Joinable Data Marts': 'Các Data Mart có thể kết hợp',
+    'Export the Models Canvas': 'Xuất canvas mô hình',
+    'Data Quality Checks': 'Kiểm tra chất lượng dữ liệu',
+    'Data Last Updated': 'Thời điểm cập nhật dữ liệu',
+    'Report Output Controls': 'Điều khiển đầu ra báo cáo',
+    'Report Aggregations and Totals': 'Tổng hợp và tổng số báo cáo',
+    'Calculated Fields': 'Trường tính toán',
+    'Connector Trigger': 'Kích hoạt connector',
+    'Report Trigger': 'Kích hoạt báo cáo',
+    'MCP Server': 'Máy chủ MCP',
+    'Self-Managed Authentication': 'Xác thực tự quản lý',
+    'Project Settings': 'Cài đặt dự án',
+    'License Keys': 'Khóa giấy phép',
+    'Members Management': 'Quản lý thành viên',
+    'Managing Project Members': 'Quản lý thành viên dự án',
+    'Roles and Permissions': 'Vai trò và quyền',
+    'Ownership and Sharing': 'Quyền sở hữu và chia sẻ',
+    Contexts: 'Ngữ cảnh',
+    Notifications: 'Thông báo',
+    'Notification Settings': 'Cài đặt thông báo',
+    'Email Notifications': 'Thông báo email',
+    Webhooks: 'Webhook',
+    Destinations: 'Điểm đến',
+    'Supported Destinations': 'Điểm đến được hỗ trợ',
+    Storages: 'Kho lưu trữ',
+    'Supported Storages': 'Kho lưu trữ được hỗ trợ',
+    Sources: 'Nguồn dữ liệu',
+    API: 'API',
+    Plugins: 'Plugin',
+    Contributing: 'Đóng góp',
+    Repository: 'Kho mã nguồn',
+    Connectors: 'Connector',
+    Documentation: 'Tài liệu',
+    'CLI Application': 'Ứng dụng CLI',
+    'Web Application': 'Ứng dụng web',
+    'Backend Application': 'Ứng dụng backend',
+    Licenses: 'Giấy phép',
+  };
+
+  function localizeVietnameseSidebar() {
+    if (document.documentElement.lang !== 'vi') return;
+    const sidebar = document.querySelector('#starlight__sidebar, #page-sidebar');
+    if (!sidebar) return;
+
+    sidebar.querySelectorAll('a, span, summary, button, [role="group"], [role="heading"]').forEach((element) => {
+      const text = element.textContent?.trim();
+      const translated = text && viSidebarLabels[text];
+      if (translated && element.children.length === 0) element.textContent = translated;
+    });
+
+    const localizedRoutes = [
+      'quick-start',
+      'core-concepts',
+      'setup-guide/insights',
+      'setup-guide/data-mart',
+      'setup-guide/storage',
+      'setup-guide/destination',
+    ];
+    sidebar.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      const route = localizedRoutes.find((candidate) => href?.includes(`/vi/docs/getting-started/${candidate}/`));
+      if (route) link.setAttribute('href', `/vi/getting-started/${route}/`);
+    });
+  }
+
   function initSidebarToggle() {
     const toggleBtn = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('page-sidebar');
@@ -132,6 +218,8 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
     const mainPane = document.querySelector('.main-pane');
     
     if (!toggleBtn || !sidebar || !container || !mainPane) return;
+
+    localizeVietnameseSidebar();
 
     // Remove initial class to allow normal styles to work
     document.documentElement.classList.remove('sidebar-initially-collapsed');
@@ -161,4 +249,6 @@ import Default from '@astrojs/starlight/components/PageSidebar.astro';
   
   // Re-initialize on Astro page transitions
   document.addEventListener('astro:page-load', initSidebarToggle);
+  document.addEventListener('DOMContentLoaded', localizeVietnameseSidebar);
+  document.addEventListener('astro:page-load', localizeVietnameseSidebar);
 </script>

@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { cn } from '@owox/ui/lib/utils';
 import { useProjectRoute } from '../../hooks';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@owox/ui/components/tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface InviteTeammatesCardProps {
   hint?: string;
@@ -16,15 +17,18 @@ interface InviteTeammatesCardProps {
 
 export function InviteTeammatesCard({
   hint,
-  inviteLabel = 'Invite teammates',
+  inviteLabel,
   docsHref,
-  docsLabel = 'View documentation',
+  docsLabel,
   className,
   variant = 'card',
   onClick,
 }: InviteTeammatesCardProps) {
+  const { t } = useTranslation();
   const { scope } = useProjectRoute();
   const membersHref = '/project-settings/members';
+  const resolvedInviteLabel = inviteLabel ?? t('setupChecklist.inviteTeammates');
+  const resolvedDocsLabel = docsLabel ?? t('helpMenu.documentation');
 
   const baseClasses = cn(
     'flex items-center gap-4 text-sm',
@@ -56,11 +60,11 @@ export function InviteTeammatesCard({
         <Link
           to={scope(membersHref)}
           className={cn(linkClasses[variant])}
-          aria-label={inviteLabel}
+          aria-label={resolvedInviteLabel}
           onClick={onClick}
         >
           <UserPlus className='h-4 w-4 shrink-0' />
-          <span className='truncate underline'>{inviteLabel}</span>
+          <span className='truncate underline'>{resolvedInviteLabel}</span>
         </Link>
 
         {hint && variant !== 'button' && (
@@ -82,7 +86,7 @@ export function InviteTeammatesCard({
             </a>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{docsLabel}</p>
+            <p>{resolvedDocsLabel}</p>
           </TooltipContent>
         </Tooltip>
       )}

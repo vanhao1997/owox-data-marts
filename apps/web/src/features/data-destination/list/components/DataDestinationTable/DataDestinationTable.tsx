@@ -23,10 +23,7 @@ import { useTranslation } from 'react-i18next';
 interface DataDestinationTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onViewDetails?: (id: string) => void;
   onEdit?: (id: string) => Promise<void>;
-  onDelete?: (id: string) => void;
-  onRotateSecretKey?: (id: string) => void;
   onOpenTypeDialog?: () => void;
 }
 

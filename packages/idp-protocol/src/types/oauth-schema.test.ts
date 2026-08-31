@@ -13,7 +13,7 @@ describe('MCP OAuth protocol schemas', () => {
       resource: 'https://mcp.owox.com/mcp',
       authorization_servers: ['https://app.p2pdigital.vn'],
       scopes_supported: ['mcp:read', 'mcp:write'],
-      resource_documentation: 'https://docs.p2pdigital.vn/docs/mcp',
+      resource_documentation: 'https://docs.p2pdigital.io.vn/docs/mcp',
     });
 
     expect(result.resource).toBe('https://mcp.owox.com/mcp');

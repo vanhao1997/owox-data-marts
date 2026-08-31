@@ -37,9 +37,15 @@ export type DataStorageAction =
   | { type: DataStorageActionType.FETCH_STORAGES_START }
   | { type: DataStorageActionType.FETCH_STORAGES_SUCCESS; payload: DataStorageList }
   | { type: DataStorageActionType.FETCH_STORAGES_ERROR; payload: ApiError | null }
-  | { type: DataStorageActionType.FETCH_STORAGE_START }
-  | { type: DataStorageActionType.FETCH_STORAGE_SUCCESS; payload: DataStorage }
-  | { type: DataStorageActionType.FETCH_STORAGE_ERROR; payload: ApiError | null }
+  | { type: DataStorageActionType.FETCH_STORAGE_START; payload: number }
+  | {
+      type: DataStorageActionType.FETCH_STORAGE_SUCCESS;
+      payload: { requestId: number; dataStorage: DataStorage };
+    }
+  | {
+      type: DataStorageActionType.FETCH_STORAGE_ERROR;
+      payload: { requestId: number; error: ApiError | null };
+    }
   | { type: DataStorageActionType.CREATE_STORAGE_START }
   | { type: DataStorageActionType.CREATE_STORAGE_SUCCESS; payload: DataStorage }
   | { type: DataStorageActionType.CREATE_STORAGE_ERROR; payload: ApiError | null }
@@ -58,4 +64,5 @@ export type DataStorageAction =
 export interface DataStorageContextValue {
   state: DataStorageState;
   dispatch: React.Dispatch<DataStorageAction>;
+  detailRequestGenerationRef: React.RefObject<number>;
 }

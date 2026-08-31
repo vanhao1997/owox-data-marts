@@ -23,7 +23,9 @@ export function DataStorageDetailsDialog({ isOpen, onClose, id }: DataStorageDet
 
   useEffect(() => {
     if (isOpen && id) {
-      void getDataStorageById(id);
+      // The hook keeps the error in context; this effect must consume the
+      // rejection because the dialog has no async caller to handle it.
+      void getDataStorageById(id).catch(() => undefined);
     }
 
     return () => {

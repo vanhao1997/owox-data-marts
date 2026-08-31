@@ -207,6 +207,7 @@ export function useReport() {
           label: id,
           error: message,
         });
+        throw error;
       }
     },
     [dispatch]

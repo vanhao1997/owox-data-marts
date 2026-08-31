@@ -6,6 +6,10 @@ import { DataDestinationType } from '../../../shared';
 import { dataDestinationService, useDataDestination } from '../../../shared';
 import { DataDestinationList } from './DataDestinationList';
 
+const tableMocks = vi.hoisted(() => ({
+  onDelete: undefined as ((id: string) => void) | undefined,
+}));
+
 vi.mock('../../../shared', async importOriginal => {
   const actual = await importOriginal<typeof import('../../../shared')>();
   return {
@@ -31,30 +35,43 @@ vi.mock('../../../../../features/idp', () => ({
 vi.mock('../DataDestinationTable', () => ({
   DataDestinationTable: ({
     data,
-    onDelete,
+    onEdit,
   }: {
     data: { id: string; title: string }[];
-    onDelete?: (id: string) => void;
+    onEdit?: (id: string) => Promise<void>;
   }) => (
     <div>
       {data.map(destination => (
-        <button
-          key={destination.id}
-          type='button'
-          onClick={() => {
-            onDelete?.(destination.id);
-          }}
-        >
-          Delete {destination.title}
-        </button>
+        <div key={destination.id}>
+          <button
+            type='button'
+            onClick={() => {
+              tableMocks.onDelete?.(destination.id);
+            }}
+          >
+            Delete {destination.title}
+          </button>
+          <button
+            type='button'
+            onClick={() => {
+              void onEdit?.(destination.id);
+            }}
+          >
+            Edit {destination.title}
+          </button>
+        </div>
       ))}
     </div>
   ),
-  getDataDestinationColumns: vi.fn(() => []),
+  getDataDestinationColumns: vi.fn(({ onDelete }: { onDelete?: (id: string) => void }) => {
+    tableMocks.onDelete = onDelete;
+    return [];
+  }),
 }));
 
 vi.mock('../../../edit', () => ({
-  DataDestinationConfigSheet: () => null,
+  DataDestinationConfigSheet: ({ isOpen }: { isOpen: boolean }) =>
+    isOpen ? <div data-testid='destinationEditSheet' /> : null,
 }));
 
 describe('DataDestinationList', () => {
@@ -113,5 +130,46 @@ describe('DataDestinationList', () => {
     await waitFor(() => {
       expect(dataDestinationService.getDataDestinationImpact).toHaveBeenCalledWith('destination-1');
     });
+  });
+
+  it('does not open the edit sheet when loading destination details fails', async () => {
+    const getDataDestinationById = vi.fn().mockRejectedValue(new Error('not found'));
+    vi.mocked(useDataDestination).mockReturnValue({
+      dataDestinations: [
+        {
+          id: 'destination-1',
+          title: '[Ok OAuth] Sheets',
+          type: DataDestinationType.GOOGLE_SHEETS,
+          projectId: 'project-1',
+          credentials: {},
+          createdAt: new Date('2026-06-09T10:00:00.000Z'),
+          modifiedAt: new Date('2026-06-09T10:00:00.000Z'),
+          contexts: [],
+        },
+      ],
+      currentDataDestination: null,
+      loading: false,
+      error: null,
+      fetchDataDestinations: vi.fn(),
+      getDataDestinationById,
+      createDataDestination: vi.fn(),
+      updateDataDestination: vi.fn(),
+      deleteDataDestination: vi.fn(),
+      clearCurrentDataDestination: vi.fn(),
+      rotateSecretKey: vi.fn(),
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/ui/project-1/data-destinations']}>
+        <DataDestinationList />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Edit [Ok OAuth] Sheets' }));
+
+    await waitFor(() => {
+      expect(getDataDestinationById).toHaveBeenCalledWith('destination-1');
+    });
+    expect(screen.queryByTestId('destinationEditSheet')).not.toBeInTheDocument();
   });
 });

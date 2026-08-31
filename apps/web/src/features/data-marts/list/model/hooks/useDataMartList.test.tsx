@@ -55,6 +55,19 @@ describe('useDataMartList', () => {
     expect(mocks.getSummaries).not.toHaveBeenCalled();
     expect(result.current.items).toEqual([apiListItem()]);
   });
+
+  it('keeps publish successful when schema actualization scheduling fails', async () => {
+    mocks.publishDataMart.mockResolvedValue({});
+    mocks.createSchemaActualizeTrigger.mockRejectedValue(new Error('trigger unavailable'));
+    const { result } = renderHook(() => useDataMartList(), { wrapper });
+
+    await act(async () => {
+      await expect(result.current.publishDataMart('mart-1')).resolves.toBeUndefined();
+    });
+
+    expect(mocks.publishDataMart).toHaveBeenCalledWith('mart-1');
+    expect(mocks.createSchemaActualizeTrigger).toHaveBeenCalledWith('mart-1');
+  });
 });
 
 function apiListItem(title = 'Orders') {

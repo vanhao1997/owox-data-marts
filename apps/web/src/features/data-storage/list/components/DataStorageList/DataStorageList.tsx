@@ -67,10 +67,15 @@ export const DataStorageList = ({
 
   const handleEdit = useCallback(
     async (id: string) => {
-      await getDataStorageById(id);
-      setIsEditDrawerOpen(true);
-
-      setIdParam(id);
+      try {
+        const dataStorage = await getDataStorageById(id);
+        if (!dataStorage) return;
+        setIsEditDrawerOpen(true);
+        setIdParam(id);
+      } catch {
+        // The hook records the error and the HTTP layer surfaces the user-facing toast.
+        // Do not open the drawer with stale or empty storage data.
+      }
     },
     [getDataStorageById, setIdParam]
   );
@@ -104,10 +109,11 @@ export const DataStorageList = ({
       handleTypeDialogClose();
       if (newStorage?.id) {
         await handleEdit(newStorage.id);
-        setIsCreatingDataStorage(false);
       }
     } catch (error) {
       console.error('Failed to create storage:', error);
+    } finally {
+      setIsCreatingDataStorage(false);
     }
   };
 
@@ -200,9 +206,9 @@ export const DataStorageList = ({
   const handleSave = async (savedStorageId: string) => {
     try {
       setIsEditDrawerOpen(false);
-      await fetchDataStorages();
+      const refreshedDataStorages = await fetchDataStorages();
       removeIdParam();
-      const storage = dataStorages.find(item => item.id === savedStorageId);
+      const storage = refreshedDataStorages.find(item => item.id === savedStorageId);
       if (storage && storage.draftDataMartsCount > 0 && storage.publishedDataMartsCount === 0) {
         openPublishDraftsDialog(storage.id);
       }

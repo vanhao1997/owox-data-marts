@@ -32,9 +32,15 @@ export type DataDestinationAction =
   | { type: DataDestinationActionType.FETCH_DESTINATIONS_START }
   | { type: DataDestinationActionType.FETCH_DESTINATIONS_SUCCESS; payload: DataDestinationList }
   | { type: DataDestinationActionType.FETCH_DESTINATIONS_ERROR; payload: string }
-  | { type: DataDestinationActionType.FETCH_DESTINATION_START }
-  | { type: DataDestinationActionType.FETCH_DESTINATION_SUCCESS; payload: DataDestination }
-  | { type: DataDestinationActionType.FETCH_DESTINATION_ERROR; payload: string }
+  | { type: DataDestinationActionType.FETCH_DESTINATION_START; payload: number }
+  | {
+      type: DataDestinationActionType.FETCH_DESTINATION_SUCCESS;
+      payload: { requestId: number; dataDestination: DataDestination };
+    }
+  | {
+      type: DataDestinationActionType.FETCH_DESTINATION_ERROR;
+      payload: { requestId: number; error: string };
+    }
   | { type: DataDestinationActionType.CREATE_DESTINATION_START }
   | { type: DataDestinationActionType.CREATE_DESTINATION_SUCCESS; payload: DataDestination }
   | { type: DataDestinationActionType.CREATE_DESTINATION_ERROR; payload: string }
@@ -50,4 +56,5 @@ export type DataDestinationAction =
 export interface DataDestinationContextValue {
   state: DataDestinationState;
   dispatch: React.Dispatch<DataDestinationAction>;
+  detailRequestGenerationRef: React.RefObject<number>;
 }

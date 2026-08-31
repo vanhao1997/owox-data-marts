@@ -17,17 +17,19 @@ import { trackEvent } from '../../../../../utils/data-layer';
 import { useRefreshSetupProgress } from '../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';
 
 export function useDataStorage() {
-  const { state, dispatch } = useDataStorageContext();
+  const { state, dispatch, detailRequestGenerationRef } = useDataStorageContext();
   const refreshSetupProgress = useRefreshSetupProgress();
 
   const fetchDataStorages = useCallback(async () => {
     dispatch({ type: DataStorageActionType.FETCH_STORAGES_START });
     try {
       const response = await dataStorageApiService.getDataStorages();
+      const dataStorages = response.map(mapDataStorageListFromDto);
       dispatch({
         type: DataStorageActionType.FETCH_STORAGES_SUCCESS,
-        payload: response.map(mapDataStorageListFromDto),
+        payload: dataStorages,
       });
+      return dataStorages;
     } catch (error) {
       dispatch({
         type: DataStorageActionType.FETCH_STORAGES_ERROR,
@@ -39,19 +41,28 @@ export function useDataStorage() {
 
   const getDataStorageById = useCallback(
     async (id: string) => {
+      const requestId = ++detailRequestGenerationRef.current;
+      dispatch({ type: DataStorageActionType.FETCH_STORAGE_START, payload: requestId });
       try {
         const response = await dataStorageApiService.getDataStorageById(id);
         const dataStorage = mapDataStorageFromDto(response);
-        dispatch({ type: DataStorageActionType.FETCH_STORAGE_SUCCESS, payload: dataStorage });
+        dispatch({
+          type: DataStorageActionType.FETCH_STORAGE_SUCCESS,
+          payload: { requestId, dataStorage },
+        });
+        return detailRequestGenerationRef.current === requestId ? dataStorage : null;
       } catch (error) {
         dispatch({
           type: DataStorageActionType.FETCH_STORAGE_ERROR,
-          payload: extractApiError(error),
+          payload: { requestId, error: extractApiError(error) },
         });
+        if (detailRequestGenerationRef.current !== requestId) {
+          return null;
+        }
         throw error;
       }
     },
-    [dispatch]
+    [detailRequestGenerationRef, dispatch]
   );
 
   const createDataStorage = useCallback(
@@ -166,8 +177,9 @@ export function useDataStorage() {
   );
 
   const clearCurrentDataStorage = useCallback(() => {
+    detailRequestGenerationRef.current += 1;
     dispatch({ type: DataStorageActionType.CLEAR_CURRENT_STORAGE });
-  }, [dispatch]);
+  }, [detailRequestGenerationRef, dispatch]);
 
   return {
     dataStorages: state.dataStorages,

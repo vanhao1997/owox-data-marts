@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { initialDataStorageState, reducer } from './reducer.ts';
 import { DataStorageContext } from './context.ts';
 
@@ -16,8 +16,9 @@ interface DataStorageProviderProps {
  */
 export function DataStorageProvider({ children }: DataStorageProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialDataStorageState);
+  const detailRequestGenerationRef = useRef(0);
   return (
-    <DataStorageContext.Provider value={{ state, dispatch }}>
+    <DataStorageContext.Provider value={{ state, dispatch, detailRequestGenerationRef }}>
       {children}
     </DataStorageContext.Provider>
   );

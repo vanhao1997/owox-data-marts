@@ -83,7 +83,13 @@ export function EmailActionsCell({
 
     try {
       setIsRunning(true);
-      await runReport(row.original.id);
+      const started = await runReport(row.original.id);
+      if (!started) {
+        // runReport handles the request error and returns false; release the
+        // optimistic state so the action does not remain permanently disabled.
+        setIsRunning(false);
+        return;
+      }
       await onRunSuccess?.();
     } catch (error) {
       setIsRunning(false);

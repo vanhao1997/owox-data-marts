@@ -6,6 +6,7 @@ import { type ApiError } from '../../../../../app/api';
 export interface DataStorageState {
   dataStorages: DataStorageList;
   currentDataStorage: DataStorage | null;
+  detailRequestId: number | null;
   loading: boolean;
   error: ApiError | null;
 }
@@ -13,6 +14,7 @@ export interface DataStorageState {
 export const initialDataStorageState: DataStorageState = {
   dataStorages: [],
   currentDataStorage: null,
+  detailRequestId: null,
   loading: false,
   error: null,
 };
@@ -20,17 +22,20 @@ export const initialDataStorageState: DataStorageState = {
 export function reducer(state: DataStorageState, action: DataStorageAction): DataStorageState {
   switch (action.type) {
     case DataStorageActionType.FETCH_STORAGES_START:
-    case DataStorageActionType.FETCH_STORAGE_START:
     case DataStorageActionType.CREATE_STORAGE_START:
     case DataStorageActionType.UPDATE_STORAGE_START:
+    case DataStorageActionType.DELETE_STORAGE_START:
     case DataStorageActionType.PUBLISH_DRAFTS_START:
       return {
         ...state,
+        loading: true,
         error: null,
       };
-    case DataStorageActionType.DELETE_STORAGE_START:
+    case DataStorageActionType.FETCH_STORAGE_START:
       return {
         ...state,
+        currentDataStorage: null,
+        detailRequestId: action.payload,
         loading: true,
         error: null,
       };
@@ -42,9 +47,13 @@ export function reducer(state: DataStorageState, action: DataStorageAction): Dat
         error: null,
       };
     case DataStorageActionType.FETCH_STORAGE_SUCCESS:
+      if (action.payload.requestId !== state.detailRequestId) {
+        return state;
+      }
       return {
         ...state,
-        currentDataStorage: action.payload,
+        currentDataStorage: action.payload.dataStorage,
+        detailRequestId: null,
         loading: false,
         error: null,
       };
@@ -92,7 +101,6 @@ export function reducer(state: DataStorageState, action: DataStorageAction): Dat
         error: null,
       };
     case DataStorageActionType.FETCH_STORAGES_ERROR:
-    case DataStorageActionType.FETCH_STORAGE_ERROR:
     case DataStorageActionType.CREATE_STORAGE_ERROR:
     case DataStorageActionType.UPDATE_STORAGE_ERROR:
     case DataStorageActionType.DELETE_STORAGE_ERROR:
@@ -102,11 +110,23 @@ export function reducer(state: DataStorageState, action: DataStorageAction): Dat
         loading: false,
         error: action.payload,
       };
+    case DataStorageActionType.FETCH_STORAGE_ERROR:
+      if (action.payload.requestId !== state.detailRequestId) {
+        return state;
+      }
+      return {
+        ...state,
+        detailRequestId: null,
+        loading: false,
+        error: action.payload.error,
+      };
 
     case DataStorageActionType.CLEAR_CURRENT_STORAGE:
       return {
         ...state,
         currentDataStorage: null,
+        detailRequestId: null,
+        loading: false,
       };
     case DataStorageActionType.CLEAR_ERROR:
       return {

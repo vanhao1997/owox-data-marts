@@ -12,28 +12,29 @@ import { Link } from 'react-router';
 import { ConfirmationDialog } from '../../../../../../shared/components/ConfirmationDialog';
 import { useProjectRoute } from '../../../../../../shared/hooks';
 import { DataStorageType } from '../../../../../data-storage';
-import { useDataMartList } from '../../../model/hooks';
 import type { DataMartListItem } from '../../../model/types';
 import { useTranslation } from 'react-i18next';
 
 interface DataMartActionsCellProps {
   row: { original: DataMartListItem };
-  onDeleteSuccess?: () => void;
+  deleteDataMart: (id: string) => Promise<void>;
+  refreshList: () => Promise<void>;
 }
 
-export const DataMartActionsCell = ({ row, onDeleteSuccess }: DataMartActionsCellProps) => {
+export const DataMartActionsCell = ({
+  row,
+  deleteDataMart,
+  refreshList,
+}: DataMartActionsCellProps) => {
   const { t } = useTranslation();
   const { scope } = useProjectRoute();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { deleteDataMart, refreshList } = useDataMartList();
-
   const handleDelete = async () => {
     try {
       await deleteDataMart(row.original.id);
       setIsDeleteDialogOpen(false);
       await refreshList();
-      onDeleteSuccess?.();
     } catch (error) {
       console.error('Failed to delete data mart:', error);
     }

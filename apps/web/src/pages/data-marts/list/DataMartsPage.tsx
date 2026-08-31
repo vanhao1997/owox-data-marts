@@ -61,7 +61,12 @@ const DataMartsPageContent = () => {
       <div className='dm-page-content'>
         <DataMartTable
           connectors={connectors}
-          columns={getDataMartColumns({ connectors, t })}
+          columns={getDataMartColumns({
+            connectors,
+            t,
+            deleteDataMart,
+            refreshList,
+          })}
           data={items}
           deleteDataMart={deleteDataMart}
           publishDataMart={publishDataMart}

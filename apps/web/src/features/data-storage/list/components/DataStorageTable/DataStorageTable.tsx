@@ -1,6 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { type ColumnDef, type Row } from '@tanstack/react-table';
-import { DataStorageDetailsDialog } from '../DataStorageDetailsDialog';
 import { type DataStorageTableItem } from './columns';
 import { useBaseTable } from '../../../../../shared/hooks';
 import {
@@ -25,9 +24,7 @@ import { useTranslation } from 'react-i18next';
 interface DataStorageTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onViewDetails?: (id: string) => void;
   onEdit?: (id: string) => Promise<void>;
-  onDelete?: (id: string) => void;
   onOpenTypeDialog?: () => void;
 }
 
@@ -38,8 +35,6 @@ export function DataStorageTable<TData, TValue>({
   onOpenTypeDialog,
 }: DataStorageTableProps<TData, TValue>) {
   const { t } = useTranslation();
-  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
-  const [selectedDataStorage] = useState<DataStorageTableItem | null>(null);
   const { projectId = '' } = useParams<{ projectId: string }>();
   const tableId = 'data-storage-table';
 
@@ -105,15 +100,6 @@ export function DataStorageTable<TData, TValue>({
 
   return (
     <div className='dm-card' data-testid='storageTable'>
-      {selectedDataStorage && (
-        <DataStorageDetailsDialog
-          isOpen={isDetailsDialogOpen}
-          onClose={() => {
-            setIsDetailsDialogOpen(false);
-          }}
-          id={selectedDataStorage.id}
-        />
-      )}
       <BaseTable
         tableId={tableId}
         table={table}

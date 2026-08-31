@@ -65,9 +65,15 @@ export const DataDestinationList = ({
 
   const handleEdit = useCallback(
     async (id: string) => {
-      await getDataDestinationById(id);
-      setIsEditSheetOpen(true);
-      setIdParam(id);
+      try {
+        const dataDestination = await getDataDestinationById(id);
+        if (!dataDestination) return;
+        setIsEditSheetOpen(true);
+        setIdParam(id);
+      } catch {
+        // The hook records the error and the HTTP layer surfaces the user-facing toast.
+        // Do not open the sheet with stale or empty destination data.
+      }
     },
     [getDataDestinationById, setIdParam]
   );
@@ -208,8 +214,6 @@ export const DataDestinationList = ({
         columns={columns}
         data={tableData}
         onEdit={handleEdit}
-        onDelete={onDeleteCallback}
-        onRotateSecretKey={handleRotateSecretKey}
         onOpenTypeDialog={handleOpenCreateForm}
       />
 

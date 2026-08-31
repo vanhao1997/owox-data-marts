@@ -28,16 +28,18 @@ import { DataLastUpdatedValue } from '../../../../shared/components/DataLastUpda
 import { formatDateOnly } from '../../../../../../utils/date-formatters';
 
 interface DataMartTableColumnsProps {
-  onDeleteSuccess?: () => void;
   connectors?: ConnectorListItem[];
   t?: TFunction;
+  deleteDataMart: (id: string) => Promise<void>;
+  refreshList: () => Promise<void>;
 }
 
 export const getDataMartColumns = ({
-  onDeleteSuccess,
   connectors = [],
   t,
-}: DataMartTableColumnsProps = {}): ColumnDef<DataMartListItem>[] => {
+  deleteDataMart,
+  refreshList,
+}: DataMartTableColumnsProps): ColumnDef<DataMartListItem>[] => {
   // Keep the English labels as a standalone fallback for non-React callers and tests.
   const dataMartColumnLabels = t
     ? getDataMartColumnLabels(t)
@@ -378,7 +380,9 @@ export const getDataMartColumns = ({
     size: 50,
     enableResizing: false,
     header: ({ table }) => <ToggleColumnsHeader table={table} />,
-    cell: ({ row }) => <DataMartActionsCell row={row} onDeleteSuccess={onDeleteSuccess} />,
+    cell: ({ row }) => (
+      <DataMartActionsCell row={row} deleteDataMart={deleteDataMart} refreshList={refreshList} />
+    ),
   },
   ];
 };

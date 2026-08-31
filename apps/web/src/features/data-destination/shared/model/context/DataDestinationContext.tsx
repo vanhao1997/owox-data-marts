@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { initialDataDestinationState, reducer } from './reducer.ts';
 import { DataDestinationContext } from './context.ts';
 
@@ -16,8 +16,9 @@ interface DataDestinationProviderProps {
  */
 export function DataDestinationProvider({ children }: DataDestinationProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialDataDestinationState);
+  const detailRequestGenerationRef = useRef(0);
   return (
-    <DataDestinationContext.Provider value={{ state, dispatch }}>
+    <DataDestinationContext.Provider value={{ state, dispatch, detailRequestGenerationRef }}>
       {children}
     </DataDestinationContext.Provider>
   );

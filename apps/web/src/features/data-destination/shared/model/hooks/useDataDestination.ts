@@ -13,7 +13,7 @@ import { trackEvent } from '../../../../../utils/data-layer';
 import { useRefreshSetupProgress } from '../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';
 
 export function useDataDestination() {
-  const { state, dispatch } = useDataDestinationContext();
+  const { state, dispatch, detailRequestGenerationRef } = useDataDestinationContext();
   const refreshSetupProgress = useRefreshSetupProgress();
 
   const fetchDataDestinations = useCallback(async () => {
@@ -25,6 +25,7 @@ export function useDataDestination() {
         type: DataDestinationActionType.FETCH_DESTINATIONS_SUCCESS,
         payload: mappedDestinations,
       });
+      return mappedDestinations;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to load destinations';
       dispatch({
@@ -42,18 +43,21 @@ export function useDataDestination() {
 
   const getDataDestinationById = useCallback(
     async (id: string) => {
+      const requestId = ++detailRequestGenerationRef.current;
+      dispatch({ type: DataDestinationActionType.FETCH_DESTINATION_START, payload: requestId });
       try {
         const response = await dataDestinationService.getDataDestinationById(id);
         const mappedDestination = mapDataDestinationFromDto(response);
         dispatch({
           type: DataDestinationActionType.FETCH_DESTINATION_SUCCESS,
-          payload: mappedDestination,
+          payload: { requestId, dataDestination: mappedDestination },
         });
+        return detailRequestGenerationRef.current === requestId ? mappedDestination : null;
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to load destination';
         dispatch({
           type: DataDestinationActionType.FETCH_DESTINATION_ERROR,
-          payload: message,
+          payload: { requestId, error: message },
         });
         trackEvent({
           event: 'data_destination_error',
@@ -61,9 +65,13 @@ export function useDataDestination() {
           action: 'GetError',
           error: message,
         });
+        if (detailRequestGenerationRef.current !== requestId) {
+          return null;
+        }
+        throw error;
       }
     },
-    [dispatch]
+    [detailRequestGenerationRef, dispatch]
   );
 
   const createDataDestination = useCallback(
@@ -182,8 +190,9 @@ export function useDataDestination() {
   );
 
   const clearCurrentDataDestination = useCallback(() => {
+    detailRequestGenerationRef.current += 1;
     dispatch({ type: DataDestinationActionType.CLEAR_CURRENT_DESTINATION });
-  }, [dispatch]);
+  }, [detailRequestGenerationRef, dispatch]);
 
   const rotateSecretKey = useCallback(async (id: DataDestination['id']) => {
     try {

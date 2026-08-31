@@ -69,7 +69,19 @@ export function useDataMartList() {
   const publishDataMart = useCallback(async (id: string) => {
     try {
       await dataMartService.publishDataMart(id);
-      await dataMartService.createSchemaActualizeTrigger(id);
+      // Publishing is committed before schema actualization is scheduled. A
+      // trigger outage must not make the UI report a successful publish as a
+      // failure or encourage a retry that now returns "already published".
+      try {
+        await dataMartService.createSchemaActualizeTrigger(id);
+      } catch {
+        trackEvent({
+          event: 'data_mart_error',
+          category: 'DataMart',
+          action: 'SchemaActualizationScheduleError',
+          error: 'Failed to schedule schema actualization',
+        });
+      }
       trackEvent({
         event: 'data_mart_published',
         category: 'DataMart',

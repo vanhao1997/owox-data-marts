@@ -5,6 +5,7 @@ import { type DataDestinationAction, DataDestinationActionType } from './types.t
 export interface DataDestinationState {
   dataDestinations: DataDestinationList;
   currentDataDestination: DataDestination | null;
+  detailRequestId: number | null;
   loading: boolean;
   error: string | null;
 }
@@ -12,6 +13,7 @@ export interface DataDestinationState {
 export const initialDataDestinationState: DataDestinationState = {
   dataDestinations: [],
   currentDataDestination: null,
+  detailRequestId: null,
   loading: false,
   error: null,
 };
@@ -22,12 +24,19 @@ export function reducer(
 ): DataDestinationState {
   switch (action.type) {
     case DataDestinationActionType.FETCH_DESTINATIONS_START:
-    case DataDestinationActionType.FETCH_DESTINATION_START:
     case DataDestinationActionType.CREATE_DESTINATION_START:
     case DataDestinationActionType.UPDATE_DESTINATION_START:
     case DataDestinationActionType.DELETE_DESTINATION_START:
       return {
         ...state,
+        loading: true,
+        error: null,
+      };
+    case DataDestinationActionType.FETCH_DESTINATION_START:
+      return {
+        ...state,
+        currentDataDestination: null,
+        detailRequestId: action.payload,
         loading: true,
         error: null,
       };
@@ -39,9 +48,13 @@ export function reducer(
         error: null,
       };
     case DataDestinationActionType.FETCH_DESTINATION_SUCCESS:
+      if (action.payload.requestId !== state.detailRequestId) {
+        return state;
+      }
       return {
         ...state,
-        currentDataDestination: action.payload,
+        currentDataDestination: action.payload.dataDestination,
+        detailRequestId: null,
         loading: false,
         error: null,
       };
@@ -70,7 +83,6 @@ export function reducer(
         error: null,
       };
     case DataDestinationActionType.FETCH_DESTINATIONS_ERROR:
-    case DataDestinationActionType.FETCH_DESTINATION_ERROR:
     case DataDestinationActionType.CREATE_DESTINATION_ERROR:
     case DataDestinationActionType.UPDATE_DESTINATION_ERROR:
     case DataDestinationActionType.DELETE_DESTINATION_ERROR:
@@ -79,11 +91,23 @@ export function reducer(
         loading: false,
         error: action.payload,
       };
+    case DataDestinationActionType.FETCH_DESTINATION_ERROR:
+      if (action.payload.requestId !== state.detailRequestId) {
+        return state;
+      }
+      return {
+        ...state,
+        detailRequestId: null,
+        loading: false,
+        error: action.payload.error,
+      };
 
     case DataDestinationActionType.CLEAR_CURRENT_DESTINATION:
       return {
         ...state,
         currentDataDestination: null,
+        detailRequestId: null,
+        loading: false,
       };
     case DataDestinationActionType.CLEAR_ERROR:
       return {

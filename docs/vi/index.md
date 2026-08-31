@@ -1,5 +1,5 @@
 ---
-title: P2PDigital Data Marts
+title: Tài liệu P2PDigital Data Marts
 description: Tài liệu tiếng Việt cho nền tảng kho dữ liệu phân tích và báo cáo tự động P2PDigital Data Marts.
 ---
 

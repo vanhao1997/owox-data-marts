@@ -73,7 +73,7 @@ export default function InsightDetailsView() {
     resetTriggerId,
     ensureActiveRunPolling,
   } = useInsights();
-  const { canEdit, canDelete, canRun, canSendAndSchedule } = useInsightsPermissions();
+  const { canEdit, canDelete, canRun, canSendAndSchedule } = useInsightsPermissions(true);
 
   const {
     handleSubmit,
@@ -144,6 +144,13 @@ export default function InsightDetailsView() {
   useEffect(() => {
     if (!insightId) return;
     void getInsight(insightId);
+    trackEvent({
+      event: 'legacy_insight_open_count',
+      category: 'Insights',
+      action: 'LegacyOpen',
+      value: '1',
+      details: JSON.stringify({ grain: 'day', timezone: 'UTC' }),
+    });
   }, [insightId, getInsight]);
 
   useEffect(() => {
@@ -200,7 +207,9 @@ export default function InsightDetailsView() {
 
   if (insightLoading) {
     // TODO:: Add skeleton loading indicator
-    return <div className='text-muted-foreground flex flex-col gap-2 text-sm'>{t('common.loading')}</div>;
+    return (
+      <div className='text-muted-foreground flex flex-col gap-2 text-sm'>{t('common.loading')}</div>
+    );
   }
 
   if (!insight || !dataMart) {
@@ -266,7 +275,9 @@ export default function InsightDetailsView() {
                     </DropdownMenuItem>
                   </div>
                 </TooltipTrigger>
-                {!canDelete && <TooltipContent side='left'>{t('common.noPermission')}</TooltipContent>}
+                {!canDelete && (
+                  <TooltipContent side='left'>{t('common.noPermission')}</TooltipContent>
+                )}
               </Tooltip>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -347,7 +358,8 @@ export default function InsightDetailsView() {
                             >
                               {isRunning ? (
                                 <span className='inline-flex items-center gap-2'>
-                                  <Loader2 className='h-3 w-3 animate-spin' /> {t('insightsUi.running')}
+                                  <Loader2 className='h-3 w-3 animate-spin' />{' '}
+                                  {t('insightsUi.running')}
                                 </span>
                               ) : isTemplateDirty ? (
                                 <span className='inline-flex items-center gap-2'>
@@ -397,20 +409,12 @@ export default function InsightDetailsView() {
                     <TooltipContent side='top'>
                       {(() => {
                         if (isDraft) {
-                          return (
-                            <p>
-                              {t('insightsUi.scheduleAfterPublish')}
-                            </p>
-                          );
+                          return <p>{t('insightsUi.scheduleAfterPublish')}</p>;
                         }
                         if (!canSendAndSchedule) {
                           return <p>{t('common.noPermission')}</p>;
                         }
-                        return (
-                          <p>
-                            {t('insightsUi.scheduleDescription')}
-                          </p>
-                        );
+                        return <p>{t('insightsUi.scheduleDescription')}</p>;
                       })()}
                     </TooltipContent>
                   </Tooltip>
@@ -424,7 +428,9 @@ export default function InsightDetailsView() {
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side='top'>
-                        <p>{t('insightsUi.lastRun')} {formatDateShort(insight.outputUpdatedAt)}</p>
+                        <p>
+                          {t('insightsUi.lastRun')} {formatDateShort(insight.outputUpdatedAt)}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -443,9 +449,7 @@ export default function InsightDetailsView() {
                       <Bookmark />
                     </EmptyMedia>
                     <EmptyTitle>{t('insightsUi.readyToExplore')}</EmptyTitle>
-                    <EmptyDescription>
-                      {t('insightsUi.runToUncover')}
-                    </EmptyDescription>
+                    <EmptyDescription>{t('insightsUi.runToUncover')}</EmptyDescription>
                   </EmptyHeader>
                 </Empty>
               ) : (

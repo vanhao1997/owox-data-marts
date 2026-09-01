@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import toast from 'react-hot-toast';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
 import { useUrlParam, useProjectRoute } from '../../../../../shared/hooks';
+import { extractApiError } from '../../../../../app/api';
 import { DataDestinationConfigSheet } from '../../../edit';
 import {
   dataDestinationService,
@@ -17,6 +19,8 @@ import {
   getDataDestinationColumns,
 } from '../DataDestinationTable';
 import { useTranslation } from 'react-i18next';
+import { mapDataDestinationFromDto } from '../../../shared/model/mappers/data-destination.mapper';
+import { dataMartQueryKeys } from '../../../../data-marts/shared/query-keys';
 
 interface DataDestinationListProps {
   isCreateSheetInitiallyOpen?: boolean;
@@ -37,15 +41,48 @@ export const DataDestinationList = ({
 }: DataDestinationListProps) => {
   const { t } = useTranslation();
   const {
-    dataDestinations,
+    dataDestinations: contextDataDestinations,
     currentDataDestination,
+    error: contextError,
     clearCurrentDataDestination,
-    fetchDataDestinations,
     getDataDestinationById,
     deleteDataDestination,
     rotateSecretKey,
-    loading,
   } = useDataDestination();
+  const { projectId: routeProjectId } = useProjectRoute();
+  const projectId = routeProjectId ?? '';
+  const queryClient = useQueryClient();
+  const destinationsQuery = useQuery({
+    queryKey: dataMartQueryKeys.destinations(projectId),
+    enabled: Boolean(projectId),
+    queryFn: async ({ signal }) => {
+      const response = await dataDestinationService.getDataDestinations({ signal });
+      return response.map(mapDataDestinationFromDto);
+    },
+  });
+  const dataDestinations = useMemo(
+    () => destinationsQuery.data ?? contextDataDestinations,
+    [contextDataDestinations, destinationsQuery.data]
+  );
+  const loading =
+    !destinationsQuery.data && dataDestinations.length === 0 && destinationsQuery.isLoading;
+  const error =
+    contextError ??
+    (!destinationsQuery.data && dataDestinations.length === 0 && destinationsQuery.isError
+      ? (extractApiError(destinationsQuery.error).message ??
+        t('destinationsPage.loadFailed', 'Failed to load destinations. Please try again.'))
+      : null);
+  const { refetch: refetchDestinations } = destinationsQuery;
+  const refreshDestinations = useCallback(() => refetchDestinations(), [refetchDestinations]);
+  const invalidateDestinationGraph = useCallback(
+    () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.destinationsRoot(projectId) }),
+        queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.destinationRoot(projectId) }),
+        queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.reportsRoot(projectId) }),
+      ]),
+    [projectId, queryClient]
+  );
 
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -92,17 +129,15 @@ export const DataDestinationList = ({
         void handleEdit(deepLinkId);
       } else {
         toast.error(
-          t('dataDestinationList.notFound', 'Destination not found by id {{id}}', { id: deepLinkId })
+          t('dataDestinationList.notFound', 'Destination not found by id {{id}}', {
+            id: deepLinkId,
+          })
         );
         removeIdParam();
       }
       hasAttemptedDeepLink.current = true;
     }
   }, [loading, dataDestinations, deepLinkId, removeIdParam, handleEdit, t]);
-
-  useEffect(() => {
-    void fetchDataDestinations();
-  }, [fetchDataDestinations]);
 
   useEffect(() => {
     if (isCreateSheetInitiallyOpen) {
@@ -139,11 +174,14 @@ export const DataDestinationList = ({
       try {
         const updatedDestination = await rotateSecretKey(destinationToRotateSecretKey);
         if (isLookerStudioCredentials(updatedDestination.credentials)) {
-          toast.success(t('dataDestinationList.newConfigCopied', 'New JSON Config copied to clipboard'));
+          toast.success(
+            t('dataDestinationList.newConfigCopied', 'New JSON Config copied to clipboard')
+          );
           const jsonConfig = generateLookerStudioJsonConfig(updatedDestination.credentials);
           void navigator.clipboard.writeText(jsonConfig);
         }
-        await fetchDataDestinations();
+        await refreshDestinations();
+        await invalidateDestinationGraph();
       } catch (error) {
         console.error('Failed to rotate secret key:', error);
       } finally {
@@ -157,7 +195,8 @@ export const DataDestinationList = ({
     if (destinationToDelete) {
       try {
         await deleteDataDestination(destinationToDelete);
-        await fetchDataDestinations();
+        await refreshDestinations();
+        await invalidateDestinationGraph();
       } catch (error) {
         console.error('Failed to delete destination:', error);
       } finally {
@@ -170,7 +209,8 @@ export const DataDestinationList = ({
   const handleSave = async () => {
     try {
       setIsEditSheetOpen(false);
-      await fetchDataDestinations();
+      await refreshDestinations();
+      await invalidateDestinationGraph();
       removeIdParam();
     } catch (error) {
       console.error('Failed to save destination:', error);
@@ -215,6 +255,9 @@ export const DataDestinationList = ({
         data={tableData}
         onEdit={handleEdit}
         onOpenTypeDialog={handleOpenCreateForm}
+        isLoading={loading}
+        error={error}
+        onRetry={() => void refreshDestinations()}
       />
 
       <DataDestinationConfigSheet
@@ -242,15 +285,23 @@ export const DataDestinationList = ({
                     setBlocked(null);
                   }}
                 >
-                  {t('dataDestinationList.referencedReports', '{{reports}} Report{{reportSuffix}}', {
-                    reports: blocked.impact.reportsCount,
-                    reportSuffix: blocked.impact.reportsCount === 1 ? '' : 's',
-                  })}
+                  {t(
+                    'dataDestinationList.referencedReports',
+                    '{{reports}} Report{{reportSuffix}}',
+                    {
+                      reports: blocked.impact.reportsCount,
+                      reportSuffix: blocked.impact.reportsCount === 1 ? '' : 's',
+                    }
+                  )}
                 </Link>{' '}
-                {t('dataDestinationList.acrossDataMarts', 'across {{dataMarts}} Data Mart{{dataMartSuffix}}.', {
+                {t(
+                  'dataDestinationList.acrossDataMarts',
+                  'across {{dataMarts}} Data Mart{{dataMartSuffix}}.',
+                  {
                     dataMarts: blocked.impact.dataMartCount,
                     dataMartSuffix: blocked.impact.dataMartCount === 1 ? '' : 's',
-                  })}
+                  }
+                )}
               </span>
               <span className='text-muted-foreground block'>
                 {t(
@@ -304,15 +355,35 @@ export const DataDestinationList = ({
         variant='destructive'
       >
         <div className='text-sm'>
-          <p className='mb-2'>{t('dataDestinationList.afterRotation', 'After rotation, you will need to:')}</p>
+          <p className='mb-2'>
+            {t('dataDestinationList.afterRotation', 'After rotation, you will need to:')}
+          </p>
           <ol className='mb-2 list-decimal pl-5'>
-            <li>{t('dataDestinationList.newConfigStep', 'The new JSON Config will be automatically copied to your clipboard')}</li>
+            <li>
+              {t(
+                'dataDestinationList.newConfigStep',
+                'The new JSON Config will be automatically copied to your clipboard'
+              )}
+            </li>
             <li>{t('dataDestinationList.connectorStep', 'Go to your Data Studio Connector')}</li>
-            <li>{t('dataDestinationList.updateConfigStep', 'Update the configuration with the new JSON Config')}</li>
-            <li>{t('dataDestinationList.saveChangesStep', 'Save the changes to restore access to your data marts')}</li>
+            <li>
+              {t(
+                'dataDestinationList.updateConfigStep',
+                'Update the configuration with the new JSON Config'
+              )}
+            </li>
+            <li>
+              {t(
+                'dataDestinationList.saveChangesStep',
+                'Save the changes to restore access to your data marts'
+              )}
+            </li>
           </ol>
           <p className='font-semibold'>
-            {t('dataDestinationList.rotateQuestion', 'Are you sure you want to rotate the secret key?')}
+            {t(
+              'dataDestinationList.rotateQuestion',
+              'Are you sure you want to rotate the secret key?'
+            )}
           </p>
         </div>
       </ConfirmationDialog>

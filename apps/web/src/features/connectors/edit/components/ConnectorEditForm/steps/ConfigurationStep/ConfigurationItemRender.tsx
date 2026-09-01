@@ -2,6 +2,7 @@ import { AppWizardStepLabel, AppWizardStepItem } from '@owox/ui/components/commo
 import { RequiredType, type ConnectorSpecificationResponseApiDto } from '../../../../../shared/api';
 import { configurationFieldRender } from './ConfigurationFieldRender';
 import { Button } from '@owox/ui/components/button';
+import { VariablePicker } from './VariablePicker';
 
 interface ConfigurationItemRenderProps {
   specification: ConnectorSpecificationResponseApiDto;
@@ -46,6 +47,16 @@ export function ConfigurationItemRender({
             >
               {isSecretEditing ? 'Cancel' : 'Edit'}
             </Button>
+          )}
+          {specification.requiredType !== RequiredType.OBJECT && !isSecret && (
+            <VariablePicker
+              connectorName={connectorName}
+              kind='value'
+              value={configuration[specification.name]}
+              onSelect={variableId => {
+                onValueChange(specification.name, variableId ? { _variable_id: variableId } : '');
+              }}
+            />
           )}
         </div>
       )}

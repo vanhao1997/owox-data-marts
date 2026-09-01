@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -171,7 +172,11 @@ describe('DataMartReportsPage', () => {
     expect(screen.getByText('Email')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Success' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Toggle columns' })).toBeInTheDocument();
-    expect(reportService.getReportsByProject).toHaveBeenCalledWith();
+    expect(reportService.getReportsByProject).toHaveBeenCalledWith(
+      undefined,
+      undefined,
+      expect.objectContaining({ signal: expect.any(AbortSignal) })
+    );
   });
 
   it('uses table pagination over the full reports list', async () => {
@@ -549,7 +554,7 @@ describe('DataMartReportsPage', () => {
 
     expect(await screen.findByText('Daily Sales Report')).toBeInTheDocument();
 
-    await vi.advanceTimersByTimeAsync(5000);
+    await vi.advanceTimersByTimeAsync(2000);
 
     await waitFor(() => {
       expect(reportService.getReportById).toHaveBeenCalledWith('report-1', expect.anything());
@@ -577,6 +582,7 @@ describe('DataMartReportsPage', () => {
     await waitFor(() => {
       expect(reportService.getReportById).toHaveBeenCalledWith('report-1', {
         skipErrorToast: true,
+        signal: expect.any(AbortSignal),
       });
     });
 
@@ -625,7 +631,7 @@ describe('DataMartReportsPage', () => {
     expect(await screen.findByText('Daily Sales Report')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'In progress' })).toBeInTheDocument();
 
-    await vi.advanceTimersByTimeAsync(5000);
+    await vi.advanceTimersByTimeAsync(2000);
 
     await waitFor(() => {
       expect(reportService.getReportById).toHaveBeenCalledTimes(1);
@@ -669,7 +675,11 @@ describe('DataMartReportsPage', () => {
       target: { value: 'Report 16' },
     });
     expect(await screen.findByText('Report 16')).toBeInTheDocument();
-    expect(reportService.getReportsByProject).toHaveBeenCalledWith();
+    expect(reportService.getReportsByProject).toHaveBeenCalledWith(
+      undefined,
+      undefined,
+      expect.objectContaining({ signal: expect.any(AbortSignal) })
+    );
     expect(reportService.getReportsByProject).toHaveBeenCalledTimes(1);
     expect(reportService.getReportById).toHaveBeenCalledWith('report-1', expect.anything());
 
@@ -745,10 +755,13 @@ describe('DataMartReportsPage', () => {
 });
 
 function renderPage(path = '/ui/project-1/data-marts/reports') {
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <MemoryRouter initialEntries={[path]}>
-      <DataMartReportsPage />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[path]}>
+        <DataMartReportsPage />
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 }
 

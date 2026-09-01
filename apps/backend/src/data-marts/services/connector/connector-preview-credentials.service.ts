@@ -1,8 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, Optional } from '@nestjs/common';
 import { AuthorizationContext } from '../../../idp';
 import { Action, AccessDecisionService, EntityType } from '../access-decision';
 import { ConnectorCredentialInjectorService } from './connector-credential-injector.service';
 import { ConnectorSourceCredentialsService } from './connector-source-credentials.service';
+import { ConfigurationVariableResolverService } from '../configuration-variable-resolver.service';
 
 const SECRET_MASK = '**********';
 
@@ -11,7 +12,8 @@ export class ConnectorPreviewCredentialsService {
   constructor(
     private readonly credentialInjector: ConnectorCredentialInjectorService,
     private readonly connectorSourceCredentialsService: ConnectorSourceCredentialsService,
-    private readonly accessDecisionService: AccessDecisionService
+    private readonly accessDecisionService: AccessDecisionService,
+    @Optional() private readonly variableResolver?: ConfigurationVariableResolverService
   ) {}
 
   async inject(
@@ -19,9 +21,20 @@ export class ConnectorPreviewCredentialsService {
     config: Record<string, unknown>,
     context: AuthorizationContext
   ): Promise<Record<string, unknown>> {
-    const previewConfig = this.withoutStoredSecretReferenceForInlineKey(config);
+    const resolvedConfig = this.variableResolver
+      ? await this.variableResolver.resolveConnectorConfig(config, context.projectId, connectorName)
+      : config;
+    const previewConfig = this.withoutStoredSecretReferenceForInlineKey(resolvedConfig);
     await this.validateReferences(connectorName, previewConfig, context);
-    return this.credentialInjector.injectSecrets(previewConfig, context.projectId);
+    const withSecrets = await this.credentialInjector.injectSecrets(
+      previewConfig,
+      context.projectId
+    );
+    return this.credentialInjector.injectOAuthCredentials(
+      withSecrets,
+      connectorName,
+      context.projectId
+    );
   }
 
   private withoutStoredSecretReferenceForInlineKey(
@@ -59,16 +72,30 @@ export class ConnectorPreviewCredentialsService {
         throw this.invalidCredentials();
       }
 
+      const credentialKind = credential.kind ?? (credential.dataMartId ? 'secret' : 'oauth');
+      const isProjectReusableSecret = credentialKind === 'secret' && !credential.dataMartId;
       const isCurrentConfig = Boolean(configId) && credential.configId === configId;
       const isCopiedConfig =
         copiedFrom !== undefined &&
         credential.dataMartId === copiedFrom.dataMartId &&
         credential.configId === copiedFrom.configId;
-      if (!isCurrentConfig && !isCopiedConfig) {
+      if (!isProjectReusableSecret && !isCurrentConfig && !isCopiedConfig) {
         throw this.invalidCredentials();
       }
 
-      if (!credential.dataMartId) {
+      if (!isProjectReusableSecret && !credential.dataMartId) {
+        throw this.invalidCredentials();
+      }
+
+      if (credentialKind !== 'secret') {
+        throw this.invalidCredentials();
+      }
+
+      const owningDataMartId = credential.dataMartId;
+      if (isProjectReusableSecret) {
+        continue;
+      }
+      if (!owningDataMartId) {
         throw this.invalidCredentials();
       }
 
@@ -76,7 +103,7 @@ export class ConnectorPreviewCredentialsService {
         context.userId,
         context.roles ?? [],
         EntityType.DATA_MART,
-        credential.dataMartId,
+        owningDataMartId,
         Action.EDIT,
         context.projectId
       );

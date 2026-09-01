@@ -6,12 +6,23 @@ export interface InsightsPermissions extends BasePermissions {
   canSendAndSchedule: boolean;
 }
 
-export function useInsightsPermissions(): InsightsPermissions {
-  return usePermissions<InsightsPermissions>(({ canEdit }) => {
+export function useInsightsPermissions(isLegacyReadOnly = false): InsightsPermissions {
+  const permissions = usePermissions<InsightsPermissions>(({ canEdit }) => {
     return {
       canGenerateAI: canEdit,
       canRun: canEdit,
       canSendAndSchedule: canEdit,
     };
   });
+
+  if (!isLegacyReadOnly) return permissions;
+  return {
+    ...permissions,
+    canCreate: false,
+    canEdit: false,
+    canDelete: false,
+    canGenerateAI: false,
+    canRun: false,
+    canSendAndSchedule: false,
+  };
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DataStorageProvider } from '../../features/data-storage/shared/model/context';
 import { DataStorageList } from '../../features/data-storage/list/components';
-import { useDataStorage } from '../../features/data-storage/shared/model/hooks/useDataStorage';
+import type { DataStorageList as DataStorageListItems } from '../../features/data-storage/shared/model/types/data-storage-list';
 import { DataStorageType } from '../../features/data-storage/shared/model/types/data-storage-type.enum';
 import {
   getCachedDataStorageHealthStatus,
@@ -10,6 +10,7 @@ import {
   subscribeToDataStorageHealthStatusUpdates,
 } from '../../features/data-storage/shared/services/data-storage-health-status.service';
 import { PageNotificationLegacyStorageSetup } from './PageNotificationLegacyStorageSetup.tsx';
+import { useParams } from 'react-router';
 
 const DataStorageListWithContext = ({
   shouldOpenDialog,
@@ -18,7 +19,7 @@ const DataStorageListWithContext = ({
   shouldOpenDialog: boolean;
   onTypeDialogClose: () => void;
 }) => {
-  const { dataStorages } = useDataStorage();
+  const [dataStorages, setDataStorages] = useState<DataStorageListItems>([]);
 
   const [, setForceUpdate] = useState(0);
 
@@ -45,6 +46,7 @@ const DataStorageListWithContext = ({
       <DataStorageList
         initialTypeDialogOpen={shouldOpenDialog}
         onTypeDialogClose={onTypeDialogClose}
+        onDataStoragesChange={setDataStorages}
       />
     </>
   );
@@ -52,6 +54,7 @@ const DataStorageListWithContext = ({
 
 export const DataStorageListPage = () => {
   const { t } = useTranslation();
+  const { projectId = '' } = useParams<{ projectId: string }>();
   const [shouldOpenDialog, setShouldOpenDialog] = useState(false);
 
   return (
@@ -61,7 +64,7 @@ export const DataStorageListPage = () => {
       </header>
 
       <div className='dm-page-content'>
-        <DataStorageProvider>
+        <DataStorageProvider key={projectId}>
           <DataStorageListWithContext
             shouldOpenDialog={shouldOpenDialog}
             onTypeDialogClose={() => {

@@ -2,10 +2,11 @@ import { useEffect, useRef } from 'react';
 
 interface UseAutoRefreshOptions {
   enabled: boolean;
-  intervalMs?: number;
+  intervalMs?: number | ((pollCount: number) => number);
   onlyWhenVisible?: boolean;
   runImmediately?: boolean;
-  onTick: (signal: AbortSignal) => void | Promise<void>;
+  resourceKey?: string;
+  onTick: (signal: AbortSignal) => unknown;
 }
 
 /**
@@ -30,34 +31,104 @@ export function useAutoRefresh({
   intervalMs = 5000,
   onlyWhenVisible = true,
   runImmediately = true,
+  resourceKey = '',
   onTick,
 }: UseAutoRefreshOptions) {
   const onTickRef = useRef(onTick);
   onTickRef.current = onTick;
+  const enabledRef = useRef(enabled);
+  enabledRef.current = enabled;
 
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const activeControllerRef = useRef<AbortController | null>(null);
+  const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
 
-    abortControllerRef.current?.abort();
-    abortControllerRef.current = new AbortController();
+    let disposed = false;
+    let pollCount = 0;
 
-    const tick = () => {
-      if (!onlyWhenVisible || document.visibilityState === 'visible') {
-        const controller = new AbortController();
-        void onTickRef.current(controller.signal);
+    const clearTimer = () => {
+      if (timerRef.current !== null) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
     };
 
-    if (runImmediately) {
-      tick();
-    }
-    const intervalId = window.setInterval(tick, intervalMs);
+    const abortActiveRequest = () => {
+      activeControllerRef.current?.abort();
+      activeControllerRef.current = null;
+    };
+
+    const schedule = () => {
+      if (
+        !disposed &&
+        enabledRef.current &&
+        (!onlyWhenVisible || document.visibilityState === 'visible')
+      ) {
+        const delay = typeof intervalMs === 'function' ? intervalMs(pollCount) : intervalMs;
+        timerRef.current = window.setTimeout(tick, delay);
+      }
+    };
+
+    const tick = () => {
+      if (disposed) return;
+
+      // Timer ids are one-shot; clear the handle as soon as it fires so a slow
+      // request cannot leave stale timers behind.
+      timerRef.current = null;
+
+      if (onlyWhenVisible && document.visibilityState !== 'visible') {
+        return;
+      }
+
+      // A slow request must not overlap the next polling attempt.
+      if (activeControllerRef.current) {
+        return;
+      }
+
+      const controller = new AbortController();
+      activeControllerRef.current = controller;
+      pollCount += 1;
+      void Promise.resolve()
+        .then(() => onTickRef.current(controller.signal))
+        .catch(() => {
+          // Callers own user-facing error state; polling must continue.
+          return true;
+        })
+        .then(shouldContinue => {
+          if (shouldContinue === false) {
+            clearTimer();
+            return;
+          }
+          schedule();
+        })
+        .finally(() => {
+          if (activeControllerRef.current === controller) {
+            activeControllerRef.current = null;
+          }
+        });
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') {
+        clearTimer();
+        abortActiveRequest();
+      } else if (!activeControllerRef.current) {
+        clearTimer();
+        tick();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    if (runImmediately) tick();
+    else schedule();
 
     return () => {
-      window.clearInterval(intervalId);
-      abortControllerRef.current?.abort();
+      disposed = true;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearTimer();
+      abortActiveRequest();
     };
-  }, [enabled, intervalMs, onlyWhenVisible, runImmediately]);
+  }, [enabled, intervalMs, onlyWhenVisible, resourceKey, runImmediately]);
 }

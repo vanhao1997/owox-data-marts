@@ -47,6 +47,10 @@ vi.mock('../../../features/idp', () => ({
 describe('DataMartRunsPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      value: 'visible',
+    });
     dataMartServiceMock.getDataMartRunById.mockImplementation(
       (_dataMartId: string, runId: string) =>
         Promise.resolve(buildGenericQualityRunDetail(runId, `Result for ${runId}`))
@@ -75,7 +79,9 @@ describe('DataMartRunsPage', () => {
       'href',
       '/ui/project-1/data-marts'
     );
-    expect(dataMartService.getProjectDataMartRuns).toHaveBeenCalledWith(50, 0, undefined);
+    expect(dataMartService.getProjectDataMartRuns).toHaveBeenCalledWith(50, 0, {
+      signal: expect.any(AbortSignal),
+    });
   });
 
   afterEach(() => {
@@ -189,7 +195,7 @@ describe('DataMartRunsPage', () => {
   });
 
   it('refreshes the first page while a loaded run is not final and stops after completion', async () => {
-    vi.useFakeTimers();
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     vi.mocked(dataMartService.getProjectDataMartRuns)
       .mockResolvedValueOnce({ runs: [buildProjectRun({ status: DataMartRunStatus.RUNNING })] })
       .mockResolvedValueOnce({ runs: [buildProjectRun({ status: DataMartRunStatus.SUCCESS })] });
@@ -197,12 +203,13 @@ describe('DataMartRunsPage', () => {
     renderPage();
 
     await act(async () => {
-      await Promise.resolve();
+      await vi.advanceTimersByTimeAsync(0);
     });
+    expect(screen.getByText('Manual connector run')).toBeInTheDocument();
     expect(dataMartService.getProjectDataMartRuns).toHaveBeenCalledTimes(1);
 
     await act(async () => {
-      vi.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(2000);
       await Promise.resolve();
     });
 
@@ -210,6 +217,7 @@ describe('DataMartRunsPage', () => {
     expect(dataMartService.getProjectDataMartRuns).toHaveBeenLastCalledWith(50, 0, {
       skipLoadingIndicator: true,
       skipErrorToast: true,
+      signal: expect.any(AbortSignal),
     });
 
     await act(async () => {
@@ -236,7 +244,8 @@ describe('DataMartRunsPage', () => {
 
     renderPage();
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Load More' }));
+    await screen.findAllByText('Manual connector run');
+    fireEvent.click(screen.getByRole('button', { name: 'Load More' }));
 
     await waitFor(() => {
       expect(dataMartService.getProjectDataMartRuns).toHaveBeenCalledTimes(2);

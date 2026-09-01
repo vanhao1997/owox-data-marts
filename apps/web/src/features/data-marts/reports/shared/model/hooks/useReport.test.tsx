@@ -99,4 +99,20 @@ describe('useReport delete contract', () => {
 
     expect(result.current.firstConsumer.reports).toEqual([{ id: 'new-report' }]);
   });
+
+  it('passes polling cancellation through to the report service', async () => {
+    const signal = new AbortController().signal;
+    mocks.getReportsByDataMartId.mockResolvedValueOnce([]);
+    const { result } = renderHook(() => useReport(), { wrapper });
+
+    await act(async () => {
+      await result.current.fetchReportsByDataMartId('data-mart-1', { silent: true, signal });
+    });
+
+    expect(mocks.getReportsByDataMartId).toHaveBeenCalledWith('data-mart-1', {
+      skipLoadingIndicator: true,
+      skipErrorToast: true,
+      signal,
+    });
+  });
 });

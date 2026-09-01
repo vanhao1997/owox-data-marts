@@ -8,6 +8,7 @@ import type {
   DataDestinationImpactResponseDto,
 } from './types';
 import type { DataDestinationType } from '../enums';
+import type { AxiosRequestConfig } from '../../../../app/api';
 
 /**
  * Identifiers of an auto-created Google Sheet, returned by the "Create document" flow.
@@ -40,8 +41,8 @@ export class DataDestinationService extends ApiService {
    * Fetch all data destinations
    * @returns Promise with data destination list response
    */
-  async getDataDestinations(): Promise<DataDestinationResponseDto[]> {
-    return this.get<DataDestinationResponseDto[]>('/');
+  async getDataDestinations(config?: AxiosRequestConfig): Promise<DataDestinationResponseDto[]> {
+    return this.get<DataDestinationResponseDto[]>('/', undefined, config);
   }
 
   /**
@@ -49,8 +50,11 @@ export class DataDestinationService extends ApiService {
    * @param id Data destination ID
    * @returns Promise with data destination response
    */
-  async getDataDestinationById(id: string): Promise<DataDestinationResponseDto> {
-    return this.get<DataDestinationResponseDto>(`/${id}`);
+  async getDataDestinationById(
+    id: string,
+    config?: AxiosRequestConfig
+  ): Promise<DataDestinationResponseDto> {
+    return this.get<DataDestinationResponseDto>(`/${id}`, undefined, config);
   }
 
   /**

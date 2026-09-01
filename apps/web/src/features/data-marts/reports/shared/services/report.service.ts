@@ -76,17 +76,22 @@ export class ReportService extends ApiService {
    * List reports by project
    * @returns Promise with list of reports
    */
-  async getReportsByProject(limit?: number, offset?: number): Promise<ReportResponseDto[]> {
+  async getReportsByProject(
+    limit?: number,
+    offset?: number,
+    config?: AxiosRequestConfig
+  ): Promise<ReportResponseDto[]> {
     if (limit === undefined && offset === undefined) {
       const reports: ReportResponseDto[] = [];
       let nextOffset = 0;
       let fetchedCount: number;
 
       do {
-        const response = await this.get<ReportResponseDto[]>('/', {
-          limit: PROJECT_REPORTS_FETCH_PAGE_SIZE,
-          offset: nextOffset,
-        });
+        const response = await this.get<ReportResponseDto[]>(
+          '/',
+          { limit: PROJECT_REPORTS_FETCH_PAGE_SIZE, offset: nextOffset },
+          config
+        );
         reports.push(...response);
         fetchedCount = response.length;
         nextOffset += PROJECT_REPORTS_FETCH_PAGE_SIZE;
@@ -104,7 +109,7 @@ export class ReportService extends ApiService {
       ...(offset !== undefined ? { offset } : {}),
     };
 
-    return this.get<ReportResponseDto[]>('/', params);
+    return this.get<ReportResponseDto[]>('/', params, config);
   }
 
   /**

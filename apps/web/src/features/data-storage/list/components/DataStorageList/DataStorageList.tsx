@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import toast from 'react-hot-toast';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
@@ -15,30 +16,72 @@ import {
   getDataStorageColumns,
 } from '../DataStorageTable';
 import { useTranslation } from 'react-i18next';
+import { dataStorageApiService } from '../../../shared/api';
+import { mapDataStorageListFromDto } from '../../../shared/model/mappers';
+import { dataMartQueryKeys } from '../../../../data-marts/shared/query-keys';
+import { extractApiError } from '../../../../../app/api';
+import type { DataStorageList as DataStorageListItems } from '../../../shared/model/types/data-storage-list';
 
 interface DataStorageListProps {
   initialTypeDialogOpen?: boolean;
   onTypeDialogClose?: () => void;
+  onDataStoragesChange?: (dataStorages: DataStorageListItems) => void;
 }
 
 export const DataStorageList = ({
   initialTypeDialogOpen = false,
   onTypeDialogClose,
+  onDataStoragesChange,
 }: DataStorageListProps) => {
   const { t } = useTranslation();
   const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(initialTypeDialogOpen);
   const [isCreatingDataStorage, setIsCreatingDataStorage] = useState(false);
 
   const {
-    dataStorages,
+    dataStorages: contextDataStorages,
     currentDataStorage,
+    error: contextError,
     clearCurrentDataStorage,
-    fetchDataStorages,
     getDataStorageById,
     deleteDataStorage,
     createDataStorage,
-    loading,
   } = useDataStorage();
+  const { projectId: routeProjectId } = useProjectRoute();
+  const projectId = routeProjectId ?? '';
+  const queryClient = useQueryClient();
+  const storagesQuery = useQuery({
+    queryKey: dataMartQueryKeys.storages(projectId),
+    enabled: Boolean(projectId),
+    queryFn: async ({ signal }) => {
+      const response = await dataStorageApiService.getDataStorages({ signal });
+      return response.map(mapDataStorageListFromDto);
+    },
+  });
+  const dataStorages = useMemo(
+    () => storagesQuery.data ?? contextDataStorages,
+    [contextDataStorages, storagesQuery.data]
+  );
+  useEffect(() => {
+    onDataStoragesChange?.(dataStorages);
+  }, [dataStorages, onDataStoragesChange]);
+  const loading = !storagesQuery.data && dataStorages.length === 0 && storagesQuery.isLoading;
+  const error =
+    contextError?.message ??
+    (!storagesQuery.data && dataStorages.length === 0 && storagesQuery.isError
+      ? (extractApiError(storagesQuery.error).message ??
+        t('storagesPage.loadFailed', 'Failed to load storages. Please try again.'))
+      : null);
+  const { refetch: refetchStorages } = storagesQuery;
+  const refreshStorages = useCallback(() => refetchStorages(), [refetchStorages]);
+  const invalidateStorageGraph = useCallback(
+    () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.storagesRoot(projectId) }),
+        queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.storageRoot(projectId) }),
+        queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.all(projectId) }),
+      ]),
+    [projectId, queryClient]
+  );
 
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -60,10 +103,6 @@ export const DataStorageList = ({
 
   const { value: deepLinkId, setParam: setIdParam, removeParam: removeIdParam } = useUrlParam('id');
   const hasAttemptedDeepLink = useRef(false);
-
-  useEffect(() => {
-    void fetchDataStorages();
-  }, [fetchDataStorages]);
 
   const handleEdit = useCallback(
     async (id: string) => {
@@ -108,6 +147,8 @@ export const DataStorageList = ({
     setIsCreatingDataStorage(true);
     try {
       const newStorage = await createDataStorage(type);
+      await refreshStorages();
+      await invalidateStorageGraph();
       handleTypeDialogClose();
       if (newStorage?.id) {
         await handleEdit(newStorage.id);
@@ -167,7 +208,8 @@ export const DataStorageList = ({
     if (storageToDelete) {
       try {
         await deleteDataStorage(storageToDelete);
-        await fetchDataStorages();
+        await refreshStorages();
+        await invalidateStorageGraph();
       } catch (error) {
         console.error('Failed to delete storage:', error);
       } finally {
@@ -197,10 +239,8 @@ export const DataStorageList = ({
   };
 
   const handlePublishDraftsSuccess = useCallback(() => {
-    void (async () => {
-      await fetchDataStorages();
-    })();
-  }, [fetchDataStorages]);
+    void refreshStorages().then(() => invalidateStorageGraph());
+  }, [invalidateStorageGraph, refreshStorages]);
 
   const { run: runPublishDraftsTrigger } = usePublishDraftsTrigger(handlePublishDraftsSuccess);
 
@@ -221,7 +261,9 @@ export const DataStorageList = ({
   const handleSave = async (savedStorageId: string) => {
     try {
       setIsEditDrawerOpen(false);
-      const refreshedDataStorages = await fetchDataStorages();
+      const result = await refreshStorages();
+      await invalidateStorageGraph();
+      const refreshedDataStorages = result.data ?? [];
       removeIdParam();
       const storage = refreshedDataStorages.find(item => item.id === savedStorageId);
       if (storage && storage.draftDataMartsCount > 0 && storage.publishedDataMartsCount === 0) {
@@ -272,6 +314,9 @@ export const DataStorageList = ({
         onOpenTypeDialog={() => {
           setIsTypeDialogOpen(true);
         }}
+        isLoading={loading}
+        error={error}
+        onRetry={() => void refreshStorages()}
       />
 
       <DataStorageDetailsDialog

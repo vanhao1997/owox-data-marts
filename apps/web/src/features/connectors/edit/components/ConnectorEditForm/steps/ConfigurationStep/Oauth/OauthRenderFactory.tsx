@@ -18,6 +18,7 @@ import type {
 import { Button } from '@owox/ui/components/button';
 import { NestedConfigurationField } from '../NestedConfigurationField';
 import { SECRET_MASK } from '../../../../../../../../shared/constants/secrets';
+import { VariablePicker } from '../VariablePicker';
 
 const SOURCE_CREDENTIAL_KEY = '_source_credential_id';
 
@@ -90,7 +91,7 @@ export function OauthRenderFactory({
   const detectedMode = useMemo(() => {
     const savedConfig = nestedConfiguration;
 
-    if (SOURCE_CREDENTIAL_KEY in savedConfig) {
+    if (SOURCE_CREDENTIAL_KEY in savedConfig || '_credential_variable_id' in savedConfig) {
       return false;
     }
 
@@ -109,7 +110,9 @@ export function OauthRenderFactory({
   const [isManualMode, setIsManualMode] = useState(detectedMode);
 
   useEffect(() => {
-    const hasOAuthCredential = SOURCE_CREDENTIAL_KEY in nestedConfiguration;
+    const hasOAuthCredential =
+      SOURCE_CREDENTIAL_KEY in nestedConfiguration ||
+      '_credential_variable_id' in nestedConfiguration;
 
     if (hasOAuthCredential) {
       setIsManualMode(false);
@@ -352,7 +355,32 @@ export function OauthRenderFactory({
 
   return (
     <div className='space-y-3'>
-      {oauthComponent}
+      <div className='flex items-center justify-between gap-2'>
+        {oauthComponent}
+        <VariablePicker
+          connectorName={connectorName}
+          kind='credential_reference'
+          value={nestedConfiguration}
+          onSelect={variableId => {
+            if (!option?.value) {
+              onValueChange(
+                specification.name,
+                variableId ? { _credential_variable_id: variableId } : {}
+              );
+              return;
+            }
+            const current = configuration[specification.name];
+            const currentObject =
+              current && typeof current === 'object' && !Array.isArray(current)
+                ? (current as Record<string, unknown>)
+                : {};
+            onValueChange(specification.name, {
+              ...currentObject,
+              [option.value]: variableId ? { _credential_variable_id: variableId } : {},
+            });
+          }}
+        />
+      </div>
       {error && <div className='text-destructive text-sm'>{error}</div>}
       {option?.items && Object.keys(option.items).length > 0 && (
         <Button

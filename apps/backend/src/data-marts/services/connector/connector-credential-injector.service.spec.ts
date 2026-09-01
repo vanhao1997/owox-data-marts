@@ -120,6 +120,21 @@ describe('ConnectorCredentialInjectorService', () => {
       expect(result).not.toHaveProperty('generated_refresh_token');
       expect(result).not.toHaveProperty('_source_credential_id');
     });
+
+    it('does not inject an OAuth credential from another connector', async () => {
+      const { service, connectorSourceCredentialsService } = createService();
+      const config = { _source_credential_id: 'cred-1' };
+      (connectorSourceCredentialsService.getCredentialsById as jest.Mock).mockResolvedValue({
+        id: 'cred-1',
+        projectId: 'proj-1',
+        connectorName: 'OtherConnector',
+        credentials: { accessToken: 'must-not-inject' },
+      });
+
+      const result = await service.injectOAuthCredentials(config, 'TestConnector', 'proj-1');
+
+      expect(result).toEqual(config);
+    });
   });
 
   describe('injectSecrets', () => {
@@ -141,6 +156,7 @@ describe('ConnectorCredentialInjectorService', () => {
       (connectorSourceCredentialsService.getCredentialsById as jest.Mock).mockResolvedValue({
         id: 'secret-1',
         projectId: 'proj-1',
+        kind: 'secret',
         credentials: secrets,
       });
       (connectorSecretService.injectSecretsAtPaths as jest.Mock).mockImplementation(
@@ -168,6 +184,7 @@ describe('ConnectorCredentialInjectorService', () => {
       (connectorSourceCredentialsService.getCredentialsById as jest.Mock).mockResolvedValue({
         id: 'secret-1',
         projectId: 'proj-1',
+        kind: 'secret',
         credentials: secrets,
       });
       (connectorSecretService.injectSecretsAtPaths as jest.Mock).mockImplementation(
@@ -182,6 +199,23 @@ describe('ConnectorCredentialInjectorService', () => {
         expect.objectContaining({ field1: 'value1' }),
         { 'AuthType.oauth2.RefreshToken': 'original-refresh-token' }
       );
+    });
+
+    it('does not inject an OAuth record through a secret reference', async () => {
+      const { service, connectorSourceCredentialsService, connectorSecretService } =
+        createService();
+      const config = { _secrets_id: 'oauth-1', field1: 'value1' };
+      (connectorSourceCredentialsService.getCredentialsById as jest.Mock).mockResolvedValue({
+        id: 'oauth-1',
+        projectId: 'proj-1',
+        kind: 'oauth',
+        credentials: { token: 'must-not-inject' },
+      });
+
+      const result = await service.injectSecrets(config, 'proj-1');
+
+      expect(result).toEqual(config);
+      expect(connectorSecretService.injectSecretsAtPaths).not.toHaveBeenCalled();
     });
 
     it('returns config when secrets entity not found', async () => {

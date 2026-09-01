@@ -30,13 +30,18 @@ export const DataMartActionsCell = ({
   const { scope } = useProjectRoute();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async () => {
+    if (isDeleting) return;
+    setIsDeleting(true);
     try {
       await deleteDataMart(row.original.id);
       setIsDeleteDialogOpen(false);
       await refreshList();
     } catch (error) {
       console.error('Failed to delete data mart:', error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -81,12 +86,19 @@ export const DataMartActionsCell = ({
         description={
           <div className='mt-2 space-y-3'>
             <p className='break-words'>
-              {t('common.deleteDataMartDescription', 'Are you sure you want to delete "{{title}}"? This action cannot be undone.', { title: row.original.title })}
+              {t(
+                'common.deleteDataMartDescription',
+                'Are you sure you want to delete "{{title}}"? This action cannot be undone.',
+                { title: row.original.title }
+              )}
             </p>
 
             {row.original.storageType === DataStorageType.LEGACY_GOOGLE_BIGQUERY && (
               <p className='text-destructive text-sm'>
-                {t('common.legacyDataMartWarning', 'Deleting this data mart will also make it unavailable in the Google Sheets extension.')}
+                {t(
+                  'common.legacyDataMartWarning',
+                  'Deleting this data mart will also make it unavailable in the Google Sheets extension.'
+                )}
               </p>
             )}
           </div>
@@ -94,6 +106,7 @@ export const DataMartActionsCell = ({
         confirmLabel={t('common.delete', 'Delete')}
         cancelLabel={t('common.cancel', 'Cancel')}
         onConfirm={() => void handleDelete()}
+        confirmDisabled={isDeleting}
         variant='destructive'
       />
     </div>

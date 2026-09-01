@@ -6,6 +6,7 @@ import { CreditConsumptionTab } from '../../pages/project-settings/CreditConsump
 import { SubscriptionTab } from '../../pages/project-settings/SubscriptionTab';
 import { NotificationSettingsTab } from '../../pages/project-settings/NotificationSettingsTab';
 import { LicenseKeysTab } from '../../pages/project-settings/LicenseKeysTab';
+import { VariablesTab } from '../../pages/project-settings/VariablesTab';
 import { LayoutErrorBoundary } from '../../components/errors';
 
 export const projectSettingsRoutes: RouteObject[] = [
@@ -42,6 +43,11 @@ export const projectSettingsRoutes: RouteObject[] = [
   {
     path: 'notifications',
     element: <NotificationSettingsTab />,
+    errorElement: <LayoutErrorBoundary />,
+  },
+  {
+    path: 'variables',
+    element: <VariablesTab />,
     errorElement: <LayoutErrorBoundary />,
   },
 ];

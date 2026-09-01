@@ -57,13 +57,9 @@ import { ConfirmationDialog } from '../../../../shared/components/ConfirmationDi
 import { InlineEditTitle } from '../../../../shared/components/InlineEditTitle/InlineEditTitle.tsx';
 
 import { useDataMartContext } from '../../edit/model';
-import {
-  DataMartRunStatus,
-  DataMartStatus,
-  isDataMartRunFinalStatus,
-  isTaskFinalStatus,
-} from '../../shared';
+import { DataMartRunStatus, DataMartStatus, isTaskFinalStatus } from '../../shared';
 import { usePermissions } from '../../../../app/permissions';
+import { extractApiError } from '../../../../app/api';
 import { trackEvent } from '../../../../utils';
 import {
   MarkdownEditorPreview,
@@ -103,6 +99,7 @@ import { useTranslation } from 'react-i18next';
 import type { AiAssistantPanelHandle } from '../model/ai-assistant/types/ai-assistant-panel.types.ts';
 import type { DataMartReport } from '../../reports/shared/model/types/data-mart-report';
 import type { StartInsightTemplateExecutionRequestDto } from '../model/templates/types/insight-templates.dto';
+import { shouldFallbackToLegacyInsight } from '../utils/insight-route-fallback';
 
 export default function InsightDetailsView() {
   const { t } = useTranslation();
@@ -112,6 +109,8 @@ export default function InsightDetailsView() {
   const { canEdit, canDelete } = usePermissions();
 
   const [entity, setEntity] = useState<InsightTemplateEntity | null>(null);
+  const [isLoadingEntity, setIsLoadingEntity] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [template, setTemplate] = useState('');
   const [saving, setSaving] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -127,23 +126,26 @@ export default function InsightDetailsView() {
 
   const { data: reports = [] } = useReportsByInsightTemplate(dataMart?.id ?? '', insightId ?? '');
 
-  const getReportsTooltipText = useCallback((reports: DataMartReport[]) => {
-    if (reports.length === 0) return null;
+  const getReportsTooltipText = useCallback(
+    (reports: DataMartReport[]) => {
+      if (reports.length === 0) return null;
 
-    const types = Array.from(new Set(reports.map(r => r.dataDestination.type)));
-    const typeLabels = types.map(type => DataDestinationTypeModel.getInfo(type).displayName);
+      const types = Array.from(new Set(reports.map(r => r.dataDestination.type)));
+      const typeLabels = types.map(type => DataDestinationTypeModel.getInfo(type).displayName);
 
-    const typesString = typeLabels.join(', ');
-    return reports.length === 1
-      ? t('insightsUi.reportsTooltipSingular', 'This Insight is used in 1 report ({{types}})', {
-          types: typesString,
-        })
-      : t(
-          'insightsUi.reportsTooltipPlural',
-          'This Insight is used in {{count}} reports ({{types}})',
-          { count: reports.length, types: typesString }
-        );
-  }, [t]);
+      const typesString = typeLabels.join(', ');
+      return reports.length === 1
+        ? t('insightsUi.reportsTooltipSingular', 'This Insight is used in 1 report ({{types}})', {
+            types: typesString,
+          })
+        : t(
+            'insightsUi.reportsTooltipPlural',
+            'This Insight is used in {{count}} reports ({{types}})',
+            { count: reports.length, types: typesString }
+          );
+    },
+    [t]
+  );
 
   // ── Preview panel ──────────────────────────────────────────────────────────
   // Closed by default; restored from localStorage.
@@ -292,7 +294,12 @@ export default function InsightDetailsView() {
   // ── Data loading ───────────────────────────────────────────────────────────
 
   const loadEntity = useCallback(async (): Promise<string | null> => {
-    if (!dataMart?.id || !insightId) return null;
+    if (!dataMart?.id || !insightId) {
+      setIsLoadingEntity(false);
+      return null;
+    }
+    setIsLoadingEntity(true);
+    setLoadError(null);
     try {
       const templateDto = await insightTemplatesService.getInsightTemplateById(
         dataMart.id,
@@ -305,10 +312,20 @@ export default function InsightDetailsView() {
       setRunErrorMessage(runError);
 
       return runError;
-    } catch {
-      toast.error(t('insightsUi.loadError', 'Failed to load insight'));
-      void navigate('..');
+    } catch (error) {
+      // Older records use a different endpoint/model. Fall back only when V2
+      // explicitly reports not found; auth and server failures stay visible.
+      if (shouldFallbackToLegacyInsight(error)) {
+        void navigate(`../insights-legacy/${insightId}`, { replace: true });
+      } else {
+        const message =
+          extractApiError(error).message ?? t('insightsUi.loadError', 'Failed to load insight');
+        setLoadError(message);
+        toast.error(message);
+      }
       return null;
+    } finally {
+      setIsLoadingEntity(false);
     }
   }, [dataMart?.id, insightId, navigate, t]);
 
@@ -335,11 +352,8 @@ export default function InsightDetailsView() {
   }, [dataMart?.id, insightId, triggerId]);
 
   useEffect(() => {
-    void loadEntity().then(() => {
-      if (entity?.lastRun && !isDataMartRunFinalStatus(entity.lastRun.status)) {
-        void ensureActiveRunPolling();
-      }
-    });
+    // Load entity first, then recover any active server-side run trigger.
+    void loadEntity().then(() => void ensureActiveRunPolling());
   }, [loadEntity]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Run polling ────────────────────────────────────────────────────────────
@@ -625,6 +639,24 @@ export default function InsightDetailsView() {
     };
   }, [canRun, handleRun, handleSave, isDirty, isRunPending, saving]);
 
+  if (!entity && isLoadingEntity) {
+    return <div className='text-muted-foreground p-6 text-sm'>{t('common.loading')}</div>;
+  }
+
+  if (!entity && loadError) {
+    return (
+      <div
+        className='dm-card-block flex flex-col items-center gap-3 text-center text-sm'
+        role='alert'
+      >
+        <p className='text-destructive'>{loadError}</p>
+        <Button variant='outline' onClick={() => void loadEntity()}>
+          {t('common.retry', 'Retry')}
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className='flex h-full w-full flex-col overflow-visible'>
       <div className='mb-2 flex shrink-0 items-center gap-3'>
@@ -732,7 +764,9 @@ export default function InsightDetailsView() {
                 }}
               >
                 <Trash2 className='h-4 w-4 text-red-600' />
-                <span className='text-red-600'>{t('insightsUi.deleteInsight', 'Delete insight')}</span>
+                <span className='text-red-600'>
+                  {t('insightsUi.deleteInsight', 'Delete insight')}
+                </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -768,7 +802,9 @@ export default function InsightDetailsView() {
             ) : (
               <>
                 <div className='flex h-12 shrink-0 items-center justify-between border-b px-4'>
-                  <div className='text-sm font-medium'>{t('insightsUi.aiAssistant', 'AI Assistant')}</div>
+                  <div className='text-sm font-medium'>
+                    {t('insightsUi.aiAssistant', 'AI Assistant')}
+                  </div>
                   <div className='flex items-center gap-1'>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -795,7 +831,11 @@ export default function InsightDetailsView() {
                           size='icon'
                           variant='ghost'
                           className='h-8 w-8'
-                          aria-label={isAiHistoryView ? t('insightsUi.backToChat', 'Back to chat') : t('insightsUi.chatHistory', 'Chat history')}
+                          aria-label={
+                            isAiHistoryView
+                              ? t('insightsUi.backToChat', 'Back to chat')
+                              : t('insightsUi.chatHistory', 'Chat history')
+                          }
                           disabled={isAiBusy}
                           onClick={() => {
                             setIsAiHistoryView(prev => !prev);
@@ -809,7 +849,9 @@ export default function InsightDetailsView() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {isAiHistoryView ? t('insightsUi.backToChat', 'Back to chat') : t('insightsUi.chatHistory', 'Chat history')}
+                        {isAiHistoryView
+                          ? t('insightsUi.backToChat', 'Back to chat')
+                          : t('insightsUi.chatHistory', 'Chat history')}
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -837,7 +879,9 @@ export default function InsightDetailsView() {
                     onRun={handleRun}
                   />
                 ) : (
-                  <div className='text-muted-foreground p-4 text-sm'>{t('insightsUi.noDataMartContext', 'No data mart context.')}</div>
+                  <div className='text-muted-foreground p-4 text-sm'>
+                    {t('insightsUi.noDataMartContext', 'No data mart context.')}
+                  </div>
                 )}
               </>
             )}
@@ -869,14 +913,19 @@ export default function InsightDetailsView() {
                       >
                         <FileText className='h-4 w-4' />
                         {reports.length > 0
-                          ? t('insightsUi.reportsCount', '{{count}} reports', { count: reports.length })
+                          ? t('insightsUi.reportsCount', '{{count}} reports', {
+                              count: reports.length,
+                            })
                           : t('insightsUi.noReports', 'No reports')}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                       {reports.length > 0
                         ? getReportsTooltipText(reports)
-                        : t('insightsUi.noReportsConfigured', 'No reports configured for this Insight yet')}
+                        : t(
+                            'insightsUi.noReportsConfigured',
+                            'No reports configured for this Insight yet'
+                          )}
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -922,7 +971,9 @@ export default function InsightDetailsView() {
                   </ResizablePanel>
                 </ResizablePanelGroup>
                 <div className='bg-muted/50 text-muted-foreground flex h-9 shrink-0 items-center border-t px-3 text-xs'>
-                  {t('insightsUi.dataArtifactsCount', 'Data Artifacts ({{count}}/5)', { count: sources.length })}
+                  {t('insightsUi.dataArtifactsCount', 'Data Artifacts ({{count}}/5)', {
+                    count: sources.length,
+                  })}
                   <Button
                     variant='ghost'
                     size='sm'
@@ -969,10 +1020,14 @@ export default function InsightDetailsView() {
                 ) : (
                   <>
                     <div className='flex h-12 shrink-0 items-center justify-between border-b px-4'>
-                      <div className='text-sm font-medium'>{t('insightsUi.preview', 'Preview')}</div>
+                      <div className='text-sm font-medium'>
+                        {t('insightsUi.preview', 'Preview')}
+                      </div>
                       <div className='flex items-center gap-2'>
                         {runErrorMessage ? (
-                          <span className='text-xs text-red-500'>{t('insightsUi.lastRunFailed', 'Last run failed')}</span>
+                          <span className='text-xs text-red-500'>
+                            {t('insightsUi.lastRunFailed', 'Last run failed')}
+                          </span>
                         ) : null}
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -990,7 +1045,11 @@ export default function InsightDetailsView() {
                               )}
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>{isCopied ? t('insightsUi.copied', 'Copied!') : t('insightsUi.copyMarkdown', 'Copy markdown')}</TooltipContent>
+                          <TooltipContent>
+                            {isCopied
+                              ? t('insightsUi.copied', 'Copied!')
+                              : t('insightsUi.copyMarkdown', 'Copy markdown')}
+                          </TooltipContent>
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -1024,9 +1083,14 @@ export default function InsightDetailsView() {
                             <EmptyMedia variant='icon'>
                               <Bookmark />
                             </EmptyMedia>
-                            <EmptyTitle>{t('insightsUi.readyToExplore', 'Ready to explore your data?')}</EmptyTitle>
+                            <EmptyTitle>
+                              {t('insightsUi.readyToExplore', 'Ready to explore your data?')}
+                            </EmptyTitle>
                             <EmptyDescription>
-                              {t('insightsUi.runToUncover', 'Run the insight to uncover the story behind your data!')}
+                              {t(
+                                'insightsUi.runToUncover',
+                                'Run the insight to uncover the story behind your data!'
+                              )}
                             </EmptyDescription>
                           </EmptyHeader>
                         </Empty>
@@ -1060,7 +1124,10 @@ export default function InsightDetailsView() {
         onOpenChange={setIsDeleteDialogOpen}
         onConfirm={() => void handleDelete()}
         title={t('insightsUi.deleteInsightTitle', 'Delete insight')}
-        description={t('insightsUi.deleteInsightDescription', 'This action cannot be undone. Delete this insight?')}
+        description={t(
+          'insightsUi.deleteInsightDescription',
+          'This action cannot be undone. Delete this insight?'
+        )}
         confirmLabel={t('common.delete', 'Delete')}
         variant='destructive'
       />

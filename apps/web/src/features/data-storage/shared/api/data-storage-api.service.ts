@@ -37,8 +37,8 @@ export class DataStorageApiService extends ApiService {
    *
    * @return {Promise<DataStorageListResponseDto>} A promise that resolves to an object representing the list of data storages.
    */
-  async getDataStorages(): Promise<DataStorageListResponseDto> {
-    return this.get<DataStorageListResponseDto>('/');
+  async getDataStorages(config?: AxiosRequestConfig): Promise<DataStorageListResponseDto> {
+    return this.get<DataStorageListResponseDto>('/', undefined, config);
   }
 
   /**
@@ -47,8 +47,11 @@ export class DataStorageApiService extends ApiService {
    * @param {string} id - The unique identifier of the data storage to retrieve.
    * @return {Promise<DataStorageResponseDto>} A promise resolving to the details of the requested data storage.
    */
-  async getDataStorageById(id: string): Promise<DataStorageResponseDto> {
-    return this.get<DataStorageResponseDto>(`/${id}`);
+  async getDataStorageById(
+    id: string,
+    config?: AxiosRequestConfig
+  ): Promise<DataStorageResponseDto> {
+    return this.get<DataStorageResponseDto>(`/${id}`, undefined, config);
   }
 
   /**

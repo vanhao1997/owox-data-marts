@@ -27,6 +27,9 @@ export class ConnectorSourceCredentials {
   @Column({ nullable: true })
   configId?: string;
 
+  @Column({ type: 'varchar', length: 20, default: 'oauth' })
+  kind: 'oauth' | 'secret';
+
   @Column({ type: 'json' })
   credentials: Record<string, unknown>;
 

@@ -1,19 +1,39 @@
+import { lazy, Suspense } from 'react';
+import type { ReactNode } from 'react';
 import { Navigate, type RouteObject } from 'react-router';
 import MainLayout from '../layouts/MainLayout';
 import About from '../pages/About';
 import NotFound from '../pages/NotFound';
-import DataMartsPage from '../pages/data-marts/list/DataMartsPage.tsx';
-import DataMartInsightsPage from '../pages/data-marts/insights/DataMartInsightsPage.tsx';
-import DataMartReportsPage from '../pages/data-marts/reports/DataMartReportsPage.tsx';
-import DataMartRunsPage from '../pages/data-marts/runs/DataMartRunsPage.tsx';
-import DataMartSchedulesPage from '../pages/data-marts/schedules/DataMartSchedulesPage.tsx';
-import ModelCanvasPage from '../pages/data-marts/model-canvas/ModelCanvasPage.tsx';
-import { DataMartDetailsPage } from '../pages/data-marts/edit';
-import CreateDataMartPage from '../pages/data-marts/create/CreateDataMartPage.tsx';
-import { DataStorageListPage } from '../pages/data-storage';
-import { DataDestinationListPage } from '../pages/data-destination/DataDestinationListPage';
+const DataMartsPage = lazy(() => import('../pages/data-marts/list/DataMartsPage.tsx'));
+const DataMartInsightsPage = lazy(
+  () => import('../pages/data-marts/insights/DataMartInsightsPage.tsx')
+);
+const DataMartReportsPage = lazy(
+  () => import('../pages/data-marts/reports/DataMartReportsPage.tsx')
+);
+const DataMartRunsPage = lazy(() => import('../pages/data-marts/runs/DataMartRunsPage.tsx'));
+const DataMartSchedulesPage = lazy(
+  () => import('../pages/data-marts/schedules/DataMartSchedulesPage.tsx')
+);
+const ModelCanvasPage = lazy(() => import('../pages/data-marts/model-canvas/ModelCanvasPage.tsx'));
+const DataMartDetailsPage = lazy(() =>
+  import('../pages/data-marts/edit').then(module => ({ default: module.DataMartDetailsPage }))
+);
+const CreateDataMartPage = lazy(() => import('../pages/data-marts/create/CreateDataMartPage.tsx'));
+const DataStorageListPage = lazy(() =>
+  import('../pages/data-storage').then(module => ({ default: module.DataStorageListPage }))
+);
+const DataDestinationListPage = lazy(() =>
+  import('../pages/data-destination/DataDestinationListPage').then(module => ({
+    default: module.DataDestinationListPage,
+  }))
+);
 import { ProjectSettingsPage } from '../pages/project-settings/ProjectSettingsPage';
-import { ProjectNotificationsPage } from '../pages/notifications/project';
+const ProjectNotificationsPage = lazy(() =>
+  import('../pages/notifications/project').then(module => ({
+    default: module.ProjectNotificationsPage,
+  }))
+);
 import { RequestAccessPage } from '../pages/request-access/RequestAccessPage';
 import { LegacyRequestAccessRedirect } from '../pages/request-access/LegacyRequestAccessRedirect';
 import { dataMartDetailsRoutes } from './data-marts/routes';
@@ -24,11 +44,24 @@ import { RootErrorBoundary, LayoutErrorBoundary } from '../components/errors';
 import { MyApiKeysPage } from '../features/api-keys/pages/MyApiKeysPage';
 import { SearchPage } from '../pages/search/SearchPage';
 import { ConnectFlowLayout } from '../layouts/ConnectFlowLayout';
-import { ConnectGoogleSheetsPage } from '../pages/connect/ConnectGoogleSheetsPage';
-import { ConnectGoogleSheetsDonePage } from '../pages/connect/ConnectGoogleSheetsDonePage';
+const ConnectGoogleSheetsPage = lazy(() =>
+  import('../pages/connect/ConnectGoogleSheetsPage').then(module => ({
+    default: module.ConnectGoogleSheetsPage,
+  }))
+);
+const ConnectGoogleSheetsDonePage = lazy(() =>
+  import('../pages/connect/ConnectGoogleSheetsDonePage').then(module => ({
+    default: module.ConnectGoogleSheetsDonePage,
+  }))
+);
 import { pluginsRoutes } from './plugins/routes';
 import { ProjectsPage } from '../pages/projects/ProjectsPage';
 import { AuthGuard } from '../features/idp/components/AuthGuard';
+import { RouteLoading } from './RouteLoading';
+
+function lazyElement(element: ReactNode) {
+  return <Suspense fallback={<RouteLoading />}>{element}</Suspense>;
+}
 
 const routes: RouteObject[] = [
   {
@@ -63,59 +96,59 @@ const routes: RouteObject[] = [
       },
       {
         index: true,
-        element: <DataMartsPage />,
+        element: lazyElement(<DataMartsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       ...pluginsRoutes,
       {
         path: 'data-marts',
-        element: <DataMartsPage />,
+        element: lazyElement(<DataMartsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/create',
-        element: <CreateDataMartPage />,
+        element: lazyElement(<CreateDataMartPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/runs',
-        element: <DataMartRunsPage />,
+        element: lazyElement(<DataMartRunsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/schedules',
-        element: <DataMartSchedulesPage />,
+        element: lazyElement(<DataMartSchedulesPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/reports',
-        element: <DataMartReportsPage />,
+        element: lazyElement(<DataMartReportsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/insights',
-        element: <DataMartInsightsPage />,
+        element: lazyElement(<DataMartInsightsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/models',
-        element: <ModelCanvasPage />,
+        element: lazyElement(<ModelCanvasPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-marts/:id',
-        element: <DataMartDetailsPage />,
+        element: lazyElement(<DataMartDetailsPage />),
         errorElement: <LayoutErrorBoundary />,
         children: dataMartDetailsRoutes,
       },
       {
         path: 'data-storages',
-        element: <DataStorageListPage />,
+        element: lazyElement(<DataStorageListPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'data-destinations',
-        element: <DataDestinationListPage />,
+        element: lazyElement(<DataDestinationListPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
@@ -149,7 +182,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'notifications',
-        element: <ProjectNotificationsPage />,
+        element: lazyElement(<ProjectNotificationsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
@@ -165,12 +198,12 @@ const routes: RouteObject[] = [
     children: [
       {
         path: 'google-sheets',
-        element: <ConnectGoogleSheetsPage />,
+        element: lazyElement(<ConnectGoogleSheetsPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'google-sheets/done',
-        element: <ConnectGoogleSheetsDonePage />,
+        element: lazyElement(<ConnectGoogleSheetsDonePage />),
         errorElement: <LayoutErrorBoundary />,
       },
     ],

@@ -54,6 +54,7 @@ export function ReportActionsCell({
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const { deleteReport, fetchReportsByDataMartId, runReport } = useReport();
 
@@ -67,8 +68,9 @@ export function ReportActionsCell({
 
   // Memoize delete handler to avoid unnecessary re-renders
   const handleDelete = useCallback(async () => {
-    if (!canEditConfig) return;
+    if (!canEditConfig || isDeleting) return;
 
+    setIsDeleting(true);
     try {
       await deleteReport(row.original.id);
       await fetchReportsByDataMartId(row.original.dataMart.id);
@@ -76,11 +78,14 @@ export function ReportActionsCell({
       setIsDeleteDialogOpen(false);
     } catch (error) {
       console.error('Failed to delete Google Sheet:', error);
+    } finally {
+      setIsDeleting(false);
     }
   }, [
     deleteReport,
     fetchReportsByDataMartId,
     canEditConfig,
+    isDeleting,
     onDeleteSuccess,
     row.original.id,
     row.original.dataMart.id,
@@ -186,7 +191,9 @@ export function ReportActionsCell({
             className={`dm-card-table-body-row-actionbtn opacity-0 transition-opacity ${
               menuOpen ? 'opacity-100' : 'group-hover:opacity-100'
             }`}
-            aria-label={t('reportsUi.actionsForReport', 'Actions for report: {{title}}', { title: row.original.title })}
+            aria-label={t('reportsUi.actionsForReport', 'Actions for report: {{title}}', {
+              title: row.original.title,
+            })}
             aria-haspopup='true'
             aria-expanded={menuOpen}
             aria-controls={actionsMenuId}
@@ -205,13 +212,19 @@ export function ReportActionsCell({
           >
             <Play className='text-foreground h-4 w-4' aria-hidden='true' />
             <div className='flex flex-col'>
-            <span>{isRunning ? t('reportActions.running', 'Running report...') : t('reportActions.run', 'Run report')}</span>
-              {localizedPullRunHint && <span className='text-muted-foreground text-xs'>{localizedPullRunHint}</span>}
+              <span>
+                {isRunning
+                  ? t('reportActions.running', 'Running report...')
+                  : t('reportActions.run', 'Run report')}
+              </span>
+              {localizedPullRunHint && (
+                <span className='text-muted-foreground text-xs'>{localizedPullRunHint}</span>
+              )}
             </div>
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            disabled={!canEditConfig}
+            disabled={!canEditConfig || isDeleting}
             onClick={e => {
               e.stopPropagation();
               handleEdit();
@@ -237,7 +250,11 @@ export function ReportActionsCell({
                 void handleReconnectSheet();
               }}
               role='menuitem'
-              aria-label={t('reportsUi.reconnectSheetAndRun', 'Reconnect sheet and run report: {{title}}', { title: row.original.title })}
+              aria-label={t(
+                'reportsUi.reconnectSheetAndRun',
+                'Reconnect sheet and run report: {{title}}',
+                { title: row.original.title }
+              )}
             >
               <Link2 className='text-foreground h-4 w-4' aria-hidden='true' />
               {isReconnecting
@@ -255,7 +272,9 @@ export function ReportActionsCell({
               handleDeleteClick();
             }}
             role='menuitem'
-            aria-label={t('reportsUi.deleteReportAria', 'Delete report: {{title}}', { title: row.original.title })}
+            aria-label={t('reportsUi.deleteReportAria', 'Delete report: {{title}}', {
+              title: row.original.title,
+            })}
           >
             <Trash2 className='h-4 w-4 text-red-600' aria-hidden='true' />
             <span className='text-red-600'>{t('reportActions.delete', 'Delete report')}</span>
@@ -269,9 +288,13 @@ export function ReportActionsCell({
         title={t('reportActions.deleteTitle', 'Delete Report')}
         description={
           <p className='break-words'>
-            {t('reportActions.deleteDescription', 'Are you sure you want to delete "{{title}}"? This action cannot be undone.', {
-              title: row.original.title,
-            })}
+            {t(
+              'reportActions.deleteDescription',
+              'Are you sure you want to delete "{{title}}"? This action cannot be undone.',
+              {
+                title: row.original.title,
+              }
+            )}
           </p>
         }
         confirmLabel={t('common.delete', 'Delete')}
@@ -279,6 +302,7 @@ export function ReportActionsCell({
         onConfirm={() => {
           void handleDelete();
         }}
+        confirmDisabled={isDeleting}
         variant='destructive'
       />
     </div>

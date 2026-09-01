@@ -21,17 +21,25 @@ export function ConfigurationSecretField({
   const displayName = specification.title ?? specification.name;
   const isReadonly = isEditingExisting && !isSecretEditing;
 
+  const marker = configuration[specification.name];
+  const isVariableReference = Boolean(
+    marker && typeof marker === 'object' && !Array.isArray(marker)
+  );
   return (
     <Input
       id={specification.name}
       {...(!isReadonly ? { name: specification.name } : {})}
-      type={isReadonly ? 'password' : 'text'}
+      type={isReadonly || isVariableReference ? 'password' : 'text'}
       autoComplete={isReadonly ? 'new-password' : 'off'}
       autoCorrect='off'
       autoCapitalize='off'
       spellCheck={false}
-      value={isReadonly ? SECRET_MASK : (configuration[specification.name] as string) || ''}
-      {...(isReadonly ? { readOnly: true, disabled: true } : {})}
+      value={
+        isReadonly || isVariableReference
+          ? SECRET_MASK
+          : (configuration[specification.name] as string) || ''
+      }
+      {...(isReadonly || isVariableReference ? { readOnly: true, disabled: true } : {})}
       {...(!isReadonly
         ? { placeholder: specification.placeholder ?? `Enter ${displayName.toLowerCase()}` }
         : {})}

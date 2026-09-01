@@ -21,7 +21,7 @@ import { useInsightsPermissions } from '../hooks/useInsightsPermissions';
 export const InsightsEmptyState = () => {
   const { t } = useTranslation();
   const { handleCreateInsight, handleCreateInsightWithAi, insightLoading } = useInsights();
-  const { canCreate, canGenerateAI } = useInsightsPermissions();
+  const { canCreate, canGenerateAI } = useInsightsPermissions(true);
 
   return (
     <Empty>

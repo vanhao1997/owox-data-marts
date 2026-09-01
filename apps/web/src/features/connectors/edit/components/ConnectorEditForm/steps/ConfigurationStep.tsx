@@ -13,6 +13,7 @@ import { Unplug } from 'lucide-react';
 import { SECRET_MASK } from '../../../../../../shared/constants/secrets';
 import { ConfigurationListRender } from './ConfigurationStep/ConfigurationListRender';
 import { CopyConfigurationButton } from '../../../../../data-marts/edit/components/DataMartDefinitionSettings/form/CopyConfigurationButton';
+import { VariablePicker } from './ConfigurationStep/VariablePicker';
 import type { CopiedConfiguration } from '../../../../../data-marts/edit/model/types';
 import { trackEvent } from '../../../../../../utils';
 import { ConnectorSpecificationAttribute } from '../../../../shared/enums/connector-specification-attribute.enum';
@@ -34,6 +35,17 @@ interface ConfigurationStepProps {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isVariableMarker(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  const keys = Object.keys(value);
+  return (
+    keys.length === 1 &&
+    ['_variable_id', '_secrets_variable_id', '_credential_variable_id'].includes(keys[0]) &&
+    typeof value[keys[0]] === 'string' &&
+    value[keys[0]] !== ''
+  );
 }
 
 function isTopLevelMigrationTarget(spec: ConnectorSpecificationResponseApiDto): boolean {
@@ -182,6 +194,7 @@ export function ConfigurationStep({
 
   const validateValue = useCallback(
     (value: unknown, spec?: ConnectorSpecificationResponseApiDto): boolean => {
+      if (isVariableMarker(value)) return true;
       if (value === null || value === undefined) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'number') {
@@ -199,7 +212,10 @@ export function ConfigurationStep({
     (value: unknown, spec: ConnectorSpecificationResponseApiDto): boolean => {
       if (typeof value !== 'object' || value === null) return validateValue(value, spec);
 
-      if (spec.attributes?.includes('OAUTH_FLOW') && '_source_credential_id' in value) {
+      if (
+        spec.attributes?.includes('OAUTH_FLOW') &&
+        ('_source_credential_id' in value || '_credential_variable_id' in value)
+      ) {
         return true;
       }
 
@@ -211,7 +227,10 @@ export function ConfigurationStep({
           if (oneOf.attributes?.includes('OAUTH_FLOW')) {
             const oneOfValue = (value as Record<string, unknown>)[oneOf.value];
             if (typeof oneOfValue === 'object' && oneOfValue !== null) {
-              if ('_source_credential_id' in oneOfValue) {
+              if (
+                '_source_credential_id' in oneOfValue ||
+                '_credential_variable_id' in oneOfValue
+              ) {
                 return true;
               }
               const requiredItems = Object.entries(oneOf.items).filter(([, item]) => item.required);
@@ -348,6 +367,19 @@ export function ConfigurationStep({
         <StepperHeroBlock connector={connector} />
         <fieldset disabled={disabled} className='min-w-0'>
           <AppWizardStepSection>
+            <div className='mb-3 flex items-center justify-end'>
+              <VariablePicker
+                connectorName={connector.name}
+                kind='secret_reference'
+                value={configuration._secrets_id}
+                onSelect={variableId => {
+                  setConfiguration(previous => ({
+                    ...previous,
+                    _secrets_id: variableId ? { _secrets_variable_id: variableId } : undefined,
+                  }));
+                }}
+              />
+            </div>
             <div className='flex items-center justify-between'>
               <h3 className='text-muted-foreground/75 text-xs font-semibold tracking-wide uppercase'>
                 Configure Settings

@@ -26,6 +26,9 @@ interface DataStorageTableProps<TData, TValue> {
   data: TData[];
   onEdit?: (id: string) => Promise<void>;
   onOpenTypeDialog?: () => void;
+  isLoading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
 }
 
 export function DataStorageTable<TData, TValue>({
@@ -33,6 +36,9 @@ export function DataStorageTable<TData, TValue>({
   data,
   onEdit,
   onOpenTypeDialog,
+  isLoading = false,
+  error,
+  onRetry,
 }: DataStorageTableProps<TData, TValue>) {
   const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
@@ -87,44 +93,86 @@ export function DataStorageTable<TData, TValue>({
     return (
       <div className='flex flex-col gap-0.5'>
         <div className='dm-card'>
-          <EmptyDataStoragesState onOpenTypeDialog={onOpenTypeDialog} />
+          {isLoading ? (
+            <div className='text-muted-foreground p-6 text-center text-sm'>
+              {t('common.loading', 'Loading...')}
+            </div>
+          ) : error ? (
+            <div className='flex flex-col items-center gap-3 p-6 text-center text-sm'>
+              <p className='text-muted-foreground'>{error}</p>
+              {onRetry && (
+                <button
+                  type='button'
+                  className='border-input hover:bg-muted rounded-md border px-3 py-1.5 transition-colors'
+                  onClick={onRetry}
+                >
+                  {t('common.retry', 'Retry')}
+                </button>
+              )}
+            </div>
+          ) : (
+            <EmptyDataStoragesState onOpenTypeDialog={onOpenTypeDialog} />
+          )}
         </div>
-        <InviteTeammatesCard
-          hint={t('storagesPage.inviteHint')}
-          docsLabel={t('storagesPage.learnMore')}
-          docsHref='https://docs.p2pdigital.io.vn/docs/storages/manage-storages/'
-        />
+        {!isLoading && !error && (
+          <InviteTeammatesCard
+            hint={t('storagesPage.inviteHint')}
+            docsLabel={t('storagesPage.learnMore')}
+            docsHref='https://docs.p2pdigital.io.vn/docs/storages/manage-storages/'
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div className='dm-card' data-testid='storageTable'>
-      <BaseTable
-        tableId={tableId}
-        table={table}
-        onRowClick={handleRowClick}
-        ariaLabel={t('storagesPage.tableAriaLabel', 'Storages table')}
-        paginationProps={{ displaySelected: false }}
-        renderToolbarLeft={() => (
-          <>
-            <DataStorageTableFilters
-              appliedState={appliedState}
-              config={filtersConfig}
-              onApply={apply}
-              onClear={clear}
-            />
-            <TableColumnSearch
-              table={table}
-              columnId={DataStorageColumnKey.TITLE}
-              placeholder={t('search.button')}
-            />
-          </>
-        )}
-        renderToolbarRight={() => (
-          <TableCTAButton onClick={onOpenTypeDialog}>{t('storagesPage.newStorage')}</TableCTAButton>
-        )}
-      />
+    <div className='flex flex-col gap-4'>
+      {error && (
+        <div
+          className='dm-card-block flex items-center justify-between gap-3 text-sm'
+          role='status'
+        >
+          <span className='text-muted-foreground'>{error}</span>
+          {onRetry && (
+            <button
+              type='button'
+              className='text-primary font-medium underline underline-offset-4'
+              onClick={onRetry}
+            >
+              {t('common.retry', 'Retry')}
+            </button>
+          )}
+        </div>
+      )}
+      <div className='dm-card' data-testid='storageTable'>
+        <BaseTable
+          tableId={tableId}
+          table={table}
+          onRowClick={handleRowClick}
+          ariaLabel={t('storagesPage.tableAriaLabel', 'Storages table')}
+          paginationProps={{ displaySelected: false }}
+          renderToolbarLeft={() => (
+            <>
+              <DataStorageTableFilters
+                appliedState={appliedState}
+                config={filtersConfig}
+                onApply={apply}
+                onClear={clear}
+              />
+              <TableColumnSearch
+                table={table}
+                columnId={DataStorageColumnKey.TITLE}
+                placeholder={t('search.button')}
+              />
+            </>
+          )}
+          renderToolbarRight={() => (
+            <TableCTAButton onClick={onOpenTypeDialog}>
+              {t('storagesPage.newStorage')}
+            </TableCTAButton>
+          )}
+        />
+      </div>
     </div>
   );
 }

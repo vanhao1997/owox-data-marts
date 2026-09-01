@@ -4,6 +4,10 @@ import { ConnectorCredentialInjectorService } from './connector-credential-injec
 import { ConnectorSourceCredentialsService } from './connector-source-credentials.service';
 import { ConnectorPreviewCredentialsService } from './connector-preview-credentials.service';
 
+jest.mock('./connector-credential-injector.service', () => ({
+  ConnectorCredentialInjectorService: jest.fn(),
+}));
+
 describe('ConnectorPreviewCredentialsService', () => {
   const context: AuthorizationContext = {
     projectId: 'proj-1',
@@ -11,9 +15,10 @@ describe('ConnectorPreviewCredentialsService', () => {
     roles: ['editor'],
   };
 
-  const createService = () => {
+  const createService = (variableResolver?: { resolveConnectorConfig: jest.Mock }) => {
     const credentialInjector = {
       injectSecrets: jest.fn().mockImplementation(config => Promise.resolve(config)),
+      injectOAuthCredentials: jest.fn().mockImplementation(config => Promise.resolve(config)),
     } as unknown as ConnectorCredentialInjectorService;
     const credentials = {
       getCredentialsById: jest.fn(),
@@ -23,7 +28,12 @@ describe('ConnectorPreviewCredentialsService', () => {
     } as unknown as AccessDecisionService;
 
     return {
-      service: new ConnectorPreviewCredentialsService(credentialInjector, credentials, access),
+      service: new ConnectorPreviewCredentialsService(
+        credentialInjector,
+        credentials,
+        access,
+        variableResolver as never
+      ),
       credentialInjector,
       credentials,
       access,
@@ -104,5 +114,35 @@ describe('ConnectorPreviewCredentialsService', () => {
     );
     expect(credentials.getCredentialsById).not.toHaveBeenCalled();
     expect(access.canAccess).not.toHaveBeenCalled();
+  });
+
+  it('resolves saved OAuth variable references before preview injection', async () => {
+    const variableResolver = { resolveConnectorConfig: jest.fn() };
+    variableResolver.resolveConnectorConfig.mockResolvedValue({
+      _id: 'config-1',
+      _source_credential_id: 'oauth-1',
+    });
+    const { service, credentialInjector } = createService(variableResolver);
+
+    await expect(
+      service.inject(
+        'GoogleAds',
+        { _id: 'config-1', AuthType: { _credential_variable_id: 'variable-1' } },
+        context
+      )
+    ).resolves.toEqual({
+      _id: 'config-1',
+      _source_credential_id: 'oauth-1',
+    });
+    expect(variableResolver.resolveConnectorConfig).toHaveBeenCalledWith(
+      { _id: 'config-1', AuthType: { _credential_variable_id: 'variable-1' } },
+      'proj-1',
+      'GoogleAds'
+    );
+    expect(credentialInjector.injectOAuthCredentials).toHaveBeenCalledWith(
+      { _id: 'config-1', _source_credential_id: 'oauth-1' },
+      'GoogleAds',
+      'proj-1'
+    );
   });
 });

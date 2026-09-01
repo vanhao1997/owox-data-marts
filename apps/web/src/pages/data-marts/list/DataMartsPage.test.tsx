@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
 import { fireEvent, render, screen } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import DataMartsPage from './DataMartsPage';
@@ -13,6 +14,11 @@ const mocks = vi.hoisted(() => ({
   loadDataMarts: vi.fn().mockResolvedValue(undefined),
   refreshList: vi.fn().mockResolvedValue(undefined),
   fetchAvailableConnectors: vi.fn().mockResolvedValue(undefined),
+  getDataMarts: vi.fn().mockResolvedValue([]),
+}));
+
+vi.mock('../../../features/data-marts/shared', () => ({
+  dataMartService: { getDataMarts: mocks.getDataMarts },
 }));
 
 vi.mock('../../../features/data-marts/list', () => ({
@@ -93,9 +99,13 @@ describe('DataMartsPage Data Quality activity', () => {
       mocks.summaries = { 'visible-mart': { state } };
 
       render(
-        <MemoryRouter>
-          <DataMartsPage />
-        </MemoryRouter>
+        <QueryClientProvider
+          client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+        >
+          <MemoryRouter>
+            <DataMartsPage />
+          </MemoryRouter>
+        </QueryClientProvider>
       );
       fireEvent.click(screen.getByRole('button', { name: 'Report visible rows' }));
 
@@ -114,9 +124,13 @@ describe('DataMartsPage Data Quality activity', () => {
     };
 
     render(
-      <MemoryRouter>
-        <DataMartsPage />
-      </MemoryRouter>
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+      >
+        <MemoryRouter>
+          <DataMartsPage />
+        </MemoryRouter>
+      </QueryClientProvider>
     );
     fireEvent.click(screen.getByRole('button', { name: 'Report visible rows' }));
 

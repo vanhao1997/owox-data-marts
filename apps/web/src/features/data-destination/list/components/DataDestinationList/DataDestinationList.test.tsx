@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthStatus } from '../../../../../features/idp/types';
@@ -104,6 +105,18 @@ describe('DataDestinationList', () => {
     });
   });
 
+  function renderList() {
+    return render(
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+      >
+        <MemoryRouter initialEntries={['/ui/project-1/data-destinations']}>
+          <DataDestinationList />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+  }
+
   it('links blocked destination reports to the project reports page filtered by destination', async () => {
     vi.mocked(dataDestinationService.getDataDestinationImpact).mockResolvedValueOnce({
       destinationId: 'destination-1',
@@ -112,11 +125,7 @@ describe('DataDestinationList', () => {
       dataMartCount: 2,
     });
 
-    render(
-      <MemoryRouter initialEntries={['/ui/project-1/data-destinations']}>
-        <DataDestinationList />
-      </MemoryRouter>
-    );
+    renderList();
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete [Ok OAuth] Sheets' }));
 
@@ -159,11 +168,7 @@ describe('DataDestinationList', () => {
       rotateSecretKey: vi.fn(),
     });
 
-    render(
-      <MemoryRouter initialEntries={['/ui/project-1/data-destinations']}>
-        <DataDestinationList />
-      </MemoryRouter>
-    );
+    renderList();
 
     fireEvent.click(screen.getByRole('button', { name: 'Edit [Ok OAuth] Sheets' }));
 

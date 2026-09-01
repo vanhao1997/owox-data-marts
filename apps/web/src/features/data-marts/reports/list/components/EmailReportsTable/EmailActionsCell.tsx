@@ -35,6 +35,7 @@ export function EmailActionsCell({
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { deleteReport, fetchReportsByDataMartId, runReport } = useReport();
 
@@ -45,8 +46,9 @@ export function EmailActionsCell({
   }, [row.original.lastRunStatus]);
 
   const handleDelete = useCallback(async () => {
-    if (!canEditConfig) return;
+    if (!canEditConfig || isDeleting) return;
 
+    setIsDeleting(true);
     try {
       await deleteReport(row.original.id);
       await fetchReportsByDataMartId(row.original.dataMart.id);
@@ -54,11 +56,14 @@ export function EmailActionsCell({
       setIsDeleteDialogOpen(false);
     } catch (error) {
       console.error('Failed to delete report:', error);
+    } finally {
+      setIsDeleting(false);
     }
   }, [
     deleteReport,
     fetchReportsByDataMartId,
     canEditConfig,
+    isDeleting,
     onDeleteSuccess,
     row.original.id,
     row.original.dataMart.id,
@@ -130,11 +135,13 @@ export function EmailActionsCell({
             role='menuitem'
           >
             <Play className='text-foreground h-4 w-4' aria-hidden='true' />
-            {isRunning ? t('reportActions.running', 'Running report...') : t('reportActions.run', 'Run report')}
+            {isRunning
+              ? t('reportActions.running', 'Running report...')
+              : t('reportActions.run', 'Run report')}
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            disabled={!canEditConfig}
+            disabled={!canEditConfig || isDeleting}
             onClick={e => {
               e.stopPropagation();
               handleEdit();
@@ -168,9 +175,13 @@ export function EmailActionsCell({
         title={t('reportActions.deleteTitle', 'Delete Report')}
         description={
           <p className='break-words'>
-            {t('reportActions.deleteDescription', 'Are you sure you want to delete "{{title}}"? This action cannot be undone.', {
-              title: row.original.title,
-            })}
+            {t(
+              'reportActions.deleteDescription',
+              'Are you sure you want to delete "{{title}}"? This action cannot be undone.',
+              {
+                title: row.original.title,
+              }
+            )}
           </p>
         }
         confirmLabel={t('common.delete', 'Delete')}
@@ -178,6 +189,7 @@ export function EmailActionsCell({
         onConfirm={() => {
           void handleDelete();
         }}
+        confirmDisabled={isDeleting}
         variant='destructive'
       />
     </div>

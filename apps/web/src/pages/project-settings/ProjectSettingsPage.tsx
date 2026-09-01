@@ -88,7 +88,9 @@ export function ProjectSettingsPage() {
       // is indistinguishable from "this project really has no members /
       // contexts". Surface the error so the admin knows to retry.
       setError(
-        err instanceof Error ? err.message : t('projectSettingsPage.loadFailed', 'Failed to load project data')
+        err instanceof Error
+          ? err.message
+          : t('projectSettingsPage.loadFailed', 'Failed to load project data')
       );
     } finally {
       setLoading(false);
@@ -139,25 +141,38 @@ export function ProjectSettingsPage() {
         );
         if (refreshed.magicLink) {
           await navigator.clipboard.writeText(refreshed.magicLink);
-          toast.success(t('projectSettingsPage.newInvitationCopied', 'New invitation link copied to clipboard'));
+          toast.success(
+            t('projectSettingsPage.newInvitationCopied', 'New invitation link copied to clipboard')
+          );
         }
         await loadData();
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : t('projectSettingsPage.resendFailed', 'Failed to resend invitation'));
+        toast.error(
+          err instanceof Error
+            ? err.message
+            : t('projectSettingsPage.resendFailed', 'Failed to resend invitation')
+        );
       }
     },
     [loadData, t]
   );
 
-  const handleCopyInvitation = useCallback(async (invitation: PendingProjectInvitation) => {
-    if (!invitation.magicLink) return;
-    try {
-      await navigator.clipboard.writeText(invitation.magicLink);
-      toast.success(t('projectSettingsPage.invitationCopied', 'Invitation link copied to clipboard'));
-    } catch {
-      toast.error(t('projectSettingsPage.copyInvitationFailed', 'Failed to copy invitation link'));
-    }
-  }, [t]);
+  const handleCopyInvitation = useCallback(
+    async (invitation: PendingProjectInvitation) => {
+      if (!invitation.magicLink) return;
+      try {
+        await navigator.clipboard.writeText(invitation.magicLink);
+        toast.success(
+          t('projectSettingsPage.invitationCopied', 'Invitation link copied to clipboard')
+        );
+      } catch {
+        toast.error(
+          t('projectSettingsPage.copyInvitationFailed', 'Failed to copy invitation link')
+        );
+      }
+    },
+    [t]
+  );
 
   const navigation: TabLink[] = [
     { name: t('projectSettingsPage.tabs.overview', 'Overview'), path: '.', end: true },
@@ -165,14 +180,33 @@ export function ProjectSettingsPage() {
     { name: t('projectSettingsPage.tabs.contexts', 'Contexts'), path: 'contexts', end: false },
     ...(isOwoxIdpProvider
       ? [
-          { name: t('projectSettingsPage.tabs.credit', 'Credit consumption'), path: 'credit', end: false },
-          { name: t('projectSettingsPage.tabs.subscription', 'Subscription'), path: 'subscription', end: false },
+          {
+            name: t('projectSettingsPage.tabs.credit', 'Credit consumption'),
+            path: 'credit',
+            end: false,
+          },
+          {
+            name: t('projectSettingsPage.tabs.subscription', 'Subscription'),
+            path: 'subscription',
+            end: false,
+          },
         ]
       : []),
     ...(licenseKeysEnabled
-      ? [{ name: t('projectSettingsPage.tabs.licenseKeys', 'License keys'), path: 'license-keys', end: false }]
+      ? [
+          {
+            name: t('projectSettingsPage.tabs.licenseKeys', 'License keys'),
+            path: 'license-keys',
+            end: false,
+          },
+        ]
       : []),
-    { name: t('projectSettingsPage.tabs.notifications', 'Notifications'), path: 'notifications', end: false },
+    {
+      name: t('projectSettingsPage.tabs.notifications', 'Notifications'),
+      path: 'notifications',
+      end: false,
+    },
+    { name: t('projectSettingsPage.tabs.variables', 'Variables'), path: 'variables', end: false },
   ];
 
   // Stabilize the context value object so consumers do not re-render every
@@ -215,7 +249,9 @@ export function ProjectSettingsPage() {
     <MembersSettingsProvider value={providerValue}>
       <div className='min-w-[600px] px-12 py-6'>
         <div className='mb-4 flex items-center gap-4'>
-          <span className='text-2xl font-medium'>{t('projectSettingsPage.title', 'Project settings')}</span>
+          <span className='text-2xl font-medium'>
+            {t('projectSettingsPage.title', 'Project settings')}
+          </span>
         </div>
 
         <nav
@@ -245,7 +281,9 @@ export function ProjectSettingsPage() {
         {error !== null && (
           <Alert variant='destructive' className='mt-4'>
             <AlertCircle className='h-4 w-4' />
-            <AlertTitle>{t('projectSettingsPage.loadFailed', 'Could not load project data')}</AlertTitle>
+            <AlertTitle>
+              {t('projectSettingsPage.loadFailed', 'Could not load project data')}
+            </AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
@@ -253,14 +291,17 @@ export function ProjectSettingsPage() {
         <div className='pt-4'>
           {isAdmin && pendingInvitations.length > 0 && (
             <div className='mb-4 rounded-md border p-3 text-sm'>
-              <div className='mb-2 font-medium'>{t('projectSettingsPage.pendingInvitations', 'Pending invitations')}</div>
+              <div className='mb-2 font-medium'>
+                {t('projectSettingsPage.pendingInvitations', 'Pending invitations')}
+              </div>
               {pendingInvitations.map(invitation => (
                 <div
                   key={invitation.invitationId ?? invitation.email}
                   className='flex items-center justify-between border-t py-2'
                 >
                   <span>
-                    {invitation.email} · {invitation.role} · {t('projectSettingsPage.expires', 'expires')}{' '}
+                    {invitation.email} · {invitation.role} ·{' '}
+                    {t('projectSettingsPage.expires', 'expires')}{' '}
                     {invitation.expiresAt
                       ? new Date(invitation.expiresAt).toLocaleDateString()
                       : t('projectSettingsPage.soon', 'soon')}

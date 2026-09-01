@@ -1,70 +1,115 @@
+import { lazy, Suspense, type ReactNode } from 'react';
 import type { RouteObject } from 'react-router';
-import DataMartOverviewContent from '../../pages/data-marts/edit/DataMartOverviewContent.tsx';
-import DataMartDataSetupContent from '../../pages/data-marts/edit/DataMartDataSetupContent.tsx';
-import DataMartQualityContent from '../../pages/data-marts/edit/DataMartQualityContent.tsx';
-import DataMartDestinationsContent from '../../pages/data-marts/edit/DataMartDestinationsContent.tsx';
-import DataMartRunHistoryContent from '../../pages/data-marts/edit/DataMartRunHistoryContent.tsx';
-import DataMartInsightsContent from '../../pages/data-marts/edit/DataMartInsightsContent.tsx';
-import DataMartNextInsightsContent from '../../pages/data-marts/edit/DataMartNextInsightsContent.tsx';
-import DataMartTriggersContent from '../../pages/data-marts/edit/DataMartTriggersContent.tsx';
-import PrevInsightsListView from '../../features/data-marts/insights-prev/components/InsightsListView.tsx';
-import PrevInsightDetailsView from '../../features/data-marts/insights-prev/components/InsightDetailsView.tsx';
-import InsightsListView from '../../features/data-marts/insights/components/InsightsListView.tsx';
-import InsightDetailsView from '../../features/data-marts/insights/components/InsightDetailsView.tsx';
 import { LayoutErrorBoundary } from '../../components/errors';
+import { InsightsV2Redirect } from './InsightsV2Redirect';
+
+const DataMartOverviewContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartOverviewContent')
+);
+const DataMartDataSetupContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartDataSetupContent')
+);
+const DataMartQualityContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartQualityContent')
+);
+const DataMartDestinationsContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartDestinationsContent')
+);
+const DataMartRunHistoryContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartRunHistoryContent')
+);
+const DataMartInsightsContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartInsightsContent')
+);
+const DataMartNextInsightsContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartNextInsightsContent')
+);
+const DataMartTriggersContent = lazy(
+  () => import('../../pages/data-marts/edit/DataMartTriggersContent')
+);
+const PrevInsightsListView = lazy(
+  () => import('../../features/data-marts/insights-prev/components/InsightsListView')
+);
+const PrevInsightDetailsView = lazy(
+  () => import('../../features/data-marts/insights-prev/components/InsightDetailsView')
+);
+const InsightsListView = lazy(
+  () => import('../../features/data-marts/insights/components/InsightsListView')
+);
+const InsightDetailsView = lazy(
+  () => import('../../features/data-marts/insights/components/InsightDetailsView')
+);
+
+function lazyElement(element: ReactNode) {
+  return (
+    <Suspense fallback={<div className='text-muted-foreground p-6 text-sm'>Loading...</div>}>
+      {element}
+    </Suspense>
+  );
+}
 
 export const dataMartDetailsRoutes: RouteObject[] = [
   {
     path: 'overview',
-    element: <DataMartOverviewContent />,
+    element: lazyElement(<DataMartOverviewContent />),
     errorElement: <LayoutErrorBoundary />,
   },
   {
     path: 'data-setup',
-    element: <DataMartDataSetupContent />,
+    element: lazyElement(<DataMartDataSetupContent />),
     errorElement: <LayoutErrorBoundary />,
   },
   {
     path: 'quality',
-    element: <DataMartQualityContent />,
+    element: lazyElement(<DataMartQualityContent />),
     errorElement: <LayoutErrorBoundary />,
   },
   {
     path: 'insights',
-    element: <DataMartInsightsContent />,
+    element: lazyElement(<DataMartNextInsightsContent />),
     errorElement: <LayoutErrorBoundary />,
     children: [
-      { index: true, element: <PrevInsightsListView /> },
-      { path: ':insightId', element: <PrevInsightDetailsView /> },
+      { index: true, element: lazyElement(<InsightsListView />) },
+      { path: ':insightId', element: lazyElement(<InsightDetailsView />) },
     ],
   },
   {
     path: 'insights-v2',
-    element: <DataMartNextInsightsContent />,
+    element: <InsightsV2Redirect />,
+    errorElement: <LayoutErrorBoundary />,
+  },
+  {
+    path: 'insights-v2/:insightId',
+    element: <InsightsV2Redirect />,
+    errorElement: <LayoutErrorBoundary />,
+  },
+  {
+    path: 'insights-legacy',
+    element: lazyElement(<DataMartInsightsContent />),
     errorElement: <LayoutErrorBoundary />,
     children: [
-      { index: true, element: <InsightsListView /> },
-      { path: ':insightId', element: <InsightDetailsView /> },
+      { index: true, element: lazyElement(<PrevInsightsListView />) },
+      { path: ':insightId', element: lazyElement(<PrevInsightDetailsView />) },
     ],
   },
   {
     path: 'reports',
-    element: <DataMartDestinationsContent />,
+    element: lazyElement(<DataMartDestinationsContent />),
     errorElement: <LayoutErrorBoundary />,
   },
   {
     path: 'triggers',
-    element: <DataMartTriggersContent />,
+    element: lazyElement(<DataMartTriggersContent />),
     errorElement: <LayoutErrorBoundary />,
   },
   {
     path: 'run-history',
-    element: <DataMartRunHistoryContent />,
+    element: lazyElement(<DataMartRunHistoryContent />),
     errorElement: <LayoutErrorBoundary />,
   },
   {
     index: true,
-    element: <DataMartOverviewContent />,
+    element: lazyElement(<DataMartOverviewContent />),
     errorElement: <LayoutErrorBoundary />,
   },
 ];

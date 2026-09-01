@@ -448,6 +448,11 @@ import { DataStorageType } from './data-storage-types/enums/data-storage-type.en
 import { PLUGIN_ENTITY_AUTHORIZATION_FACADE } from './facades/plugin-entity-authorization.facade';
 import { PluginEntityAuthorizationFacadeImpl } from './facades/plugin-entity-authorization.facade.impl';
 import { PendingMemberInvitationScope } from './entities/pending-member-invitation-scope.entity';
+import { ConfigurationVariable } from './entities/configuration-variable.entity';
+import { ConfigurationVariableController } from './controllers/configuration-variable.controller';
+import { ConfigurationVariableMapper } from './mappers/configuration-variable.mapper';
+import { ConfigurationVariableService } from './services/configuration-variable.service';
+import { ConfigurationVariableResolverService } from './services/configuration-variable-resolver.service';
 
 @Module({
   imports: [
@@ -506,6 +511,7 @@ import { PendingMemberInvitationScope } from './entities/pending-member-invitati
       UserProvisioningContextSettings,
       UserProvisioningContextSettingsContext,
       PendingMemberInvitationScope,
+      ConfigurationVariable,
     ]),
     CommonModule,
     IdpModule,
@@ -547,6 +553,7 @@ import { PendingMemberInvitationScope } from './entities/pending-member-invitati
     ProjectMemberApiKeysController,
     HttpDataController,
     RequestAccessController,
+    ConfigurationVariableController,
   ],
   providers: [
     PluginEntityAuthorizationFacadeImpl,
@@ -917,6 +924,9 @@ import { PendingMemberInvitationScope } from './entities/pending-member-invitati
     HttpDataRequestValidator,
     HttpDataColumnResolver,
     HttpDataColumnValidator,
+    ConfigurationVariableService,
+    ConfigurationVariableMapper,
+    ConfigurationVariableResolverService,
   ],
   exports: [
     PLUGIN_ENTITY_AUTHORIZATION_FACADE,

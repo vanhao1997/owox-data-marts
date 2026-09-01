@@ -76,6 +76,15 @@ export class ConnectorCredentialInjectorService {
           return obj;
         }
 
+        const credentialKind =
+          credentialsEntity.kind ?? (credentialsEntity.dataMartId ? 'secret' : 'oauth');
+        if (credentialsEntity.connectorName !== connectorName || credentialKind !== 'oauth') {
+          this.logger.warn(
+            `OAuth credentials ${credentialId} do not match connector ${connectorName}. Skipping injection.`
+          );
+          return obj;
+        }
+
         const isExpired = await this.connectorSourceCredentialsService.isExpired(credentialId);
         if (isExpired) {
           this.logger.warn(
@@ -221,6 +230,12 @@ export class ConnectorCredentialInjectorService {
         this.logger.warn(
           `Secrets ${secretsId} belong to project ${secretsEntity.projectId}, not ${projectId}. Skipping injection.`
         );
+        return config;
+      }
+
+      const credentialKind = secretsEntity.kind ?? (secretsEntity.dataMartId ? 'secret' : 'oauth');
+      if (credentialKind !== 'secret') {
+        this.logger.warn(`Credential ${secretsId} is not a secret record. Skipping injection.`);
         return config;
       }
 

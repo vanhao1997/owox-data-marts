@@ -76,4 +76,20 @@ describe('ReportService', () => {
       params: { limit: 100, offset: 200 },
     });
   });
+
+  it('forwards abort and background options for project polling', async () => {
+    const signal = new AbortController().signal;
+    await service.getReportsByProject(undefined, undefined, {
+      signal,
+      skipLoadingIndicator: true,
+      skipErrorToast: true,
+    });
+
+    expect(apiClient.get).toHaveBeenCalledWith('/reports/', {
+      signal,
+      skipLoadingIndicator: true,
+      skipErrorToast: true,
+      params: { limit: 100, offset: 0 },
+    });
+  });
 });

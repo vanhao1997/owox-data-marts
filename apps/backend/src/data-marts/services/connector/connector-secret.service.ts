@@ -367,7 +367,9 @@ export class ConnectorSecretService {
         // repairs definitions that already share a record: the first save after
         // this change gives each DataMart its own copy of the values.
         const belongsToAnotherDataMart = Boolean(
-          existingSecrets?.dataMartId && existingSecrets.dataMartId !== dataMartId
+          existingSecrets &&
+          ((existingSecrets.kind === 'secret' && !existingSecrets.dataMartId) ||
+            (existingSecrets.dataMartId && existingSecrets.dataMartId !== dataMartId))
         );
 
         if (belongsToAnotherDataMart) {
@@ -391,6 +393,18 @@ export class ConnectorSecretService {
         // copy source had none — so drop them rather than persisting the
         // placeholder as if it were the credential itself.
         if (Object.keys(secrets).length === 0) {
+          if (existingSecrets && belongsToAnotherDataMart && existingSecrets.kind === 'secret') {
+            const credentialsEntity =
+              await this.connectorSourceCredentialsService.createSecretsForConfig(
+                projectId,
+                connectorName,
+                dataMartId,
+                configId,
+                existingSecrets.credentials,
+                userId
+              );
+            configItem._secrets_id = credentialsEntity.id;
+          }
           this.removeMaskedSecretsRecursively(configItem, secretFieldNames);
           return configItem;
         }

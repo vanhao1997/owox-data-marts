@@ -45,9 +45,7 @@ describe('useDataStorage detail loading', () => {
   it('returns null for a stale detail response', async () => {
     const first = deferred<{ id: string }>();
     const second = deferred<{ id: string }>();
-    mocks.getDataStorageById
-      .mockReturnValueOnce(first.promise)
-      .mockReturnValueOnce(second.promise);
+    mocks.getDataStorageById.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise);
     const { result } = renderHook(
       () => ({ firstConsumer: useDataStorage(), secondConsumer: useDataStorage() }),
       { wrapper }

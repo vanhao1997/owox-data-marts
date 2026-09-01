@@ -61,4 +61,22 @@ describe('useInsightsPermissions', () => {
       canSendAndSchedule: false,
     });
   });
+
+  it('forces legacy mode to read-only for an editor', () => {
+    (useRole as any).mockReturnValue({
+      isAdmin: false,
+      canEdit: true,
+    });
+
+    const { result } = renderHook(() => useInsightsPermissions(true));
+
+    expect(result.current).toEqual({
+      canCreate: false,
+      canEdit: false,
+      canDelete: false,
+      canGenerateAI: false,
+      canRun: false,
+      canSendAndSchedule: false,
+    });
+  });
 });

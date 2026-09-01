@@ -1,5 +1,5 @@
 // connector-source-config.service.ts
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 
 // @ts-expect-error - Package lacks TypeScript declarations
 import { Core } from '@owox/connectors';
@@ -11,12 +11,16 @@ type RunConfigDto = InstanceType<typeof Core.RunConfigDto>;
 import { ConnectorDefinition as DataMartConnectorDefinition } from '../../dto/schemas/data-mart-table-definitions/connector-definition.schema';
 import { ConnectorStateItem } from '../../connector-types/interfaces/connector-state';
 import { ConnectorCredentialInjectorService } from './connector-credential-injector.service';
+import { ConfigurationVariableResolverService } from '../configuration-variable-resolver.service';
 
 @Injectable()
 export class ConnectorSourceConfigService {
   private readonly logger = new Logger(ConnectorSourceConfigService.name);
 
-  constructor(private readonly credentialInjector: ConnectorCredentialInjectorService) {}
+  constructor(
+    private readonly credentialInjector: ConnectorCredentialInjectorService,
+    @Optional() private readonly variableResolver?: ConfigurationVariableResolverService
+  ) {}
 
   async buildSourceConfig(
     dataMartId: string,
@@ -30,8 +34,15 @@ export class ConnectorSourceConfigService {
       .map(field => `${connector.source.node} ${field}`)
       .join(', ');
 
+    const configWithVariables = this.variableResolver
+      ? await this.variableResolver.resolveConnectorConfig(config, projectId, connector.source.name)
+      : config;
+
     // First inject externalized secrets (non-OAuth secrets stored in connector_source_credentials)
-    const configWithSecrets = await this.credentialInjector.injectSecrets(config, projectId);
+    const configWithSecrets = await this.credentialInjector.injectSecrets(
+      configWithVariables,
+      projectId
+    );
 
     // Then inject OAuth credentials
     const configWithCredentials = await this.credentialInjector.injectOAuthCredentials(

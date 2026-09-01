@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useOutletContext } from 'react-router';
 import type { DataMartContextType } from '../../../../edit/model/context/types';
 import { useReport } from './useReport';
 import { useAutoRefresh } from '../../../../../../hooks/useAutoRefresh';
+import { ReportStatusEnum } from '../../enums';
 
 interface Options {
   enabled?: boolean;
@@ -20,8 +21,15 @@ export function useDataMartReportsAutoRefresh({
   initialFetch = true,
 }: Options = {}) {
   const { dataMart } = useOutletContext<DataMartContextType>();
-  const { fetchReportsByDataMartId } = useReport();
+  const { reports, fetchReportsByDataMartId } = useReport();
   const dataMartId = dataMart?.id;
+  const hasActiveReports = reports.some(
+    report => report.lastRunStatus === ReportStatusEnum.RUNNING
+  );
+  const pollInterval = useCallback(
+    (pollCount: number) => (pollCount < 3 ? 2000 : intervalMs),
+    [intervalMs]
+  );
 
   // Initial fetch on dataMart change
   useEffect(() => {
@@ -31,14 +39,15 @@ export function useDataMartReportsAutoRefresh({
 
   // Unified polling for the current dataMart
   useAutoRefresh({
-    enabled: !!dataMartId && enabled,
-    intervalMs,
+    enabled: !!dataMartId && enabled && hasActiveReports,
+    intervalMs: pollInterval,
     // The initial fetch is handled by the effect above. Avoid issuing the same
     // request twice when the refresh timer is created.
     runImmediately: false,
-    onTick: () => {
+    onTick: signal => {
       if (!dataMartId) return;
-      void fetchReportsByDataMartId(dataMartId, { silent: true });
+      return fetchReportsByDataMartId(dataMartId, { silent: true, signal });
     },
+    resourceKey: dataMartId,
   });
 }

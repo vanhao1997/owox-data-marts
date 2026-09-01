@@ -15,12 +15,24 @@ export function ConfigurationStringField({
   const { name, placeholder } = specification;
   const displayName = specification.title ?? specification.name;
 
+  const marker = configuration[name];
+  const markerValue =
+    marker && typeof marker === 'object' && !Array.isArray(marker)
+      ? Object.values(marker as Record<string, unknown>)[0]
+      : undefined;
+  const displayValue =
+    typeof markerValue === 'string'
+      ? '{{saved variable}}'
+      : typeof marker === 'string'
+        ? marker
+        : '';
   return (
     <Input
       id={name}
       name={name}
       type='text'
-      value={(configuration[name] as string) || ''}
+      value={displayValue}
+      readOnly={Boolean(marker && typeof marker === 'object')}
       placeholder={placeholder ?? `Enter ${displayName.toLowerCase()}`}
       onChange={e => {
         onValueChange(name, e.target.value);

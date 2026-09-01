@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, ForbiddenException } from '@nestjs/common';
+import { BadRequestException, Injectable, ForbiddenException, Optional } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { BusinessViolationException } from '../../common/exceptions/business-violation.exception';
 import { OwoxEventDispatcher } from '../../common/event-dispatcher/owox-event-dispatcher';
@@ -20,6 +20,7 @@ import { AccessDecisionService, EntityType, Action } from '../services/access-de
 import { AdvancedSearchIndexSyncService } from '../services/advanced-search-index-sync.service';
 import { SearchableEntityType } from '../../common/search/search.facade';
 import { ConnectorService } from '../services/connector/connector.service';
+import { ConfigurationVariableResolverService } from '../services/configuration-variable-resolver.service';
 import type { ConnectorCapabilities } from '../connector-types/connector-capabilities';
 
 @Injectable()
@@ -33,6 +34,8 @@ export class UpdateDataMartDefinitionService {
     private readonly definitionValidatorFacade: DataMartDefinitionValidatorFacade,
     private readonly eventDispatcher: OwoxEventDispatcher,
     private readonly connectorService: ConnectorService,
+    @Optional()
+    private readonly configurationVariableResolver?: ConfigurationVariableResolverService,
     private readonly advancedSearchIndexSync?: AdvancedSearchIndexSyncService
   ) {}
 
@@ -108,11 +111,37 @@ export class UpdateDataMartDefinitionService {
         sourceDefinition = sourceDataMart.definition as ConnectorDefinition;
       }
 
-      this.validateSecretReferences(connectorDefinition, previousDefinition, sourceDefinition);
+      const resolver = this.configurationVariableResolver;
+      const resolvedConnectorDefinition = resolver
+        ? ({
+            ...connectorDefinition,
+            connector: {
+              ...connectorDefinition.connector,
+              source: {
+                ...connectorDefinition.connector.source,
+                configuration: await Promise.all(
+                  connectorDefinition.connector.source.configuration.map(item =>
+                    resolver.resolveConnectorConfigForSave(
+                      item,
+                      command.projectId,
+                      connectorDefinition.connector.source.name
+                    )
+                  )
+                ),
+              },
+            },
+          } as ConnectorDefinition)
+        : connectorDefinition;
+
+      this.validateSecretReferences(
+        resolvedConnectorDefinition,
+        previousDefinition,
+        sourceDefinition
+      );
 
       if (sourceDefinition) {
         mergedDefinition = await this.connectorSecretService.mergeDefinitionSecretsFromSource(
-          connectorDefinition,
+          resolvedConnectorDefinition,
           sourceDefinition
         );
         mergedDefinition = await this.connectorSecretService.mergeDefinitionSecrets(
@@ -121,7 +150,7 @@ export class UpdateDataMartDefinitionService {
         );
       } else {
         mergedDefinition = await this.connectorSecretService.mergeDefinitionSecrets(
-          connectorDefinition,
+          resolvedConnectorDefinition,
           previousDefinition
         );
       }
@@ -132,7 +161,8 @@ export class UpdateDataMartDefinitionService {
         dataMart.id,
         command.projectId,
         connectorDefinition.connector.source.name,
-        mergedDefinition
+        mergedDefinition,
+        command.userId
       );
 
       // Delete secrets this DataMart no longer references

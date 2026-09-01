@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useParams } from 'react-router';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import RelativeTime from '@owox/ui/components/common/relative-time';
 import { SkeletonList } from '@owox/ui/components/common/skeleton-list';
@@ -47,6 +48,9 @@ import {
   reportTitleCellQuickActionClassName,
 } from '../../../features/data-marts/reports/shared/components';
 import { useTranslation } from 'react-i18next';
+import { dataMartQueryKeys } from '../../../features/data-marts/shared';
+import { useAutoRefresh } from '../../../hooks/useAutoRefresh';
+import { recordWebSyncRefresh } from '../../../utils/sync-telemetry';
 
 const PROJECT_REPORTS_TABLE_PAGE_SIZE = 15;
 const PROJECT_REPORTS_TABLE_ID = 'project-reports-table';
@@ -213,11 +217,11 @@ function ProjectReportActionsCell({
 export default function DataMartReportsPage() {
   const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
+  const queryClient = useQueryClient();
   const { scope } = useProjectRoute();
-  const [reports, setReports] = useState<DataMartReport[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [pollingErrorCount, setPollingErrorCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const latestPollRef = useRef(0);
   const {
     isOpen: isReportEditSheetOpen,
     mode: reportEditMode,
@@ -226,61 +230,74 @@ export default function DataMartReportsPage() {
     handleCloseModal,
   } = useReportSidesheet();
 
-  const loadReports = useCallback(async (options?: { silent?: boolean }) => {
-    const isSilent = options?.silent === true;
+  const reportsQuery = useQuery({
+    queryKey: dataMartQueryKeys.reports(projectId),
+    queryFn: async ({ signal }) => {
+      const response = await reportService.getReportsByProject(undefined, undefined, { signal });
+      return response.map(mapReportDtoToEntity);
+    },
+  });
 
-    if (!isSilent) {
-      setIsLoading(true);
-      setError(null);
-    }
+  const reports = useMemo(() => reportsQuery.data ?? [], [reportsQuery.data]);
+  const isLoading = reportsQuery.isLoading;
+  const queryError = reportsQuery.isError
+    ? (extractApiError(reportsQuery.error).message ?? 'Failed to fetch Data Mart reports')
+    : null;
+  const error = queryError && reports.length === 0 ? queryError : null;
 
-    try {
-      const response = await reportService.getReportsByProject();
-      const nextReports = response.map(mapReportDtoToEntity);
-      setReports(currentReports => {
-        if (!isSilent) {
-          return nextReports;
-        }
+  const { refetch: refetchReports } = reportsQuery;
+  const loadReports = useCallback(async () => {
+    latestPollRef.current += 1;
+    const result = await refetchReports();
+    if (result.isSuccess) setPollingErrorCount(0);
+  }, [refetchReports]);
 
-        return mergeReportPagePreservingRows(currentReports, nextReports);
-      });
-    } catch (caught) {
-      if (!isSilent) {
-        setError(extractApiError(caught).message ?? 'Failed to fetch Data Mart reports');
+  const refreshReportsByIds = useCallback(
+    async (reportIds: string[], signal?: AbortSignal): Promise<boolean> => {
+      const requestId = ++latestPollRef.current;
+      const responses = await Promise.allSettled(
+        reportIds.map(reportId =>
+          reportService.getReportById(reportId, {
+            ...POLL_REQUEST_OPTIONS,
+            ...(signal ? { signal } : {}),
+          })
+        )
+      );
+      const nextReports = responses.flatMap(response =>
+        response.status === 'fulfilled' ? [mapReportDtoToEntity(response.value)] : []
+      );
+      if (requestId !== latestPollRef.current || signal?.aborted) return false;
+
+      const failed = responses.some(response => response.status === 'rejected');
+      if (failed) {
+        setPollingErrorCount(count => count + 1);
+        recordWebSyncRefresh(projectId, 'reports', true);
+      } else {
+        setPollingErrorCount(0);
+        recordWebSyncRefresh(projectId, 'reports', false);
       }
-    } finally {
-      if (!isSilent) {
-        setIsLoading(false);
+
+      if (nextReports.length === 0) {
+        return true;
       }
-    }
-  }, []);
 
-  const refreshReportsByIds = useCallback(async (reportIds: string[]) => {
-    const responses = await Promise.allSettled(
-      reportIds.map(reportId => reportService.getReportById(reportId, POLL_REQUEST_OPTIONS))
-    );
-    const nextReports = responses.flatMap(response =>
-      response.status === 'fulfilled' ? [mapReportDtoToEntity(response.value)] : []
-    );
-
-    if (nextReports.length === 0) {
-      return;
-    }
-
-    setReports(currentReports => mergeReportPagePreservingRows(currentReports, nextReports));
-  }, []);
-
-  useEffect(() => {
-    void loadReports();
-  }, [loadReports]);
+      queryClient.setQueryData<DataMartReport[]>(dataMartQueryKeys.reports(projectId), current =>
+        mergeReportPagePreservingRows(current ?? [], nextReports)
+      );
+      return (
+        failed || nextReports.some(report => report.lastRunStatus === ReportStatusEnum.RUNNING)
+      );
+    },
+    [projectId, queryClient]
+  );
 
   const handleCloseReportEditSheet = useCallback(() => {
     handleCloseModal();
   }, [handleCloseModal]);
 
   const handleReportActionComplete = useCallback(async () => {
-    await loadReports();
-  }, [loadReports]);
+    await queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.reportsRoot(projectId) });
+  }, [projectId, queryClient]);
 
   const reportDataMartContextValue = useMemo(
     () => (editingReport ? buildProjectDataMartContextValue(editingReport.dataMart) : null),
@@ -488,20 +505,15 @@ export default function DataMartReportsPage() {
     .rows.filter(row => row.original.lastRunStatus === ReportStatusEnum.RUNNING)
     .map(row => row.original.id);
   const visibleRunningReportIdsKey = visibleRunningReportIds.join('\0');
+  const pollInterval = useCallback((pollCount: number) => (pollCount < 3 ? 2000 : 5000), []);
 
-  useEffect(() => {
-    if (!visibleRunningReportIdsKey) return;
-
-    const reportIds = visibleRunningReportIdsKey.split('\0');
-
-    const intervalId = window.setInterval(() => {
-      void refreshReportsByIds(reportIds);
-    }, 5000);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [refreshReportsByIds, visibleRunningReportIdsKey]);
+  useAutoRefresh({
+    enabled: Boolean(visibleRunningReportIdsKey),
+    intervalMs: pollInterval,
+    runImmediately: false,
+    resourceKey: `${projectId}:${visibleRunningReportIdsKey}`,
+    onTick: signal => refreshReportsByIds(visibleRunningReportIdsKey.split('\0'), signal),
+  });
 
   return (
     <ReportsProvider>
@@ -511,6 +523,36 @@ export default function DataMartReportsPage() {
         </header>
 
         <div className='dm-page-content'>
+          {pollingErrorCount >= 3 && (
+            <div
+              className='dm-card-block mb-3 flex items-center justify-between gap-3 text-sm'
+              role='status'
+            >
+              <span>Data may be stale because automatic refresh is failing.</span>
+              <button
+                type='button'
+                className='text-primary font-medium underline underline-offset-4'
+                onClick={() => void loadReports()}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+          {queryError && reports.length > 0 && (
+            <div
+              className='dm-card-block mb-3 flex items-center justify-between gap-3 text-sm'
+              role='status'
+            >
+              <span className='text-muted-foreground'>{queryError}</span>
+              <button
+                type='button'
+                className='text-primary font-medium underline underline-offset-4'
+                onClick={() => void loadReports()}
+              >
+                Retry
+              </button>
+            </div>
+          )}
           {isLoading ? (
             <SkeletonList />
           ) : error ? (

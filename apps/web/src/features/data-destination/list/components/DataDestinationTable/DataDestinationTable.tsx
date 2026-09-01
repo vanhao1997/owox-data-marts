@@ -25,6 +25,9 @@ interface DataDestinationTableProps<TData, TValue> {
   data: TData[];
   onEdit?: (id: string) => Promise<void>;
   onOpenTypeDialog?: () => void;
+  isLoading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
 }
 
 export function DataDestinationTable<TData, TValue>({
@@ -32,6 +35,9 @@ export function DataDestinationTable<TData, TValue>({
   data,
   onEdit,
   onOpenTypeDialog,
+  isLoading = false,
+  error,
+  onRetry,
 }: DataDestinationTableProps<TData, TValue>) {
   const { t } = useTranslation();
   const { projectId = '' } = useParams<{ projectId: string }>();
@@ -87,46 +93,86 @@ export function DataDestinationTable<TData, TValue>({
     return (
       <div className='flex flex-col gap-0.5'>
         <div className='dm-card'>
-          <EmptyDataDestinationsState onOpenTypeDialog={onOpenTypeDialog} />
+          {isLoading ? (
+            <div className='text-muted-foreground p-6 text-center text-sm'>
+              {t('common.loading', 'Loading...')}
+            </div>
+          ) : error ? (
+            <div className='flex flex-col items-center gap-3 p-6 text-center text-sm'>
+              <p className='text-muted-foreground'>{error}</p>
+              {onRetry && (
+                <button
+                  type='button'
+                  className='border-input hover:bg-muted rounded-md border px-3 py-1.5 transition-colors'
+                  onClick={onRetry}
+                >
+                  {t('common.retry', 'Retry')}
+                </button>
+              )}
+            </div>
+          ) : (
+            <EmptyDataDestinationsState onOpenTypeDialog={onOpenTypeDialog} />
+          )}
         </div>
-        <InviteTeammatesCard
-          hint={t('destinationsPage.inviteHint')}
-          docsLabel={t('destinationsPage.learnMore')}
-          docsHref='https://docs.p2pdigital.io.vn/docs/destinations/manage-destinations/'
-        />
+        {!isLoading && !error && (
+          <InviteTeammatesCard
+            hint={t('destinationsPage.inviteHint')}
+            docsLabel={t('destinationsPage.learnMore')}
+            docsHref='https://docs.p2pdigital.io.vn/docs/destinations/manage-destinations/'
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div className='dm-card'>
-      <BaseTable
-        tableId={tableId}
-        table={table}
-        onRowClick={handleRowClick}
-        ariaLabel={t('destinationsPage.tableAriaLabel', 'Destinations table')}
-        paginationProps={{ displaySelected: false }}
-        renderToolbarLeft={() => (
-          <>
-            <DataDestinationTableFilters
-              appliedState={appliedState}
-              config={filtersConfig}
-              onApply={apply}
-              onClear={clear}
-            />
-            <TableColumnSearch
-              table={table}
-              columnId={DataDestinationColumnKey.TITLE}
-              placeholder={t('search.button')}
-            />
-          </>
-        )}
-        renderToolbarRight={() => (
-          <TableCTAButton data-testid='destCreateButton' onClick={onOpenTypeDialog}>
-            {t('destinationsPage.newDestination')}
-          </TableCTAButton>
-        )}
-      />
+    <div className='flex flex-col gap-4'>
+      {error && (
+        <div
+          className='dm-card-block flex items-center justify-between gap-3 text-sm'
+          role='status'
+        >
+          <span className='text-muted-foreground'>{error}</span>
+          {onRetry && (
+            <button
+              type='button'
+              className='text-primary font-medium underline underline-offset-4'
+              onClick={onRetry}
+            >
+              {t('common.retry', 'Retry')}
+            </button>
+          )}
+        </div>
+      )}
+      <div className='dm-card'>
+        <BaseTable
+          tableId={tableId}
+          table={table}
+          onRowClick={handleRowClick}
+          ariaLabel={t('destinationsPage.tableAriaLabel', 'Destinations table')}
+          paginationProps={{ displaySelected: false }}
+          renderToolbarLeft={() => (
+            <>
+              <DataDestinationTableFilters
+                appliedState={appliedState}
+                config={filtersConfig}
+                onApply={apply}
+                onClear={clear}
+              />
+              <TableColumnSearch
+                table={table}
+                columnId={DataDestinationColumnKey.TITLE}
+                placeholder={t('search.button')}
+              />
+            </>
+          )}
+          renderToolbarRight={() => (
+            <TableCTAButton data-testid='destCreateButton' onClick={onOpenTypeDialog}>
+              {t('destinationsPage.newDestination')}
+            </TableCTAButton>
+          )}
+        />
+      </div>
     </div>
   );
 }

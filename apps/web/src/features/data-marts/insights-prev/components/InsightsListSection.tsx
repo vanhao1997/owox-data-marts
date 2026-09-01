@@ -36,7 +36,7 @@ export default function InsightsListSection() {
     handleCreateInsightWithAi,
   } = useInsights();
   const { insights, isLoading, error, hasInsights } = useInsightsList();
-  const { canCreate, canGenerateAI } = useInsightsPermissions();
+  const { canCreate, canGenerateAI } = useInsightsPermissions(true);
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
 

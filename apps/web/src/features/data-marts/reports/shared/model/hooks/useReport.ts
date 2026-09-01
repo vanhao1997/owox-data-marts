@@ -65,9 +65,10 @@ export function useReport() {
   }, [dispatch, reportsRequestGenerationRef]);
 
   const fetchReportsByDataMartId = useCallback(
-    async (dataMartId: string, options?: { silent?: boolean }) => {
+    async (dataMartId: string, options?: { silent?: boolean; signal?: AbortSignal }) => {
       const requestId = ++reportsRequestGenerationRef.current;
       const silent = options?.silent === true;
+      const signal = options?.signal;
       dispatch({
         type: ReportActionType.FETCH_REPORTS_START,
         payload: { requestId, silent },
@@ -75,7 +76,12 @@ export function useReport() {
       try {
         const reports = await reportService.getReportsByDataMartId(
           dataMartId,
-          options?.silent ? { skipLoadingIndicator: true } : undefined
+          silent || signal
+            ? {
+                ...(silent ? { skipLoadingIndicator: true, skipErrorToast: true } : {}),
+                ...(signal ? { signal } : {}),
+              }
+            : undefined
         );
         const mappedReports = reports.map(mapReportDtoToEntity);
         dispatch({
@@ -84,6 +90,7 @@ export function useReport() {
         });
         return true;
       } catch (error) {
+        if (signal?.aborted) return false;
         const message = error instanceof Error ? error.message : 'Failed to fetch reports';
         dispatch({
           type: ReportActionType.FETCH_REPORTS_ERROR,

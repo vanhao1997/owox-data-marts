@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 import { ConnectorSourceCredentials } from '../../entities/connector-source-credentials.entity';
 // @ts-expect-error - Package lacks TypeScript declarations
 import { Core } from '@owox/connectors';
@@ -37,6 +37,7 @@ export class ConnectorSourceCredentialsService {
       projectId,
       userId,
       connectorName,
+      kind: 'oauth',
       credentials,
       user,
       expiresAt,
@@ -66,6 +67,17 @@ export class ConnectorSourceCredentialsService {
   ): Promise<ConnectorSourceCredentials[]> {
     return await this.connectorSourceCredentialsRepository.find({
       where: { connectorName },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  /**
+   * List non-deleted credentials visible to one project. Callers must map the
+   * result to a safe DTO; this method is intentionally backend-only.
+   */
+  async getCredentialsByProjectId(projectId: string): Promise<ConnectorSourceCredentials[]> {
+    return this.connectorSourceCredentialsRepository.find({
+      where: { projectId },
       order: { createdAt: 'DESC' },
     });
   }
@@ -184,11 +196,39 @@ export class ConnectorSourceCredentialsService {
       connectorName,
       dataMartId,
       configId,
+      kind: 'secret',
       credentials: secrets,
       userId,
     });
 
     return await this.connectorSourceCredentialsRepository.save(entity);
+  }
+
+  /** Create a project-scoped reusable copy without exposing its payload. */
+  async createReusableSecrets(
+    projectId: string,
+    connectorName: string,
+    credentials: Record<string, unknown>,
+    userId?: string
+  ): Promise<ConnectorSourceCredentials> {
+    const entity = this.connectorSourceCredentialsRepository.create({
+      projectId,
+      connectorName,
+      kind: 'secret',
+      credentials: JSON.parse(JSON.stringify(credentials)) as Record<string, unknown>,
+      userId,
+    });
+    return this.connectorSourceCredentialsRepository.save(entity);
+  }
+
+  /** Remove a project-scoped reusable secret after its last variable is deleted. */
+  async deleteReusableSecret(projectId: string, id: string): Promise<void> {
+    await this.connectorSourceCredentialsRepository.softDelete({
+      id,
+      projectId,
+      kind: 'secret',
+      dataMartId: IsNull(),
+    });
   }
 
   /**

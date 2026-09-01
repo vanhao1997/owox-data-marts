@@ -1,8 +1,10 @@
 import type { ConnectorSpecificationItemResponseApiDto } from '../../../../../shared/api/types';
+import { RequiredType } from '../../../../../shared/api/types';
 import { AppWizardStepLabel } from '@owox/ui/components/common/wizard';
 import { Button } from '@owox/ui/components/button';
 import { configurationFieldRender } from './ConfigurationFieldRender';
 import { SECRET_MASK } from '../../../../../../../shared/constants/secrets';
+import { VariablePicker } from './VariablePicker';
 
 interface NestedConfigurationFieldProps {
   itemName: string;
@@ -64,6 +66,16 @@ export function NestedConfigurationField({
           >
             {isSecretEditing ? 'Cancel' : 'Edit'}
           </Button>
+        )}
+        {itemSpec.requiredType !== RequiredType.OBJECT && !isSecret && (
+          <VariablePicker
+            connectorName={connectorName}
+            kind='value'
+            value={nestedConfiguration[itemName]}
+            onSelect={variableId => {
+              onValueChange(itemName, variableId ? { _variable_id: variableId } : '');
+            }}
+          />
         )}
       </div>
       {configurationFieldRender({

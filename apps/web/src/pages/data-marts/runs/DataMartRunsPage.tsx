@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { RefreshCw } from 'lucide-react';
 import { Button } from '@owox/ui/components/button';
 import { SkeletonList } from '@owox/ui/components/common/skeleton-list';
 import { extractApiError } from '../../../app/api';
-import { DataMartRunType, dataMartService } from '../../../features/data-marts/shared';
+import {
+  DataMartRunType,
+  dataMartQueryKeys,
+  dataMartService,
+} from '../../../features/data-marts/shared';
 import { isDataMartRunFinalStatus } from '../../../features/data-marts/shared/utils/status.utils';
 import { RunItem } from '../../../features/data-marts/edit/components/DataMartRunHistoryView';
 import { LogViewType } from '../../../features/data-marts/edit/components/DataMartRunHistoryView/types';
@@ -14,98 +19,138 @@ import { getConnectorInfoByName } from '../../../features/connectors/shared/util
 import { useProjectRoute } from '../../../shared/hooks';
 import { ProjectDataMartEmptyState } from '../shared/ProjectDataMartEmptyState';
 import { useTranslation } from 'react-i18next';
+import { useAutoRefresh } from '../../../hooks/useAutoRefresh';
+import { recordWebSyncRefresh } from '../../../utils/sync-telemetry';
+import { useParams } from 'react-router';
 
 const PROJECT_RUNS_PAGE_SIZE = 50;
 
 export default function DataMartRunsPage() {
   const { t } = useTranslation();
+  const { projectId = '' } = useParams<{ projectId: string }>();
+  const queryClient = useQueryClient();
   const { scope } = useProjectRoute();
-  const [runs, setRuns] = useState<ProjectDataMartRunItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMoreRunsToLoad, setHasMoreRunsToLoad] = useState(false);
+  const [pollingErrorCount, setPollingErrorCount] = useState(0);
   const [expandedRun, setExpandedRun] = useState<string | null>(null);
   const [logViewType, setLogViewType] = useState<LogViewType>(LogViewType.STRUCTURED);
   const [searchTerm, setSearchTerm] = useState('');
   const [connectorInfoByName, setConnectorInfoByName] = useState<
     Record<string, ConnectorListItem | null>
   >({});
+  const requestGenerationRef = useRef(0);
 
-  const loadRuns = useCallback(async (offset = 0, options?: { silent?: boolean }) => {
-    const isInitialLoad = offset === 0;
-    const isSilent = options?.silent === true;
-
-    if (isInitialLoad) {
-      if (!isSilent) {
-        setIsLoading(true);
-      }
-    } else {
-      setIsLoadingMore(true);
-    }
-    if (!isSilent) {
-      setError(null);
-    }
-
-    try {
-      const response = await dataMartService.getProjectDataMartRuns(
-        PROJECT_RUNS_PAGE_SIZE,
-        offset,
-        isSilent ? { skipLoadingIndicator: true, skipErrorToast: true } : undefined
-      );
-      const nextRuns = mapProjectDataMartRunListResponseDtoToEntity(response);
-      setRuns(currentRuns => {
-        if (!isInitialLoad) {
-          return [...currentRuns, ...nextRuns];
-        }
-
-        if (!isSilent) {
-          return nextRuns;
-        }
-
-        const nextRunIds = new Set(nextRuns.map(run => run.id));
-        const loadedOlderRuns = currentRuns.filter(run => !nextRunIds.has(run.id));
-        return [...nextRuns, ...loadedOlderRuns];
+  const runsQuery = useQuery({
+    queryKey: dataMartQueryKeys.runs(projectId),
+    queryFn: async ({ signal }) => {
+      const response = await dataMartService.getProjectDataMartRuns(PROJECT_RUNS_PAGE_SIZE, 0, {
+        signal,
       });
+      const nextRuns = mapProjectDataMartRunListResponseDtoToEntity(response);
+      return { runs: nextRuns, hasMore: nextRuns.length >= PROJECT_RUNS_PAGE_SIZE };
+    },
+  });
 
-      if (!isSilent) {
-        setHasMoreRunsToLoad(nextRuns.length >= PROJECT_RUNS_PAGE_SIZE);
+  const runs = useMemo(() => runsQuery.data?.runs ?? [], [runsQuery.data?.runs]);
+  const isLoading = runsQuery.isLoading;
+  const queryError = runsQuery.isError
+    ? (extractApiError(runsQuery.error).message ?? 'Failed to fetch Data Mart runs')
+    : null;
+  const error = queryError && runs.length === 0 ? queryError : null;
+  const hasMoreRunsToLoad = runsQuery.data?.hasMore ?? false;
+
+  const { refetch: refetchRuns } = runsQuery;
+  const loadRuns = useCallback(
+    async (offset = 0, options?: { silent?: boolean; signal?: AbortSignal }): Promise<boolean> => {
+      const isInitialLoad = offset === 0;
+      const isSilent = options?.silent === true;
+      const signal = options?.signal;
+      const requestGeneration = ++requestGenerationRef.current;
+
+      if (isInitialLoad && !isSilent && !signal) {
+        const result = await refetchRuns();
+        if (result.isSuccess) setPollingErrorCount(0);
+        return true;
       }
-    } catch (caught) {
-      if (!isSilent) {
-        setError(extractApiError(caught).message ?? 'Failed to fetch Data Mart runs');
-      }
-    } finally {
+
+      const requestConfig =
+        isSilent || signal
+          ? {
+              ...(isSilent ? { skipLoadingIndicator: true, skipErrorToast: true } : {}),
+              ...(signal ? { signal } : {}),
+            }
+          : undefined;
+
       if (isInitialLoad) {
-        if (!isSilent) {
-          setIsLoading(false);
-        }
+        // Query owns initial loading state; silent refreshes update cached rows only.
       } else {
-        setIsLoadingMore(false);
+        setIsLoadingMore(true);
       }
-    }
-  }, []);
 
-  useEffect(() => {
-    void loadRuns(0);
-  }, [loadRuns]);
+      try {
+        const response = await dataMartService.getProjectDataMartRuns(
+          PROJECT_RUNS_PAGE_SIZE,
+          offset,
+          requestConfig
+        );
+        const nextRuns = mapProjectDataMartRunListResponseDtoToEntity(response);
+        if (requestGeneration !== requestGenerationRef.current || signal?.aborted) return false;
+        if (isSilent) {
+          setPollingErrorCount(0);
+          recordWebSyncRefresh(projectId, 'runs', false);
+        }
+        queryClient.setQueryData<{ runs: ProjectDataMartRunItem[]; hasMore: boolean }>(
+          dataMartQueryKeys.runs(projectId),
+          current => {
+            if (!isInitialLoad) {
+              return {
+                runs: [...(current?.runs ?? []), ...nextRuns],
+                hasMore: nextRuns.length >= PROJECT_RUNS_PAGE_SIZE,
+              };
+            }
+
+            if (!isSilent) {
+              return { runs: nextRuns, hasMore: nextRuns.length >= PROJECT_RUNS_PAGE_SIZE };
+            }
+
+            const nextRunIds = new Set(nextRuns.map(run => run.id));
+            const loadedOlderRuns = (current?.runs ?? []).filter(run => !nextRunIds.has(run.id));
+            return {
+              runs: [...nextRuns, ...loadedOlderRuns],
+              hasMore: current?.hasMore ?? nextRuns.length >= PROJECT_RUNS_PAGE_SIZE,
+            };
+          }
+        );
+        return nextRuns.some(run => !isDataMartRunFinalStatus(run.status));
+      } catch {
+        const aborted = signal?.aborted ?? false;
+        if (isSilent && !aborted) {
+          setPollingErrorCount(count => count + 1);
+          recordWebSyncRefresh(projectId, 'runs', true);
+        }
+        return true;
+      } finally {
+        if (!isInitialLoad) {
+          setIsLoadingMore(false);
+        }
+      }
+    },
+    [projectId, queryClient, refetchRuns]
+  );
 
   const hasActiveRuns = useMemo(
     () => runs.some(run => !isDataMartRunFinalStatus(run.status)),
     [runs]
   );
+  const pollInterval = useCallback((pollCount: number) => (pollCount < 3 ? 2000 : 5000), []);
 
-  useEffect(() => {
-    if (!hasActiveRuns || isLoadingMore) return;
-
-    const intervalId = window.setInterval(() => {
-      void loadRuns(0, { silent: true });
-    }, 5000);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [hasActiveRuns, isLoadingMore, loadRuns]);
+  useAutoRefresh({
+    enabled: hasActiveRuns && !isLoadingMore,
+    intervalMs: pollInterval,
+    runImmediately: false,
+    resourceKey: projectId,
+    onTick: signal => loadRuns(0, { silent: true, signal }),
+  });
 
   const connectorSourceNames = useMemo(() => {
     const names = runs.map(getConnectorSourceName).filter((name): name is string => Boolean(name));
@@ -145,12 +190,12 @@ export default function DataMartRunsPage() {
     async (dataMartId: string, runId: string) => {
       try {
         await dataMartService.cancelDataMartRun(dataMartId, runId);
-        await loadRuns(0);
+        await queryClient.invalidateQueries({ queryKey: dataMartQueryKeys.runsRoot(projectId) });
       } catch (caught) {
         throw new Error(extractApiError(caught).message ?? 'Failed to cancel Data Mart run');
       }
     },
-    [loadRuns]
+    [projectId, queryClient]
   );
 
   const toggleRunDetails = (runId: string) => {
@@ -164,6 +209,28 @@ export default function DataMartRunsPage() {
       </header>
 
       <div className='dm-page-content'>
+        {pollingErrorCount >= 3 && (
+          <div
+            className='dm-card-block mb-3 flex items-center justify-between gap-3 text-sm'
+            role='status'
+          >
+            <span>Data may be stale because automatic refresh is failing.</span>
+            <Button size='sm' variant='outline' onClick={() => void loadRuns(0)}>
+              Retry
+            </Button>
+          </div>
+        )}
+        {queryError && runs.length > 0 && (
+          <div
+            className='dm-card-block mb-3 flex items-center justify-between gap-3 text-sm'
+            role='status'
+          >
+            <span className='text-muted-foreground'>{queryError}</span>
+            <Button size='sm' variant='outline' onClick={() => void loadRuns(0)}>
+              Retry
+            </Button>
+          </div>
+        )}
         {isLoading ? (
           <SkeletonList />
         ) : error ? (

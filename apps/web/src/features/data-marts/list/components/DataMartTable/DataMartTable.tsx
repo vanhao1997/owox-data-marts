@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   refetchDataMarts: () => Promise<void>;
   onVisibleDataMartIdsChange?: (dataMartIds: string[]) => void;
   isLoading?: boolean;
+  error?: string | null;
 }
 
 export function DataMartTable<TData, TValue>({
@@ -51,6 +52,7 @@ export function DataMartTable<TData, TValue>({
   refetchDataMarts,
   onVisibleDataMartIdsChange,
   isLoading,
+  error,
 }: DataTableProps<TData, TValue>) {
   const { t } = useTranslation();
   const { navigate, scope } = useProjectRoute();
@@ -191,6 +193,21 @@ export function DataMartTable<TData, TValue>({
     );
   }
 
+  if (error && !data.length) {
+    return (
+      <div className='dm-card-block flex flex-col items-center gap-3 text-center text-sm'>
+        <p className='text-muted-foreground'>{error}</p>
+        <button
+          type='button'
+          className='border-input hover:bg-muted rounded-md border px-3 py-1.5 transition-colors'
+          onClick={() => void refetchDataMarts()}
+        >
+          {t('common.retry', 'Retry')}
+        </button>
+      </div>
+    );
+  }
+
   // Show empty state
   if (!data.length) {
     return <EmptyDataMartsState />;
@@ -204,6 +221,21 @@ export function DataMartTable<TData, TValue>({
 
   return (
     <div className='flex flex-col gap-4'>
+      {error && (
+        <div
+          className='dm-card-block flex items-center justify-between gap-3 text-sm'
+          role='status'
+        >
+          <span className='text-muted-foreground'>{error}</span>
+          <button
+            type='button'
+            className='text-primary font-medium underline underline-offset-4'
+            onClick={() => void refetchDataMarts()}
+          >
+            {t('common.retry', 'Retry')}
+          </button>
+        </div>
+      )}
       <div className='dm-card' data-testid='datamartTable'>
         <BaseTable
           tableId={tableId}
@@ -266,7 +298,9 @@ export function DataMartTable<TData, TValue>({
                 )}
               >
                 <Import className='h-4 w-4' />
-                <span className='hidden lg:block'>{t('dataMartsPage.importButton', 'Import…')}</span>
+                <span className='hidden lg:block'>
+                  {t('dataMartsPage.importButton', 'Import…')}
+                </span>
               </Button>
               <TableCTAButton asChild>
                 <Link to={scope('/data-marts/create')}>
@@ -292,28 +326,19 @@ export function DataMartTable<TData, TValue>({
         <PromoBlock
           icon={GoogleBigQueryIcon}
           size='compact'
-          title={t(
-            'dataMartsPage.bigQueryPromoTitle',
-            'Use existing BigQuery tables or views'
-          )}
+          title={t('dataMartsPage.bigQueryPromoTitle', 'Use existing BigQuery tables or views')}
           description={t(
             'dataMartsPage.bigQueryPromoDescription',
             'Automatically create multiple Data Marts from your BigQuery assets in seconds'
           )}
           primaryAction={{
-            label: t(
-              'dataMartsPage.bigQueryPromoPrimaryAction',
-              'Create Multiple Data Marts...'
-            ),
+            label: t('dataMartsPage.bigQueryPromoPrimaryAction', 'Create Multiple Data Marts...'),
             onClick: () => {
               setShowBulkCreateFromStorage(true);
             },
           }}
           secondaryAction={{
-            label: t(
-              'dataMartsPage.bigQueryPromoSecondaryAction',
-              'Create from a Single Table'
-            ),
+            label: t('dataMartsPage.bigQueryPromoSecondaryAction', 'Create from a Single Table'),
             href: scope('/data-marts/create?preset=table'),
           }}
         />

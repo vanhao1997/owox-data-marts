@@ -2,9 +2,11 @@ import { DataDestinationProvider } from '../../features/data-destination';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DataDestinationList } from '../../features/data-destination/list';
+import { useParams } from 'react-router';
 
 export const DataDestinationListPage = () => {
   const { t } = useTranslation();
+  const { projectId = '' } = useParams<{ projectId: string }>();
   const [isCreateSheetOpen, setIsCreateSheetOpen] = useState(false);
 
   return (
@@ -14,7 +16,7 @@ export const DataDestinationListPage = () => {
       </header>
 
       <div className='dm-page-content'>
-        <DataDestinationProvider>
+        <DataDestinationProvider key={projectId}>
           <DataDestinationList
             isCreateSheetInitiallyOpen={isCreateSheetOpen}
             onCreateSheetClose={() => {

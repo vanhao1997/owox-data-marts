@@ -27,7 +27,7 @@ export function usePublishableScopes(): PluginPublicationScope[] {
  * @param enabled gates the request, because listing a scope the caller cannot manage is
  *   refused by the server rather than returned empty.
  */
-export function usePluginPublications(scope: PluginPublicationScope, enabled = true) {
+function usePluginPublications(scope: PluginPublicationScope, enabled = true) {
   const projectId = useProjectId();
 
   const { data, isLoading, refetch } = useQuery({

@@ -13,7 +13,6 @@ export {
 } from './hooks/useGalleryView';
 export {
   usePluginManageablePublications,
-  usePluginPublications,
   usePluginPublishing,
   usePublishableScopes,
   type PublishFailure,

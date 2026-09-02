@@ -60,14 +60,12 @@
     "react-hook-form": "^7.58.1",
     "react-hot-toast": "^2.5.2",
     "react-i18next": "^17.0.12",
-    "react-router": "^8.3.0",
-    "tailwindcss": "^4.1.8"
+    "react-router": "^8.3.0"
   },
   "devDependencies": {
     "@owox/eslint-config": "*",
     "@owox/prettier-config": "*",
     "@playwright/test": "^1.58.2",
-    "@tanstack/react-query-devtools": "^5.66.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.1.2",

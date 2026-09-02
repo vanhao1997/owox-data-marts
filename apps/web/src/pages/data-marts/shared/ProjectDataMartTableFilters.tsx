@@ -1,9 +1,7 @@
-import {
-  TableFilters,
-  TableFiltersContent,
-  TableFiltersTrigger,
-  type FilterConfigItem,
-} from '../../../shared/components/TableFilters';
+import { TableFilters } from '../../../shared/components/TableFilters/TableFilters';
+import { TableFiltersContent } from '../../../shared/components/TableFilters/TableFiltersContent';
+import { TableFiltersTrigger } from '../../../shared/components/TableFilters/TableFiltersTrigger';
+import type { FilterConfigItem } from '../../../shared/components/TableFilters/types';
 import type { FiltersState } from '../../../shared/components/TableFilters/types';
 
 interface ProjectDataMartTableFiltersProps<K extends string> {

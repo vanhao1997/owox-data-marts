@@ -1,7 +1,7 @@
 import { DataDestinationType } from '../../../../../data-destination/shared/enums';
-import { ReportEditSheet } from '../../../edit/components/ReportEditSheet';
-import { LookerStudioReportEditSheet } from '../../../edit/components/LookerStudioReportEditSheet';
-import { EmailReportEditSheet } from '../../../edit/components/EmailReportEditSheet';
+import { ReportEditSheet } from '../../../edit/components/ReportEditSheet/ReportEditSheet';
+import { LookerStudioReportEditSheet } from '../../../edit/components/LookerStudioReportEditSheet/LookerStudioReportEditSheet';
+import { EmailReportEditSheet } from '../../../edit/components/EmailReportEditSheet/EmailReportEditSheet';
 import { ReportFormMode } from '../../../shared';
 import type { DataDestination } from '../../../../../data-destination/shared/model/types';
 import type { DataMartReport } from '../../../shared/model/types/data-mart-report';

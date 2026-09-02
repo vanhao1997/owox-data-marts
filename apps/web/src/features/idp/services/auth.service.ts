@@ -51,11 +51,3 @@ export function hasAnyRole(user: User | null, roles: Role[]): boolean {
 export function hasAllRoles(user: User | null, roles: Role[]): boolean {
   return roles.every(role => hasRole(user, role));
 }
-
-export const AuthService = {
-  currentUserResponseToUser,
-  isViewOnlySession,
-  hasRole,
-  hasAnyRole,
-  hasAllRoles,
-};

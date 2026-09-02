@@ -8,7 +8,7 @@ declare global {
 const INTERCOM_LAUNCHER_HORIZONTAL_PADDING = 20;
 const INTERCOM_LAUNCHER_VERTICAL_PADDING = 20;
 
-export function setIntercomPadding({
+function setIntercomPadding({
   vertical,
   horizontal,
 }: {
@@ -31,7 +31,7 @@ export function setIntercomPadding({
   }
 }
 
-export function setIntercomLauncherVisible(visible: boolean): void {
+function setIntercomLauncherVisible(visible: boolean): void {
   try {
     if (!window.Intercom) return;
     window.Intercom('update', { hide_default_launcher: !visible });

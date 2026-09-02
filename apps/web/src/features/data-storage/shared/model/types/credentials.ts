@@ -53,33 +53,3 @@ export type DataStorageCredentials =
   | SnowflakeCredentials
   | RedshiftCredentials
   | DatabricksCredentials;
-
-export function isGoogleBigQueryCredentials(
-  credentials: DataStorageCredentials
-): credentials is GoogleBigQueryCredentials {
-  return 'serviceAccount' in credentials;
-}
-
-export function isAwsAthenaCredentials(
-  credentials: DataStorageCredentials
-): credentials is AwsAthenaCredentials {
-  return 'accessKeyId' in credentials && 'secretAccessKey' in credentials;
-}
-
-export function isSnowflakeCredentials(
-  credentials: DataStorageCredentials
-): credentials is SnowflakeCredentials {
-  return 'authMethod' in credentials && 'username' in credentials;
-}
-
-export function isRedshiftCredentials(
-  credentials: DataStorageCredentials
-): credentials is RedshiftCredentials {
-  return 'accessKeyId' in credentials && 'secretAccessKey' in credentials;
-}
-
-export function isDatabricksCredentials(
-  credentials: DataStorageCredentials
-): credentials is DatabricksCredentials {
-  return 'authMethod' in credentials && 'token' in credentials;
-}

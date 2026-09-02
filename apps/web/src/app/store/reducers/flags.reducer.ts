@@ -15,19 +15,19 @@ const initialState: FlagsState = {
 };
 
 // Actions
-export const LOAD_FLAGS = 'settings/LOAD_FLAGS';
-export const LOAD_FLAGS_SUCCESS = 'settings/LOAD_FLAGS_SUCCESS';
-export const LOAD_FLAGS_ERROR = 'settings/LOAD_FLAGS_ERROR';
+const LOAD_FLAGS = 'settings/LOAD_FLAGS';
+const LOAD_FLAGS_SUCCESS = 'settings/LOAD_FLAGS_SUCCESS';
+const LOAD_FLAGS_ERROR = 'settings/LOAD_FLAGS_ERROR';
 
-export function loadflags() {
+function loadflags() {
   return { type: LOAD_FLAGS } satisfies AnyAction;
 }
 
-export function loadFlagsSuccess(payload: Record<string, unknown>) {
+function loadFlagsSuccess(payload: Record<string, unknown>) {
   return { type: LOAD_FLAGS_SUCCESS, payload } satisfies AnyAction;
 }
 
-export function loadFlagsError(payload: string) {
+function loadFlagsError(payload: string) {
   return { type: LOAD_FLAGS_ERROR, payload } satisfies AnyAction;
 }
 

@@ -52,28 +52,3 @@ export function isAwsAthenaDataStorageConfig(
 ): config is AwsAthenaDataStorageConfig {
   return 'outputBucket' in config;
 }
-
-export function isSnowflakeDataStorageConfig(
-  config: DataStorageConfig
-): config is SnowflakeDataStorageConfig {
-  return 'account' in config && 'warehouse' in config;
-}
-
-export function isRedshiftDataStorageConfig(
-  config: DataStorageConfig
-): config is RedshiftDataStorageConfig {
-  if (!('connectionType' in config)) {
-    return false;
-  }
-  const typedConfig = config as { connectionType: unknown };
-  return (
-    typedConfig.connectionType === RedshiftConnectionType.SERVERLESS ||
-    typedConfig.connectionType === RedshiftConnectionType.PROVISIONED
-  );
-}
-
-export function isDatabricksDataStorageConfig(
-  config: DataStorageConfig
-): config is DatabricksDataStorageConfig {
-  return 'host' in config && 'httpPath' in config;
-}

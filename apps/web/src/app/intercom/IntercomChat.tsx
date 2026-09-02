@@ -127,5 +127,3 @@ export function IntercomChat(): null {
 
   return null;
 }
-
-export default IntercomChat;

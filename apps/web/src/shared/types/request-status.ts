@@ -6,10 +6,3 @@ export enum RequestStatus {
   LOADED = 'loaded',
   ERROR = 'error',
 }
-
-export const RequestStatusValues: readonly RequestStatus[] = [
-  RequestStatus.IDLE,
-  RequestStatus.LOADING,
-  RequestStatus.LOADED,
-  RequestStatus.ERROR,
-] as const;

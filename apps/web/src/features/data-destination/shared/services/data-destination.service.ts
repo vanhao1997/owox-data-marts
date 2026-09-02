@@ -29,7 +29,7 @@ export interface CreateGoogleSheetDocumentResponseDto {
  * Data Destination Service
  * Specializes in data destination operations using the generic ApiService
  */
-export class DataDestinationService extends ApiService {
+class DataDestinationService extends ApiService {
   /**
    * Creates a new DataDestinationService instance
    */

@@ -107,62 +107,6 @@ export const formatDateTime = (date: Date | string | null): string => {
 };
 
 /**
- * Format a date with a specific timezone
- * Useful when you need to display time in a timezone different from the browser's
- *
- * @param date - Date to format
- * @param timeZone - IANA timezone identifier (e.g., 'America/New_York', 'Europe/London')
- * @returns Formatted string in the specified timezone
- *
- * @example
- * formatDateTimeWithTimezone(new Date(), 'America/New_York') // "2024-03-15 14:30:00"
- */
-export const formatDateTimeWithTimezone = (
-  date: Date | string | null,
-  timeZone: string
-): string => {
-  if (!date) return '—';
-
-  let d: Date;
-  if (typeof date === 'string') {
-    d = new Date(date);
-    if (isNaN(d.getTime())) return '—';
-  } else {
-    d = date;
-    if (isNaN(d.getTime())) return '—';
-  }
-
-  try {
-    const formatter = new Intl.DateTimeFormat(getDateLocale(), {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      timeZone,
-    });
-
-    const parts = formatter.formatToParts(d);
-    const partsMap = new Map(parts.map(part => [part.type, part.value]));
-
-    const year = partsMap.get('year') ?? '';
-    const month = partsMap.get('month') ?? '';
-    const day = partsMap.get('day') ?? '';
-    const hour = partsMap.get('hour') ?? '';
-    const minute = partsMap.get('minute') ?? '';
-    const second = partsMap.get('second') ?? '';
-
-    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-  } catch (error) {
-    console.warn(`Failed to format date with timezone ${timeZone}:`, error);
-    // Fallback to browser timezone
-    return formatDateTime(d);
-  }
-};
-
-/**
  * Format timestamp string to display format
  * Parses the timestamp and formats it in browser's local timezone
  */

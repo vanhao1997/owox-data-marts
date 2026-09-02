@@ -5,7 +5,7 @@ import { DataDestinationProvider } from '../../../../../data-destination';
 import type { DataDestination } from '../../../../../data-destination';
 import { ReportFormMode, TemplateSourceTypeEnum } from '../../../shared';
 import type { DataMartReport } from '../../../shared/model/types/data-mart-report';
-import { EmailReportEditForm } from '../EmailReportEditForm';
+import { EmailReportEditForm } from '../EmailReportEditForm/EmailReportEditForm';
 import type { DataDestinationType } from '../../../../../data-destination';
 import { toast } from 'sonner';
 import { Link, useLocation, useParams } from 'react-router';
@@ -99,14 +99,8 @@ export function EmailReportEditSheet({
           </SheetTitle>
           <ReportSheetDescription mode={mode} report={initialReport}>
             {mode === ReportFormMode.CREATE
-              ? t(
-                  'reportsUi.createReportSheetDescription',
-                  'Điền thông tin để tạo báo cáo mới'
-                )
-              : t(
-                  'reportsUi.editReportSheetDescription',
-                  'Cập nhật thông tin của báo cáo hiện có'
-                )}
+              ? t('reportsUi.createReportSheetDescription', 'Điền thông tin để tạo báo cáo mới')
+              : t('reportsUi.editReportSheetDescription', 'Cập nhật thông tin của báo cáo hiện có')}
           </ReportSheetDescription>
         </SheetHeader>
 

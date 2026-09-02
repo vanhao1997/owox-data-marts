@@ -110,7 +110,3 @@ export function isSnowflakeStorage(storage: DataStorage): storage is SnowflakeDa
 export function isRedshiftStorage(storage: DataStorage): storage is RedshiftDataStorage {
   return storage.type === DataStorageType.AWS_REDSHIFT;
 }
-
-export function isDatabricksStorage(storage: DataStorage): storage is DatabricksDataStorage {
-  return storage.type === DataStorageType.DATABRICKS;
-}

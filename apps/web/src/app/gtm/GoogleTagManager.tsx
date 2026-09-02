@@ -96,5 +96,3 @@ export function GoogleTagManager(): null {
 
   return null;
 }
-
-export default GoogleTagManager;

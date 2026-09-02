@@ -26,7 +26,9 @@ import {
 import type { DataDestination } from '../../../../../data-destination';
 import { useDataDestination, useDataDestinationVisibility } from '../../../../../data-destination';
 import { useReportSidesheet } from '../../model/hooks';
-import { AddReportButton, ReportEditSheetRenderer, ReportListRenderer } from './index';
+import { AddReportButton } from './AddReportButton';
+import { ReportEditSheetRenderer } from './ReportEditSheetRenderer';
+import { ReportListRenderer } from './ReportListRenderer';
 import {
   canCreateReportInApp,
   DataDestinationType,
@@ -176,8 +178,14 @@ export function DestinationCard({
         </CollapsibleCard>
         {shouldShowInviteCard && (
           <InviteTeammatesCard
-            hint={t('reportsUi.inviteHint', '— Give business users self-service access to reporting in Google Sheets')}
-            docsLabel={t('reportsUi.learnSheetsDestination', 'Learn more about Google Sheets destination')}
+            hint={t(
+              'reportsUi.inviteHint',
+              '— Give business users self-service access to reporting in Google Sheets'
+            )}
+            docsLabel={t(
+              'reportsUi.learnSheetsDestination',
+              'Learn more about Google Sheets destination'
+            )}
             docsHref='https://docs.p2pdigital.io.vn/docs/destinations/supported-destinations/google-sheets/?utm_source=owox_data_marts&utm_medium=dm_page_destinations_tab&utm_campaign=no_reports_google_sheets_destination'
           />
         )}
@@ -207,10 +215,20 @@ export function DestinationCard({
             </AlertDialogTitle>
             <AlertDialogDescription>
               {dialogContent === 'publish'
-                ? t('reportsUi.publishToCreateDescription', 'Reports are available only for published Data Marts. We’ll open the new report form when publishing is complete.')
+                ? t(
+                    'reportsUi.publishToCreateDescription',
+                    'Reports are available only for published Data Marts. We’ll open the new report form when publishing is complete.'
+                  )
                 : requiredSetupActions.length === 1
-                  ? t('reportsUi.beforeCreateSingleSetup', 'Before creating a report, {{action}}.', { action: requiredSetupActions[0] })
-                  : t('reportsUi.beforeCreateMultipleSetup', 'Before creating a report the required setup is needed:')}
+                  ? t(
+                      'reportsUi.beforeCreateSingleSetup',
+                      'Before creating a report, {{action}}.',
+                      { action: requiredSetupActions[0] }
+                    )
+                  : t(
+                      'reportsUi.beforeCreateMultipleSetup',
+                      'Before creating a report the required setup is needed:'
+                    )}
             </AlertDialogDescription>
             {dialogContent === 'setup' && requiredSetupActions.length > 1 && (
               <ul className='text-muted-foreground list-disc space-y-0.5 pl-5 text-sm'>
@@ -222,13 +240,19 @@ export function DestinationCard({
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPublishing}>{t('reportsUi.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPublishing}>
+              {t('reportsUi.cancel', 'Cancel')}
+            </AlertDialogCancel>
             {dialogContent === 'publish' ? (
               <Button onClick={() => void handlePublishAndCreateReport()} disabled={isPublishing}>
-                {isPublishing ? t('reportsUi.publishing', 'Publishing…') : t('reportsUi.publishAndCreate', 'Publish and create report')}
+                {isPublishing
+                  ? t('reportsUi.publishing', 'Publishing…')
+                  : t('reportsUi.publishAndCreate', 'Publish and create report')}
               </Button>
             ) : (
-              <Button onClick={handleReviewDataSetup}>{t('reportsUi.openDataSetup', 'Open Data Setup')}</Button>
+              <Button onClick={handleReviewDataSetup}>
+                {t('reportsUi.openDataSetup', 'Open Data Setup')}
+              </Button>
             )}
           </AlertDialogFooter>
         </AlertDialogContent>

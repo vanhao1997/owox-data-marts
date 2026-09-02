@@ -71,7 +71,7 @@ import {
   insightTemplatesService,
   mapInsightTemplateFromDto,
 } from '../model';
-import { EmailReportEditSheet } from '../../reports/edit';
+import { EmailReportEditSheet } from '../../reports/edit/components/EmailReportEditSheet/EmailReportEditSheet';
 import { ReportFormMode, ReportsProvider, TemplateSourceTypeEnum } from '../../reports/shared';
 import { DataDestinationType, DataDestinationTypeModel } from '../../../data-destination';
 

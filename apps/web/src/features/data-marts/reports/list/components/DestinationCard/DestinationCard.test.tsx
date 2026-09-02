@@ -45,13 +45,19 @@ vi.mock('../../../shared', async importOriginal => {
   return { ...actual, useReport: () => ({ reports: [] }) };
 });
 
-vi.mock('./index', () => ({
+vi.mock('./AddReportButton', () => ({
   AddReportButton: ({ onAddReport }: { onAddReport: () => void }) => (
     <button type='button' onClick={onAddReport}>
       New Report
     </button>
   ),
+}));
+
+vi.mock('./ReportListRenderer', () => ({
   ReportListRenderer: () => null,
+}));
+
+vi.mock('./ReportEditSheetRenderer', () => ({
   ReportEditSheetRenderer: ({ isOpen }: { isOpen: boolean }) =>
     isOpen ? <div role='dialog'>Report form</div> : null,
 }));

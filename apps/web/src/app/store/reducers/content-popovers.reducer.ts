@@ -10,9 +10,9 @@ export const contentPopoversInitialState: ContentPopoversState = {
   isOpen: false,
 };
 
-export const OPEN_POPOVER = 'contentPopovers/OPEN_POPOVER';
-export const CLOSE_POPOVER = 'contentPopovers/CLOSE_POPOVER';
-export const TOGGLE_POPOVER = 'contentPopovers/TOGGLE_POPOVER';
+const OPEN_POPOVER = 'contentPopovers/OPEN_POPOVER';
+const CLOSE_POPOVER = 'contentPopovers/CLOSE_POPOVER';
+const TOGGLE_POPOVER = 'contentPopovers/TOGGLE_POPOVER';
 
 export function openPopover(id: string) {
   return { type: OPEN_POPOVER, payload: id } satisfies AnyAction;

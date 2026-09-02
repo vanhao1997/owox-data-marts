@@ -1,43 +1,6 @@
-import {
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Info,
-  AlertTriangle,
-  Circle,
-  Loader2,
-  Ban,
-  CircleStop,
-  CalendarClock,
-  SquarePlay,
-} from 'lucide-react';
+import { XCircle, AlertCircle, Info, AlertTriangle, CalendarClock, SquarePlay } from 'lucide-react';
 import { LogLevel } from './types';
-import { DataMartRunStatus, DataMartRunTriggerType } from '../../../shared';
-
-export function getStatusIcon(status: DataMartRunStatus) {
-  return (
-    <div className='flex items-center gap-2'>
-      {(() => {
-        switch (status) {
-          case DataMartRunStatus.SUCCESS:
-            return <CheckCircle className='h-4 w-4 text-green-500' />;
-          case DataMartRunStatus.FAILED:
-            return <XCircle className='h-4 w-4 text-red-500' />;
-          case DataMartRunStatus.RUNNING:
-            return <Loader2 className='text-primary h-4 w-4 animate-spin' />;
-          case DataMartRunStatus.CANCELLED:
-            return <Ban className='h-4 w-4 text-gray-500' />;
-          case DataMartRunStatus.INTERRUPTED:
-            return <CircleStop className='h-4 w-4 text-gray-500' />;
-          case DataMartRunStatus.RESTRICTED:
-            return <XCircle className='h-4 w-4 text-yellow-500' />;
-          default:
-            return <Circle className='h-4 w-4 text-gray-500' />;
-        }
-      })()}
-    </div>
-  );
-}
+import { DataMartRunTriggerType } from '../../../shared';
 
 export function getLogLevelIcon(level: LogLevel) {
   switch (level) {

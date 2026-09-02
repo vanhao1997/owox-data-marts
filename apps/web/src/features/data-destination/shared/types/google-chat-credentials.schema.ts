@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const GOOGLE_CHAT_WEBHOOK_PATH = /^\/v1\/spaces\/[^/]+\/messages$/;
 
-export function isGoogleChatWebhookUrl(value: string): boolean {
+function isGoogleChatWebhookUrl(value: string): boolean {
   try {
     const url = new URL(value);
     return (

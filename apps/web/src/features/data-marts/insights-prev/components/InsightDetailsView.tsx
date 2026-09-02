@@ -37,7 +37,7 @@ import {
 } from '../../../../shared/components/MarkdownEditor';
 import { useInsights } from '../model';
 import { useInsightsPermissions } from '../hooks/useInsightsPermissions';
-import { EmailReportEditSheet } from '../../reports/edit';
+import { EmailReportEditSheet } from '../../reports/edit/components/EmailReportEditSheet/EmailReportEditSheet';
 import { ReportFormMode, ReportsProvider } from '../../reports/shared';
 import { DataDestinationType } from '../../../data-destination';
 import { InsightLoader } from './InsightMinerLoader.tsx';

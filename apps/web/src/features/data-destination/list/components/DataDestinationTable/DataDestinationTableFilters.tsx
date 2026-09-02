@@ -1,9 +1,7 @@
-import type { FilterConfigItem } from '../../../../../shared/components/TableFilters';
-import {
-  TableFilters,
-  TableFiltersContent,
-  TableFiltersTrigger,
-} from '../../../../../shared/components/TableFilters';
+import type { FilterConfigItem } from '../../../../../shared/components/TableFilters/types';
+import { TableFilters } from '../../../../../shared/components/TableFilters/TableFilters';
+import { TableFiltersContent } from '../../../../../shared/components/TableFilters/TableFiltersContent';
+import { TableFiltersTrigger } from '../../../../../shared/components/TableFilters/TableFiltersTrigger';
 import type { FiltersState } from '../../../../../shared/components/TableFilters/types';
 import type { DataDestinationFilterKey } from './DataDestinationTableFilters.config';
 

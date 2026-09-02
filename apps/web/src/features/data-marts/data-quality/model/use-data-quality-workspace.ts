@@ -64,7 +64,7 @@ export function useDataQualitySummary(projectId: string, dataMartId: string) {
   });
 }
 
-export function useDataQualityConfig(projectId: string, dataMartId: string) {
+function useDataQualityConfig(projectId: string, dataMartId: string) {
   return useQuery({
     queryKey: dataQualityQueryKeys.config(projectId, dataMartId),
     queryFn: ({ signal }) =>
@@ -73,7 +73,7 @@ export function useDataQualityConfig(projectId: string, dataMartId: string) {
   });
 }
 
-export function useLatestDataQualityRun(projectId: string, dataMartId: string) {
+function useLatestDataQualityRun(projectId: string, dataMartId: string) {
   return useQuery({
     queryKey: dataQualityQueryKeys.latest(projectId, dataMartId),
     queryFn: ({ signal }) =>

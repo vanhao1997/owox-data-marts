@@ -11,15 +11,10 @@ const initialState: ProjectState = {
 };
 
 // Actions
-export const SET_PROJECT = 'project/SET_PROJECT';
-export const CLEAR_PROJECT = 'project/CLEAR_PROJECT';
+const SET_PROJECT = 'project/SET_PROJECT';
 
 export function setProject(payload: { id: string; title: string | null }) {
   return { type: SET_PROJECT, payload } satisfies AnyAction;
-}
-
-export function clearProject() {
-  return { type: CLEAR_PROJECT } satisfies AnyAction;
 }
 
 export function projectReducer(
@@ -31,8 +26,6 @@ export function projectReducer(
       const { id, title } = action.payload as { id: string; title?: string | null };
       return { id, title: title ?? null };
     }
-    case CLEAR_PROJECT:
-      return { ...initialState };
     default:
       return state;
   }

@@ -13,7 +13,7 @@ import {
   DataDestinationType,
   generateLookerStudioJsonConfig,
 } from '../../../shared';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { isLookerStudioCredentials } from '../../../shared/model/types/looker-studio-credentials.ts';
 import { useTranslation } from 'react-i18next';
 

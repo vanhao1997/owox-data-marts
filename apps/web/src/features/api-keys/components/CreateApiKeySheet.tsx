@@ -31,7 +31,7 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { Loader2 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { apiKeysService } from '../services/api-keys.service';
 import type { CreateProjectMemberApiKeyResponse } from '../types';
 import { ApiKeyDocumentationSection, ApiKeyFormLabel } from './ApiKeyFormShared';

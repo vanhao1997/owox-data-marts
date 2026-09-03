@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { licenseKeysService } from '../services/license-keys.service';
 import type { LicenseKey } from '../types';
 

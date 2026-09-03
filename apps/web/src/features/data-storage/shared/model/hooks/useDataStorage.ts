@@ -12,7 +12,7 @@ import { invalidateDataStorageHealthStatus } from '../../services/data-storage-h
 import type { DataStorageFormData } from '../../types/data-storage.schema.ts';
 import { DataStorageType } from '../types';
 import { extractApiError } from '../../../../../app/api';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { trackEvent } from '../../../../../utils/data-layer';
 import { useRefreshSetupProgress } from '../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';
 

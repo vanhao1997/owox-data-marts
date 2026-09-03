@@ -15,3 +15,9 @@ createRoot(rootElement).render(
     <App />
   </StrictMode>
 );
+
+import { initWebVitals } from './utils/web-vitals';
+import { initGlobalErrorHandlers } from './utils/error-reporter';
+
+initGlobalErrorHandlers();
+void initWebVitals();

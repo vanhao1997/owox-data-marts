@@ -1,7 +1,6 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, cleanup } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import { isInsideIgnoredDismissPortal } from '@owox/ui/lib/dismissable-portals';
-import { Toaster as HotToaster } from './index';
 
 /**
  * Sheets close on any interaction outside their DOM subtree. Toasts render in
@@ -20,15 +19,14 @@ describe('toast portals are ignored by the sheet outside-dismiss guard', () => {
     document.body.innerHTML = '';
   });
 
-  it('recognises the react-hot-toast portal the app renders', () => {
-    render(<HotToaster />);
-
-    const portal = document.querySelector('[data-rht-toaster]');
-    expect(portal).not.toBeNull();
-
-    // Stand in for a toast's dismiss button.
+  it('recognises the sonner portal via data attribute', () => {
+    // Sonner renders its container with data-sonner-toaster when a toast exists.
+    // We test the attribute-based detection directly since Sonner needs providers to render.
+    const portal = document.createElement('ol');
+    portal.setAttribute('data-sonner-toaster', 'true');
     const dismissButton = document.createElement('button');
-    portal?.appendChild(dismissButton);
+    portal.appendChild(dismissButton);
+    document.body.appendChild(portal);
 
     expect(isInsideIgnoredDismissPortal(dismissButton)).toBe(true);
   });

@@ -2,9 +2,14 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import { TaskStatus } from '../../../../../shared/types/task-status.enum.ts';
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   __esModule: true,
   default: {
+    loading: vi.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    dismiss: vi.fn(),
+  }, toast: {
     loading: vi.fn(),
     success: vi.fn(),
     error: vi.fn(),
@@ -27,7 +32,7 @@ vi.mock('../../../../data-storage/shared/services/data-storage-health-status.ser
   invalidateDataStorageHealthStatus: vi.fn(),
 }));
 
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { dataMartService } from '../../services/data-mart.service';
 import { invalidateDataStorageHealthStatus } from '../../../../data-storage/shared/services/data-storage-health-status.service';
 import { useSchemaActualizeTrigger } from '../useSchemaActualizeTrigger';

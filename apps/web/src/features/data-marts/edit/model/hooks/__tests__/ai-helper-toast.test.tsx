@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import {
   dismissAiHelperToasts,
@@ -9,12 +9,13 @@ import {
   showAiHelperErrorToast,
 } from '../ai-helper-toast';
 
-vi.mock('react-hot-toast', () => {
+vi.mock('sonner', () => {
   const mock = Object.assign(vi.fn(), {
     error: vi.fn(),
+    custom: vi.fn(),
     dismiss: vi.fn(),
   });
-  return { default: mock };
+  return { default: mock, toast: mock };
 });
 
 const BIGQUERY_ACCESS_DENIED =
@@ -23,7 +24,7 @@ const BIGQUERY_ACCESS_DENIED =
 type ToastContent = (t: { id: string }) => ReactNode;
 
 function renderLastErrorToast(): void {
-  const calls = vi.mocked(toast.error).mock.calls;
+  const calls = vi.mocked(toast.custom).mock.calls;
   const [content] = calls[calls.length - 1] as unknown as [ToastContent];
   render(<>{content({ id: 'toast-1' })}</>);
 }
@@ -56,14 +57,14 @@ describe('humanizeAiHelperError', () => {
 
 describe('showAiHelperErrorToast', () => {
   beforeEach(() => {
-    vi.mocked(toast.error).mockClear();
+    vi.mocked(toast.custom).mockClear();
     vi.mocked(toast.dismiss).mockClear();
   });
 
-  it('shows a persistent react-hot-toast error keyed by data mart', () => {
+  it('shows a persistent sonner error keyed by data mart', () => {
     showAiHelperErrorToast('dm-1', 'Something failed');
 
-    expect(toast.error).toHaveBeenCalledWith(expect.any(Function), {
+    expect(toast.custom).toHaveBeenCalledWith(expect.any(Function), {
       duration: Infinity,
       id: 'ai-helper-error-dm-1',
     });
@@ -76,7 +77,7 @@ describe('showAiHelperErrorToast', () => {
     expect(screen.getByText(/can't access BigQuery project/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss error' }));
-    expect(toast.dismiss).toHaveBeenCalledWith('toast-1');
+    expect(toast.dismiss).toHaveBeenCalledWith('ai-helper-error-dm-1');
   });
 
   it('expands the raw error by re-issuing the toast under the same id', () => {
@@ -86,8 +87,8 @@ describe('showAiHelperErrorToast', () => {
     expect(screen.queryByText(BIGQUERY_ACCESS_DENIED)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Show technical details' }));
 
-    // The click re-issues the toast (same id) so react-hot-toast re-renders and re-measures.
-    expect(toast.error).toHaveBeenCalledTimes(2);
+    // The click re-issues the toast (same id) so sonner re-renders and re-measures.
+    expect(toast.custom).toHaveBeenCalledTimes(2);
     renderLastErrorToast();
     expect(screen.getByText(BIGQUERY_ACCESS_DENIED)).toBeInTheDocument();
   });
@@ -106,7 +107,7 @@ describe('showAiHelperCancelledToast', () => {
   it('shows a persistent, dismissible notice keyed by data mart', () => {
     showAiHelperCancelledToast('dm-2');
 
-    expect(toast).toHaveBeenCalledWith(expect.any(Function), {
+    expect(toast.custom).toHaveBeenCalledWith(expect.any(Function), {
       duration: Infinity,
       id: 'ai-helper-cancelled-dm-2',
     });

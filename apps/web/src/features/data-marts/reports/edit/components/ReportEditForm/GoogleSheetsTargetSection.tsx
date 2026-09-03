@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { ExternalLink, Loader2, Plus } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import {
   FormControl,

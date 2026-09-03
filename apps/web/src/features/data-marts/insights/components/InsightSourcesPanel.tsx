@@ -43,7 +43,7 @@ import {
   DropdownMenuTrigger,
 } from '@owox/ui/components/dropdown-menu';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@owox/ui/components/tooltip';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { trackEvent } from '../../../../utils';
 import { cn } from '@owox/ui/lib/utils';
 import {

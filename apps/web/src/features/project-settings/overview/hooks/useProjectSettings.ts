@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { projectSettingsApiService } from '../services';
 import type { ProjectSettings } from '../types';
 

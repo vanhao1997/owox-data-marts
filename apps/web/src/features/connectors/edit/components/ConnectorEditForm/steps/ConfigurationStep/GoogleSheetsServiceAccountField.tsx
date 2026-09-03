@@ -4,7 +4,7 @@ import { Input } from '@owox/ui/components/input';
 import { FileDropTextarea } from '@owox/ui/components/file-drop-textarea';
 import { AppWizardStepLabel } from '@owox/ui/components/common/wizard';
 import { ExternalAnchor } from '@owox/ui/components/common/external-anchor';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Check, Copy } from 'lucide-react';
 import { SECRET_MASK } from '../../../../../../../shared/constants/secrets';
 import { getServiceAccountLink } from '../../../../../../../utils';

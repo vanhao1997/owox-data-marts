@@ -9,7 +9,7 @@ import {
 } from '@owox/ui/components/form';
 import { FileDropTextarea } from '@owox/ui/components/file-drop-textarea';
 import { Input } from '@owox/ui/components/input';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
 import { type UseFormReturn } from 'react-hook-form';
 import { type DataDestinationFormData, DataDestinationType } from '../../../shared';

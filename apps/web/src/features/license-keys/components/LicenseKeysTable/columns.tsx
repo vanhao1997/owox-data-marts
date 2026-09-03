@@ -9,7 +9,7 @@ import {
 import { Copy, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import RelativeTime from '@owox/ui/components/common/relative-time';
 import { SortableHeader, ToggleColumnsHeader } from '../../../../shared/components/Table';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import type { LicenseKey } from '../../types';
 import { ExpirationValue } from '../../../../shared/components/ExpirationValue/ExpirationValue';
 import { UserReference } from '../../../../shared/components/UserReference';

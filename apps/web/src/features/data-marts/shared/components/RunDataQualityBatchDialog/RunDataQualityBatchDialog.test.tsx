@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { dataQualityBatchApi } from './data-quality-batch.api';
 import { RunDataQualityBatchDialog } from './RunDataQualityBatchDialog';
@@ -13,8 +13,11 @@ vi.mock('./data-quality-batch.api', () => ({
   },
 }));
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   default: {
+    success: vi.fn(),
+    error: vi.fn(),
+  }, toast: {
     success: vi.fn(),
     error: vi.fn(),
   },

@@ -12,7 +12,7 @@ import {
 import { Input } from '@owox/ui/components/input';
 import { Tabs, TabsList, TabsTrigger } from '@owox/ui/components/tabs';
 import { FileDropTextarea } from '@owox/ui/components/file-drop-textarea';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { Combobox } from '../../../../../shared/components/Combobox/combobox.tsx';

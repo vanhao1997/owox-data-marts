@@ -44,6 +44,8 @@ const authStateManager = new AuthStateManager();
 // Request interceptor to add auth headers
 apiClient.interceptors.request.use(
   (config: ExtendedInternalAxiosRequestConfig) => {
+    (config as unknown as Record<string, unknown>)._requestStartTime = Date.now();
+
     if (config.skipAuthHeader) {
       return config;
     }
@@ -69,7 +71,20 @@ apiClient.interceptors.request.use(
 
 // Response interceptor for error handling and token refresh
 apiClient.interceptors.response.use(
-  response => response,
+  response => {
+    const startTime = (response.config as unknown as Record<string, unknown>)?._requestStartTime as
+      | number
+      | undefined;
+    if (startTime && import.meta.env.DEV) {
+      const duration = Date.now() - startTime;
+      if (duration > 3000) {
+        console.warn(
+          `[Slow API] ${response.config.method?.toUpperCase()} ${response.config.url} took ${duration}ms`
+        );
+      }
+    }
+    return response;
+  },
   async (error: AxiosError) => {
     const originalRequest = error.config as ExtendedInternalAxiosRequestConfig;
 

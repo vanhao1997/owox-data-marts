@@ -25,7 +25,7 @@ import { Button } from '@owox/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { cn } from '@owox/ui/lib/utils';
 import { Copy, Loader2, Trash2 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { apiKeysService } from '../services/api-keys.service';
 import { formatDateShort } from '../../../utils';
 import type { ProjectMemberApiKey } from '../types';

@@ -40,8 +40,8 @@ vi.mock('../../../../../../utils', () => ({
   trackEvent: mocks.trackEvent,
 }));
 
-vi.mock('react-hot-toast', () => ({
-  default: { success: vi.fn() },
+vi.mock('sonner', () => ({
+  default: { success: vi.fn() }, toast: { success: vi.fn() },
 }));
 
 const wrapper = ({ children }: PropsWithChildren) => <ReportsProvider>{children}</ReportsProvider>;

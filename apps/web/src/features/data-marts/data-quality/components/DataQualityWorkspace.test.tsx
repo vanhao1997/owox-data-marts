@@ -2,7 +2,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { MemoryRouter } from 'react-router';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DataQualityWorkspace } from './DataQualityWorkspace';
 import type { DataQualityConfig, DataQualityConfigResponse } from '../model/types';

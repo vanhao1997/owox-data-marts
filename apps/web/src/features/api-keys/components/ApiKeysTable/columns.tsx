@@ -10,7 +10,7 @@ import { Copy, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import RelativeTime from '@owox/ui/components/common/relative-time';
 import { SortableHeader, ToggleColumnsHeader } from '../../../../shared/components/Table';
 import type { ProjectMemberApiKey } from '../../types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { ApiKeyExpirationValue } from '../ApiKeyExpirationValue';
 import type { TFunction } from 'i18next';
 

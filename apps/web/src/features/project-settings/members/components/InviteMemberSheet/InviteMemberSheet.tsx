@@ -25,7 +25,7 @@ import {
   FormSection,
 } from '@owox/ui/components/form';
 import { Loader2, Check, Copy, Link2, Clock, ShieldCheck } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { projectMembersService } from '../../../../../features/project-members/services/project-members.service';
 import type { InviteMemberResponse } from '../../../../../features/project-members/services/project-members.service';
 import {

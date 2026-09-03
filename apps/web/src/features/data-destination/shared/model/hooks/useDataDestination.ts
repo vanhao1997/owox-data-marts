@@ -8,7 +8,7 @@ import type {
   CreateDataDestinationCopyRequestDto,
   UpdateDataDestinationRequestDto,
 } from '../../services/types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { trackEvent } from '../../../../../utils/data-layer';
 import { useRefreshSetupProgress } from '../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';
 

@@ -3,7 +3,7 @@ import { cn } from '@owox/ui/lib/utils';
 import { Editor } from '@monaco-editor/react';
 import { useTheme } from 'next-themes';
 import { Copy, FileCode2, Loader2 } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import {
   Dialog,

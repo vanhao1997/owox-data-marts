@@ -32,7 +32,7 @@ import {
 import { Input } from '@owox/ui/components/input';
 import { Button } from '@owox/ui/components/button';
 import { Loader2 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { licenseKeysService } from '../services/license-keys.service';
 import type { CreateLicenseKeyResponse } from '../types';
 

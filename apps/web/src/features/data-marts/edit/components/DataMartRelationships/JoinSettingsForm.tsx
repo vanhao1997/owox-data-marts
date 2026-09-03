@@ -16,7 +16,7 @@ import { ExternalLink, Info, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../../../../../shared/components/Button';
 import { Combobox } from '../../../../../shared/components/Combobox/combobox';

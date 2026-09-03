@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import type { ColumnDef } from '@tanstack/react-table';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { SkeletonList } from '@owox/ui/components/common/skeleton-list';
 import { extractApiError } from '../../../app/api';
 import { InsightRowActionsCell } from '../../../features/data-marts/insights/components/InsightRowActionsCell';

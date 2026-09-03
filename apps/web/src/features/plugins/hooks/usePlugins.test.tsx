@@ -4,11 +4,11 @@ import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../../shared/hooks', () => ({ useProjectId: () => 'project-1' }));
-vi.mock('react-hot-toast', () => {
+vi.mock('sonner', () => {
   // Callable with properties: neutral outcomes use the bare toast(), which is not a
   // success and not an error.
   const toast = Object.assign(vi.fn(), { error: vi.fn(), success: vi.fn() });
-  return { default: toast };
+  return { default: toast, toast };
 });
 vi.mock('../services/plugins.service', () => ({
   pluginsService: {
@@ -20,7 +20,7 @@ vi.mock('../services/plugins.service', () => ({
   },
 }));
 
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { pluginsService } from '../services/plugins.service';
 import { usePluginActions, usePluginGallery } from './usePlugins';
 

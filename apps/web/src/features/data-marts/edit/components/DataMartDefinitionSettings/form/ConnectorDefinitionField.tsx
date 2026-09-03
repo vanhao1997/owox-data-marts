@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useFormContext, type Control } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { type DataMartDefinitionFormData } from '../../../model/schema/data-mart-definition.schema';
 import { FormControl, FormField, FormItem, FormMessage } from '@owox/ui/components/form';
 import { Button } from '@owox/ui/components/button';

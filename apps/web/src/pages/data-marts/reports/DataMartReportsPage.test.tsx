@@ -20,7 +20,7 @@ import DataMartReportsPage from './DataMartReportsPage';
 import { mergeReportPagePreservingRows } from './DataMartReportsPage.utils';
 
 const mockToastCustom = vi.hoisted(() => vi.fn().mockReturnValue('mock-toast-id'));
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   default: { custom: mockToastCustom, dismiss: vi.fn(), success: vi.fn(), error: vi.fn() },
   toast: { custom: mockToastCustom, dismiss: vi.fn(), success: vi.fn(), error: vi.fn() },
 }));

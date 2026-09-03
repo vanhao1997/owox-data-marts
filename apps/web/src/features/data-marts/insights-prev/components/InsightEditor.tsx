@@ -9,7 +9,7 @@ import {
   registerSlashCommandProvider,
   setActiveCopyTemplateHandler,
 } from '../utils/monaco-commands.util.ts';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Lightbulb } from 'lucide-react';
 import { trackEvent } from '../../../../utils';
 

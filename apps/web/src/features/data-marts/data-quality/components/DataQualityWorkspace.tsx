@@ -12,7 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { extractApiError } from '../../../../app/api';

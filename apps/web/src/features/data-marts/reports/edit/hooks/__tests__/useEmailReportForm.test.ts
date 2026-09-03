@@ -1,9 +1,14 @@
 import { renderHook, act } from '@testing-library/react';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   __esModule: true,
   default: {
+    success: vi.fn(),
+    error: vi.fn(),
+    loading: vi.fn(),
+    dismiss: vi.fn(),
+  }, toast: {
     success: vi.fn(),
     error: vi.fn(),
     loading: vi.fn(),

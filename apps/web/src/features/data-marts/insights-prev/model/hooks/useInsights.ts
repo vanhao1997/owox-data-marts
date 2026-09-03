@@ -12,7 +12,7 @@ import {
 import { extractApiError } from '../../../../../app/api';
 import { useDataMartContext } from '../../../edit/model';
 import { trackEvent } from '../../../../../utils';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import type { InsightEntity } from '../types';
 import { useInsightsContext } from '../context/useInsightsContext.ts';
 import { RequestStatus } from '../../../../../shared/types/request-status.ts';

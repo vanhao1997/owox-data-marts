@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { contextService } from '../../services/context.service';
 import { AdminsHoverCard } from '../../../project-members/components/AdminsHoverCard';
 import type { ContextDto } from '../../types/context.types';

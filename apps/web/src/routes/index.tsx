@@ -28,21 +28,19 @@ const DataDestinationListPage = lazy(() =>
     default: module.DataDestinationListPage,
   }))
 );
-import { ProjectSettingsPage } from '../pages/project-settings/ProjectSettingsPage';
+
 const ProjectNotificationsPage = lazy(() =>
   import('../pages/notifications/project').then(module => ({
     default: module.ProjectNotificationsPage,
   }))
 );
-import { RequestAccessPage } from '../pages/request-access/RequestAccessPage';
-import { LegacyRequestAccessRedirect } from '../pages/request-access/LegacyRequestAccessRedirect';
+
 import { dataMartDetailsRoutes } from './data-marts/routes';
 import { projectSettingsRoutes } from './project-settings/routes';
 import { ProjectRedirect } from '../components/ProjectRedirect';
 import { oauthRoutes } from './oauth.routes';
 import { RootErrorBoundary, LayoutErrorBoundary } from '../components/errors';
-import { MyApiKeysPage } from '../features/api-keys/pages/MyApiKeysPage';
-import { SearchPage } from '../pages/search/SearchPage';
+
 import { ConnectFlowLayout } from '../layouts/ConnectFlowLayout';
 const ConnectGoogleSheetsPage = lazy(() =>
   import('../pages/connect/ConnectGoogleSheetsPage').then(module => ({
@@ -55,8 +53,38 @@ const ConnectGoogleSheetsDonePage = lazy(() =>
   }))
 );
 import { pluginsRoutes } from './plugins/routes';
-import { ProjectsPage } from '../pages/projects/ProjectsPage';
+
 import { AuthGuard } from '../features/idp/components/AuthGuard';
+const ProjectSettingsPage = lazy(() =>
+  import('../pages/project-settings/ProjectSettingsPage').then(module => ({
+    default: module.ProjectSettingsPage,
+  }))
+);
+const RequestAccessPage = lazy(() =>
+  import('../pages/request-access/RequestAccessPage').then(module => ({
+    default: module.RequestAccessPage,
+  }))
+);
+const LegacyRequestAccessRedirect = lazy(() =>
+  import('../pages/request-access/LegacyRequestAccessRedirect').then(module => ({
+    default: module.LegacyRequestAccessRedirect,
+  }))
+);
+const MyApiKeysPage = lazy(() =>
+  import('../features/api-keys/pages/MyApiKeysPage').then(module => ({
+    default: module.MyApiKeysPage,
+  }))
+);
+const SearchPage = lazy(() =>
+  import('../pages/search/SearchPage').then(module => ({
+    default: module.SearchPage,
+  }))
+);
+const ProjectsPage = lazy(() =>
+  import('../pages/projects/ProjectsPage').then(module => ({
+    default: module.ProjectsPage,
+  }))
+);
 import { RouteLoading } from './RouteLoading';
 
 function lazyElement(element: ReactNode) {
@@ -68,7 +96,7 @@ const routes: RouteObject[] = [
     path: '/projects',
     element: (
       <AuthGuard>
-        <ProjectsPage />
+        {lazyElement(<ProjectsPage />)}
       </AuthGuard>
     ),
     errorElement: <RootErrorBoundary />,
@@ -86,7 +114,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: 'request-access',
-        element: <RequestAccessPage />,
+        element: lazyElement(<RequestAccessPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
@@ -153,12 +181,12 @@ const routes: RouteObject[] = [
       },
       {
         path: 'search',
-        element: <SearchPage />,
+        element: lazyElement(<SearchPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
         path: 'project-settings',
-        element: <ProjectSettingsPage />,
+        element: lazyElement(<ProjectSettingsPage />),
         errorElement: <LayoutErrorBoundary />,
         children: projectSettingsRoutes,
       },
@@ -177,7 +205,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'me/api-keys',
-        element: <MyApiKeysPage />,
+        element: lazyElement(<MyApiKeysPage />),
         errorElement: <LayoutErrorBoundary />,
       },
       {
@@ -214,7 +242,7 @@ const routes: RouteObject[] = [
   },
   {
     path: '/request-access',
-    element: <LegacyRequestAccessRedirect />,
+    element: lazyElement(<LegacyRequestAccessRedirect />),
     errorElement: <RootErrorBoundary />,
   },
   {

@@ -2,10 +2,20 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import basicSsl from '@vitejs/plugin-basic-ssl';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), tailwindcss(), basicSsl()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    basicSsl(),
+    mode === 'analyze' && visualizer({
+      open: true,
+      filename: 'dist/bundle-report.html',
+      gzipSize: true,
+    }),
+  ].filter(Boolean),
   // esbuild >=0.28 errors when lowering some destructuring patterns (styled-components, @base-ui/react,
   // lucide-react, ...) for the Safari 14 target workaround. The target browsers all support destructuring
   // natively, so tell esbuild not to transform it. This must be set in BOTH passes: `esbuild` covers source
@@ -26,6 +36,20 @@ export default defineConfig(({ mode }) => ({
   build: {
     minify: mode === 'production',
     sourcemap: mode === 'development',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router'],
+          'vendor-query': ['@tanstack/react-query'],
+          'vendor-i18n': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          'vendor-forms': ['react-hook-form', '@hookform/resolvers'],
+          'vendor-editor': ['@monaco-editor/react'],
+          'vendor-flow': ['@xyflow/react', '@dagrejs/dagre'],
+          'vendor-dnd': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+        },
+      },
+    },
   },
   test: {
     environment: 'happy-dom',

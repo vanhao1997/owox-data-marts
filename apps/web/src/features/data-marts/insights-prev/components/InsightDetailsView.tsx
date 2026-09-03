@@ -19,7 +19,7 @@ import {
 } from '@owox/ui/components/dropdown-menu';
 import { Button } from '@owox/ui/components/button';
 import { MoreVertical, Trash2, Bookmark, BookmarkX, Loader2, Send, Copy } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useClipboard } from '../../../../hooks/useClipboard';
 import { ConfirmationDialog } from '../../../../shared/components/ConfirmationDialog';
 import {

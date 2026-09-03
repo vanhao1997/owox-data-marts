@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { X } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
 import { cn } from '@owox/ui/lib/utils';

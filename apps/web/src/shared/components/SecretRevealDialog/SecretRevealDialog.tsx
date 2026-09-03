@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from '@owox/ui/components/alert';
 import { Label } from '@owox/ui/components/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@owox/ui/components/tooltip';
 import { Copy, ExternalLink, Eye, EyeOff, Info } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface SecretRevealDialogProps {
   title: string;

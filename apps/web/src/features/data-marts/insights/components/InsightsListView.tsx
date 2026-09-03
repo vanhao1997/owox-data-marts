@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Plus, Bookmark } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import type { ColumnDef } from '@tanstack/react-table';
 import {

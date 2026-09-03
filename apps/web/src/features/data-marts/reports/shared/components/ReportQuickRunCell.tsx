@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Loader2, Play } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import {
   Tooltip,
@@ -85,10 +85,11 @@ export function ReportQuickRunCell({ report, onRunSuccess }: ReportQuickRunCellP
       hasRunRef.current = false;
       setIsPending(true);
 
-      const id = toast.custom(
-        t => (
+      const toastId = String(Date.now());
+      toast.custom(
+        () => (
           <RunUndoToast
-            toastId={t.id}
+            toastId={toastId}
             reportName={report.title}
             gracePeriodMs={GRACE_PERIOD_MS}
             onConfirm={executeRun}
@@ -100,10 +101,10 @@ export function ReportQuickRunCell({ report, onRunSuccess }: ReportQuickRunCellP
             }}
           />
         ),
-        { duration: Infinity, position: 'bottom-center' }
+        { id: toastId, duration: Infinity, position: 'bottom-center' }
       );
 
-      toastIdRef.current = id;
+      toastIdRef.current = toastId;
     },
     [canRun, isPending, isRunning, isOptimisticRunning, executeRun, report.title]
   );

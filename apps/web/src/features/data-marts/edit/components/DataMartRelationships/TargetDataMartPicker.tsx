@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '../../../../../shared/components/Button';
 import { Combobox } from '../../../../../shared/components/Combobox/combobox';
 import { generateUniqueAlias, slugify } from '../../../../../utils/string-utils';

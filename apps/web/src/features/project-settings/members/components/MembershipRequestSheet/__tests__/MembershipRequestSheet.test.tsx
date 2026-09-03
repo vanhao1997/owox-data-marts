@@ -131,7 +131,7 @@ vi.mock('@owox/ui/components/button', () => ({
 }));
 
 // Mock toast to avoid side effects
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),

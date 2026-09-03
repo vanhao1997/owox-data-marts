@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { reportService } from '../../../shared';
 import { mapReportDtoToEntity } from '../../../shared/model/mappers';
 import { ReportStatusEnum } from '../../../shared/enums';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const REPORTS_BY_INSIGHT_TEMPLATE_QUERY_KEY = 'reports-by-insight-template';
 

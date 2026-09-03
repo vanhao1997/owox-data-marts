@@ -5,7 +5,7 @@ import type { CreateReportRequestDto, UpdateReportRequestDto } from '../../servi
 import type { ReportStatusPollingConfig } from '../../services';
 import { useReportContext, ReportActionType } from '../context';
 import { mapReportDtoToEntity } from '../mappers';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { trackEvent } from '../../../../../../utils';
 import { useRefreshSetupProgress } from '../../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';
 import { ReportStatusEnum } from '../../enums';

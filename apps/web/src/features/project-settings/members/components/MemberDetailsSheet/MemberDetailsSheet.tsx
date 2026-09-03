@@ -38,7 +38,7 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { Loader2, User } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { projectMembersService } from '../../../../../features/project-members/services/project-members.service';
 import { getRoleDisplayName } from '../../../../../features/idp/utils/role-display-name';
 import { ContextsCheckboxList } from '../../../../../features/contexts/components/ContextsCheckboxList';

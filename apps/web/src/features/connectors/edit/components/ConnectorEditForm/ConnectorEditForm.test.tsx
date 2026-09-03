@@ -28,7 +28,7 @@ const { connectorHook, recorded, recordedFields, recordedNavigation, toastError 
   })
 );
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   toast: { error: toastError },
 }));
 

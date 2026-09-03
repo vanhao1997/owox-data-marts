@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@owox/ui/components/dropdown-menu';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { ConfirmationDialog } from '../../../../../../shared/components/ConfirmationDialog';
 import { showApiErrorToast } from '../../../../../../shared/utils/showApiErrorToast';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight, Loader2, UserCog } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import { FormRadioCard, FormRadioCardGroup } from '@owox/ui/components/form';
 import { getRoleDisplayName } from '../../../../idp/utils/role-display-name';

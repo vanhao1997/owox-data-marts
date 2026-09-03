@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { projectMembersService } from '../../project-members/services/project-members.service';
 import type { ContextDto, MemberWithScopeDto } from '../types/context.types';
 

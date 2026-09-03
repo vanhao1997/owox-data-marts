@@ -8,7 +8,7 @@ const exportMocks = vi.hoisted(() => {
   return { toast, trackEvent: vi.fn() };
 });
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   default: exportMocks.toast,
   toast: exportMocks.toast,
 }));

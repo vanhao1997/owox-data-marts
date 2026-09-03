@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { dataMartService } from '../../shared/services/data-mart.service';
 import type { DataLastUpdatedDto } from '../../shared/types/api/response/data-mart-data-last-updated.dto';
 import type { ModelCanvasTopologyData } from './types';

@@ -20,7 +20,7 @@ import {
 } from '@owox/ui/components/common/wizard';
 import { trackEvent } from '../../../../../utils';
 import { resolveEffectiveDataLevel } from '../../../shared/constants/connector-config';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import { RefreshCw } from 'lucide-react';
 import { extractApiError } from '../../../../../app/api/extract-api-error.util';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { ContextsTable } from '../../features/contexts/components/ContextsTable/ContextsTable';
 import { ContextDetailsSheet } from '../../features/contexts/components/ContextDetailsSheet/ContextDetailsSheet';
 import { useMembersSettings } from '../../features/project-settings/members/model/members-settings.context';

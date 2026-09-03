@@ -10,8 +10,8 @@ vi.mock('../services/license-keys.service', () => ({
   },
 }));
 
-vi.mock('react-hot-toast', () => ({
-  default: { success: vi.fn(), error: vi.fn() },
+vi.mock('sonner', () => ({
+  default: { success: vi.fn(), error: vi.fn() }, toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 describe('useLicenseKeys', () => {

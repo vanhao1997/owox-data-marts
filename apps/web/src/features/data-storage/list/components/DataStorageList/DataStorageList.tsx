@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
 import { useUrlParam, useProjectRoute } from '../../../../../shared/hooks';
 import { DataStorageConfigSheet } from '../../../edit';

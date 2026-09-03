@@ -8,7 +8,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { Loader2, ArrowUp, Bookmark } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { trackEvent } from '../../../../utils';
 import { Button } from '@owox/ui/components/button';
 import { Textarea } from '@owox/ui/components/textarea';

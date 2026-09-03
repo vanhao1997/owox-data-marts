@@ -1,4 +1,4 @@
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 /**
  * BigQuery access errors arrive as raw API strings like
@@ -69,7 +69,7 @@ function DismissButton({ toastId, label }: { toastId: string; label: string }) {
 
 /**
  * Persistent (no auto-dismiss) error toast for AI helper failures, rendered through the
- * same react-hot-toast error style the rest of the app uses (red, top-center) — a
+ * same sonner error style the rest of the app uses (red, top-center) — a
  * transient toast proved invisible in practice: the presenter on the 2026-08-05 client
  * demo never saw the failure and retried blindly. Keyed per data mart so retries
  * collapse onto one toast.
@@ -88,8 +88,8 @@ function renderErrorToast(
 ): void {
   const { message, details } = humanized;
 
-  toast.error(
-    t => (
+  toast.custom(
+    () => (
       <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <span>
           {message}
@@ -131,7 +131,7 @@ function renderErrorToast(
               </button>
             ))}
         </span>
-        <DismissButton toastId={t.id} label='Dismiss error' />
+        <DismissButton toastId={`ai-helper-error-${dataMartId}`} label='Dismiss error' />
       </span>
     ),
     { duration: Infinity, id: `ai-helper-error-${dataMartId}` }
@@ -153,14 +153,14 @@ export function dismissAiHelperToasts(dataMartId: string): void {
  * back to untouched fields with no explanation of whether the run succeeded.
  */
 export function showAiHelperCancelledToast(dataMartId: string): void {
-  toast(
-    t => (
+  toast.custom(
+    () => (
       <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <span>
           AI suggestion generation was cancelled because you left the page. Run it again when you
           are ready.
         </span>
-        <DismissButton toastId={t.id} label='Dismiss notice' />
+        <DismissButton toastId={`ai-helper-cancelled-${dataMartId}`} label='Dismiss notice' />
       </span>
     ),
     { duration: Infinity, id: `ai-helper-cancelled-${dataMartId}` }

@@ -18,7 +18,7 @@ import { Skeleton } from '@owox/ui/components/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@owox/ui/components/tabs';
 import { GitMerge, Link2, List, Network, Plus } from 'lucide-react';
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { useDataMartContext } from '../../model/context/useDataMartContext';
 import { useDebounce } from '../../../../../hooks/useDebounce';

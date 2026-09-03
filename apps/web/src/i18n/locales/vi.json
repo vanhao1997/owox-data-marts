@@ -204,8 +204,8 @@
     "filters": "Bộ lọc",
     "retry": "Thử lại",
     "loadingApplication": "Đang tải ứng dụng...",
-    "failedLoadAppFlags": "Không thể tải cờ cấu hình ứng dụng"
-    ,"openMenu": "Mở menu",
+    "failedLoadAppFlags": "Không thể tải cờ cấu hình ứng dụng",
+    "openMenu": "Mở menu",
     "viewDetails": "Xem chi tiết",
     "publishDrafts": "Xuất bản bản nháp",
     "copyJsonConfig": "Sao chép cấu hình JSON",
@@ -214,13 +214,13 @@
     "deleteDataMartDescription": "Bạn có chắc chắn muốn xóa \"{{title}}\"? Thao tác này không thể hoàn tác.",
     "legacyDataMartWarning": "Xóa Data Mart này cũng khiến nó không còn khả dụng trong tiện ích Google Sheets.",
     "general": "Chung",
-    "optional": "không bắt buộc"
-    ,"apply": "Áp dụng"
-    ,"never": "Chưa bao giờ"
-    ,"expired": "Đã hết hạn"
-    ,"expiresSoon": "Sắp hết hạn"
-    ,"noPermission": "Bạn không có quyền thực hiện thao tác này. Hãy yêu cầu quản trị viên dự án cấp quyền."
-    ,"moreOptions": "Tùy chọn khác"
+    "optional": "không bắt buộc",
+    "apply": "Áp dụng",
+    "never": "Chưa bao giờ",
+    "expired": "Đã hết hạn",
+    "expiresSoon": "Sắp hết hạn",
+    "noPermission": "Bạn không có quyền thực hiện thao tác này. Hãy yêu cầu quản trị viên dự án cấp quyền.",
+    "moreOptions": "Tùy chọn khác"
   },
   "authentication": {
     "authentication": "Xác thực",
@@ -468,15 +468,15 @@
     "noAggregatableColumns": "Không có cột nào có thể tổng hợp.",
     "allColumnsSorted": "Tất cả cột đã chọn đã được sắp xếp.",
     "rows": "dòng",
-    "aggregationsHelp": "Chọn hàm tổng hợp hoặc khoảng thời gian cho các cột báo cáo đã chọn."
-    ,"aggregationColumnUnavailable": "Cột này không thể tổng hợp nữa. Hãy xóa quy tắc hoặc khôi phục cột."
-    ,"columnNotFound": "Không tìm thấy cột trong lược đồ"
-    ,"editDisabledColumnMissing": "Không thể chỉnh sửa — cột không có trong lược đồ"
-    ,"editAggregation": "Chỉnh sửa phép tổng hợp"
-    ,"dateColumnUnavailable": "Cột này không còn là cột ngày/giờ. Hãy xóa quy tắc hoặc khôi phục cột."
-    ,"aggregatedBy": "tổng hợp theo"
-    ,"groupedBy": "nhóm theo"
-    ,"editDateBucket": "Chỉnh sửa khoảng ngày"
+    "aggregationsHelp": "Chọn hàm tổng hợp hoặc khoảng thời gian cho các cột báo cáo đã chọn.",
+    "aggregationColumnUnavailable": "Cột này không thể tổng hợp nữa. Hãy xóa quy tắc hoặc khôi phục cột.",
+    "columnNotFound": "Không tìm thấy cột trong lược đồ",
+    "editDisabledColumnMissing": "Không thể chỉnh sửa — cột không có trong lược đồ",
+    "editAggregation": "Chỉnh sửa phép tổng hợp",
+    "dateColumnUnavailable": "Cột này không còn là cột ngày/giờ. Hãy xóa quy tắc hoặc khôi phục cột.",
+    "aggregatedBy": "tổng hợp theo",
+    "groupedBy": "nhóm theo",
+    "editDateBucket": "Chỉnh sửa khoảng ngày"
   },
   "healthStatus": {
     "noRunsLast30": "Không có lượt chạy trong 30 ngày qua",
@@ -531,10 +531,10 @@
     "noMatch": "Không có trường nào khớp với bộ lọc hiện tại",
     "mode": "Chế độ",
     "collapseNested": "Thu gọn trường lồng nhau",
-    "expandNested": "Mở rộng trường lồng nhau"
-    ,"dedupHelp": "Tổng hợp khử trùng lặp — thu gọn trường đã nối còn một dòng cho mỗi khóa nối để phép nối không nhân số dòng."
-    ,"availableAfterJoin": "Các phép tổng hợp khả dụng — những hàm báo cáo có thể áp dụng cho trường này sau phép nối."
-    ,"noFieldsCurrentFilter": "Không có trường nào khớp với bộ lọc hiện tại"
+    "expandNested": "Mở rộng trường lồng nhau",
+    "dedupHelp": "Tổng hợp khử trùng lặp — thu gọn trường đã nối còn một dòng cho mỗi khóa nối để phép nối không nhân số dòng.",
+    "availableAfterJoin": "Các phép tổng hợp khả dụng — những hàm báo cáo có thể áp dụng cho trường này sau phép nối.",
+    "noFieldsCurrentFilter": "Không có trường nào khớp với bộ lọc hiện tại"
   },
   "sqlValidator": {
     "validating": "Đang xác thực...",
@@ -575,23 +575,27 @@
     "nullRateThreshold": "Ngưỡng tỷ lệ giá trị rỗng",
     "thresholdHours": "Ngưỡng, giờ",
     "freshnessThreshold": "Ngưỡng độ mới dữ liệu theo giờ cho {{scope}}",
-    "severities": { "error": "Lỗi", "warning": "Cảnh báo", "notice": "Thông báo" },
+    "severities": {
+      "error": "Lỗi",
+      "warning": "Cảnh báo",
+      "notice": "Thông báo"
+    },
     "loadFailed": "Không thể tải Chất lượng dữ liệu",
     "refreshLater": "Hãy làm mới trang hoặc thử lại sau.",
     "resultsLoadFailed": "Không thể tải kết quả kiểm tra",
-    "resultsLoadDescription": "Tóm tắt lượt chạy vẫn khả dụng nhưng báo cáo chi tiết không thể tải."
-    ,"checks": "Kiểm tra chất lượng dữ liệu"
-    ,"criticalFinding": "phát hiện nghiêm trọng"
-    ,"warningFinding": "phát hiện cảnh báo"
-    ,"noticeFinding": "phát hiện thông báo"
-    ,"terminalResults": "Kết quả cuối sẽ khả dụng sau khi lượt chạy hoàn tất."
-    ,"passedCount": "{{count}} đạt"
-    ,"notApplicableCount": "{{count}} không áp dụng"
-    ,"openFor": "Mở Chất lượng dữ liệu cho {{title}}: {{status}}{{details}}"
-    ,"checksFor": "Kiểm tra chất lượng dữ liệu cho {{title}}"
-    ,"queued": "Đang chờ"
-    ,"started": "Đã bắt đầu"
-    ,"lastChecked": "Kiểm tra lần cuối"
+    "resultsLoadDescription": "Tóm tắt lượt chạy vẫn khả dụng nhưng báo cáo chi tiết không thể tải.",
+    "checks": "Kiểm tra chất lượng dữ liệu",
+    "criticalFinding": "phát hiện nghiêm trọng",
+    "warningFinding": "phát hiện cảnh báo",
+    "noticeFinding": "phát hiện thông báo",
+    "terminalResults": "Kết quả cuối sẽ khả dụng sau khi lượt chạy hoàn tất.",
+    "passedCount": "{{count}} đạt",
+    "notApplicableCount": "{{count}} không áp dụng",
+    "openFor": "Mở Chất lượng dữ liệu cho {{title}}: {{status}}{{details}}",
+    "checksFor": "Kiểm tra chất lượng dữ liệu cho {{title}}",
+    "queued": "Đang chờ",
+    "started": "Đã bắt đầu",
+    "lastChecked": "Kiểm tra lần cuối"
   },
   "dataMartsPage": {
     "title": "Data Mart",
@@ -628,15 +632,42 @@
     "coreConcepts": "Khái niệm cốt lõi"
   },
   "dataMartPresets": {
-    "facebook": { "title": "Facebook Ads", "datamartTitle": "Data Mart Facebook Ads" },
-    "facebookPages": { "title": "Facebook Fanpage", "datamartTitle": "Data Mart Facebook Fanpage" },
-    "linkedin": { "title": "LinkedIn Ads", "datamartTitle": "Data Mart LinkedIn Ads" },
-    "tiktok": { "title": "TikTok Ads", "datamartTitle": "Data Mart TikTok Ads" },
-    "microsoft": { "title": "Microsoft Ads", "datamartTitle": "Data Mart Microsoft Ads" },
-    "otherConnector": { "title": "Trình kết nối khác", "datamartTitle": "Data Mart dựa trên trình kết nối" },
-    "sqlQuery": { "title": "Truy vấn SQL", "datamartTitle": "Data Mart dựa trên SQL" },
-    "existingTable": { "title": "Bảng có sẵn", "datamartTitle": "Data Mart dựa trên bảng" },
-    "blankDataMart": { "title": "Data Mart trống", "datamartTitle": "Data Mart mới" }
+    "facebook": {
+      "title": "Facebook Ads",
+      "datamartTitle": "Data Mart Facebook Ads"
+    },
+    "facebookPages": {
+      "title": "Facebook Fanpage",
+      "datamartTitle": "Data Mart Facebook Fanpage"
+    },
+    "linkedin": {
+      "title": "LinkedIn Ads",
+      "datamartTitle": "Data Mart LinkedIn Ads"
+    },
+    "tiktok": {
+      "title": "TikTok Ads",
+      "datamartTitle": "Data Mart TikTok Ads"
+    },
+    "microsoft": {
+      "title": "Microsoft Ads",
+      "datamartTitle": "Data Mart Microsoft Ads"
+    },
+    "otherConnector": {
+      "title": "Trình kết nối khác",
+      "datamartTitle": "Data Mart dựa trên trình kết nối"
+    },
+    "sqlQuery": {
+      "title": "Truy vấn SQL",
+      "datamartTitle": "Data Mart dựa trên SQL"
+    },
+    "existingTable": {
+      "title": "Bảng có sẵn",
+      "datamartTitle": "Data Mart dựa trên bảng"
+    },
+    "blankDataMart": {
+      "title": "Data Mart trống",
+      "datamartTitle": "Data Mart mới"
+    }
   },
   "modelCanvasPage": {
     "title": "Mô hình",
@@ -712,22 +743,28 @@
     "fieldCountHelp": "Số trường hiển thị trên mỗi đối tượng",
     "statusDot": "Chấm trạng thái",
     "statusDotHelp": "Chấm trạng thái đã xuất bản/nháp trong tiêu đề thẻ",
-    "viewModes": { "compact": "Thu gọn", "erd": "Chi tiết" },
-    "directions": { "horizontal": "Ngang", "vertical": "Dọc" }
+    "viewModes": {
+      "compact": "Thu gọn",
+      "erd": "Chi tiết"
+    },
+    "directions": {
+      "horizontal": "Ngang",
+      "vertical": "Dọc"
+    }
   },
   "dataLastUpdated": {
     "checkingShort": "đang kiểm tra…",
     "ariaLabel": "Dữ liệu cập nhật lần cuối của {{title}}: {{label}}",
     "checking": "Đang kiểm tra dữ liệu cập nhật lần cuối…",
-    "notChecked": "Dữ liệu cập nhật lần cuối chưa được kiểm tra. Hãy mở Thao tác → Kiểm tra dữ liệu cập nhật lần cuối để đo các Data Mart đang hiển thị."
-    ,"allTablesChecked": "Đã kiểm tra tất cả bảng nguồn."
-    ,"partialCoverage": "Không thể kiểm tra một số bảng nguồn — thời điểm thực tế chỉ có thể mới hơn."
-    ,"storageUnavailable": "Kho lưu trữ không cung cấp thời điểm thay đổi gần nhất của các bảng nguồn."
-    ,"sourceTablesChanged": "Bảng nguồn thay đổi lần cuối: {{date}}"
-    ,"noModificationTime": "Kho lưu trữ không cung cấp thời điểm sửa đổi."
-    ,"checked": "Đã kiểm tra {{time}}"
-    ,"writeTimeCaveat": "Cho biết thời điểm ghi các bảng nguồn, không phải khoảng thời gian dữ liệu bao phủ."
-    ,"notCheckedYet": "Chưa kiểm tra"
+    "notChecked": "Dữ liệu cập nhật lần cuối chưa được kiểm tra. Hãy mở Thao tác → Kiểm tra dữ liệu cập nhật lần cuối để đo các Data Mart đang hiển thị.",
+    "allTablesChecked": "Đã kiểm tra tất cả bảng nguồn.",
+    "partialCoverage": "Không thể kiểm tra một số bảng nguồn — thời điểm thực tế chỉ có thể mới hơn.",
+    "storageUnavailable": "Kho lưu trữ không cung cấp thời điểm thay đổi gần nhất của các bảng nguồn.",
+    "sourceTablesChanged": "Bảng nguồn thay đổi lần cuối: {{date}}",
+    "noModificationTime": "Kho lưu trữ không cung cấp thời điểm sửa đổi.",
+    "checked": "Đã kiểm tra {{time}}",
+    "writeTimeCaveat": "Cho biết thời điểm ghi các bảng nguồn, không phải khoảng thời gian dữ liệu bao phủ.",
+    "notCheckedYet": "Chưa kiểm tra"
   },
   "owners": {
     "title": "Người phụ trách",
@@ -914,8 +951,8 @@
     "aliasPlaceholder": "ví dụ: orders",
     "aliasTooltip": "Tên nội bộ dùng khi tạo SQL JOIN cho Data Mart này (ví dụ: orders_customer_id). Không hiển thị trong đầu ra.",
     "joinFields": "Trường liên kết",
-    "joinFieldsTooltip": "Xác định cách ghép các dòng giữa nguồn và Data Mart liên quan."
-    ,"allStatuses": "Tất cả trạng thái",
+    "joinFieldsTooltip": "Xác định cách ghép các dòng giữa nguồn và Data Mart liên quan.",
+    "allStatuses": "Tất cả trạng thái",
     "publishedOnly": "Chỉ đã xuất bản",
     "draftOnly": "Chỉ bản nháp",
     "field": "trường",
@@ -950,8 +987,8 @@
     "saveSchedule": "Lưu lịch",
     "weekdaysPreset": "Các ngày trong tuần lúc 9:00",
     "everyHourPreset": "Mỗi giờ",
-    "everySixHoursPreset": "Mỗi 6 giờ"
-    ,"weekday0": "Chủ nhật",
+    "everySixHoursPreset": "Mỗi 6 giờ",
+    "weekday0": "Chủ nhật",
     "weekday1": "Thứ hai",
     "weekday2": "Thứ ba",
     "weekday3": "Thứ tư",
@@ -1066,83 +1103,83 @@
     "since": "từ",
     "openInGoogleSheets": "Mở trong Google Sheets",
     "startingSoon": "Sắp bắt đầu…",
-    "reportRunning": "Báo cáo đang chạy…"
-    ,"pullRunHintExcel": "Làm mới từ tiện ích P2PDigital trong Excel"
-    ,"pullRunHintDestination": "Điểm đến tự đọc báo cáo này"
-    ,"actionsForReport": "Thao tác cho báo cáo: {{title}}"
-    ,"reconnectSheetAndRun": "Kết nối lại trang tính và chạy báo cáo: {{title}}"
-    ,"deleteReportAria": "Xóa báo cáo: {{title}}"
-    ,"reconnectFailed": "Không thể kết nối lại trang tính"
-    ,"general": "Thông tin chung"
-    ,"template": "Mẫu"
-    ,"sendingConditions": "Điều kiện gửi"
-    ,"reportColumns": "Cột báo cáo"
-    ,"reportColumnsTooltip": "Chọn các cột cần đưa vào báo cáo"
-    ,"automateRuns": "Tự động chạy báo cáo"
-    ,"ownership": "Quyền phụ trách"
-    ,"details": "Chi tiết"
-    ,"owners": "Người phụ trách"
-    ,"ownersTooltip": "Thành viên phụ trách báo cáo này"
-    ,"createdBy": "Người tạo"
-    ,"createdAt": "Ngày tạo"
-    ,"unknown": "Chưa xác định"
-    ,"noDestinations": "Không có điểm đến"
-    ,"createDestinationFirst": "Bạn cần tạo Điểm đến trước khi tạo báo cáo."
-    ,"goDestinations": "Đến điểm đến"
-    ,"shareDocumentWith": "Chia sẻ tài liệu với"
-    ,"shareDocumentTooltip": "Chia sẻ Google Sheet với email này để cho phép ghi dữ liệu"
-    ,"titleTooltip": "Đặt tiêu đề thể hiện mục đích của báo cáo"
-    ,"selectDestinationTooltip": "Chọn một điểm đến hiện có"
-    ,"subjectTooltip": "Thêm tiêu đề ngắn gọn, rõ ràng cho báo cáo"
-    ,"createNew": "+ Tạo mới"
-    ,"message": "Nội dung"
-    ,"edit": "Chỉnh sửa"
-    ,"preview": "Xem trước"
-    ,"viewSource": "Xem nguồn"
-    ,"noInsights": "Chưa có phân tích chuyên sâu"
-    ,"openInsight": "Mở phân tích chuyên sâu"
-    ,"cacheConfiguration": "Cấu hình bộ nhớ đệm"
-    ,"cacheTooltip": "Khoảng thời gian kết quả truy vấn được phục vụ từ bộ nhớ đệm của kho, tránh chạy lại"
-    ,"title": "Tiêu đề"
-    ,"destination": "Điểm đến"
-    ,"selectDestination": "Chọn điểm đến"
-    ,"reportTitlePlaceholder": "Nhập tiêu đề báo cáo"
-    ,"subject": "Tiêu đề email"
-    ,"subjectPlaceholder": "Nhập tiêu đề tin nhắn"
-    ,"custom": "Tùy chỉnh"
-    ,"insight": "Phân tích chuyên sâu"
-    ,"createInsight": "Tạo phân tích chuyên sâu"
-    ,"selectInsight": "Chọn phân tích chuyên sâu"
-    ,"selectedInsight": "Phân tích chuyên sâu đã chọn"
-    ,"noInsightSelected": "Chưa chọn phân tích chuyên sâu"
-    ,"noInsightAvailable": "Chưa có phân tích chuyên sâu khả dụng"
-    ,"insightSourceDescription": "Tạo một phân tích chuyên sâu để dùng làm nguồn cho nội dung báo cáo."
-    ,"insightWillRun": "Phân tích chuyên sâu sẽ được dùng khi báo cáo chạy"
-    ,"dataMartRunResults": "Kết quả chạy Data Mart"
-    ,"dataMartRunResultsTooltip": "Xác định khi nào báo cáo được gửi dựa trên kết quả chạy Data Mart"
-    ,"cacheLifetime": "Thời gian lưu bộ nhớ đệm"
-    ,"selectCacheTime": "Chọn thời gian lưu bộ nhớ đệm"
-    ,"minutes": "{{count}} phút"
-    ,"hours": "{{count}} giờ"
-    ,"createReport": "Tạo báo cáo"
-    ,"report": "Báo cáo"
-    ,"createReportSheetTitle": "Tạo báo cáo"
-    ,"editReportSheetTitle": "Chỉnh sửa báo cáo"
-    ,"createReportSheetDescription": "Điền thông tin để tạo báo cáo mới"
-    ,"editReportSheetDescription": "Cập nhật thông tin của báo cáo hiện có"
-    ,"lookerCreateDescription": "Thiết lập Data Mart làm nguồn dữ liệu"
-    ,"lookerEditDescription": "Cập nhật thông tin kết nối"
-    ,"copyLinkToReport": "Sao chép liên kết tới báo cáo này"
-    ,"reportCreatedToast": "Đã tạo báo cáo"
-    ,"viewItInDestinations": "Bạn có thể xem trong trang Điểm đến"
-    ,"createAndRunReport": "Tạo và chạy báo cáo"
-    ,"saveChangesToReport": "Lưu thay đổi báo cáo"
-    ,"createNewReport": "Tạo báo cáo mới"
-    ,"saveAndRunReport": "Lưu và chạy báo cáo"
-    ,"saveChanges": "Lưu thay đổi"
-    ,"moreActions": "Thao tác khác"
-    ,"creating": "Đang tạo..."
-    ,"saving": "Đang lưu..."
+    "reportRunning": "Báo cáo đang chạy…",
+    "pullRunHintExcel": "Làm mới từ tiện ích P2PDigital trong Excel",
+    "pullRunHintDestination": "Điểm đến tự đọc báo cáo này",
+    "actionsForReport": "Thao tác cho báo cáo: {{title}}",
+    "reconnectSheetAndRun": "Kết nối lại trang tính và chạy báo cáo: {{title}}",
+    "deleteReportAria": "Xóa báo cáo: {{title}}",
+    "reconnectFailed": "Không thể kết nối lại trang tính",
+    "general": "Thông tin chung",
+    "template": "Mẫu",
+    "sendingConditions": "Điều kiện gửi",
+    "reportColumns": "Cột báo cáo",
+    "reportColumnsTooltip": "Chọn các cột cần đưa vào báo cáo",
+    "automateRuns": "Tự động chạy báo cáo",
+    "ownership": "Quyền phụ trách",
+    "details": "Chi tiết",
+    "owners": "Người phụ trách",
+    "ownersTooltip": "Thành viên phụ trách báo cáo này",
+    "createdBy": "Người tạo",
+    "createdAt": "Ngày tạo",
+    "unknown": "Chưa xác định",
+    "noDestinations": "Không có điểm đến",
+    "createDestinationFirst": "Bạn cần tạo Điểm đến trước khi tạo báo cáo.",
+    "goDestinations": "Đến điểm đến",
+    "shareDocumentWith": "Chia sẻ tài liệu với",
+    "shareDocumentTooltip": "Chia sẻ Google Sheet với email này để cho phép ghi dữ liệu",
+    "titleTooltip": "Đặt tiêu đề thể hiện mục đích của báo cáo",
+    "selectDestinationTooltip": "Chọn một điểm đến hiện có",
+    "subjectTooltip": "Thêm tiêu đề ngắn gọn, rõ ràng cho báo cáo",
+    "createNew": "+ Tạo mới",
+    "message": "Nội dung",
+    "edit": "Chỉnh sửa",
+    "preview": "Xem trước",
+    "viewSource": "Xem nguồn",
+    "noInsights": "Chưa có phân tích chuyên sâu",
+    "openInsight": "Mở phân tích chuyên sâu",
+    "cacheConfiguration": "Cấu hình bộ nhớ đệm",
+    "cacheTooltip": "Khoảng thời gian kết quả truy vấn được phục vụ từ bộ nhớ đệm của kho, tránh chạy lại",
+    "title": "Tiêu đề",
+    "destination": "Điểm đến",
+    "selectDestination": "Chọn điểm đến",
+    "reportTitlePlaceholder": "Nhập tiêu đề báo cáo",
+    "subject": "Tiêu đề email",
+    "subjectPlaceholder": "Nhập tiêu đề tin nhắn",
+    "custom": "Tùy chỉnh",
+    "insight": "Phân tích chuyên sâu",
+    "createInsight": "Tạo phân tích chuyên sâu",
+    "selectInsight": "Chọn phân tích chuyên sâu",
+    "selectedInsight": "Phân tích chuyên sâu đã chọn",
+    "noInsightSelected": "Chưa chọn phân tích chuyên sâu",
+    "noInsightAvailable": "Chưa có phân tích chuyên sâu khả dụng",
+    "insightSourceDescription": "Tạo một phân tích chuyên sâu để dùng làm nguồn cho nội dung báo cáo.",
+    "insightWillRun": "Phân tích chuyên sâu sẽ được dùng khi báo cáo chạy",
+    "dataMartRunResults": "Kết quả chạy Data Mart",
+    "dataMartRunResultsTooltip": "Xác định khi nào báo cáo được gửi dựa trên kết quả chạy Data Mart",
+    "cacheLifetime": "Thời gian lưu bộ nhớ đệm",
+    "selectCacheTime": "Chọn thời gian lưu bộ nhớ đệm",
+    "minutes": "{{count}} phút",
+    "hours": "{{count}} giờ",
+    "createReport": "Tạo báo cáo",
+    "report": "Báo cáo",
+    "createReportSheetTitle": "Tạo báo cáo",
+    "editReportSheetTitle": "Chỉnh sửa báo cáo",
+    "createReportSheetDescription": "Điền thông tin để tạo báo cáo mới",
+    "editReportSheetDescription": "Cập nhật thông tin của báo cáo hiện có",
+    "lookerCreateDescription": "Thiết lập Data Mart làm nguồn dữ liệu",
+    "lookerEditDescription": "Cập nhật thông tin kết nối",
+    "copyLinkToReport": "Sao chép liên kết tới báo cáo này",
+    "reportCreatedToast": "Đã tạo báo cáo",
+    "viewItInDestinations": "Bạn có thể xem trong trang Điểm đến",
+    "createAndRunReport": "Tạo và chạy báo cáo",
+    "saveChangesToReport": "Lưu thay đổi báo cáo",
+    "createNewReport": "Tạo báo cáo mới",
+    "saveAndRunReport": "Lưu và chạy báo cáo",
+    "saveChanges": "Lưu thay đổi",
+    "moreActions": "Thao tác khác",
+    "creating": "Đang tạo...",
+    "saving": "Đang lưu..."
   },
   "reportTable": {
     "title": "Tiêu đề",
@@ -1164,7 +1201,10 @@
     "loadingHistory": "Đang tải lịch sử trò chuyện...",
     "noChats": "Chưa có cuộc trò chuyện nào.",
     "rename": "Đổi tên",
-    "delete": "Xóa",
+    "delete": {
+      "title": "Xóa phân tích chuyên sâu",
+      "description": "Bạn có chắc chắn muốn xóa phân tích chuyên sâu này? Thao tác này không thể hoàn tác."
+    },
     "applyRun": "Áp dụng và chạy",
     "applyOnly": "Chỉ áp dụng",
     "applyChangesAction": "Áp dụng thay đổi cho nguồn",
@@ -1204,10 +1244,6 @@
       "loadProject": "Không thể tải các phân tích chuyên sâu của Data Mart",
       "delete": "Không thể xóa phân tích chuyên sâu"
     },
-    "delete": {
-      "title": "Xóa phân tích chuyên sâu",
-      "description": "Bạn có chắc chắn muốn xóa phân tích chuyên sâu này? Thao tác này không thể hoàn tác."
-    },
     "titleUpdated": "Đã cập nhật tiêu đề",
     "unsavedChanges": "Thay đổi chưa lưu",
     "save": "Lưu",
@@ -1243,7 +1279,7 @@
     "reportRunFailed": "Không thể chạy báo cáo",
     "loadingReports": "Đang tải báo cáo...",
     "scheduleTitle": "Lên lịch phân tích chuyên sâu",
-    "scheduleDescription": "Tự động gửi đến các điểm đến của bạn",
+    "scheduleDescription": "Bạn có thể lên lịch chạy phân tích chuyên sâu vào thời điểm cụ thể hoặc gửi đến người nhận",
     "newReport": "Báo cáo mới",
     "createReportTooltip": "Tạo báo cáo mới cho phân tích chuyên sâu này",
     "runReport": "Chạy báo cáo",
@@ -1258,7 +1294,6 @@
     "publishBeforeRun": "Để chạy phân tích chuyên sâu, trước tiên hãy xuất bản Data Mart",
     "saveAndRun": "Lưu và chạy phân tích chuyên sâu",
     "scheduleAfterPublish": "Bạn chỉ có thể lên lịch và gửi báo cáo sau khi xuất bản Data Mart",
-    "scheduleDescription": "Bạn có thể lên lịch chạy phân tích chuyên sâu vào thời điểm cụ thể hoặc gửi đến người nhận",
     "templateEmpty": "Mẫu phân tích chuyên sâu đang trống",
     "pressSlashCommands": "Nhấn '/' để xem các lệnh",
     "searchInsights": "Tìm kiếm phân tích chuyên sâu…",
@@ -1344,33 +1379,33 @@
       "integrity": "Đang xác nhận tính toàn vẹn dữ liệu...",
       "preparing": "Đang chuẩn bị kết quả cuối cho phân tích...",
       "quality": "Đang thực hiện kiểm tra chất lượng cuối..."
-    }
-    ,"createArtifactTitle": "Tác vụ dữ liệu mới"
-    ,"editArtifactTitle": "Chỉnh sửa tác vụ dữ liệu"
-    ,"addArtifactTitle": "Thêm tác vụ dữ liệu"
-    ,"id": "Mã"
-    ,"idRequired": "Bắt buộc nhập mã"
-    ,"keyPattern": "Chỉ cho phép chữ cái, chữ số và dấu gạch dưới"
-    ,"idTooltip": "Nhập mã duy nhất dùng để tham chiếu nguồn này trong mẫu phân tích chuyên sâu. Không thể thay đổi sau khi tạo."
-    ,"titleRequired": "Bắt buộc nhập tiêu đề"
-    ,"titleTooltip": "Nhập tiêu đề dễ hiểu cho nguồn dữ liệu này."
-    ,"visibleTitlePlaceholder": "Tiêu đề hiển thị"
-    ,"sqlQueryLabel": "Truy vấn SQL"
-    ,"sqlQueryTooltip": "Viết truy vấn SQL để lấy dữ liệu. Bạn có thể dùng các tham số đã định nghĩa trong mẫu."
-    ,"preview": "Xem trước"
-    ,"noColumns": "Không có cột nào được trả về"
-    ,"estimatedVolume": "Đây là dung lượng ước tính và có thể khác giá trị thực tế"
-    ,"invalidSql": "SQL không hợp lệ"
-    ,"artifactUpdated": "Đã cập nhật tác vụ dữ liệu"
-    ,"artifactCreated": "Đã tạo tác vụ dữ liệu"
-    ,"saveArtifactFailed": "Không thể lưu tác vụ dữ liệu"
-    ,"artifactsCount": "Tác vụ dữ liệu ({{count}}/5)"
-    ,"dataArtifact": "Tác vụ dữ liệu"
-    ,"actions": "Thao tác"
-    ,"loading": "Đang tải..."
-    ,"deleteChat": "Xóa cuộc trò chuyện"
-    ,"headingAction": "Tiêu đề"
-    ,"markdownLearnMore": "Tìm hiểu thêm"
+    },
+    "createArtifactTitle": "Tác vụ dữ liệu mới",
+    "editArtifactTitle": "Chỉnh sửa tác vụ dữ liệu",
+    "addArtifactTitle": "Thêm tác vụ dữ liệu",
+    "id": "Mã",
+    "idRequired": "Bắt buộc nhập mã",
+    "keyPattern": "Chỉ cho phép chữ cái, chữ số và dấu gạch dưới",
+    "idTooltip": "Nhập mã duy nhất dùng để tham chiếu nguồn này trong mẫu phân tích chuyên sâu. Không thể thay đổi sau khi tạo.",
+    "titleRequired": "Bắt buộc nhập tiêu đề",
+    "titleTooltip": "Nhập tiêu đề dễ hiểu cho nguồn dữ liệu này.",
+    "visibleTitlePlaceholder": "Tiêu đề hiển thị",
+    "sqlQueryLabel": "Truy vấn SQL",
+    "sqlQueryTooltip": "Viết truy vấn SQL để lấy dữ liệu. Bạn có thể dùng các tham số đã định nghĩa trong mẫu.",
+    "preview": "Xem trước",
+    "noColumns": "Không có cột nào được trả về",
+    "estimatedVolume": "Đây là dung lượng ước tính và có thể khác giá trị thực tế",
+    "invalidSql": "SQL không hợp lệ",
+    "artifactUpdated": "Đã cập nhật tác vụ dữ liệu",
+    "artifactCreated": "Đã tạo tác vụ dữ liệu",
+    "saveArtifactFailed": "Không thể lưu tác vụ dữ liệu",
+    "artifactsCount": "Tác vụ dữ liệu ({{count}}/5)",
+    "dataArtifact": "Tác vụ dữ liệu",
+    "actions": "Thao tác",
+    "loading": "Đang tải...",
+    "deleteChat": "Xóa cuộc trò chuyện",
+    "headingAction": "Tiêu đề",
+    "markdownLearnMore": "Tìm hiểu thêm"
   },
   "reportsEmptyDestinations": {
     "analyzeTitle": "Phân tích dữ liệu trong Google Sheets",
@@ -1907,51 +1942,51 @@
     "declineConfirm": "Từ chối",
     "declineTitle": "Từ chối yêu cầu tham gia",
     "declineDescription": "Bạn có chắc chắn muốn từ chối yêu cầu từ",
-    "declineNotified": "Người này sẽ được thông báo rằng yêu cầu đã bị từ chối."
-    ,"magicLinkCopied": "Đã sao chép liên kết đăng nhập một lần vào bộ nhớ tạm"
-    ,"magicLinkCopyFailed": "Không thể sao chép. Hãy chọn liên kết và sao chép thủ công."
-    ,"invitationSent": "Đã gửi email mời tới {{email}}"
-    ,"invitationFailed": "Không thể gửi lời mời"
-    ,"invitationLinkReady": "Liên kết lời mời đã sẵn sàng"
-    ,"invitationLinkDescription": "Chia sẻ liên kết đăng nhập một lần này với người được mời qua bất kỳ kênh nào (email, Slack, v.v.)."
-    ,"invitee": "Người được mời"
-    ,"willJoinAs": "Sẽ tham gia với vai trò"
-    ,"oneTimeLink": "Liên kết dùng một lần"
-    ,"copyInvitationLink": "Sao chép liên kết lời mời"
-    ,"singleUse": "Dùng một lần"
-    ,"expiresAt": "Hết hạn"
-    ,"copiedToClipboard": "Đã sao chép vào bộ nhớ tạm"
-    ,"inviteTitle": "Mời thành viên"
-    ,"inviteDescription": "Gửi lời mời qua email. Thành viên sẽ nhận liên kết để tham gia dự án."
-    ,"emailTooltip": "Địa chỉ email của thành viên"
-    ,"email": "Email"
-    ,"sendInvitation": "Gửi lời mời"
-    ,"tableLabel": "Bảng thành viên dự án"
-    ,"searchByName": "Tìm theo tên"
-    ,"noMembersFound": "Không tìm thấy thành viên"
-    ,"loadFailed": "Không thể tải danh sách thành viên"
-    ,"andMore": "và {{count}} người khác"
-    ,"access": "Quyền truy cập"
-    ,"contexts": "Ngữ cảnh"
-    ,"roleScope": "Phạm vi vai trò"
-    ,"selectedContextsOnly": "Chỉ các ngữ cảnh đã chọn"
-    ,"assignContextsOptional": "Gán cho ngữ cảnh (không bắt buộc)"
-    ,"roleTooltip": "Vai trò dự án được cấp cho thành viên này"
-    ,"scopeTooltip": "Kiểm soát tài nguyên thành viên này có thể xem theo mặc định"
-    ,"contextsTooltip": "Các ngữ cảnh thành viên này có thể xem"
-    ,"contextsAssignedTooltip": "Các ngữ cảnh được gán cho thành viên — kiểm soát khả năng hiển thị khi phạm vi là \"Các ngữ cảnh đã chọn\""
-    ,"assignedContexts": "Ngữ cảnh được gán"
-    ,"adminAccessDescription": "Quản trị viên dự án có quyền truy cập toàn dự án. Phạm vi và gán ngữ cảnh không áp dụng."
-    ,"settingsUpdated": "Đã cập nhật cài đặt thành viên"
-    ,"saveFailed": "Không thể lưu"
-    ,"configureTitle": "Cấu hình thành viên"
-    ,"configureDescription": "Tùy chỉnh vai trò, phạm vi và ngữ cảnh cho thành viên này"
-    ,"defaultRoleTitle": "Vai trò và phạm vi mặc định"
-    ,"defaultRoleDescription": "Cấu hình mặc định cho thành viên mới tự động tham gia dự án này"
-    ,"context": "ngữ cảnh"
-    ,"contextsLower": "ngữ cảnh"
-    ,"staleContexts": "{{count}} {{contextWord}} đã lưu không còn khả dụng và sẽ bị xóa khi lưu."
-    ,"roleHelp": {
+    "declineNotified": "Người này sẽ được thông báo rằng yêu cầu đã bị từ chối.",
+    "magicLinkCopied": "Đã sao chép liên kết đăng nhập một lần vào bộ nhớ tạm",
+    "magicLinkCopyFailed": "Không thể sao chép. Hãy chọn liên kết và sao chép thủ công.",
+    "invitationSent": "Đã gửi email mời tới {{email}}",
+    "invitationFailed": "Không thể gửi lời mời",
+    "invitationLinkReady": "Liên kết lời mời đã sẵn sàng",
+    "invitationLinkDescription": "Chia sẻ liên kết đăng nhập một lần này với người được mời qua bất kỳ kênh nào (email, Slack, v.v.).",
+    "invitee": "Người được mời",
+    "willJoinAs": "Sẽ tham gia với vai trò",
+    "oneTimeLink": "Liên kết dùng một lần",
+    "copyInvitationLink": "Sao chép liên kết lời mời",
+    "singleUse": "Dùng một lần",
+    "expiresAt": "Hết hạn",
+    "copiedToClipboard": "Đã sao chép vào bộ nhớ tạm",
+    "inviteTitle": "Mời thành viên",
+    "inviteDescription": "Gửi lời mời qua email. Thành viên sẽ nhận liên kết để tham gia dự án.",
+    "emailTooltip": "Địa chỉ email của thành viên",
+    "email": "Email",
+    "sendInvitation": "Gửi lời mời",
+    "tableLabel": "Bảng thành viên dự án",
+    "searchByName": "Tìm theo tên",
+    "noMembersFound": "Không tìm thấy thành viên",
+    "loadFailed": "Không thể tải danh sách thành viên",
+    "andMore": "và {{count}} người khác",
+    "access": "Quyền truy cập",
+    "contexts": "Ngữ cảnh",
+    "roleScope": "Phạm vi vai trò",
+    "selectedContextsOnly": "Chỉ các ngữ cảnh đã chọn",
+    "assignContextsOptional": "Gán cho ngữ cảnh (không bắt buộc)",
+    "roleTooltip": "Vai trò dự án được cấp cho thành viên này",
+    "scopeTooltip": "Kiểm soát tài nguyên thành viên này có thể xem theo mặc định",
+    "contextsTooltip": "Các ngữ cảnh thành viên này có thể xem",
+    "contextsAssignedTooltip": "Các ngữ cảnh được gán cho thành viên — kiểm soát khả năng hiển thị khi phạm vi là \"Các ngữ cảnh đã chọn\"",
+    "assignedContexts": "Ngữ cảnh được gán",
+    "adminAccessDescription": "Quản trị viên dự án có quyền truy cập toàn dự án. Phạm vi và gán ngữ cảnh không áp dụng.",
+    "settingsUpdated": "Đã cập nhật cài đặt thành viên",
+    "saveFailed": "Không thể lưu",
+    "configureTitle": "Cấu hình thành viên",
+    "configureDescription": "Tùy chỉnh vai trò, phạm vi và ngữ cảnh cho thành viên này",
+    "defaultRoleTitle": "Vai trò và phạm vi mặc định",
+    "defaultRoleDescription": "Cấu hình mặc định cho thành viên mới tự động tham gia dự án này",
+    "context": "ngữ cảnh",
+    "contextsLower": "ngữ cảnh",
+    "staleContexts": "{{count}} {{contextWord}} đã lưu không còn khả dụng và sẽ bị xóa khi lưu.",
+    "roleHelp": {
       "question": "Nên chọn vai trò nào?",
       "businessUser": "có thể xem Data Mart và báo cáo được chia sẻ, tạo báo cáo cho Data Mart được chia sẻ để báo cáo, quản lý báo cáo do mình sở hữu (chỉnh sửa, xóa, đổi người phụ trách), quản lý lịch chạy báo cáo của mình và dùng điểm đến được chia sẻ. Không thể tạo, chỉnh sửa hoặc xóa Data Mart, lịch chạy Data Mart hay kho lưu trữ.",
       "technicalUser": "có mọi quyền của Người dùng nghiệp vụ, đồng thời có thể tạo, chỉnh sửa và xóa Data Mart, lịch chạy Data Mart và kho lưu trữ; chỉnh sửa và xóa báo cáo trong toàn dự án; đổi người phụ trách báo cáo; quản lý lịch chạy báo cáo trong toàn dự án.",
@@ -2329,8 +2364,16 @@
     "selectFromStorage": "Chọn từ kho lưu trữ",
     "title": "Chọn {{resource}}",
     "description": "Chọn namespace để xem tất cả {{resources}} mà kho lưu trữ có quyền truy cập. Chọn một mục để điền Tên đầy đủ.",
-    "labels": { "view": "view", "table_pattern": "mẫu bảng", "table": "bảng" },
-    "plurals": { "view": "view", "table_pattern": "các mẫu bảng", "table": "các bảng" }
+    "labels": {
+      "view": "view",
+      "table_pattern": "mẫu bảng",
+      "table": "bảng"
+    },
+    "plurals": {
+      "view": "view",
+      "table_pattern": "các mẫu bảng",
+      "table": "các bảng"
+    }
   },
   "generatedSql": {
     "failedLoad": "Không thể tải SQL đã tạo",
@@ -2423,5 +2466,12 @@
     "loadTriggersFailed": "Không thể tải các lịch chạy Data Mart",
     "loadMore": "Tải thêm",
     "loadingMore": "Đang tải..."
+  },
+  "errors": {
+    "somethingWentWrong": "Da xay ra loi",
+    "retry": "Thu lai"
+  },
+  "accessibility": {
+    "skipToContent": "Chuyen den noi dung chinh"
   }
 }

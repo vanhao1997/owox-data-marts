@@ -33,7 +33,7 @@ import {
 } from '@owox/ui/components/accordion';
 import { Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { contextService } from '../../services/context.service';
 import { MembersAssignmentField } from '../../../../shared/components/MembersAssignmentField';
 import { UserReference } from '../../../../shared/components/UserReference';

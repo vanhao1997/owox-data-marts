@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 import {
   SidebarInset,
@@ -21,7 +21,6 @@ import { ThemeProvider } from '../app/providers/theme-provider.tsx';
 import { storageService } from '../services';
 import { GlobalLoader, LoadingProvider, useLoading } from '../shared/components/GlobalLoader';
 import { Toaster as SonnerToaster } from '@owox/ui/components/sonner';
-import { Toaster as HotToaster } from '../shared/components/Toaster';
 import { useUser } from '../features/idp/hooks';
 import { ProjectAuthGuards } from './ProjectAuthGuards';
 import { Separator } from '@owox/ui/components/separator';
@@ -30,6 +29,8 @@ import { HelpMenu } from '../components/AppSidebar/HelpMenu';
 import { UserMenu } from '../components/AppSidebar/UserMenu';
 import { SidebarProjectMenu } from '../components/AppSidebar/ProjectMenu';
 import { useTranslation } from 'react-i18next';
+import { prefetchCommonRoutes } from '../utils/prefetch-routes';
+import { SkipToContent } from '../shared/components/SkipToContent';
 
 const SIDEBAR_STATE_KEY = 'sidebar_state';
 const ignoreSetupChecklist = () => undefined;
@@ -110,7 +111,6 @@ function MainLayoutContent() {
   return (
     <>
       <SonnerToaster position='bottom-right' closeButton />
-      <HotToaster />
       <GlobalLoader isLoading={isLoading} />
       <ProjectAuthGuards>
         {user && hasEmptyProjectRoles ? (
@@ -145,8 +145,13 @@ function MainLayout() {
     storageService.set(SIDEBAR_STATE_KEY, open);
   };
 
+  useEffect(() => {
+    prefetchCommonRoutes();
+  }, []);
+
   return (
     <ThemeProvider>
+      <SkipToContent />
       <LoadingProvider>
         <SidebarProvider open={sidebarOpen} onOpenChange={handleSidebarChange}>
           <MainLayoutContent />

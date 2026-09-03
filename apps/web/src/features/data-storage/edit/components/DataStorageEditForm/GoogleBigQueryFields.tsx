@@ -20,7 +20,7 @@ import GoogleBigQueryLocationDescription from './FormDescriptions/GoogleBigQuery
 import { Button } from '@owox/ui/components/button';
 import { FieldWithActions } from '@owox/ui/components/common/field-with-actions';
 import { FileDropTextarea } from '@owox/ui/components/file-drop-textarea';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
 import { getServiceAccountLink } from '../../../../../utils/google-cloud-utils';
 import { GoogleOAuthConnectButton, storageOAuthApi } from '../../../../../features/google-oauth';

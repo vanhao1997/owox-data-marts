@@ -21,7 +21,7 @@ import {
   useRunReport,
 } from '../../reports/list/model/hooks/useReportsByInsightTemplate';
 import type { DataMartReport } from '../../reports/shared/model/types/data-mart-report';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { DataDestinationType, DataDestinationTypeModel } from '../../../data-destination';
 import { ConfirmationDialog } from '../../../../shared/components/ConfirmationDialog';
 import { ReportStatusEnum } from '../../reports/shared';

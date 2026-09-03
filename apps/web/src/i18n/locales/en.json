@@ -204,8 +204,8 @@
     "filters": "Filters",
     "retry": "Retry",
     "loadingApplication": "Loading application...",
-    "failedLoadAppFlags": "Failed to load app flags"
-    ,"openMenu": "Open menu",
+    "failedLoadAppFlags": "Failed to load app flags",
+    "openMenu": "Open menu",
     "viewDetails": "View details",
     "publishDrafts": "Publish drafts",
     "copyJsonConfig": "Copy JSON Config",
@@ -214,13 +214,13 @@
     "deleteDataMartDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
     "legacyDataMartWarning": "Deleting this data mart will also make it unavailable in the Google Sheets extension.",
     "general": "General",
-    "optional": "optional"
-    ,"apply": "Apply"
-    ,"never": "Never"
-    ,"expired": "Expired"
-    ,"expiresSoon": "Expires soon"
-    ,"noPermission": "You don’t have access to this action. Ask a project administrator for permission."
-    ,"moreOptions": "More options"
+    "optional": "optional",
+    "apply": "Apply",
+    "never": "Never",
+    "expired": "Expired",
+    "expiresSoon": "Expires soon",
+    "noPermission": "You don’t have access to this action. Ask a project administrator for permission.",
+    "moreOptions": "More options"
   },
   "authentication": {
     "authentication": "Authentication",
@@ -468,15 +468,15 @@
     "noAggregatableColumns": "No aggregatable columns.",
     "allColumnsSorted": "All selected columns are already sorted.",
     "rows": "rows",
-    "aggregationsHelp": "Choose aggregate functions or date buckets for the selected report columns."
-    ,"aggregationColumnUnavailable": "This column can no longer be aggregated. Remove this rule or restore the column."
-    ,"columnNotFound": "Column not found in schema"
-    ,"editDisabledColumnMissing": "Edit disabled — column missing from schema"
-    ,"editAggregation": "Edit aggregation"
-    ,"dateColumnUnavailable": "This column is no longer a date/timestamp column. Remove this rule or restore the column."
-    ,"aggregatedBy": "aggregated by"
-    ,"groupedBy": "grouped by"
-    ,"editDateBucket": "Edit date bucket"
+    "aggregationsHelp": "Choose aggregate functions or date buckets for the selected report columns.",
+    "aggregationColumnUnavailable": "This column can no longer be aggregated. Remove this rule or restore the column.",
+    "columnNotFound": "Column not found in schema",
+    "editDisabledColumnMissing": "Edit disabled — column missing from schema",
+    "editAggregation": "Edit aggregation",
+    "dateColumnUnavailable": "This column is no longer a date/timestamp column. Remove this rule or restore the column.",
+    "aggregatedBy": "aggregated by",
+    "groupedBy": "grouped by",
+    "editDateBucket": "Edit date bucket"
   },
   "healthStatus": {
     "noRunsLast30": "No runs in the last 30 days",
@@ -531,10 +531,10 @@
     "noMatch": "No fields match the current filter",
     "mode": "Mode",
     "collapseNested": "Collapse nested fields",
-    "expandNested": "Expand nested fields"
-    ,"dedupHelp": "Deduplication rollup — collapses a joined field to one row per join key so the join never multiplies rows."
-    ,"availableAfterJoin": "Available aggregations — functions a report may apply to this field after the join."
-    ,"noFieldsCurrentFilter": "No fields match the current filter"
+    "expandNested": "Expand nested fields",
+    "dedupHelp": "Deduplication rollup — collapses a joined field to one row per join key so the join never multiplies rows.",
+    "availableAfterJoin": "Available aggregations — functions a report may apply to this field after the join.",
+    "noFieldsCurrentFilter": "No fields match the current filter"
   },
   "sqlValidator": {
     "validating": "Validating...",
@@ -575,23 +575,27 @@
     "nullRateThreshold": "Null rate threshold percent",
     "thresholdHours": "Threshold, hours",
     "freshnessThreshold": "Data freshness threshold hours for {{scope}}",
-    "severities": { "error": "Error", "warning": "Warning", "notice": "Notice" },
+    "severities": {
+      "error": "Error",
+      "warning": "Warning",
+      "notice": "Notice"
+    },
     "loadFailed": "Unable to load Data Quality",
     "refreshLater": "Refresh the page or try again later.",
     "resultsLoadFailed": "Unable to load check results",
-    "resultsLoadDescription": "The run summary is available, but its detailed report failed to load."
-    ,"checks": "Data Quality checks"
-    ,"criticalFinding": "critical finding"
-    ,"warningFinding": "warning finding"
-    ,"noticeFinding": "notice finding"
-    ,"terminalResults": "Terminal results will be available after this run finishes."
-    ,"passedCount": "{{count}} passed"
-    ,"notApplicableCount": "{{count}} not applicable"
-    ,"openFor": "Open Data Quality for {{title}}: {{status}}{{details}}"
-    ,"checksFor": "Data Quality checks for {{title}}"
-    ,"queued": "Queued"
-    ,"started": "Started"
-    ,"lastChecked": "Last checked"
+    "resultsLoadDescription": "The run summary is available, but its detailed report failed to load.",
+    "checks": "Data Quality checks",
+    "criticalFinding": "critical finding",
+    "warningFinding": "warning finding",
+    "noticeFinding": "notice finding",
+    "terminalResults": "Terminal results will be available after this run finishes.",
+    "passedCount": "{{count}} passed",
+    "notApplicableCount": "{{count}} not applicable",
+    "openFor": "Open Data Quality for {{title}}: {{status}}{{details}}",
+    "checksFor": "Data Quality checks for {{title}}",
+    "queued": "Queued",
+    "started": "Started",
+    "lastChecked": "Last checked"
   },
   "dataMartsPage": {
     "title": "Data Marts",
@@ -628,15 +632,42 @@
     "coreConcepts": "Core concepts"
   },
   "dataMartPresets": {
-    "facebook": { "title": "Facebook Ads", "datamartTitle": "Facebook Ads Data Mart" },
-    "facebookPages": { "title": "Facebook Fanpage", "datamartTitle": "Facebook Fanpage Data Mart" },
-    "linkedin": { "title": "LinkedIn Ads", "datamartTitle": "LinkedIn Ads Data Mart" },
-    "tiktok": { "title": "TikTok Ads", "datamartTitle": "TikTok Ads Data Mart" },
-    "microsoft": { "title": "Microsoft Ads", "datamartTitle": "Microsoft Ads Data Mart" },
-    "otherConnector": { "title": "Other connector", "datamartTitle": "Connector-based Data Mart" },
-    "sqlQuery": { "title": "SQL query", "datamartTitle": "SQL-based Data Mart" },
-    "existingTable": { "title": "Existing Table", "datamartTitle": "Table-based Data Mart" },
-    "blankDataMart": { "title": "Blank Data Mart", "datamartTitle": "New Data Mart" }
+    "facebook": {
+      "title": "Facebook Ads",
+      "datamartTitle": "Facebook Ads Data Mart"
+    },
+    "facebookPages": {
+      "title": "Facebook Fanpage",
+      "datamartTitle": "Facebook Fanpage Data Mart"
+    },
+    "linkedin": {
+      "title": "LinkedIn Ads",
+      "datamartTitle": "LinkedIn Ads Data Mart"
+    },
+    "tiktok": {
+      "title": "TikTok Ads",
+      "datamartTitle": "TikTok Ads Data Mart"
+    },
+    "microsoft": {
+      "title": "Microsoft Ads",
+      "datamartTitle": "Microsoft Ads Data Mart"
+    },
+    "otherConnector": {
+      "title": "Other connector",
+      "datamartTitle": "Connector-based Data Mart"
+    },
+    "sqlQuery": {
+      "title": "SQL query",
+      "datamartTitle": "SQL-based Data Mart"
+    },
+    "existingTable": {
+      "title": "Existing Table",
+      "datamartTitle": "Table-based Data Mart"
+    },
+    "blankDataMart": {
+      "title": "Blank Data Mart",
+      "datamartTitle": "New Data Mart"
+    }
   },
   "modelCanvasPage": {
     "title": "Models",
@@ -690,11 +721,11 @@
     "existingView": "Existing view",
     "pattern": "Pattern",
     "tablePattern": "Table pattern",
-    "connector": "Connector"
-    ,"dataImport": "Data import from Source to Storage"
-    ,"select": "Select definition type"
-    ,"current": "current"
-    ,"openInStorageConsole": "Open in storage console"
+    "connector": "Connector",
+    "dataImport": "Data import from Source to Storage",
+    "select": "Select definition type",
+    "current": "current",
+    "openInStorageConsole": "Open in storage console"
   },
   "canvasSettings": {
     "title": "Canvas settings",
@@ -712,22 +743,28 @@
     "fieldCountHelp": "The field count shown on each object",
     "statusDot": "Status dot",
     "statusDotHelp": "The published/draft status dot in the card header",
-    "viewModes": { "compact": "Compact", "erd": "Detailed" },
-    "directions": { "horizontal": "Horizontal", "vertical": "Vertical" }
+    "viewModes": {
+      "compact": "Compact",
+      "erd": "Detailed"
+    },
+    "directions": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    }
   },
   "dataLastUpdated": {
     "checkingShort": "checking…",
     "ariaLabel": "Data Last Updated for {{title}}: {{label}}",
     "checking": "Checking Data Last Updated…",
-    "notChecked": "Data Last Updated has not been checked yet. Use Actions → Check Data Last Updated to measure the visible Data Marts."
-    ,"allTablesChecked": "All source tables were checked."
-    ,"partialCoverage": "Some source tables could not be checked — the actual time can only be more recent."
-    ,"storageUnavailable": "The storage did not report when the source tables last changed."
-    ,"sourceTablesChanged": "Source tables last changed: {{date}}"
-    ,"noModificationTime": "The storage did not report a modification time."
-    ,"checked": "Checked {{time}}"
-    ,"writeTimeCaveat": "Reflects when source tables were written to, not which period the data covers."
-    ,"notCheckedYet": "Not checked yet"
+    "notChecked": "Data Last Updated has not been checked yet. Use Actions → Check Data Last Updated to measure the visible Data Marts.",
+    "allTablesChecked": "All source tables were checked.",
+    "partialCoverage": "Some source tables could not be checked — the actual time can only be more recent.",
+    "storageUnavailable": "The storage did not report when the source tables last changed.",
+    "sourceTablesChanged": "Source tables last changed: {{date}}",
+    "noModificationTime": "The storage did not report a modification time.",
+    "checked": "Checked {{time}}",
+    "writeTimeCaveat": "Reflects when source tables were written to, not which period the data covers.",
+    "notCheckedYet": "Not checked yet"
   },
   "owners": {
     "title": "Owners",
@@ -914,8 +951,8 @@
     "aliasPlaceholder": "e.g. orders",
     "aliasTooltip": "Internal name used when building the SQL JOIN for this data mart (e.g. orders_customer_id). Not shown in the output.",
     "joinFields": "Join Fields",
-    "joinFieldsTooltip": "Define how rows are matched between the source and related data marts."
-    ,"allStatuses": "All statuses",
+    "joinFieldsTooltip": "Define how rows are matched between the source and related data marts.",
+    "allStatuses": "All statuses",
     "publishedOnly": "Published only",
     "draftOnly": "Draft only",
     "field": "field",
@@ -950,8 +987,8 @@
     "saveSchedule": "Save Schedule",
     "weekdaysPreset": "Weekdays 9:00",
     "everyHourPreset": "Every hour",
-    "everySixHoursPreset": "Every 6 hours"
-    ,"weekday0": "Sunday",
+    "everySixHoursPreset": "Every 6 hours",
+    "weekday0": "Sunday",
     "weekday1": "Monday",
     "weekday2": "Tuesday",
     "weekday3": "Wednesday",
@@ -1066,83 +1103,83 @@
     "since": "since",
     "openInGoogleSheets": "Open in Google Sheets",
     "startingSoon": "Starting soon…",
-    "reportRunning": "Report is running…"
-    ,"pullRunHintExcel": "Refresh it from The P2PDigital add-in in Excel"
-    ,"pullRunHintDestination": "The destination reads this report itself"
-    ,"actionsForReport": "Actions for report: {{title}}"
-    ,"reconnectSheetAndRun": "Reconnect sheet and run report: {{title}}"
-    ,"deleteReportAria": "Delete report: {{title}}"
-    ,"reconnectFailed": "Failed to reconnect sheet"
-    ,"general": "General"
-    ,"template": "Template"
-    ,"sendingConditions": "Sending conditions"
-    ,"reportColumns": "Report Columns"
-    ,"reportColumnsTooltip": "Select which columns to include in the report"
-    ,"automateRuns": "Automate Report Runs"
-    ,"ownership": "Ownership"
-    ,"details": "Details"
-    ,"owners": "Owners"
-    ,"ownersTooltip": "Team members responsible for this report"
-    ,"createdBy": "Created By"
-    ,"createdAt": "Created At"
-    ,"unknown": "Unknown"
-    ,"noDestinations": "No destinations available"
-    ,"createDestinationFirst": "You need to create a Destination before you can create a report."
-    ,"goDestinations": "Go to Destinations"
-    ,"shareDocumentWith": "Share document with"
-    ,"shareDocumentTooltip": "Share the Google Sheet with this email to allow writing"
-    ,"titleTooltip": "Add a title that reflects the report's purpose"
-    ,"selectDestinationTooltip": "Select one of your existing destinations"
-    ,"subjectTooltip": "Add a short, clear subject line for your report"
-    ,"createNew": "+ Create new"
-    ,"message": "Message"
-    ,"edit": "Edit"
-    ,"preview": "Preview"
-    ,"viewSource": "View Source"
-    ,"noInsights": "No Insights"
-    ,"openInsight": "Open Insight"
-    ,"cacheConfiguration": "Cache Configuration"
-    ,"cacheTooltip": "Period during which query results are served from storage-side cache, avoiding re-execution"
-    ,"title": "Title"
-    ,"destination": "Destination"
-    ,"selectDestination": "Select destination"
-    ,"reportTitlePlaceholder": "Enter report title"
-    ,"subject": "Email subject"
-    ,"subjectPlaceholder": "Enter message subject"
-    ,"custom": "Custom"
-    ,"insight": "Insight"
-    ,"createInsight": "Create insight"
-    ,"selectInsight": "Select insight"
-    ,"selectedInsight": "Selected insight"
-    ,"noInsightSelected": "No insight selected"
-    ,"noInsightAvailable": "No insights available"
-    ,"insightSourceDescription": "Create an insight to use as the source for report content."
-    ,"insightWillRun": "The insight will be used when the report runs"
-    ,"dataMartRunResults": "Data Mart run results"
-    ,"dataMartRunResultsTooltip": "Define when the report is sent based on Data Mart run results"
-    ,"cacheLifetime": "Cache lifetime"
-    ,"selectCacheTime": "Select cache lifetime"
-    ,"minutes": "{{count}} minutes"
-    ,"hours": "{{count}} hours"
-    ,"createReport": "Create report"
-    ,"report": "Report"
-    ,"createReportSheetTitle": "Create report"
-    ,"editReportSheetTitle": "Edit report"
-    ,"createReportSheetDescription": "Fill in the details to create a new report"
-    ,"editReportSheetDescription": "Update the details of an existing report"
-    ,"lookerCreateDescription": "Configure the Data Mart as the data source"
-    ,"lookerEditDescription": "Update connection details"
-    ,"copyLinkToReport": "Copy link to this report"
-    ,"reportCreatedToast": "Report created"
-    ,"viewItInDestinations": "You can view it on the Destinations page"
-    ,"createAndRunReport": "Create & Run report"
-    ,"saveChangesToReport": "Save changes to report"
-    ,"createNewReport": "Create new report"
-    ,"saveAndRunReport": "Save & Run report"
-    ,"saveChanges": "Save changes"
-    ,"moreActions": "More actions"
-    ,"creating": "Creating..."
-    ,"saving": "Saving..."
+    "reportRunning": "Report is running…",
+    "pullRunHintExcel": "Refresh it from The P2PDigital add-in in Excel",
+    "pullRunHintDestination": "The destination reads this report itself",
+    "actionsForReport": "Actions for report: {{title}}",
+    "reconnectSheetAndRun": "Reconnect sheet and run report: {{title}}",
+    "deleteReportAria": "Delete report: {{title}}",
+    "reconnectFailed": "Failed to reconnect sheet",
+    "general": "General",
+    "template": "Template",
+    "sendingConditions": "Sending conditions",
+    "reportColumns": "Report Columns",
+    "reportColumnsTooltip": "Select which columns to include in the report",
+    "automateRuns": "Automate Report Runs",
+    "ownership": "Ownership",
+    "details": "Details",
+    "owners": "Owners",
+    "ownersTooltip": "Team members responsible for this report",
+    "createdBy": "Created By",
+    "createdAt": "Created At",
+    "unknown": "Unknown",
+    "noDestinations": "No destinations available",
+    "createDestinationFirst": "You need to create a Destination before you can create a report.",
+    "goDestinations": "Go to Destinations",
+    "shareDocumentWith": "Share document with",
+    "shareDocumentTooltip": "Share the Google Sheet with this email to allow writing",
+    "titleTooltip": "Add a title that reflects the report's purpose",
+    "selectDestinationTooltip": "Select one of your existing destinations",
+    "subjectTooltip": "Add a short, clear subject line for your report",
+    "createNew": "+ Create new",
+    "message": "Message",
+    "edit": "Edit",
+    "preview": "Preview",
+    "viewSource": "View Source",
+    "noInsights": "No Insights",
+    "openInsight": "Open Insight",
+    "cacheConfiguration": "Cache Configuration",
+    "cacheTooltip": "Period during which query results are served from storage-side cache, avoiding re-execution",
+    "title": "Title",
+    "destination": "Destination",
+    "selectDestination": "Select destination",
+    "reportTitlePlaceholder": "Enter report title",
+    "subject": "Email subject",
+    "subjectPlaceholder": "Enter message subject",
+    "custom": "Custom",
+    "insight": "Insight",
+    "createInsight": "Create insight",
+    "selectInsight": "Select insight",
+    "selectedInsight": "Selected insight",
+    "noInsightSelected": "No insight selected",
+    "noInsightAvailable": "No insights available",
+    "insightSourceDescription": "Create an insight to use as the source for report content.",
+    "insightWillRun": "The insight will be used when the report runs",
+    "dataMartRunResults": "Data Mart run results",
+    "dataMartRunResultsTooltip": "Define when the report is sent based on Data Mart run results",
+    "cacheLifetime": "Cache lifetime",
+    "selectCacheTime": "Select cache lifetime",
+    "minutes": "{{count}} minutes",
+    "hours": "{{count}} hours",
+    "createReport": "Create report",
+    "report": "Report",
+    "createReportSheetTitle": "Create report",
+    "editReportSheetTitle": "Edit report",
+    "createReportSheetDescription": "Fill in the details to create a new report",
+    "editReportSheetDescription": "Update the details of an existing report",
+    "lookerCreateDescription": "Configure the Data Mart as the data source",
+    "lookerEditDescription": "Update connection details",
+    "copyLinkToReport": "Copy link to this report",
+    "reportCreatedToast": "Report created",
+    "viewItInDestinations": "You can view it on the Destinations page",
+    "createAndRunReport": "Create & Run report",
+    "saveChangesToReport": "Save changes to report",
+    "createNewReport": "Create new report",
+    "saveAndRunReport": "Save & Run report",
+    "saveChanges": "Save changes",
+    "moreActions": "More actions",
+    "creating": "Creating...",
+    "saving": "Saving..."
   },
   "reportTable": {
     "title": "Title",
@@ -1164,7 +1201,10 @@
     "loadingHistory": "Loading chat history...",
     "noChats": "No chats yet.",
     "rename": "Rename",
-    "delete": "Delete",
+    "delete": {
+      "title": "Delete insight",
+      "description": "Are you sure you want to delete this insight? This action cannot be undone."
+    },
     "applyRun": "Apply & Run",
     "applyOnly": "Apply only",
     "applyChangesAction": "Apply changes to source",
@@ -1204,10 +1244,6 @@
       "loadProject": "Failed to fetch Data Mart insights",
       "delete": "Failed to delete insight"
     },
-    "delete": {
-      "title": "Delete insight",
-      "description": "Are you sure you want to delete this insight? This action cannot be undone."
-    },
     "titleUpdated": "Title updated",
     "unsavedChanges": "Unsaved changes",
     "save": "Save",
@@ -1243,7 +1279,7 @@
     "reportRunFailed": "Failed to run report",
     "loadingReports": "Loading reports...",
     "scheduleTitle": "Schedule your insights",
-    "scheduleDescription": "Automate delivery to your destinations",
+    "scheduleDescription": "You can schedule this insight to run at a specific time or send it to a recipient",
     "newReport": "New Report",
     "createReportTooltip": "Create a new report for this insight",
     "runReport": "Run report",
@@ -1258,7 +1294,6 @@
     "publishBeforeRun": "To run an insight, publish the Data Mart first",
     "saveAndRun": "Save & Run Insight",
     "scheduleAfterPublish": "You can schedule and send reports only after publishing the Data Mart",
-    "scheduleDescription": "You can schedule this insight to run at a specific time or send it to a recipient",
     "templateEmpty": "Insight template is empty",
     "pressSlashCommands": "Press '/' for commands",
     "searchInsights": "Search insights…",
@@ -1344,33 +1379,33 @@
       "integrity": "Confirming data integrity...",
       "preparing": "Preparing final output for insights...",
       "quality": "Performing final quality checks..."
-    }
-    ,"createArtifactTitle": "New Data Artifact"
-    ,"editArtifactTitle": "Edit Data Artifact"
-    ,"addArtifactTitle": "Add Data Artifact"
-    ,"id": "Id"
-    ,"idRequired": "Id is required"
-    ,"keyPattern": "Only letters, digits, and underscores are allowed"
-    ,"idTooltip": "Enter a unique id that will be used to reference this source in the insight template. This field cannot be changed after creation."
-    ,"titleRequired": "Title is required"
-    ,"titleTooltip": "Enter a human-readable title for this data source."
-    ,"visibleTitlePlaceholder": "Visible title"
-    ,"sqlQueryLabel": "SQL Query"
-    ,"sqlQueryTooltip": "Write the SQL query to fetch data. You can use parameters defined in the template."
-    ,"preview": "Preview"
-    ,"noColumns": "No columns returned"
-    ,"estimatedVolume": "This is an estimated volume and may differ from the actual value"
-    ,"invalidSql": "Invalid SQL"
-    ,"artifactUpdated": "Data Artifact updated"
-    ,"artifactCreated": "Data Artifact created"
-    ,"saveArtifactFailed": "Failed to save data artifact"
-    ,"artifactsCount": "Data Artifacts ({{count}}/5)"
-    ,"dataArtifact": "Data Artifact"
-    ,"actions": "Actions"
-    ,"loading": "Loading..."
-    ,"deleteChat": "Delete Chat"
-    ,"headingAction": "Heading"
-    ,"markdownLearnMore": "Learn more"
+    },
+    "createArtifactTitle": "New Data Artifact",
+    "editArtifactTitle": "Edit Data Artifact",
+    "addArtifactTitle": "Add Data Artifact",
+    "id": "Id",
+    "idRequired": "Id is required",
+    "keyPattern": "Only letters, digits, and underscores are allowed",
+    "idTooltip": "Enter a unique id that will be used to reference this source in the insight template. This field cannot be changed after creation.",
+    "titleRequired": "Title is required",
+    "titleTooltip": "Enter a human-readable title for this data source.",
+    "visibleTitlePlaceholder": "Visible title",
+    "sqlQueryLabel": "SQL Query",
+    "sqlQueryTooltip": "Write the SQL query to fetch data. You can use parameters defined in the template.",
+    "preview": "Preview",
+    "noColumns": "No columns returned",
+    "estimatedVolume": "This is an estimated volume and may differ from the actual value",
+    "invalidSql": "Invalid SQL",
+    "artifactUpdated": "Data Artifact updated",
+    "artifactCreated": "Data Artifact created",
+    "saveArtifactFailed": "Failed to save data artifact",
+    "artifactsCount": "Data Artifacts ({{count}}/5)",
+    "dataArtifact": "Data Artifact",
+    "actions": "Actions",
+    "loading": "Loading...",
+    "deleteChat": "Delete Chat",
+    "headingAction": "Heading",
+    "markdownLearnMore": "Learn more"
   },
   "reportsEmptyDestinations": {
     "analyzeTitle": "Analyze your data in Google Sheets",
@@ -1907,51 +1942,51 @@
     "declineConfirm": "Decline",
     "declineTitle": "Decline membership request",
     "declineDescription": "Are you sure you want to decline the request from",
-    "declineNotified": "They will be notified the request was rejected."
-    ,"magicLinkCopied": "Magic link copied to clipboard"
-    ,"magicLinkCopyFailed": "Failed to copy. Select the link and copy manually."
-    ,"invitationSent": "Invitation email sent to {{email}}"
-    ,"invitationFailed": "Failed to send invitation"
-    ,"invitationLinkReady": "Invitation link ready"
-    ,"invitationLinkDescription": "Share this one-time sign-in link with the invitee through any channel (email, Slack, etc.)."
-    ,"invitee": "Invitee"
-    ,"willJoinAs": "Will join as"
-    ,"oneTimeLink": "One-time link"
-    ,"copyInvitationLink": "Copy invitation link"
-    ,"singleUse": "Single-use"
-    ,"expiresAt": "Expires"
-    ,"copiedToClipboard": "Copied to clipboard"
-    ,"inviteTitle": "Invite member"
-    ,"inviteDescription": "Send an invitation via email. The member will receive a link to join the project."
-    ,"emailTooltip": "The member's email address"
-    ,"email": "Email"
-    ,"sendInvitation": "Send invitation"
-    ,"tableLabel": "Project members table"
-    ,"searchByName": "Search by name"
-    ,"noMembersFound": "No members found"
-    ,"loadFailed": "Could not load members"
-    ,"andMore": "and {{count}} more"
-    ,"access": "Access"
-    ,"contexts": "Contexts"
-    ,"roleScope": "Role scope"
-    ,"selectedContextsOnly": "Selected contexts only"
-    ,"assignContextsOptional": "Assign to contexts (optional)"
-    ,"roleTooltip": "Project role granted to this member"
-    ,"scopeTooltip": "Controls what resources this member can see by default"
-    ,"contextsTooltip": "Contexts this member can see"
-    ,"contextsAssignedTooltip": "Contexts assigned to this member — controls visibility when scope is \"Selected contexts\""
-    ,"assignedContexts": "Assigned contexts"
-    ,"adminAccessDescription": "Project Admin has project-wide access. Scope and context assignments do not apply."
-    ,"settingsUpdated": "Member settings updated"
-    ,"saveFailed": "Failed to save"
-    ,"configureTitle": "Configure member"
-    ,"configureDescription": "Customize role, scope and contexts for this member"
-    ,"defaultRoleTitle": "Default roles and scopes"
-    ,"defaultRoleDescription": "Configure the defaults for new members who automatically join this project"
-    ,"context": "context"
-    ,"contextsLower": "contexts"
-    ,"staleContexts": "{{count}} saved {{contextWord}} {{state}} no longer available and will be removed on save."
-    ,"roleHelp": {
+    "declineNotified": "They will be notified the request was rejected.",
+    "magicLinkCopied": "Magic link copied to clipboard",
+    "magicLinkCopyFailed": "Failed to copy. Select the link and copy manually.",
+    "invitationSent": "Invitation email sent to {{email}}",
+    "invitationFailed": "Failed to send invitation",
+    "invitationLinkReady": "Invitation link ready",
+    "invitationLinkDescription": "Share this one-time sign-in link with the invitee through any channel (email, Slack, etc.).",
+    "invitee": "Invitee",
+    "willJoinAs": "Will join as",
+    "oneTimeLink": "One-time link",
+    "copyInvitationLink": "Copy invitation link",
+    "singleUse": "Single-use",
+    "expiresAt": "Expires",
+    "copiedToClipboard": "Copied to clipboard",
+    "inviteTitle": "Invite member",
+    "inviteDescription": "Send an invitation via email. The member will receive a link to join the project.",
+    "emailTooltip": "The member's email address",
+    "email": "Email",
+    "sendInvitation": "Send invitation",
+    "tableLabel": "Project members table",
+    "searchByName": "Search by name",
+    "noMembersFound": "No members found",
+    "loadFailed": "Could not load members",
+    "andMore": "and {{count}} more",
+    "access": "Access",
+    "contexts": "Contexts",
+    "roleScope": "Role scope",
+    "selectedContextsOnly": "Selected contexts only",
+    "assignContextsOptional": "Assign to contexts (optional)",
+    "roleTooltip": "Project role granted to this member",
+    "scopeTooltip": "Controls what resources this member can see by default",
+    "contextsTooltip": "Contexts this member can see",
+    "contextsAssignedTooltip": "Contexts assigned to this member — controls visibility when scope is \"Selected contexts\"",
+    "assignedContexts": "Assigned contexts",
+    "adminAccessDescription": "Project Admin has project-wide access. Scope and context assignments do not apply.",
+    "settingsUpdated": "Member settings updated",
+    "saveFailed": "Failed to save",
+    "configureTitle": "Configure member",
+    "configureDescription": "Customize role, scope and contexts for this member",
+    "defaultRoleTitle": "Default roles and scopes",
+    "defaultRoleDescription": "Configure the defaults for new members who automatically join this project",
+    "context": "context",
+    "contextsLower": "contexts",
+    "staleContexts": "{{count}} saved {{contextWord}} {{state}} no longer available and will be removed on save.",
+    "roleHelp": {
       "question": "Which role should I pick?",
       "businessUser": "sees accessible Data Marts and Reports, creates Reports for Data Marts available for reporting, manages Reports they own (edit, delete, change owners), manages Report Triggers under their Reports, and uses Destinations available for use. Cannot create, edit, or delete Data Marts, Data Mart Triggers, or Storages.",
       "technicalUser": "everything a Business User may do, plus: creates, edits, and deletes Data Marts, Data Mart Triggers, and Storages; edits and deletes Reports project-wide; changes Report owners; manages Report Triggers project-wide.",
@@ -2329,8 +2364,16 @@
     "selectFromStorage": "Select from storage",
     "title": "Pick a {{resource}}",
     "description": "Pick a namespace to see all {{resources}} the storage has access to. Selecting one fills the Fully Qualified Name.",
-    "labels": { "view": "view", "table_pattern": "table pattern", "table": "table" },
-    "plurals": { "view": "views", "table_pattern": "table patterns", "table": "tables" }
+    "labels": {
+      "view": "view",
+      "table_pattern": "table pattern",
+      "table": "table"
+    },
+    "plurals": {
+      "view": "views",
+      "table_pattern": "table patterns",
+      "table": "tables"
+    }
   },
   "generatedSql": {
     "failedLoad": "Failed to load generated SQL",
@@ -2423,5 +2466,12 @@
     "loadTriggersFailed": "Failed to fetch Data Mart triggers",
     "loadMore": "Load More",
     "loadingMore": "Loading..."
+  },
+  "errors": {
+    "somethingWentWrong": "Something went wrong",
+    "retry": "Try again"
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content"
   }
 }

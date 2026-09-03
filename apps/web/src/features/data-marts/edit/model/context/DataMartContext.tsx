@@ -36,7 +36,7 @@ import type {
 } from '../types';
 import { extractApiError, type ApiError, type AxiosRequestConfig } from '../../../../../app/api';
 import type { DataMartSchema } from '../../../shared/types/data-mart-schema.types';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { pushToDataLayer, trackEvent } from '../../../../../utils';
 import { DATA_MART_RUNS_PAGE_SIZE } from '../../constants';
 import { useRefreshSetupProgress } from '../../../../../components/AppSidebar/SetupChecklist/useSetupProgress';

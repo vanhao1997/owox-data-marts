@@ -1,7 +1,7 @@
 import { useOutletContext } from 'react-router';
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { DataMartOverview } from '../../../features/data-marts/edit';
 import { OwnersEditor } from '../../../features/data-marts/edit/components/OwnersEditor';
 import { UserReference } from '../../../shared/components/UserReference/UserReference';

@@ -1,7 +1,7 @@
 import { useState, useEffect, type KeyboardEvent, type ReactNode, useRef } from 'react';
 import { cn } from '@owox/ui/lib/utils';
 import { Textarea } from '@owox/ui/components/textarea';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 export interface InlineEditTitleAiContext {
   /** Replace the current value in the open input. Does not persist on its own. */

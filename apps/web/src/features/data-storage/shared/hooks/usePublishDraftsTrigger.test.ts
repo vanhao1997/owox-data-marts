@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { TaskStatus } from '../../../../shared/types/task-status.enum.ts';
 import { dataStorageApiService } from '../api';
 import { usePublishDraftsTrigger } from './usePublishDraftsTrigger.ts';
 
-vi.mock('react-hot-toast', () => ({
-  default: { error: vi.fn(), success: vi.fn(), loading: vi.fn(), dismiss: vi.fn() },
+vi.mock('sonner', () => ({
+  default: { error: vi.fn(), success: vi.fn(), loading: vi.fn(), dismiss: vi.fn() }, toast: { error: vi.fn(), success: vi.fn(), loading: vi.fn(), dismiss: vi.fn() },
 }));
 
 vi.mock('../api', () => ({

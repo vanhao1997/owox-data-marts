@@ -19,8 +19,13 @@ vi.mock('../../../../../utils', () => ({
   trackEvent: vi.fn(),
 }));
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   default: {
+    success: vi.fn(),
+    error: vi.fn(),
+    loading: vi.fn(() => 'toast-id'),
+    dismiss: vi.fn(),
+  }, toast: {
     success: vi.fn(),
     error: vi.fn(),
     loading: vi.fn(() => 'toast-id'),

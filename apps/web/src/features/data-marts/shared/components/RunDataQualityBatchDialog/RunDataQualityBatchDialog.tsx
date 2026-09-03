@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { ConfirmationDialog } from '../../../../../shared/components/ConfirmationDialog';
 import { dataQualityQueryKeys } from '../../../data-quality/model/use-data-quality-workspace';
 import { dataQualityBatchApi, type DataQualityBatchRunItem } from './data-quality-batch.api';

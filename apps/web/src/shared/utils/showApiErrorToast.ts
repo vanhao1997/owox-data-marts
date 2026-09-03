@@ -1,5 +1,4 @@
-import toast from 'react-hot-toast';
-import { createElement } from 'react';
+import { toast } from 'sonner';
 import type { ApiError, ApiValidationError } from '../../app/api/api-error.interface';
 import { extractApiError } from '../../app/api/extract-api-error.util';
 
@@ -86,36 +85,10 @@ export function showApiErrorToast(
   // (users may want to copy the required role), so dismissal is a dedicated,
   // keyboard-accessible close button instead of the whole message.
   if (options?.persistent) {
-    toast.error(
-      t =>
-        createElement(
-          'span',
-          { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
-          message,
-          createElement(
-            'button',
-            {
-              type: 'button',
-              'aria-label': 'Dismiss error',
-              onClick: () => {
-                toast.dismiss(t.id);
-              },
-              style: {
-                cursor: 'pointer',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                margin: 0,
-                font: 'inherit',
-                color: 'inherit',
-                flexShrink: 0,
-              },
-            },
-            '✕'
-          )
-        ),
-      { duration: Infinity, id: `persistent-error:${message}` }
-    );
+    toast.error(message, {
+      duration: Infinity,
+      id: `persistent-error:${message}`,
+    });
     return;
   }
 

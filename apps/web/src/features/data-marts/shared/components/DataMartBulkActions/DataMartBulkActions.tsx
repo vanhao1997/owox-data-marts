@@ -34,7 +34,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { DataStorageType } from '../../../../data-storage';
 import { DataMartStatus } from '../../enums';

@@ -32,7 +32,7 @@ import {
   AccordionTrigger,
 } from '@owox/ui/components/accordion';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { contextService } from '../../services/context.service';
 import { MembersAssignmentField } from '../../../../shared/components/MembersAssignmentField';
 import { getRoleDisplayName } from '../../../idp/utils/role-display-name';

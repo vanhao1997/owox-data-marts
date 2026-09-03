@@ -22,10 +22,13 @@ vi.mock('@owox/ui/components/tooltip', () => ({
   TooltipContent: ({ children }: { children: ReactNode }) => <div role='tooltip'>{children}</div>,
 }));
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   __esModule: true,
   default: {
     success: vi.fn(),
+  }, toast: {
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 

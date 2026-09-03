@@ -29,7 +29,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from '@owox/ui/components/resizable';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Button } from '@owox/ui/components/button';
 import {
   Breadcrumb,

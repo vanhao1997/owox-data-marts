@@ -19,7 +19,7 @@ import {
   FormSection,
 } from '@owox/ui/components/form';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { projectMembersService } from '../../../../../features/project-members/services/project-members.service';
 import { PROJECT_ROLE_VALUES, type Role } from '../../../../../features/project-members/types';
 import type { MembershipRequestDto } from '../../../../../features/project-members/types';

@@ -9,7 +9,7 @@ vi.mock('../../model', () => ({
 }));
 
 const mockToastCustom = vi.hoisted(() => vi.fn().mockReturnValue('mock-id'));
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   toast: { custom: mockToastCustom, dismiss: vi.fn() },
 }));
 

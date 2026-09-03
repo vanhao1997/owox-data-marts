@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { TaskStatus } from '../../../../shared/types/task-status.enum.ts';
 import { buildPublishFailureMessage } from '../utils/buildPublishFailureMessage.ts';
 import { dataStorageApiService } from '../api';

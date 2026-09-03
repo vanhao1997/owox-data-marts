@@ -42,8 +42,9 @@ const testState = vi.hoisted(() => ({
   generateAllFieldMetadata: vi.fn(),
 }));
 
-vi.mock('react-hot-toast', () => ({
+vi.mock('sonner', () => ({
   default: testState.toast,
+  toast: testState.toast,
 }));
 
 vi.mock('react-router', async importOriginal => {

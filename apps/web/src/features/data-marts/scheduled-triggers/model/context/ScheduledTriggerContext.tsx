@@ -8,7 +8,7 @@ import { ScheduledTriggerMapper } from '../mappers';
 import type { ScheduledTriggerConfig } from '../trigger-config.types.ts';
 import { useDataMartContext } from '../../../edit/model';
 import { useConnector } from '../../../../connectors/shared/model/hooks/useConnector.ts';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import { trackEvent } from '../../../../../utils/data-layer';
 
 interface ScheduledTriggerProviderProps {

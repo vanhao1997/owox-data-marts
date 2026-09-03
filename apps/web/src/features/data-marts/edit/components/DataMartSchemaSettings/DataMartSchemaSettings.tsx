@@ -1,7 +1,7 @@
 import { Button } from '@owox/ui/components/button';
 import { TriangleAlert } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useOutletContext } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import type {

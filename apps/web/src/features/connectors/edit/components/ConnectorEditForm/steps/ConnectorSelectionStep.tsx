@@ -15,6 +15,15 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InviteTeammatesCard } from '../../../../../../shared/components/InviteTeammatesCard';
 
+const HIDDEN_CONNECTOR_NAMES = new Set([
+  'BankOfCanada',
+  'CriteoAds',
+  'MicrosoftAds',
+  'OpenExchangeRates',
+  'OpenHolidays',
+  'RedditAds',
+]);
+
 interface ConnectorSelectionStepProps {
   connectors: ConnectorListItem[];
   selectedConnector: ConnectorListItem | null;
@@ -33,6 +42,9 @@ export function ConnectorSelectionStep({
   onConnectorDoubleClick,
 }: ConnectorSelectionStepProps) {
   const { t } = useTranslation();
+  const visibleConnectors = connectors.filter(
+    connector => !HIDDEN_CONNECTOR_NAMES.has(connector.name)
+  );
 
   useEffect(() => {
     trackEvent({
@@ -60,7 +72,7 @@ export function ConnectorSelectionStep({
     <AppWizardStep>
       <AppWizardStepSection title={t('connectorWizard.chooseConnector')}>
         <AppWizardGrid>
-          {connectors.map(connector => (
+          {visibleConnectors.map(connector => (
             <AppWizardGridItem
               key={connector.name}
               icon={
@@ -88,7 +100,7 @@ export function ConnectorSelectionStep({
         />
       </AppWizardStepSection>
 
-      {connectors.length === 0 && (
+      {visibleConnectors.length === 0 && (
         <AppWizardStepHero
           icon={<Unplug size={56} strokeWidth={1} />}
           title={t('connectorWizard.noAvailable')}

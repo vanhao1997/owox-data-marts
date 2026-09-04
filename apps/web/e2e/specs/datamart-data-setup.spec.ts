@@ -143,7 +143,7 @@ test.describe('Data Setup - SQL Definition', () => {
 
 // ---------------------------------------------------------------------------
 // DSET-05, DSET-06, DSET-07: Connector definition type selection,
-// Bank of Canada wizard completion, and connector persistence after reload.
+// GitHub wizard completion, and connector persistence after reload.
 // ---------------------------------------------------------------------------
 test.describe('Data Setup - Connector Definition', () => {
   let datamartId: string;
@@ -173,14 +173,23 @@ test.describe('Data Setup - Connector Definition', () => {
       timeout: 10000,
     });
 
-    // Verify "Bank of Canada" is available in the connector grid
-    await expect(page.getByText('Bank of Canada', { exact: true })).toBeVisible();
+    for (const hiddenConnector of [
+      'Bank of Canada',
+      'Criteo Ads',
+      'Microsoft Ads',
+      'Open Exchange Rates',
+      'Open Holidays',
+      'Reddit Ads',
+    ]) {
+      await expect(page.getByText(hiddenConnector, { exact: true })).not.toBeVisible();
+    }
+    await expect(page.getByText('Admicro Ads', { exact: true })).toBeVisible();
 
     // Verify the step indicator shows "Step 1 of 5"
     await expect(page.getByText('Step 1 of 5')).toBeVisible();
   });
 
-  test('completes Bank of Canada connector wizard and verifies persistence after reload (DSET-06, DSET-07)', async ({
+  test('completes GitHub connector wizard and verifies persistence after reload (DSET-06, DSET-07)', async ({
     page,
     radix,
   }) => {
@@ -194,12 +203,12 @@ test.describe('Data Setup - Connector Definition', () => {
     await radix.selectOption(page.getByLabel('Definition Type'), 'Connector');
 
     // -----------------------------------------------------------------------
-    // Step 1 of 5: Select Connector -- choose "Bank of Canada" from the grid
+    // Step 1 of 5: Select Connector -- choose a visible connector from the grid
     // -----------------------------------------------------------------------
     await expect(page.getByText('Choose Connector')).toBeVisible({
       timeout: 10000,
     });
-    await page.getByText('Bank of Canada', { exact: true }).click();
+    await page.getByText('GitHub', { exact: true }).click();
 
     // Click Next to go to Step 2
     const nextButton = page.getByRole('button', { name: 'Next' });
@@ -207,23 +216,23 @@ test.describe('Data Setup - Connector Definition', () => {
     await nextButton.click();
 
     // -----------------------------------------------------------------------
-    // Step 2 of 5: Configuration -- ReimportLookbackWindow has default=2,
-    // so the form should already be valid. Just click Next.
+    // Step 2 of 5: Configuration
     // -----------------------------------------------------------------------
     await expect(page.getByText('Configure Settings')).toBeVisible({
       timeout: 10000,
     });
+    await page.getByLabel('Access Token *').fill('e2e-placeholder-token');
+    await page.getByLabel('Repository Name *').fill('owner/repository');
     // Wait for Next to be enabled (configuration loaded and valid)
     await expect(nextButton).toBeEnabled({ timeout: 10000 });
     await nextButton.click();
 
     // -----------------------------------------------------------------------
-    // Step 3 of 5: Select Nodes -- click "Bank of Canada Exchange Rates"
+    // Step 3 of 5: Select Nodes -- click "Repository Information"
     // -----------------------------------------------------------------------
-    // The node label uses the "overview" field from BankOfCanadaFieldsSchema
-    await expect(page.getByText('Bank of Canada Exchange Rates')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Repository Information')).toBeVisible({ timeout: 10000 });
     // The node is rendered as AppWizardStepCardItem with type='radio'
-    await page.getByText('Bank of Canada Exchange Rates').click();
+    await page.getByText('Repository Information').click();
     await expect(nextButton).toBeEnabled();
     await nextButton.click();
 
@@ -232,15 +241,8 @@ test.describe('Data Setup - Connector Definition', () => {
     // The defaultFields mechanism may pre-select fields automatically.
     // We need at least one field selected for Next to be enabled.
     // -----------------------------------------------------------------------
-    // Wait for fields to load -- the "rate" field should be visible
-    await expect(page.getByText('rate')).toBeVisible({ timeout: 10000 });
-
-    // Unique keys (date, label) are auto-selected and disabled.
-    // If rate is not selected, click it to ensure at least one non-key field is selected.
-    const rateCheckbox = page.locator('input[value="rate"]');
-    if (!(await rateCheckbox.isChecked())) {
-      await rateCheckbox.click({ force: true });
-    }
+    // Wait for fields to load. GitHub default fields provide a valid selection.
+    await expect(page.locator('input[value="id"]')).toBeVisible({ timeout: 10000 });
 
     await expect(nextButton).toBeEnabled();
     await nextButton.click();
@@ -252,8 +254,7 @@ test.describe('Data Setup - Connector Definition', () => {
     await expect(page.getByText('Choose where to store your data')).toBeVisible({ timeout: 10000 });
 
     // The Dataset name and Table name inputs should be pre-filled with defaults:
-    // Dataset name: "bank_of_canada_owox"
-    // Table name: "bank_of_canada_exchange_rates"
+    // Dataset and table names are pre-filled from the selected connector/node.
     // The Save button (finishLabel = 'Save') should be enabled if target is valid.
     const saveButton = page.getByRole('button', { name: 'Save' }).last();
     await expect(saveButton).toBeEnabled({ timeout: 5000 });
@@ -268,9 +269,9 @@ test.describe('Data Setup - Connector Definition', () => {
 
     // Verify connector info is displayed on the data-setup page.
     // After saving, the Input Source section shows the connector configuration.
-    // The ConnectorConfigurationItem renders the connector's internal name "BankOfCanada".
+    // The ConnectorConfigurationItem renders the connector's internal name "GitHub".
     const dataSetupContent = page.getByTestId(TESTIDS.datamartTabDataSetup);
-    await expect(dataSetupContent.getByText('BankOfCanada')).toBeVisible({ timeout: 10000 });
+    await expect(dataSetupContent.getByText('GitHub')).toBeVisible({ timeout: 10000 });
 
     // -----------------------------------------------------------------------
     // DSET-07: Verify persistence after reload
@@ -280,14 +281,14 @@ test.describe('Data Setup - Connector Definition', () => {
 
     // After reload, the connector definition should still be displayed.
     // The definition type selector will NOT appear since definition exists.
-    await expect(dataSetupContent.getByText('BankOfCanada')).toBeVisible({ timeout: 10000 });
+    await expect(dataSetupContent.getByText('GitHub')).toBeVisible({ timeout: 10000 });
 
     // Verify via API that the definition was saved with connector type
     const apiRes = await page.request.get(`/api/data-marts/${datamartId}`);
     expect(apiRes.ok()).toBeTruthy();
     const dmData = await apiRes.json();
     expect(dmData.definitionType).toBe('CONNECTOR');
-    expect(dmData.definition?.connector?.source?.name).toBe('BankOfCanada');
+    expect(dmData.definition?.connector?.source?.name).toBe('GitHub');
   });
 });
 

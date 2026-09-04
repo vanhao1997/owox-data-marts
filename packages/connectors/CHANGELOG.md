@@ -1,5 +1,16 @@
 # @owox/connectors
 
+## 0.33.0
+
+### Minor Changes
+
+- 264cdcf: Add stable Meta Marketing API metrics for Facebook Ads and replace deprecated
+  Facebook Page/Post reach reporting with Page media-view and lifetime post media
+  insights. New metrics remain optional and existing default selections stay unchanged.
+- 820d349: # Add manual Facebook Ads credentials
+
+  Facebook Ads setup now offers a dedicated Access Token option where users can enter an Access Token, App ID, and App Secret. OAuth and existing legacy token configurations remain supported.
+
 ## 0.32.0
 
 ## 0.31.0

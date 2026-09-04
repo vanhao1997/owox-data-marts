@@ -32,7 +32,9 @@ jobs:
   verify:
     name: Lint, test, and build
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    # The full web Vitest suite is intentionally part of this release gate and
+    # can take more than 30 minutes on a cold GitHub-hosted runner.
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository

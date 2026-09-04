@@ -75,6 +75,11 @@ jobs:
         env:
           NODE_ENV: test
 
+      # The CLI integration tests execute the generated oclif manifest and
+      # therefore need the publishable command bundles before the test fan-out.
+      - name: Build publishable CLI packages for integration tests
+        run: npm run build --workspace owox --workspace @owox/ctl
+
       - name: Run non-backend unit tests
         run: npx turbo run test --filter='!@owox/backend'
         env:

@@ -44,6 +44,21 @@ describe('AdmicroAds source behavior', () => {
     expect(sourceProto._columnIds.call(self, 'mobile')).toEqual(['1', '9', '2', '4', '5']);
   });
 
+  it('selects mobile column 9 in the initial schema before preview runs', () => {
+    const self = {
+      config: { ColumnIDs: { value: '1,8,2,4,5' } },
+      fieldsSchema: JSON.parse(JSON.stringify(globalThis.AdmicroAdsFieldsSchema)),
+      _columnIds: sourceProto._columnIds,
+    };
+
+    sourceProto._setDefaultFields.call(self, 'mobile');
+
+    expect(self.fieldsSchema.campaign.defaultFields).toContain('admicro_column_9');
+    expect(self.fieldsSchema.campaign.defaultFields).not.toContain('admicro_column_8');
+    expect(self.fieldsSchema.date.defaultFields).toContain('admicro_column_9');
+    expect(self.fieldsSchema.date.defaultFields).not.toContain('admicro_column_8');
+  });
+
   it('uses the Admicro timezone when choosing the preview day', () => {
     expect(
       globalThis.AdmicroAdsHelper.todayInTimezone(
@@ -151,6 +166,16 @@ describe('AdmicroAds source behavior', () => {
 
     await expect(sourceProto._post.call(self, '/v1/extract', {})).resolves.toEqual({ rows: [] });
     expect(globalThis.HttpUtils.fetch).toHaveBeenCalledTimes(2);
+    expect(globalThis.HttpUtils.fetch).toHaveBeenNthCalledWith(
+      1,
+      'http://admicro-extractor/v1/extract',
+      expect.objectContaining({ headers: expect.objectContaining({ 'x-owox-attempt': '1' }) })
+    );
+    expect(globalThis.HttpUtils.fetch).toHaveBeenNthCalledWith(
+      2,
+      'http://admicro-extractor/v1/extract',
+      expect.objectContaining({ headers: expect.objectContaining({ 'x-owox-attempt': '2' }) })
+    );
   });
 
   it('does not retry credential failures and marks them for user action', async () => {

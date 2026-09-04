@@ -2,51 +2,41 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "inputs": [
         "src/**",
+        "scripts/**",
+        "*.config.*",
+        "nest-cli.json",
         "tsconfig.json",
         "tsconfig.*.json",
         "package.json"
       ],
-      "outputs": [
-        "dist/**",
-        "dist-cjs/**"
-      ],
+      "outputs": ["dist/**", "dist-cjs/**"],
+      "outputLogs": "new-only"
+    },
+    "@owox/admicro-extractor#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "package.json"],
+      "outputs": [],
       "outputLogs": "new-only"
     },
     "build:dep": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "lint": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "src/**",
-        "eslint.config.*",
-        "tsconfig.json",
-        "package.json"
-      ],
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "scripts/**", "eslint.config.*", "tsconfig.json", "package.json"],
       "outputs": [],
       "outputLogs": "new-only"
     },
     "lint:fix": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "lint:md": {
-      "inputs": [
-        "**/*.md",
-        "package.json"
-      ],
+      "inputs": ["**/*.md", "package.json"],
       "outputs": [],
       "outputLogs": "new-only"
     },
@@ -57,20 +47,16 @@
       "cache": false
     },
     "format:check": {
-      "inputs": [
-        "src/**",
-        "package.json"
-      ],
+      "inputs": ["src/**", "package.json"],
       "outputs": [],
       "outputLogs": "new-only"
     },
     "test": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "inputs": [
         "src/**",
         "test/**",
+        "*.config.*",
         "tsconfig.json",
         "package.json",
         "jest.config.*",
@@ -81,50 +67,25 @@
       "outputLogs": "new-only"
     },
     "test:coverage": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "src/**",
-        "test/**",
-        "tsconfig.json",
-        "package.json"
-      ],
-      "outputs": [
-        "coverage/**"
-      ],
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "test/**", "tsconfig.json", "package.json"],
+      "outputs": ["coverage/**"],
       "outputLogs": "new-only"
     },
     "type-check": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "src/**",
-        "tsconfig.json",
-        "tsconfig.*.json",
-        "package.json"
-      ],
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "tsconfig.*.json", "package.json"],
       "outputs": [],
       "outputLogs": "new-only"
     },
     "typecheck": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "src/**",
-        "tsconfig.json",
-        "tsconfig.*.json",
-        "package.json"
-      ],
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "tsconfig.*.json", "package.json"],
       "outputs": [],
       "outputLogs": "new-only"
     },
     "dev": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     }

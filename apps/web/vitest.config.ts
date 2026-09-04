@@ -16,7 +16,7 @@ export default defineConfig({
       happyDOM: { settings: { disableIframePageLoading: true } },
     },
     globals: true,
-    setupFiles: [resolve(__dirname, 'test/setupTests.ts')],
+    setupFiles: [resolve(__dirname, 'src/test/setup.ts')],
     exclude: ['e2e/**', 'node_modules/**'],
   },
 });

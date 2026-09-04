@@ -1,0 +1,386 @@
+name: P2PDigital Production Reliability
+
+on:
+  # Keep this workflow path-independent so the required branch-protection check
+  # is never skipped for a documentation-only or configuration-only PR.
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_to_coolify:
+        description: 'Deploy the Git-SHA images to Coolify after checks pass'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  NODE_VERSION: '22'
+  IMAGE_TAG: sha-${{ github.sha }}
+  SNOWFLAKE_DISABLE_PLATFORM_DETECTION: 'true'
+  AWS_EC2_METADATA_DISABLED: 'true'
+
+jobs:
+  verify:
+    name: Lint, test, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund --loglevel error
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Type-check web
+        run: npm run type-check -w @owox/web
+
+      - name: Run targeted Admicro connector tests
+        run: npm run test -w @owox/connectors -- Sources/AdmicroAds
+        env:
+          NODE_ENV: test
+
+      - name: Run targeted Admicro extractor tests
+        run: npm run test -w @owox/admicro-extractor
+        env:
+          NODE_ENV: test
+
+      - name: Run targeted Admicro backend tests
+        run: >-
+          npm run test -w @owox/backend --
+          --runInBand
+          config/env-validation.config.spec.ts
+          data-marts/services/connector/connector.service.spec.ts
+          data-marts/services/connector/connector-fields-preview.service.spec.ts
+          data-marts/services/connector/connector-credential-injector.service.spec.ts
+          data-marts/services/connector/connector-executor.service.spec.ts
+        env:
+          NODE_ENV: test
+
+      - name: Run non-backend unit tests
+        run: npx turbo run test --filter='!@owox/backend'
+        env:
+          NODE_ENV: test
+
+      # Backend tests load several cloud SDKs and SQLite dialect fixtures. Keep
+      # them serial so unrelated suites cannot starve 5-second unit timeouts.
+      - name: Run backend unit tests
+        run: npm run test -w @owox/backend -- --runInBand
+        env:
+          NODE_ENV: test
+
+      - name: Build workspaces
+        run: npm run build
+
+  images:
+    name: Build and publish immutable images
+    runs-on: ubuntu-latest
+    needs: verify
+    timeout-minutes: 45
+
+    outputs:
+      runtime_image: ${{ steps.image_names.outputs.runtime_image }}
+      sidecar_image: ${{ steps.image_names.outputs.sidecar_image }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund --loglevel error
+
+      - name: Build runtime artifacts
+        run: npm run build
+
+      - name: Refresh runtime artifact for image build
+        run: |
+          set -euo pipefail
+          tar -czf deploy/owox-runtime-artifacts.tar.gz \
+            packages/connectors/dist \
+            packages/idp-protocol/dist \
+            packages/idp-owox-better-auth/dist \
+            packages/idp-better-auth/dist \
+            apps/backend/dist \
+            apps/web/dist \
+            apps/owox/dist
+
+      - name: Set lowercase image names
+        id: image_names
+        run: |
+          set -euo pipefail
+          repo_lower="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
+          echo "runtime_image=ghcr.io/${repo_lower}:${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "sidecar_image=ghcr.io/${repo_lower}/admicro-extractor:${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build runtime smoke image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: owox-runtime-smoke:${{ github.sha }}
+          build-args: |
+            version=${{ env.IMAGE_TAG }}
+            revision=${{ github.sha }}
+
+      - name: Build sidecar smoke image
+        uses: docker/build-push-action@v7
+        with:
+          context: apps/admicro-extractor
+          load: true
+          tags: admicro-extractor-smoke:${{ github.sha }}
+          build-args: |
+            version=${{ env.IMAGE_TAG }}
+            revision=${{ github.sha }}
+
+      - name: Smoke main runtime healthcheck
+        run: |
+          set -euo pipefail
+          docker run --rm -d --name owox-runtime-smoke \
+            -p 127.0.0.1:3000:3000 \
+            -e NODE_ENV=production \
+            -e OWOX_TELEMETRY_DISABLED=1 \
+            -e DB_TYPE=sqlite \
+            -e SQLITE_DB_PATH=/tmp/owox.sqlite \
+            -e IDP_PROVIDER=none \
+            -e PUBLIC_ORIGIN=http://127.0.0.1:3000 \
+            owox-runtime-smoke:${{ github.sha }}
+          trap 'docker logs owox-runtime-smoke || true; docker stop owox-runtime-smoke || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:3000/health/ready >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Smoke Admicro sidecar healthcheck
+        run: |
+          set -euo pipefail
+          docker run --rm -d --name admicro-extractor-smoke \
+            -p 127.0.0.1:8091:8091 \
+            -e ADMICRO_EXTRACTOR_ENABLED=true \
+            -e ADMICRO_EXTRACTOR_SHARED_SECRET=smoke-secret \
+            admicro-extractor-smoke:${{ github.sha }}
+          trap 'docker logs admicro-extractor-smoke || true; docker stop admicro-extractor-smoke || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8091/healthz >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push runtime image
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            version=${{ env.IMAGE_TAG }}
+            revision=${{ github.sha }}
+          tags: ${{ steps.image_names.outputs.runtime_image }}
+
+      - name: Push Admicro sidecar image
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v7
+        with:
+          context: apps/admicro-extractor
+          push: true
+          platforms: linux/amd64
+          build-args: |
+            version=${{ env.IMAGE_TAG }}
+            revision=${{ github.sha }}
+          tags: ${{ steps.image_names.outputs.sidecar_image }}
+
+  coolify-deploy:
+    name: Deploy to Coolify
+    runs-on: ubuntu-latest
+    needs: [verify, images]
+    timeout-minutes: 30
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      ((github.event_name == 'push' && vars.COOLIFY_DEPLOY_ENABLED == 'true') ||
+      (github.event_name == 'workflow_dispatch' && inputs.deploy_to_coolify))
+
+    steps:
+      - name: Trigger Coolify deployments
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_DEPLOY_TOKEN: ${{ secrets.COOLIFY_DEPLOY_TOKEN }}
+          COOLIFY_MAIN_RESOURCE_UUID: ${{ vars.COOLIFY_MAIN_RESOURCE_UUID }}
+          COOLIFY_ADMICRO_RESOURCE_UUID: ${{ vars.COOLIFY_ADMICRO_RESOURCE_UUID }}
+          RUNTIME_IMAGE: ${{ needs.images.outputs.runtime_image }}
+          SIDECAR_IMAGE: ${{ needs.images.outputs.sidecar_image }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+        run: |
+          set -euo pipefail
+          if [ -z "${COOLIFY_URL}" ] || [ -z "${COOLIFY_API_TOKEN}" ] || [ -z "${COOLIFY_DEPLOY_TOKEN}" ]; then
+            echo "::error::COOLIFY_URL, COOLIFY_API_TOKEN, and COOLIFY_DEPLOY_TOKEN must be configured as GitHub Actions secrets."
+            exit 1
+          fi
+          if [ -z "${COOLIFY_MAIN_RESOURCE_UUID}" ] || [ -z "${COOLIFY_ADMICRO_RESOURCE_UUID}" ]; then
+            echo "::error::Both COOLIFY_MAIN_RESOURCE_UUID and COOLIFY_ADMICRO_RESOURCE_UUID must be configured as GitHub Actions variables."
+            exit 1
+          fi
+
+          api_request() {
+            local method="$1"
+            local url="$2"
+            local token="$3"
+            local response_file="$4"
+            local payload="${5:-}"
+            local curl_args=(
+              --silent
+              --show-error
+              --output "${response_file}"
+              --write-out "%{http_code}"
+              --request "${method}"
+              --header "Authorization: Bearer ${token}"
+              --header "Accept: application/json"
+            )
+            if [ -n "${payload}" ]; then
+              curl_args+=(--header "Content-Type: application/json" --data "${payload}")
+            fi
+
+            local status
+            if ! status="$(curl "${curl_args[@]}" "${url}")"; then
+              echo "::error::${method} ${url} failed before receiving an HTTP response."
+              return 1
+            fi
+            if ! [[ "${status}" =~ ^[0-9]{3}$ ]]; then
+              echo "::error::${method} ${url} returned an invalid HTTP status: ${status:-empty}."
+              return 1
+            fi
+            if [ "${status}" -lt 200 ] || [ "${status}" -ge 300 ]; then
+              local message
+              message="$(jq -r '.message // .error // "Coolify API request failed"' "${response_file}" 2>/dev/null || echo 'Coolify API request failed')"
+              echo "::error::${method} ${url} failed; HTTP ${status}: ${message}"
+              return 1
+            fi
+          }
+
+          configure_resource() {
+            local name="$1"
+            local uuid="$2"
+            local image="$3"
+            local health_path="$4"
+            local health_port="$5"
+            local image_name="${image%:*}"
+            local response_file
+            response_file="$(mktemp)"
+            local payload
+            payload="$(jq -cn \
+              --arg image "${image_name}" \
+              --arg tag "${IMAGE_TAG}" \
+              --arg health_path "${health_path}" \
+              --argjson health_port "${health_port}" \
+              '{
+                docker_registry_image_name: $image,
+                docker_registry_image_tag: $tag,
+                health_check_enabled: true,
+                health_check_path: $health_path,
+                health_check_port: $health_port,
+                health_check_scheme: "http",
+                health_check_method: "GET",
+                health_check_return_code: 200,
+                health_check_interval: 10,
+                health_check_timeout: 5,
+                health_check_retries: 6,
+                health_check_start_period: 30
+              }')"
+            api_request \
+              PATCH \
+              "${COOLIFY_URL%/}/api/v1/applications/${uuid}" \
+              "${COOLIFY_API_TOKEN}" \
+              "${response_file}" \
+              "${payload}"
+            echo "Coolify image configured for ${name}: ${image_name}:${IMAGE_TAG}."
+          }
+
+          deploy_resource() {
+            local name="$1"
+            local uuid="$2"
+            local response_file
+            response_file="$(mktemp)"
+            api_request \
+              GET \
+              "${COOLIFY_URL%/}/api/v1/deploy?uuid=${uuid}&force=false" \
+              "${COOLIFY_DEPLOY_TOKEN}" \
+              "${response_file}"
+
+            local deployment_uuid
+            deployment_uuid="$(jq -r '.deployments[0].deployment_uuid // empty' "${response_file}")"
+            if [ -z "${deployment_uuid}" ]; then
+              echo "::error::Coolify did not return a deployment UUID for ${name}."
+              exit 1
+            fi
+            echo "Coolify deploy queued for ${name}: ${deployment_uuid}."
+
+            for attempt in {1..90}; do
+              api_request \
+                GET \
+                "${COOLIFY_URL%/}/api/v1/deployments/${deployment_uuid}" \
+                "${COOLIFY_API_TOKEN}" \
+                "${response_file}"
+
+              local deployment_status
+              deployment_status="$(jq -r '.status // empty' "${response_file}")"
+              case "${deployment_status}" in
+                finished)
+                  echo "Coolify deploy finished for ${name}: ${deployment_uuid}."
+                  return 0
+                  ;;
+                failed|cancelled|cancelled-by-user|error)
+                  echo "::error::Coolify deploy ${deployment_uuid} for ${name} ended with status ${deployment_status}."
+                  exit 1
+                  ;;
+              esac
+              sleep 10
+            done
+
+            echo "::error::Timed out waiting for Coolify deploy ${deployment_uuid} for ${name}."
+            exit 1
+          }
+
+          configure_resource "Admicro sidecar" "${COOLIFY_ADMICRO_RESOURCE_UUID}" "${SIDECAR_IMAGE}" "/healthz" "8091"
+          configure_resource "main runtime" "${COOLIFY_MAIN_RESOURCE_UUID}" "${RUNTIME_IMAGE}" "/health/ready" "3000"
+          deploy_resource "Admicro sidecar" "${COOLIFY_ADMICRO_RESOURCE_UUID}"
+          deploy_resource "main runtime" "${COOLIFY_MAIN_RESOURCE_UUID}"

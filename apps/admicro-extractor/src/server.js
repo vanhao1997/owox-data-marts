@@ -1,5 +1,6 @@
 import express from 'express';
 import { extract, validateRequest } from './extractor.js';
+import { jobLogContext, writeOperationalLog } from './operational-log.js';
 import { verifyHmac } from './security.js';
 
 const app = express();
@@ -49,7 +50,17 @@ function requireHmac(req, res, next) {
 }
 
 app.post('/v1/preview', requireEnabled, requireHmac, async (req, res) => {
+  const startedAt = Date.now();
+  const logContext = jobLogContext(req, { reportType: 'campaign' });
   if (activeJobs >= maxConcurrentJobs) {
+    writeOperationalLog('warn', 'job_rejected', {
+      operation: 'preview',
+      ...logContext,
+      status: 'rejected',
+      statusCode: 429,
+      activeJobs,
+      maxConcurrentJobs,
+    });
     return res.status(429).json({ error: 'Admicro extractor concurrency limit reached' });
   }
   activeJobs += 1;
@@ -62,6 +73,14 @@ app.post('/v1/preview', requireEnabled, requireHmac, async (req, res) => {
   try {
     const request = validateRequest({ ...req.body, reportType: req.body.reportType || 'campaign' });
     const result = await extract(request, { signal: abortController.signal });
+    writeOperationalLog('info', 'job_completed', {
+      operation: 'preview',
+      ...logContext,
+      status: 'success',
+      statusCode: 200,
+      rowCount: result.rows.length,
+      durationMs: Date.now() - startedAt,
+    });
     return res.json({
       schemaVersion: '1',
       reportType: request.reportType,
@@ -70,8 +89,25 @@ app.post('/v1/preview', requireEnabled, requireHmac, async (req, res) => {
       requestedColumnIds: request.columnIds,
     });
   } catch (error) {
-    if (abortController.signal.aborted) return;
+    if (abortController.signal.aborted) {
+      writeOperationalLog('info', 'job_cancelled', {
+        operation: 'preview',
+        ...logContext,
+        status: 'cancelled',
+        statusCode: 499,
+        durationMs: Date.now() - startedAt,
+      });
+      return;
+    }
     const status = [400, 401, 429].includes(error?.statusCode) ? error.statusCode : 502;
+    writeOperationalLog(status >= 500 ? 'error' : 'warn', 'job_failed', {
+      operation: 'preview',
+      ...logContext,
+      status: 'failed',
+      statusCode: status,
+      errorType: status === 401 ? 'authentication' : status === 400 ? 'validation' : 'provider',
+      durationMs: Date.now() - startedAt,
+    });
     return res
       .status(status)
       .json({ error: error instanceof Error ? error.message : 'Invalid preview request' });
@@ -82,7 +118,17 @@ app.post('/v1/preview', requireEnabled, requireHmac, async (req, res) => {
 });
 
 app.post('/v1/extract', requireEnabled, requireHmac, async (req, res) => {
+  const startedAt = Date.now();
+  const logContext = jobLogContext(req);
   if (activeJobs >= maxConcurrentJobs) {
+    writeOperationalLog('warn', 'job_rejected', {
+      operation: 'extract',
+      ...logContext,
+      status: 'rejected',
+      statusCode: 429,
+      activeJobs,
+      maxConcurrentJobs,
+    });
     return res.status(429).json({ error: 'Admicro extractor concurrency limit reached' });
   }
   activeJobs += 1;
@@ -94,8 +140,16 @@ app.post('/v1/extract', requireEnabled, requireHmac, async (req, res) => {
   });
   try {
     const request = validateRequest(req.body);
-    const startedAt = Date.now();
     const result = await extract(request, { signal: abortController.signal });
+    const durationMs = Date.now() - startedAt;
+    writeOperationalLog('info', 'job_completed', {
+      operation: 'extract',
+      ...logContext,
+      status: 'success',
+      statusCode: 200,
+      rowCount: result.rows.length,
+      durationMs,
+    });
     return res.json({
       schemaVersion: '1',
       fields: result.fields,
@@ -112,11 +166,28 @@ app.post('/v1/extract', requireEnabled, requireHmac, async (req, res) => {
       fetchedAt: new Date().toISOString(),
       requestedColumnIds: request.columnIds,
       rowCount: result.rows.length,
-      durationMs: Date.now() - startedAt,
+      durationMs,
     });
   } catch (error) {
-    if (abortController.signal.aborted) return;
+    if (abortController.signal.aborted) {
+      writeOperationalLog('info', 'job_cancelled', {
+        operation: 'extract',
+        ...logContext,
+        status: 'cancelled',
+        statusCode: 499,
+        durationMs: Date.now() - startedAt,
+      });
+      return;
+    }
     const status = [400, 401, 429].includes(error?.statusCode) ? error.statusCode : 502;
+    writeOperationalLog(status >= 500 ? 'error' : 'warn', 'job_failed', {
+      operation: 'extract',
+      ...logContext,
+      status: 'failed',
+      statusCode: status,
+      errorType: status === 401 ? 'authentication' : status === 400 ? 'validation' : 'provider',
+      durationMs: Date.now() - startedAt,
+    });
     return res
       .status(status)
       .json({ error: error instanceof Error ? error.message : 'Admicro extraction failed' });

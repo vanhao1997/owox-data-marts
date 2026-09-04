@@ -1,7 +1,15 @@
+ARG OWOX_BASE_IMAGE=ghcr.io/owox/owox-data-marts@sha256:778786d9a9d1a77d7cd443255be9b70daeb0b83ca598d51c2c2ec9fc402ea0d8
+
 # The source checkout is built and tested before release. Overlaying only the
 # generated runtime artifacts keeps Coolify's source deployment below its
 # hard-coded SSH timeout while retaining the official runtime dependencies.
-FROM ghcr.io/owox/owox-data-marts:latest
+FROM ${OWOX_BASE_IMAGE}
+
+ARG revision=unknown
+ARG version=local
+LABEL org.opencontainers.image.revision="${revision}"
+LABEL org.opencontainers.image.version="${version}"
+LABEL org.opencontainers.image.source="https://github.com/vanhao1997/p2pdigital-data-marts"
 
 COPY deploy/owox-runtime-artifacts.tar.gz /tmp/owox-runtime-artifacts.tar.gz
 RUN tar -xzf /tmp/owox-runtime-artifacts.tar.gz -C /tmp \
@@ -13,3 +21,5 @@ RUN tar -xzf /tmp/owox-runtime-artifacts.tar.gz -C /tmp \
   && cp -a /tmp/apps/web/dist/. /usr/local/lib/node_modules/owox/node_modules/@owox/web/dist/ \
   && cp -a /tmp/apps/owox/dist/. /usr/local/lib/node_modules/owox/dist/ \
   && rm -rf /tmp/packages /tmp/apps /tmp/owox-runtime-artifacts.tar.gz
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 CMD node -e "const port=process.env.PORT||3000;fetch('http://127.0.0.1:'+port+'/health/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"

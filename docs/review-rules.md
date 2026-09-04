@@ -158,17 +158,17 @@ is implemented in an internal layer.
 When the policy requires a changeset, verify that:
 
 - the changed release outcome is covered by a new `.changeset` file;
-- for OWOX-managed work, the filename starts with the owning Fibery Work Item's
-  public numeric ID followed by a short kebab-case summary;
+- for release-relevant work, the filename starts with the owning GitHub Issue's
+  public number followed by a short kebab-case summary;
 - the selected package and version bump follow the repository release strategy;
 - the title and body accurately explain the user-visible outcome without
   unnecessary implementation detail.
 
-If the owning Fibery ID is missing or ambiguous, request clarification rather
-than guessing it or substituting a pull request number. Treat a missing required
-changeset, an unconfirmed filename ID, or misleading release text as an
-approval-blocking release-readiness gap and report it separately from code-risk
-findings. The absence of an optional changeset is not a finding.
+If the owning GitHub Issue number is missing or ambiguous, request clarification
+rather than guessing it or substituting a pull request number. Treat a missing
+required changeset, an unconfirmed filename number, or misleading release text
+as an approval-blocking release-readiness gap and report it separately from
+code-risk findings. The absence of an optional changeset is not a finding.
 
 ## Tests and Validation
 

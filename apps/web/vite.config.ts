@@ -53,7 +53,7 @@ export default defineConfig(({ mode }) => ({
   },
   test: {
     environment: 'happy-dom',
-    setupFiles: [],
+    setupFiles: ['./src/test/setup.ts'],
   },
   server: {
     host: '0.0.0.0',

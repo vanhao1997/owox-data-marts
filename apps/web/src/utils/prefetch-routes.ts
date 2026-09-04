@@ -14,7 +14,9 @@ export function prefetchCommonRoutes(): void {
 
   if ('requestIdleCallback' in window) {
     window.requestIdleCallback(() => {
-      routes.forEach(load => load());
+      routes.forEach(load => {
+        void load();
+      });
     });
   }
 }

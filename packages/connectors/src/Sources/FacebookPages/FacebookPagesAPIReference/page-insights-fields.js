@@ -37,6 +37,28 @@ var pageInsightsFields = {
   },
 };
 
+var pageMediaViewBreakdownFields = {
+  page_id: { description: 'Facebook Page ID.', type: DATA_TYPES.STRING },
+  date_start: {
+    description: 'Daily insight bucket start returned by Meta.',
+    type: DATA_TYPES.DATE,
+    GoogleBigQueryPartitioned: true,
+  },
+  date_stop: { description: 'Daily insight bucket end returned by Meta.', type: DATA_TYPES.DATE },
+  breakdown: {
+    description: 'Meta media-view breakdown name.',
+    type: DATA_TYPES.STRING,
+  },
+  dimension_value: {
+    description: 'Value returned for the selected media-view breakdown.',
+    type: DATA_TYPES.STRING,
+  },
+  metric_value: {
+    description: 'Page media views for the breakdown value.',
+    type: DATA_TYPES.INTEGER,
+  },
+};
+
 var pageProfileFields = {
   page_id: { description: 'The unique Facebook Page ID.', type: DATA_TYPES.STRING },
   page_name: { description: 'Current Facebook Page name.', type: DATA_TYPES.STRING },
@@ -76,6 +98,26 @@ var pagePostInsightsFields = {
   },
   post_clicks: { description: 'Post clicks.', type: DATA_TYPES.INTEGER },
   post_reactions: { description: 'Post reactions.', type: DATA_TYPES.INTEGER },
+};
+
+var pagePostLifetimeInsightsFields = {
+  page_id: { description: 'Facebook Page ID.', type: DATA_TYPES.STRING },
+  post_id: { description: 'Facebook post ID.', type: DATA_TYPES.STRING },
+  post_message: { description: 'Post message, when available.', type: DATA_TYPES.STRING },
+  post_created_time: { description: 'Post creation timestamp.', type: DATA_TYPES.DATETIME },
+  permalink_url: { description: 'Public post URL.', type: DATA_TYPES.STRING },
+  post_media_view: {
+    description: 'Lifetime number of times the post content was played or displayed.',
+    type: DATA_TYPES.INTEGER,
+  },
+  post_total_media_view_unique: {
+    description: 'Lifetime total unique viewers of the post media.',
+    type: DATA_TYPES.INTEGER,
+  },
+  fetched_at: {
+    description: 'UTC timestamp when the lifetime snapshot was fetched.',
+    type: DATA_TYPES.DATETIME,
+  },
 };
 
 var pageVideoInsightsFields = {

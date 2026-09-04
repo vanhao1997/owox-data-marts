@@ -72,7 +72,7 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling and token refresh
 apiClient.interceptors.response.use(
   response => {
-    const startTime = (response.config as unknown as Record<string, unknown>)?._requestStartTime as
+    const startTime = (response.config as unknown as Record<string, unknown>)._requestStartTime as
       | number
       | undefined;
     if (startTime && import.meta.env.DEV) {

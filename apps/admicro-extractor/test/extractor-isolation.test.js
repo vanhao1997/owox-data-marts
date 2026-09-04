@@ -167,4 +167,42 @@ describe('Admicro campaign scope isolation', () => {
     });
     expect(playwrightMocks.waitForFunction).toHaveBeenCalledOnce();
   });
+
+  it('closes the page, context, and browser when a job is cancelled', async () => {
+    const controller = new AbortController();
+    let rejectDataview;
+    playwrightMocks.waitForFunction.mockImplementationOnce(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectDataview = reject;
+        })
+    );
+    playwrightMocks.browserClose.mockImplementation(async () => {
+      rejectDataview?.(new Error('Browser closed after cancellation'));
+    });
+
+    const extraction = extract(
+      {
+        reportType: 'campaign',
+        platform: 'desktop',
+        baseUrl: 'https://adx.admicro.vn',
+        reportPath: '/vn/report/result',
+        startDate: '2026-09-01',
+        endDate: '2026-09-01',
+        columnIds: ['1', '8', '2', '4', '5'],
+        campaignIds: [],
+        username: 'user',
+        password: 'password',
+      },
+      { signal: controller.signal }
+    );
+
+    await vi.waitFor(() => expect(playwrightMocks.waitForFunction).toHaveBeenCalledOnce());
+    controller.abort();
+
+    await expect(extraction).rejects.toThrow('Browser closed after cancellation');
+    expect(playwrightMocks.pageClose).toHaveBeenCalledOnce();
+    expect(playwrightMocks.contextClose).toHaveBeenCalledOnce();
+    expect(playwrightMocks.browserClose).toHaveBeenCalled();
+  });
 });

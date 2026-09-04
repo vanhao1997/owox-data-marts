@@ -278,7 +278,9 @@ Insights endpoints return daily performance data. **Ad Account Insights** and it
 
 ### Ad Account Insights Fields
 
-Use these fields with `ad-account/insights` and every `ad-account/insights-by-*` endpoint.
+Use the base field set with `ad-account/insights` and every `ad-account/insights-by-*` endpoint.
+The stable v25 additions below are available on the standard ad, ad set, and campaign nodes;
+breakdown nodes remain unchanged until Meta compatibility is verified for each combination.
 
 **Ad Insights by Ad Set** and **Ad Insights by Campaign** use a subset of these fields. Some ad-level fields do not apply at the ad set or campaign level.
 
@@ -386,6 +388,31 @@ Official Meta reference: [Ad Account Insights](https://developers.facebook.com/d
 | `website_ctr` | `website_ctr` | `ARRAY` | The percentage of times people saw your ad and performed a link click. |
 | `website_purchase_roas` | `website_purchase_roas` | `ARRAY` | The total return on ad spend (ROAS) from website purchases. This is based on the value of all conversions recorded by the Facebook pixel on your website and attributed to your ads. |
 | `wish_bid` | `wish_bid` | `NUMBER` | wish_bid |
+
+### Stable Meta v25 additions
+
+These fields are selectable but intentionally not included in `defaultFields`. Numeric values are
+returned directly by Meta and cast to `NUMBER`; action metrics remain JSON arrays so their action
+type and attribution dimensions are not lost. The daily grain is unchanged and uses the date
+bucket returned by Meta in the ad account timezone. Sync frequency is daily.
+
+| Connector field | Meta API field | Data type | Formula / notes |
+| --- | --- | --- | --- |
+| `actions_per_impression` | `actions_per_impression` | `NUMBER` | Total attributed actions divided by impressions. |
+| `app_store_clicks` | `app_store_clicks` | `NUMBER` | Clicks on links to an app store. |
+| `call_to_action_clicks` | `call_to_action_clicks` | `NUMBER` | Clicks on the ad call-to-action button. |
+| `cost_per_total_action` | `cost_per_total_action` | `NUMBER` | Average cost of a relevant tracked action. |
+| `landing_page_view_per_link_click` | `landing_page_view_per_link_click` | `NUMBER` | Landing page views divided by link clicks. |
+| `marketing_messages_delivered` | `marketing_messages_delivered` | `NUMBER` | Successfully delivered marketing messages; Meta may estimate this value. |
+| `purchase_per_landing_page_view` | `purchase_per_landing_page_view` | `NUMBER` | Purchases divided by landing page views. |
+| `thumb_stops` | `thumb_stops` | `NUMBER` | Attentive views of display ads. |
+| `total_actions` | `total_actions` | `NUMBER` | Total attributed actions. |
+| `total_action_value` | `total_action_value` | `NUMBER` | Total value attributed to tracked actions. |
+| `total_unique_actions` | `total_unique_actions` | `NUMBER` | Estimated unique Accounts Center accounts performing an action. |
+| `unique_impressions` | `unique_impressions` | `NUMBER` | Estimated unique Accounts Center accounts seeing the ad. |
+| `video_6_sec_watched_actions` | `video_6_sec_watched_actions` | `ARRAY` | Video views lasting at least six seconds. |
+| `video_complete_watched_actions` | `video_complete_watched_actions` | `ARRAY` | Video views lasting at least thirty seconds or until video end. |
+| `video_completed_view_or_15s_passed_actions` | `video_completed_view_or_15s_passed_actions` | `ARRAY` | Video completions or views passing fifteen seconds. |
 
 ### Breakdown Fields
 

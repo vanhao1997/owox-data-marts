@@ -5,7 +5,8 @@ function reportMetric(metric: Metric): void {
     console.log(`[Web Vitals] ${metric.name}: ${metric.value.toFixed(2)}`);
   }
 
-  const endpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT;
+  const endpoint = (import.meta.env as unknown as Record<string, string | undefined>)
+    .VITE_ANALYTICS_ENDPOINT;
   if (endpoint) {
     const body = JSON.stringify({
       name: metric.name,
@@ -16,7 +17,7 @@ function reportMetric(metric: Metric): void {
       navigationType: metric.navigationType,
     });
 
-    if (navigator.sendBeacon) {
+    if (typeof navigator.sendBeacon === 'function') {
       navigator.sendBeacon(`${endpoint}/web-vitals`, body);
     }
   }

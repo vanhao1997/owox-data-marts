@@ -1,8 +1,9 @@
 # Admicro Ads Metric Dictionary
 
-MVP keeps provider columns under stable raw names. Mapping below was confirmed against sanitized
-Campaign and Date `DATAVIEW` fixtures plus live desktop/mobile report rendering. Semantic aliases
-remain deferred so source column IDs stay lossless.
+MVP keeps provider columns under stable raw names. The mapping below is the current implementation
+contract and must be validated against sanitized Campaign and Date `DATAVIEW` fixtures plus live
+desktop/mobile report rendering before semantic aliases are introduced. Source column IDs remain
+lossless until that validation is complete.
 
 | Field                 | Source                                                                 | Formula                                                  | Grain                                                                         | Timezone           | Sync  | Lookback |
 | --------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------ | ----- | -------- |

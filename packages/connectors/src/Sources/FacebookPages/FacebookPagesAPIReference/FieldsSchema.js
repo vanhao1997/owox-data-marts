@@ -8,7 +8,7 @@
 var FacebookPagesFieldsSchema = {
   page_insights_daily: {
     overview: 'Facebook Page Insights',
-    description: 'Daily organic metrics for one Facebook Page.',
+    description: 'Daily organic metrics for one Facebook Page, including Meta media-view replacements.',
     documentation: 'https://developers.facebook.com/docs/graph-api/reference/page/insights/',
     fields: pageInsightsFields,
     uniqueKeys: ['page_id', 'date_start', 'date_stop'],
@@ -22,6 +22,23 @@ var FacebookPagesFieldsSchema = {
       'page_follows',
     ],
     destinationName: 'facebook_pages_page_insights_daily',
+    isTimeSeries: true,
+  },
+  page_media_view_breakdown_daily: {
+    overview: 'Facebook Page media-view breakdowns',
+    description: 'Daily Page media views split by paid distribution or follower status.',
+    documentation: 'https://developers.facebook.com/docs/graph-api/reference/insights/',
+    fields: pageMediaViewBreakdownFields,
+    uniqueKeys: ['page_id', 'date_start', 'date_stop', 'breakdown', 'dimension_value'],
+    defaultFields: [
+      'page_id',
+      'date_start',
+      'date_stop',
+      'breakdown',
+      'dimension_value',
+      'metric_value',
+    ],
+    destinationName: 'facebook_pages_page_media_view_breakdown_daily',
     isTimeSeries: true,
   },
   page_profile: {
@@ -64,6 +81,25 @@ var FacebookPagesFieldsSchema = {
     ],
     destinationName: 'facebook_pages_page_posts_insights_daily',
     isTimeSeries: true,
+  },
+  page_posts_insights_lifetime: {
+    overview: 'Facebook Page post lifetime insights',
+    description: 'Latest lifetime media-view totals for posts published on selected Facebook Pages.',
+    documentation: 'https://developers.facebook.com/docs/graph-api/reference/insights/',
+    fields: pagePostLifetimeInsightsFields,
+    uniqueKeys: ['page_id', 'post_id'],
+    defaultFields: [
+      'page_id',
+      'post_id',
+      'post_message',
+      'post_created_time',
+      'permalink_url',
+      'post_media_view',
+      'post_total_media_view_unique',
+      'fetched_at',
+    ],
+    destinationName: 'facebook_pages_page_posts_insights_lifetime',
+    isTimeSeries: false,
   },
   page_videos_insights_daily: {
     overview: 'Facebook Page video insights',

@@ -90,6 +90,7 @@ var AdmicroAdsSource = class AdmicroAdsSource extends AbstractSource {
     // Keep schema metadata isolated per source instance so dynamic preview
     // labels from one project cannot leak into another connector run.
     this.fieldsSchema = JSON.parse(JSON.stringify(AdmicroAdsFieldsSchema));
+    this._setDefaultFields(this.config?.Platform?.value || 'desktop');
   }
 
   async fetchFieldsSchema(signal) {
@@ -164,7 +165,7 @@ var AdmicroAdsSource = class AdmicroAdsSource extends AbstractSource {
       try {
         const response = await HttpUtils.fetch(url, {
           method: 'POST',
-          headers: signed.headers,
+          headers: { ...signed.headers, 'x-owox-attempt': String(attempt) },
           body: signed.raw,
           signal: requestSignal,
           muteHttpExceptions: true,
@@ -200,10 +201,23 @@ var AdmicroAdsSource = class AdmicroAdsSource extends AbstractSource {
   }
 
   _columnIds(platform) {
-    const configured = AdmicroAdsHelper.parseIds(this.config.ColumnIDs?.value || '');
+    const configured = AdmicroAdsHelper.parseIds(this.config?.ColumnIDs?.value || '');
     if (platform === 'mobile' && configured.join(',') === '1,8,2,4,5')
       return ['1', '9', '2', '4', '5'];
     return configured.length ? configured : AdmicroAdsHelper.defaultColumnIds(platform);
+  }
+
+  _setDefaultFields(platform) {
+    const rawFields = this._columnIds(platform).map(id => `admicro_column_${id}`);
+    for (const nodeName of ['campaign', 'date']) {
+      const canonicalFields =
+        nodeName === 'campaign'
+          ? ['day', 'platform', 'report_type', 'campaign_scope', 'campaign_id']
+          : ['day', 'date', 'platform', 'report_type', 'campaign_scope'];
+      this.fieldsSchema[nodeName].defaultFields = [...canonicalFields, ...rawFields].filter(
+        (name, index, list) => name in this.fieldsSchema[nodeName].fields && list.indexOf(name) === index
+      );
+    }
   }
 
   _previewDate() {

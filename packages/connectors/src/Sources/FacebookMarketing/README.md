@@ -25,6 +25,7 @@ If you create your first connector, read the OWOX guide to [create a connector-b
 - [**Credentials**](CREDENTIALS.md): connect with OAuth or a manual access token.
 - [**Getting Started**](GETTING_STARTED.md): create and run the Data Mart.
 - [**Endpoints and Fields**](ENDPOINTS_AND_FIELDS.md): choose endpoints and fields.
+- [**Metric Dictionary**](METRIC_DICTIONARY.md): review source, formula, grain, and freshness for metrics.
 - [**Troubleshooting**](TROUBLESHOOTING.md): fix import, permission, and account errors.
 - [**Q&A**](https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/q-a): check community answers.
 

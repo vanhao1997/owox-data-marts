@@ -5,9 +5,9 @@
 runtime, then enter the project-scoped Admicro username and password in the connector form.
 
 The MVP keeps canonical dimensions (`day`, `platform`, `report_type`, `campaign_scope`, and
-`campaign_id` for the campaign node) and raw provider columns as `admicro_column_<id>`. Sanitized
-Campaign and Date fixtures establish source-key mapping for default columns. Semantic aliases stay
-deferred until a versioned mapping review.
+`campaign_id` for the campaign node) and raw provider columns as `admicro_column_<id>`. The current
+source-key mapping for default columns still needs validation against sanitized Campaign and Date
+fixtures. Semantic aliases stay deferred until that validation and a versioned mapping review.
 
 See [METRIC_DICTIONARY.md](METRIC_DICTIONARY.md) for source, formula, grain, timezone, sync,
 and lookback definitions.

@@ -68,8 +68,7 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
       // log line: the run would report plain success while that account's data is missing.
       if( this.skippedAccounts.size ) {
         this.config.addWarningToCurrentStatus(
-          `${this.skippedAccounts.size} out of ${accountsIds.length} accounts were skipped and their data is missing. `
-          + `Skipped accounts: ${[...this.skippedAccounts.keys()].join(', ')}`
+          `${this.skippedAccounts.size} out of ${accountsIds.length} configured accounts were skipped and their data is missing.`
         );
       }
 
@@ -93,6 +92,11 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
      */
     _skipOrRethrow(accountId, error, context) {
 
+      const safeMessage = this._safeErrorMessage(error);
+      if (error?.message && safeMessage !== error.message) {
+        error.message = safeMessage;
+      }
+
       if( !error?.isWarning ) {
         throw error;
       }
@@ -102,7 +106,9 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
       }
       this.skippedAccounts.get(accountId).push(error);
 
-      this.config.addWarningToCurrentStatus(`${context}: skipped account ${accountId}: ${error.message}`);
+      this.config.addWarningToCurrentStatus(
+        `${context}: skipped one configured account: ${this._safeErrorMessage(error)}`
+      );
 
     }
 
@@ -129,7 +135,7 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
       const details = accountIds.map(accountId => {
         const errors = this.skippedAccounts.get(accountId) || [];
         const last = errors[errors.length - 1];
-        return `${accountId}: ${last ? last.message : 'unknown error'}`;
+        return last ? this._safeErrorMessage(last) : 'unknown error';
       });
 
       const error = new Error(
@@ -179,7 +185,7 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
             await storage.saveData([]);
           }
 
-          totalRows && this.config.logMessage(`${totalRows} rows of ${nodeName} were fetched for account ${accountId}`);
+          totalRows && this.config.logMessage(`${totalRows} rows of ${nodeName} were fetched for a configured account`);
 
         // catalog nodes are imported before any time-series node, so an unreachable account here
         // would otherwise abort the whole run before a single day is requested
@@ -224,7 +230,7 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
             // itteration nodes to fetch data
             for(var nodeName in timeSeriesNodes) {
 
-              this.config.logMessage(`Start importing data for ${DateUtils.formatDate(startDate)}: ${accountId}/${nodeName}`);
+              this.config.logMessage(`Start importing data for ${DateUtils.formatDate(startDate)}: configured account/${nodeName}`);
 
               // fetching new data from a data source
               let data = await this.source.fetchData(nodeName, accountId, timeSeriesNodes[ nodeName ], startDate);
@@ -258,6 +264,12 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
         startDate.setDate( startDate.getDate() + 1);  // let's move on to the next date
 
       }
+    }
+
+    _safeErrorMessage(error) {
+      return String(error?.message || 'unknown error')
+        .replace(/\bact_[^\s;)]+\b/gi, 'the configured account')
+        .replace(/\b\d{6,}\b/g, '[REDACTED_ID]');
     }
   
 //---- getStorageName -------------------------------------------------

@@ -323,6 +323,14 @@ class ConnectorBuilder {
       }
 
       // 2. Create a single, ordered array of files
+      // ZZ field extensions depend on base field maps, so load them last.
+      const isFieldExtension = file => {
+        const fileName = path.basename(file).toLowerCase();
+        return fileName.startsWith('zz') && fileName.includes('fields');
+      };
+      dependencyFiles.sort(
+        (left, right) => Number(isFieldExtension(left)) - Number(isFieldExtension(right))
+      );
       const orderedFiles = [...dependencyFiles, ...schemaFiles, ...classFiles];
 
       // 3. Process each file in this connector in the correct order

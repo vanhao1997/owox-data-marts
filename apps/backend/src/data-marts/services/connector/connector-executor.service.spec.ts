@@ -218,7 +218,7 @@ describe('ConnectorExecutorService', () => {
       { id: 'run-1', status: expect.anything() },
       expect.objectContaining({ status: DataMartRunStatus.RUNNING })
     );
-    expect(projectBilling.registerConnectorRunConsumption).toHaveBeenCalled();
+    expect(projectBilling.registerConnectorRunConsumption).toHaveBeenCalledTimes(1);
     expect(eventDispatcher.publishExternal).toHaveBeenCalled();
     expect(dataMartService.actualizeSchema).toHaveBeenCalledWith('dm-1', 'proj-1');
     const successUpdate = (dataMartRunRepository.update as jest.Mock).mock.calls.findIndex(
@@ -228,6 +228,24 @@ describe('ConnectorExecutorService', () => {
     expect(
       (dataMartRunRepository.update as jest.Mock).mock.invocationCallOrder[successUpdate]
     ).toBeLessThan((dataMartService.actualizeSchema as jest.Mock).mock.invocationCallOrder[0]);
+  });
+
+  it('charges one connector run when multiple source configurations succeed', async () => {
+    const { service, processSpawner, projectBilling } = createService();
+    const dataMart = createDataMart();
+    const definition = dataMart.definition as {
+      connector: { source: { configuration: Array<Record<string, unknown>> } };
+    };
+    definition.connector.source.configuration = [
+      { _id: 'cfg-1', param: 'first' },
+      { _id: 'cfg-2', param: 'second' },
+    ];
+
+    await service.executeInBackground(dataMart, createRun(), null);
+
+    expect(processSpawner.spawnConnector).toHaveBeenCalledTimes(2);
+    expect(projectBilling.registerConnectorRunConsumption).toHaveBeenCalledTimes(1);
+    expect(projectBilling.registerConnectorRunConsumption).toHaveBeenCalledWith(dataMart, 'run-1');
   });
 
   it('persists sanitized fields emitted by a successful connector run', async () => {

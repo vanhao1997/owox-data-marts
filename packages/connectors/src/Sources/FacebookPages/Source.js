@@ -6,6 +6,24 @@
  */
 
 /* eslint-disable no-undef */
+var FACEBOOK_PAGE_INSIGHTS_DAILY_METRICS = new Set([
+  'page_views_total',
+  'page_post_engagements',
+  'page_follows',
+  'page_daily_follows',
+  'page_daily_follows_unique',
+  'page_daily_unfollows_unique',
+  'page_media_view',
+  'page_total_actions',
+  'page_total_media_view_unique',
+]);
+
+var FACEBOOK_PAGE_MEDIA_VIEW_BREAKDOWNS = ['is_from_ads', 'is_from_followers'];
+var FACEBOOK_PAGE_POST_LIFETIME_METRICS = [
+  'post_media_view',
+  'post_total_media_view_unique',
+];
+
 var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
   constructor(config) {
     super(
@@ -316,11 +334,20 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
       );
     }
 
+    const page = await this._getManagedPage(normalizedPageId);
+
+    if (nodeName === 'page_posts_insights_lifetime') {
+      return this._fetchPostLifetimeInsights(
+        normalizedPageId,
+        page.accessToken,
+        requestedFields
+      );
+    }
+
     if (!startDate) {
       throw new Error('Facebook Pages daily insights requires a start date');
     }
 
-    const page = await this._getManagedPage(normalizedPageId);
     const date = DateUtils.formatDate(startDate);
     const endDate = new Date(startDate);
     endDate.setUTCDate(endDate.getUTCDate() + 1);
@@ -331,7 +358,7 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
     });
     if (nodeName === 'page_insights_daily') {
       const requestedMetrics = requestedFields.filter(metric =>
-        ['page_views_total', 'page_post_engagements', 'page_follows'].includes(metric)
+        FACEBOOK_PAGE_INSIGHTS_DAILY_METRICS.has(metric)
       );
       if (requestedMetrics.length === 0)
         throw new Error('At least one supported Page Insights metric must be selected');
@@ -346,6 +373,16 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
         requestedFields,
         fallbackDate: date,
       });
+    }
+
+    if (nodeName === 'page_media_view_breakdown_daily') {
+      return this._fetchMediaViewBreakdown(
+        normalizedPageId,
+        page.accessToken,
+        requestedFields,
+        date,
+        publicParams
+      );
     }
 
     if (nodeName === 'page_audience_breakdown_daily') {
@@ -496,6 +533,156 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
       });
     }
     return rows;
+  }
+
+  async _fetchPostLifetimeInsights(pageId, accessToken, fields) {
+    const metrics = FACEBOOK_PAGE_POST_LIFETIME_METRICS.filter(metric =>
+      fields.includes(metric)
+    );
+    if (!metrics.length) {
+      throw new Error('At least one supported lifetime post Insights metric must be selected');
+    }
+
+    const metadataFields = 'id,message,created_time,permalink_url';
+    const posts = await this._fetchAllPages(
+      `${this.BASE_URL}/${pageId}/posts?fields=${metadataFields}&limit=100`,
+      accessToken
+    );
+    const rows = [];
+
+    for (const post of posts) {
+      const insight = await this._fetchJson(
+        `${this.BASE_URL}/${post.id}/insights?metric=${metrics.join(',')}&period=lifetime`,
+        accessToken
+      );
+      const row = {
+        page_id: pageId,
+        post_id: String(post.id),
+        post_message: post.message ?? null,
+        post_created_time: post.created_time ?? null,
+        permalink_url: post.permalink_url ?? null,
+        fetched_at: new Date().toISOString(),
+      };
+
+      for (const metric of insight.data || []) {
+        if (metrics.includes(metric.name)) {
+          row[metric.name] = this._extractLifetimeMetricValue(metric);
+        }
+      }
+      rows.push(this._selectFields(row, fields));
+    }
+
+    return rows;
+  }
+
+  async _fetchMediaViewBreakdown(pageId, accessToken, fields, date, publicParams) {
+    const rows = [];
+
+    for (const breakdown of FACEBOOK_PAGE_MEDIA_VIEW_BREAKDOWNS) {
+      const params = new URLSearchParams(publicParams);
+      params.set('metric', 'page_media_view');
+      params.set('breakdown', breakdown);
+      const result = await this._fetchJson(
+        `${this.BASE_URL}/${pageId}/insights?${params}`,
+        accessToken
+      );
+      rows.push(...this._transformMediaViewBreakdown(result.data || [], {
+        pageId,
+        breakdown,
+        fields,
+        fallbackDate: date,
+      }));
+    }
+
+    return rows;
+  }
+
+  _transformMediaViewBreakdown(metricRows, { pageId, breakdown, fields, fallbackDate }) {
+    const rows = [];
+
+    for (const metric of metricRows) {
+      let foundValues = false;
+      for (const valueRow of metric.values || []) {
+        const dateStart = this._getBucketDate(valueRow.end_time, fallbackDate);
+        for (const [dimensionValue, value] of this._normalizeBreakdownEntries(
+          valueRow.value,
+          breakdown
+        )) {
+          foundValues = true;
+          rows.push(this._selectFields({
+            page_id: pageId,
+            date_start: dateStart,
+            date_stop: this._getNextDate(dateStart),
+            breakdown,
+            dimension_value: String(dimensionValue),
+            metric_value: this._normalizeMetricValue(value),
+          }, fields));
+        }
+      }
+
+      if (!foundValues) {
+        for (const breakdownResult of metric.total_value?.breakdowns || []) {
+          const dimensionIndex = (breakdownResult.dimension_keys || []).indexOf(breakdown);
+          if (dimensionIndex < 0) continue;
+          for (const result of breakdownResult.results || []) {
+            const dimensionValue = result.dimension_values?.[dimensionIndex];
+            if (dimensionValue === undefined) continue;
+            rows.push(this._selectFields({
+              page_id: pageId,
+              date_start: fallbackDate,
+              date_stop: this._getNextDate(fallbackDate),
+              breakdown,
+              dimension_value: String(dimensionValue),
+              metric_value: this._normalizeMetricValue(result.value),
+            }, fields));
+          }
+        }
+      }
+    }
+
+    return rows;
+  }
+
+  _normalizeBreakdownEntries(value, breakdown) {
+    if (value === null || value === undefined) return [];
+
+    if (Array.isArray(value)) {
+      return value.flatMap((item, index) => {
+        if (!item || typeof item !== 'object') return [[String(index), item]];
+        const dimensionValue =
+          item[breakdown] ??
+          item.dimension_value ??
+          item.dimension_values?.[0] ??
+          item.name ??
+          item.key;
+        const metricValue = item.value ?? item.metric_value;
+        return dimensionValue === undefined || metricValue === undefined
+          ? []
+          : [[dimensionValue, metricValue]];
+      });
+    }
+
+    if (typeof value === 'object') {
+      if (value[breakdown] && typeof value[breakdown] === 'object') {
+        return Object.entries(value[breakdown]);
+      }
+      if (value[breakdown] !== undefined && value.value !== undefined) {
+        return [[value[breakdown], value.value]];
+      }
+      return Object.entries(value);
+    }
+
+    return [['total', value]];
+  }
+
+  _extractLifetimeMetricValue(metric) {
+    if (metric.total_value?.value !== undefined) {
+      return this._normalizeMetricValue(metric.total_value.value);
+    }
+    const values = Array.isArray(metric.values) ? metric.values : [];
+    return values.length
+      ? this._normalizeMetricValue(values[values.length - 1].value)
+      : null;
   }
 
   async _fetchInstagramInsights(nodeName, pageId, accessToken, fields, date, publicParams) {
@@ -674,10 +861,12 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
     if (response.getResponseCode() >= HTTP_STATUS.BAD_REQUEST || body.error) {
       throw new OauthFlowException({
         message:
-          body.error?.message ||
-          `Facebook OAuth request failed (HTTP ${response.getResponseCode()})`,
+          this._safeProviderErrorMessage(
+            body.error?.message,
+            `Facebook OAuth request failed (HTTP ${response.getResponseCode()})`
+          ),
         statusCode: response.getResponseCode(),
-        payload: body,
+        payload: this._safeErrorPayload(body),
       });
     }
     return body;
@@ -689,16 +878,16 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
       requestUrl,
       accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : undefined
     );
-    this._logUsageHeaders(response.getHeaders(), requestUrl);
+    this._logUsageHeaders(response.getHeaders());
     const body = await response.getAsJson();
     if (body.error) {
       const errorCode = Number(body.error.code);
       throw new HttpRequestException({
-        message: body.error.message || 'Facebook API request failed',
+        message: this._safeProviderErrorMessage(body.error.message),
         statusCode: FACEBOOK_RETRYABLE_ERROR_CODES.includes(errorCode)
           ? HTTP_STATUS.TOO_MANY_REQUESTS
           : HTTP_STATUS.BAD_REQUEST,
-        payload: body,
+        payload: this._safeErrorPayload(body),
       });
     }
     return body;
@@ -710,11 +899,11 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
     if (body.error) {
       const errorCode = Number(body.error.code);
       throw new HttpRequestException({
-        message: body.error.message || 'Facebook API request failed',
+        message: this._safeProviderErrorMessage(body.error.message),
         statusCode: FACEBOOK_RETRYABLE_ERROR_CODES.includes(errorCode)
           ? HTTP_STATUS.TOO_MANY_REQUESTS
           : HTTP_STATUS.BAD_REQUEST,
-        payload: body,
+        payload: this._safeErrorPayload(body),
       });
     }
     return validated;
@@ -772,18 +961,16 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
 
     const page = this._managedPages.find(item => String(item.id) === pageId);
     if (!page) {
-      throw new Error(`Facebook Page ${pageId} is not available to the authenticated user`);
+      throw new Error('Configured Facebook Page is not available to the authenticated user');
     }
 
     const tasks = Array.isArray(page.tasks) ? page.tasks : [];
     if (!tasks.includes('ANALYZE')) {
-      throw new Error(
-        `Facebook Page ${pageId} does not grant the ANALYZE task required for insights`
-      );
+      throw new Error('Configured Facebook Page does not grant the ANALYZE task required for insights');
     }
 
     if (!page.access_token) {
-      throw new Error(`Facebook Page ${pageId} access token is unavailable`);
+      throw new Error('Configured Facebook Page access token is unavailable');
     }
 
     return {
@@ -809,7 +996,7 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
   _normalizePageId(pageId) {
     const normalized = String(pageId || '').trim();
     if (!/^\d+$/.test(normalized)) {
-      throw new Error(`Invalid Facebook Page ID: ${pageId}`);
+      throw new Error('Invalid Facebook Page ID');
     }
     return normalized;
   }
@@ -885,14 +1072,30 @@ var FacebookPagesSource = class FacebookPagesSource extends AbstractSource {
     }
   }
 
-  _logUsageHeaders(headers, safeUrl) {
+  _logUsageHeaders(headers) {
     const appUsage = headers?.['x-app-usage'];
     const pageUsage = headers?.['x-page-usage'];
     if (appUsage || pageUsage) {
-      this.config.logMessage(
-        `Facebook API usage for ${safeUrl}: app=${appUsage || 'n/a'}, page=${pageUsage || 'n/a'}`
-      );
+      this.config.logMessage(`Facebook API usage: app=${appUsage || 'n/a'}, page=${pageUsage || 'n/a'}`);
     }
+  }
+
+  _safeErrorPayload(body) {
+    const error = body?.error || {};
+    return {
+      error: {
+        code: error.code,
+        type: error.type,
+        error_subcode: error.error_subcode,
+        is_transient: error.is_transient,
+      },
+    };
+  }
+
+  _safeProviderErrorMessage(message, fallback = 'Facebook API request failed') {
+    return String(message || fallback)
+      .replace(/access_token=[^&\s]+/gi, 'access_token=[REDACTED]')
+      .replace(/\b\d{6,}\b/g, '[REDACTED_ID]');
   }
 };
 

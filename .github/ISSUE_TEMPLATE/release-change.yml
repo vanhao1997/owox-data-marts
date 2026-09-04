@@ -1,0 +1,37 @@
+name: Release change
+description: Track a user-visible or operator-visible change that may need a changeset.
+title: '[Release] '
+labels:
+  - release
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create this issue before the changeset. Use the issue number in the changeset filename.
+
+        Example: `.changeset/123-short-summary.md`
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Release outcome
+      description: Describe what users or operators will observe after release.
+      placeholder: Users can...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance checks
+      description: List the checks that prove the release outcome works.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: input
+    id: packages
+    attributes:
+      label: Affected packages
+      description: List affected workspace packages, or write "none" for docs-only work.
+      placeholder: '@owox/web, @owox/backend'
+    validations:
+      required: true

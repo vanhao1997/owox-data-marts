@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node --check src/server.js && node --check src/extractor.js && node --check src/parser.js && node --check src/security.js",
+    "build": "node --check src/server.js && node --check src/extractor.js && node --check src/parser.js && node --check src/security.js && node --check src/operational-log.js",
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "vitest run"

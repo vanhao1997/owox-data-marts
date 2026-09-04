@@ -28,19 +28,20 @@ export function reportError(error: Error, componentStack?: string): void {
     return;
   }
 
-  const endpoint = import.meta.env.VITE_ERROR_REPORTING_ENDPOINT;
+  const endpoint = (import.meta.env as unknown as Record<string, string | undefined>)
+    .VITE_ERROR_REPORTING_ENDPOINT;
   if (endpoint) {
     fetch(`${endpoint}/errors`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(report),
-    }).catch(() => {});
+    }).catch(() => undefined);
   }
 }
 
 export function initGlobalErrorHandlers(): void {
   window.addEventListener('error', (event) => {
-    reportError(event.error || new Error(event.message));
+    reportError(event.error instanceof Error ? event.error : new Error(event.message));
   });
 
   window.addEventListener('unhandledrejection', (event) => {

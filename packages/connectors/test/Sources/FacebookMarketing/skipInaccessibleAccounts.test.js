@@ -87,7 +87,8 @@ describe('time-series import: one inaccessible account', () => {
     await importOneDay(self, ['revoked', 'working']);
 
     expect(warnings).toHaveLength(1);
-    expect(warnings[0]).toContain('skipped account revoked');
+    expect(warnings[0]).toContain('skipped one configured account');
+    expect(warnings[0]).not.toContain('revoked');
     expect(warnings[0]).toContain('ads_read permission');
   });
 });
@@ -147,8 +148,8 @@ describe('time-series import: every account skipped', () => {
 
     const error = await importOneDay(self, ['one', 'two']).catch(e => e);
 
-    expect(error.message).toContain('one:');
-    expect(error.message).toContain('two:');
+    expect(error.message).not.toContain('one');
+    expect(error.message).not.toContain('two');
     // a permission failure is customer-actionable: the readable message is kept, not a stack
     expect(error.isWarning).toBe(true);
   });
@@ -199,7 +200,8 @@ describe('catalog import', () => {
     );
 
     expect(fetched).toEqual(['working']);
-    expect(warnings[0]).toContain('skipped account revoked');
+    expect(warnings[0]).toContain('skipped one configured account');
+    expect(warnings[0]).not.toContain('revoked');
   });
 
   it('fails when no account could be imported', async () => {
@@ -243,7 +245,8 @@ describe('_skipOrRethrow classification', () => {
     connectorProto._skipOrRethrow.call(self, 'acc', permissionError('acc'), 'Importing 2026-08-05');
 
     expect([...self.skippedAccounts.keys()]).toEqual(['acc']);
-    expect(warnings[0]).toContain('Importing 2026-08-05: skipped account acc');
+    expect(warnings[0]).toContain('Importing 2026-08-05: skipped one configured account');
+    expect(warnings[0]).not.toContain('act_acc');
   });
 
   it('rethrows anything that is not an account-scoped permission failure', () => {
@@ -253,5 +256,15 @@ describe('_skipOrRethrow classification', () => {
       connectorProto._skipOrRethrow.call(self, 'acc', new Error('BigQuery write failed'), 'ctx')
     ).toThrow('BigQuery write failed');
     expect(self.skippedAccounts.size).toBe(0);
+  });
+
+  it('redacts account identifiers before rethrowing provider failures', () => {
+    const { self } = buildConnector({ fetchData: async () => [] });
+    const error = new Error('Provider failed for act_123456789');
+
+    expect(() => connectorProto._skipOrRethrow.call(self, 'acc', error, 'ctx')).toThrow(
+      'Provider failed for the configured account'
+    );
+    expect(error.message).not.toContain('123456789');
   });
 });

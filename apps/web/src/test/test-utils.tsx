@@ -50,4 +50,6 @@ export function renderWithProviders(
   };
 }
 
+// Test utility module intentionally re-exports Testing Library helpers for consumers.
+// eslint-disable-next-line react-refresh/only-export-components
 export * from '@testing-library/react';

@@ -21,8 +21,8 @@ Before completing an implementation, determine whether it needs a changeset by
 following the policy in
 [`docs/contributing/repository/release-strategy.md`](docs/contributing/repository/release-strategy.md).
 A changeset is not required for every change. When one is required for
-OWOX-managed work, its filename starts with the owning Fibery Work Item's public
-numeric ID. If that ID cannot be determined unambiguously from the task context,
+release-relevant work, its filename starts with the owning GitHub Issue's public
+number. If that issue cannot be determined unambiguously from the task context,
 ask the user before creating or renaming the changeset; never guess it.
 
 For changes to database routing, plugin-owned collections, migrations, events,

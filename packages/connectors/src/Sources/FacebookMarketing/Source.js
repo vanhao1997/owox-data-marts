@@ -394,8 +394,6 @@ var FacebookMarketingSource = class FacebookMarketingSource extends AbstractSour
         throw new Error(`End point for ${nodeName} is not implemented yet. Feel free add idea here: https://github.com/vanhao1997/p2pdigital-data-marts/discussions/categories/ideas`);
     }
 
-    console.log(`Facebook API URL:`, url);
-
     url += `&access_token=${this._getAccessToken()}`;
 
     return await this._fetchPaginatedData(url, nodeName, fields, onPageFetched);
@@ -555,8 +553,6 @@ var FacebookMarketingSource = class FacebookMarketingSource extends AbstractSour
     if (breakdowns.length > 0) {
       insightsUrl += `&breakdowns=${breakdowns.join(",")}`;
     }
-
-    console.log(`Facebook API URL:`, insightsUrl);
 
     insightsUrl += `&access_token=${this._getAccessToken()}`;
     return insightsUrl;

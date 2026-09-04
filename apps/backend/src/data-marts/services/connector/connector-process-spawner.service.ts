@@ -26,7 +26,9 @@ export class ConnectorProcessSpawnerService {
       logCapture?: { onStdout?: (message: string) => void; onStderr?: (message: string) => void };
       onSpawn?: (pid: number | undefined) => void;
     },
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    projectId?: string,
+    configId?: string
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const spawnStdio = 'pipe' as const;
@@ -48,6 +50,8 @@ export class ConnectorProcessSpawnerService {
       const env = {
         ...process.env,
         OW_DATAMART_ID: datamartId,
+        OW_PROJECT_ID: projectId || datamartId,
+        OW_CONFIG_ID: configId || '',
         OW_RUN_ID: runId,
         OW_CONFIG: JSON.stringify(configuration.toObject()),
         OW_RUN_CONFIG: JSON.stringify(runConfig.toObject()),

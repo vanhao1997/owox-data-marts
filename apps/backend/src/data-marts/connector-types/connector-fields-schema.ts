@@ -14,6 +14,7 @@ export const ConnectorFieldsSchema = z.array(
       .array(
         z.object({
           name: z.string(),
+          label: z.string().optional(),
           type: z.string().optional(),
           description: z.string().optional(),
         })

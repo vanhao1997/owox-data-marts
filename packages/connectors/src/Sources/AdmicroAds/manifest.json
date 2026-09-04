@@ -1,0 +1,10 @@
+{
+  "title": "Admicro Ads",
+  "description": "Import Admicro ADX campaign and date reports through a private extractor sidecar.",
+  "logo": "logo.svg",
+  "docUrl": "https://digitalreport.p2pdigital.io.vn/",
+  "capabilities": {
+    "singleConfiguration": true,
+    "copySecretsByValue": false
+  }
+}

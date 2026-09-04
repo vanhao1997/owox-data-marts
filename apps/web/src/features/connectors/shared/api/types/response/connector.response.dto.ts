@@ -38,6 +38,7 @@ export interface ConnectorSpecificationResponseApiDto extends ConnectorSpecifica
 
 export interface ConnectorFieldResponseApiDto {
   name: string;
+  label?: string;
   type?: string;
   description?: string;
 }

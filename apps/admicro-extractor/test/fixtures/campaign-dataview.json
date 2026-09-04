@@ -1,0 +1,27 @@
+{
+  "data_rpt_campaign": {
+    "campaign_1001": {
+      "camp_name": "Sanitized Campaign A",
+      "displayclick": "1,234",
+      "click": "4,567",
+      "displayview": "2,345,678",
+      "ctr": "0.052",
+      "money": "20,000,000"
+    },
+    "campaign_1002": {
+      "camp_name": "Sanitized Campaign B",
+      "displayclick": "12",
+      "click": "34",
+      "displayview": "5,678",
+      "ctr": "0.211",
+      "money": "100,000"
+    },
+    "total": {
+      "displayclick": "1,246",
+      "click": "4,601",
+      "displayview": "2,351,356",
+      "ctr": "0.053",
+      "money": "20,100,000"
+    }
+  }
+}

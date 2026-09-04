@@ -83,6 +83,33 @@ describe('ConnectorProcessSpawnerService', () => {
     );
   });
 
+  it('passes project and configuration identity to the connector runner', async () => {
+    const { service } = createService();
+    const mockProcess = createMockProcess();
+    (spawn as unknown as jest.Mock).mockReturnValue(mockProcess);
+
+    const promise = service.spawnConnector(
+      'dm-1',
+      'run-1',
+      { toObject: () => ({}) } as unknown,
+      { toObject: () => ({}) } as unknown,
+      {},
+      undefined,
+      'project-1',
+      'config-1'
+    );
+
+    expect((spawn as unknown as jest.Mock).mock.calls[0][2].env).toMatchObject({
+      OW_DATAMART_ID: 'dm-1',
+      OW_PROJECT_ID: 'project-1',
+      OW_CONFIG_ID: 'config-1',
+      OW_RUN_ID: 'run-1',
+    });
+
+    mockProcess.emit('close', 0, null);
+    await promise;
+  });
+
   it('drains piped output even without logCapture callbacks', async () => {
     const { service } = createService();
     const mockProcess = createMockProcess();

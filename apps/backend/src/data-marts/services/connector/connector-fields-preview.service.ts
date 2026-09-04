@@ -13,12 +13,14 @@ import { Connectors, Core } from '@owox/connectors';
 import { ConnectorFieldsSchema } from '../../connector-types/connector-fields-schema';
 import { AuthorizationContext } from '../../../idp';
 import { ConnectorPreviewCredentialsService } from './connector-preview-credentials.service';
+import { ConnectorService } from './connector.service';
 import {
   mapConnectorFieldsSchema,
   type SourceFieldsSchema,
 } from './connector-fields-schema.mapper';
 
 const PREVIEW_TIMEOUT_MS = 15_000;
+const ADMICRO_PREVIEW_TIMEOUT_MS = 130_000;
 
 class PreviewTimeoutError extends Error {}
 
@@ -51,13 +53,17 @@ class ConnectorFieldsPreviewConfig extends Core.AbstractConfig {
 export class ConnectorFieldsPreviewService {
   private readonly logger = new Logger(ConnectorFieldsPreviewService.name);
 
-  constructor(private readonly previewCredentials: ConnectorPreviewCredentialsService) {}
+  constructor(
+    private readonly previewCredentials: ConnectorPreviewCredentialsService,
+    private readonly connectorService: ConnectorService
+  ) {}
 
   async run(
     context: AuthorizationContext,
     connectorName: string,
     configuration: Record<string, unknown>
   ): Promise<ConnectorFieldsSchema> {
+    this.connectorService.getConnectorCapabilities(connectorName);
     const SourceClass = Connectors[connectorName]?.[`${connectorName}Source`];
     if (typeof SourceClass?.prototype?.fetchFieldsSchema !== 'function') {
       throw new BadRequestException(
@@ -90,12 +96,15 @@ export class ConnectorFieldsPreviewService {
     }
 
     try {
-      const sourceFieldsSchema = (await this.withTimeout(signal =>
-        source.fetchFieldsSchema(signal)
+      const timeoutMs =
+        connectorName === 'AdmicroAds' ? ADMICRO_PREVIEW_TIMEOUT_MS : PREVIEW_TIMEOUT_MS;
+      const sourceFieldsSchema = (await this.withTimeout(
+        signal => source.fetchFieldsSchema(signal),
+        timeoutMs
       )) as SourceFieldsSchema;
       return ConnectorFieldsSchema.parse(mapConnectorFieldsSchema(sourceFieldsSchema));
     } catch (error) {
-      throw this.mapPreviewError(error);
+      throw this.mapPreviewError(error, connectorName);
     }
   }
 
@@ -109,14 +118,17 @@ export class ConnectorFieldsPreviewService {
     return new SourceClass(new ConnectorFieldsPreviewConfig(sourceConfig.config, this.logger));
   }
 
-  private async withTimeout<T>(work: (signal: AbortSignal) => Promise<T>): Promise<T> {
+  private async withTimeout<T>(
+    work: (signal: AbortSignal) => Promise<T>,
+    timeoutMs: number
+  ): Promise<T> {
     const abortController = new AbortController();
     let timeout: NodeJS.Timeout | undefined;
     const deadline = new Promise<never>((_resolve, reject) => {
       timeout = setTimeout(() => {
         abortController.abort();
         reject(new PreviewTimeoutError('Connector field preview timed out'));
-      }, PREVIEW_TIMEOUT_MS);
+      }, timeoutMs);
     });
 
     try {
@@ -133,7 +145,7 @@ export class ConnectorFieldsPreviewService {
     }
   }
 
-  private mapPreviewError(error: unknown): HttpException {
+  private mapPreviewError(error: unknown, connectorName?: string): HttpException {
     if (error instanceof HttpException) {
       return error;
     }
@@ -145,6 +157,12 @@ export class ConnectorFieldsPreviewService {
     const message = error instanceof Error ? error.message : String(error);
     const normalizedMessage = message.toLowerCase();
 
+    if (
+      connectorName === 'AdmicroAds' &&
+      this.looksLikeExtractorAuthenticationFailure(normalizedMessage)
+    ) {
+      return new BadGatewayException('Admicro extractor authentication failed');
+    }
     if (status === 401 || this.looksLikeAuthenticationFailure(normalizedMessage)) {
       // The application client reserves HTTP 401 for the OWOX login session.
       return new BadRequestException('Connector credentials are invalid or expired');
@@ -212,10 +230,21 @@ export class ConnectorFieldsPreviewService {
     return [
       'access token',
       'authentication failed',
+      'credentials were rejected',
       'failed to get access token',
       'invalid credential',
       'invalid_grant',
       'token error',
+    ].some(fragment => message.includes(fragment));
+  }
+
+  private looksLikeExtractorAuthenticationFailure(message: string): boolean {
+    return [
+      'extractor signature',
+      'extractor body hash',
+      'extractor nonce',
+      'extractor timestamp',
+      'extractor shared secret',
     ].some(fragment => message.includes(fragment));
   }
 

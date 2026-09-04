@@ -86,8 +86,10 @@ export function FieldsSelectionStep({
   }, [availableFields]);
 
   const filteredFields = useMemo(() => {
-    const filtered = availableFields.filter(field =>
-      field.name.toLowerCase().includes(filterText.toLowerCase().trim())
+    const query = filterText.toLowerCase().trim();
+    const filtered = availableFields.filter(
+      field =>
+        field.name.toLowerCase().includes(query) || field.label?.toLowerCase().includes(query)
     );
 
     const comparator = (a: { name: string }, b: { name: string }) => {
@@ -319,6 +321,10 @@ export function FieldsSelectionStep({
           <AppWizardStepCards>
             {filteredFields.map(field => {
               const isUniqueKey = uniqueKeys.includes(field.name);
+              const fieldLabel =
+                field.label && field.label !== field.name
+                  ? `${field.label} (${field.name})`
+                  : field.name;
               return (
                 <AppWizardStepCardItem
                   key={field.name}
@@ -332,7 +338,7 @@ export function FieldsSelectionStep({
                   onChange={checked => {
                     onFieldToggle(field.name, checked as boolean);
                   }}
-                  label={field.name}
+                  label={fieldLabel}
                   tooltip={
                     <div className='flex flex-col gap-2 py-1'>
                       {isUniqueKey && (
@@ -370,7 +376,8 @@ export function FieldsSelectionStep({
 
           <OpenIssueLink
             label={t('connectorWizard.needAnother', {
-              item: itemLabel === 'columns' ? t('connectorWizard.column') : t('connectorWizard.field'),
+              item:
+                itemLabel === 'columns' ? t('connectorWizard.column') : t('connectorWizard.field'),
             })}
           />
         </AppWizardStepSection>

@@ -1,5 +1,5 @@
 jest.mock('@owox/connectors', () => ({
-  AvailableConnectors: ['TestConnector'],
+  AvailableConnectors: ['TestConnector', 'AdmicroAds'],
   Connectors: {
     TestConnector: {
       TestConnectorSource: class {
@@ -58,6 +58,17 @@ jest.mock('@owox/connectors', () => ({
         },
       },
     },
+    AdmicroAds: {
+      AdmicroAdsSource: class {
+        config = {};
+      },
+      manifest: {
+        title: 'Admicro Ads',
+        description: 'Admicro test connector',
+        logo: 'https://logo.url/admicro',
+        docUrl: 'https://docs.url/admicro',
+      },
+    },
   },
   Core: {
     // eslint-disable-next-line @typescript-eslint/no-extraneous-class
@@ -76,6 +87,17 @@ import { ConnectorService } from './connector.service';
 import { ConnectorSourceCredentialsService } from './connector-source-credentials.service';
 
 describe('ConnectorService', () => {
+  const previousAdmicroEnabled = process.env.ADMICRO_EXTRACTOR_ENABLED;
+
+  beforeEach(() => {
+    delete process.env.ADMICRO_EXTRACTOR_ENABLED;
+  });
+
+  afterAll(() => {
+    if (previousAdmicroEnabled === undefined) delete process.env.ADMICRO_EXTRACTOR_ENABLED;
+    else process.env.ADMICRO_EXTRACTOR_ENABLED = previousAdmicroEnabled;
+  });
+
   const createService = () => {
     const connectorSourceCredentialsService = {
       createCredentials: jest.fn(),
@@ -99,6 +121,15 @@ describe('ConnectorService', () => {
         title: 'Test Connector',
         description: 'A test connector',
       });
+    });
+
+    it('shows Admicro only when its feature flag is enabled', async () => {
+      const { service } = createService();
+      process.env.ADMICRO_EXTRACTOR_ENABLED = 'true';
+
+      const result = await service.getAvailableConnectors();
+
+      expect(result.map(connector => connector.name)).toEqual(['TestConnector', 'AdmicroAds']);
     });
   });
 
@@ -129,6 +160,14 @@ describe('ConnectorService', () => {
 
       await expect(service.getConnectorSpecification('UnknownConnector')).rejects.toThrow(
         "Connector 'UnknownConnector' not found"
+      );
+    });
+
+    it('rejects the Admicro specification while its feature flag is disabled', async () => {
+      const { service } = createService();
+
+      await expect(service.getConnectorSpecification('AdmicroAds')).rejects.toThrow(
+        "Connector 'AdmicroAds' not found"
       );
     });
   });

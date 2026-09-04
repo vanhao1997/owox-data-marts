@@ -246,6 +246,25 @@ describe('ConnectorCredentialInjectorService', () => {
       expect(result).toEqual(config);
     });
 
+    it('does not inject secrets belonging to another connector', async () => {
+      const { service, connectorSourceCredentialsService, connectorSecretService } =
+        createService();
+      const config = { _secrets_id: 'secret-1', field1: 'value1' };
+
+      (connectorSourceCredentialsService.getCredentialsById as jest.Mock).mockResolvedValue({
+        id: 'secret-1',
+        projectId: 'proj-1',
+        connectorName: 'OtherConnector',
+        kind: 'secret',
+        credentials: { Password: 'must-not-inject' },
+      });
+
+      const result = await service.injectSecrets(config, 'proj-1', 'AdmicroAds');
+
+      expect(result).toEqual(config);
+      expect(connectorSecretService.injectSecretsAtPaths).not.toHaveBeenCalled();
+    });
+
     it('returns config on error', async () => {
       const { service, connectorSourceCredentialsService } = createService();
       const config = { _secrets_id: 'secret-1', field1: 'value1' };

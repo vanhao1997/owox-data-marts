@@ -55,7 +55,10 @@ export class ConnectorService {
    * Get all available connectors
    */
   async getAvailableConnectors(): Promise<ConnectorDefinition[]> {
-    return AvailableConnectors.map(connector => {
+    const connectors = AvailableConnectors.filter(
+      connector => connector !== 'AdmicroAds' || this.isAdmicroEnabled()
+    );
+    return connectors.map(connector => {
       const manifest = this.getConnectorManifest(connector);
       return {
         name: connector,
@@ -439,9 +442,20 @@ export class ConnectorService {
       throw new NotFoundException('No connectors found');
     }
 
-    if (!Object.keys(Connectors).includes(connectorName)) {
+    if (
+      !Object.keys(Connectors).includes(connectorName) ||
+      (connectorName === 'AdmicroAds' && !this.isAdmicroEnabled())
+    ) {
       throw new NotFoundException(`Connector '${connectorName}' not found`);
     }
+  }
+
+  private isAdmicroEnabled(): boolean {
+    return (
+      String(process.env.ADMICRO_EXTRACTOR_ENABLED || '')
+        .trim()
+        .toLowerCase() === 'true'
+    );
   }
 
   private createConnectorSource(connectorName: string) {

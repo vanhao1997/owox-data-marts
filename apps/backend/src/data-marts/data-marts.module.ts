@@ -946,13 +946,15 @@ export class DataMartsModule {
       .apply(createOperationTimeoutMiddleware(180000))
       .forRoutes(
         { path: 'data-marts/:id/definition', method: RequestMethod.PUT },
-        { path: 'data-marts/:id/publish', method: RequestMethod.PUT }
+        { path: 'data-marts/:id/publish', method: RequestMethod.PUT },
+        { path: 'connectors/:connectorName/fields/preview', method: RequestMethod.POST }
       );
     consumer
       .apply(createOperationTimeoutMiddleware(30000))
       .exclude(
         { path: 'data-marts/:id/definition', method: RequestMethod.PUT },
         { path: 'data-marts/:id/publish', method: RequestMethod.PUT },
+        { path: 'connectors/:connectorName/fields/preview', method: RequestMethod.POST },
         { path: 'external/{*path}', method: RequestMethod.ALL },
         ...MCP_OPERATION_TIMEOUT_EXCLUSIONS
       )

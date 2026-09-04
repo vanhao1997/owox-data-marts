@@ -28,7 +28,8 @@ export class ConnectorPreviewCredentialsService {
     await this.validateReferences(connectorName, previewConfig, context);
     const withSecrets = await this.credentialInjector.injectSecrets(
       previewConfig,
-      context.projectId
+      context.projectId,
+      connectorName
     );
     return this.credentialInjector.injectOAuthCredentials(
       withSecrets,

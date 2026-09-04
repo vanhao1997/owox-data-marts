@@ -200,3 +200,33 @@ describe('FieldsSelectionStep Google Sheets technical fields', () => {
     expect(screen.getByRole('checkbox', { name: 'Campaign' })).toBeEnabled();
   });
 });
+
+describe('FieldsSelectionStep provider labels', () => {
+  it('shows a provider label while preserving the stable field name', () => {
+    renderStep({
+      connector,
+      connectorFields: [
+        {
+          name: 'campaign',
+          fields: [
+            {
+              name: 'admicro_column_8',
+              label: 'Tong luot hien thi',
+              type: 'NUMBER',
+            },
+          ],
+        },
+      ],
+      selectedField: 'campaign',
+      selectedFields: [],
+      onFieldToggle: noop,
+      onSelectAllFields: noop,
+    });
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Tong luot hien thi (admicro_column_8)',
+      })
+    ).toBeEnabled();
+  });
+});

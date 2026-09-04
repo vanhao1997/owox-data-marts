@@ -1,0 +1,25 @@
+{
+  "data_rpt_date": {
+    "01/07/2026": {
+      "displayclick": "10",
+      "click": "20",
+      "displayview": "30,000",
+      "ctr": "0.033",
+      "money": "300,000"
+    },
+    "02/07/2026": {
+      "displayclick": "11",
+      "click": "21",
+      "displayview": "31,000",
+      "ctr": "0.035",
+      "money": "310,000"
+    },
+    "total": {
+      "displayclick": "21",
+      "click": "41",
+      "displayview": "61,000",
+      "ctr": "0.034",
+      "money": "610,000"
+    }
+  }
+}

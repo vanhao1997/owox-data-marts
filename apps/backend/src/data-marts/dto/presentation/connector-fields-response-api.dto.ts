@@ -4,6 +4,9 @@ export class ConnectorFieldResponseApiDto {
   @ApiProperty({ example: 'field_name' })
   name: string;
 
+  @ApiProperty({ example: 'Field label', required: false })
+  label?: string;
+
   @ApiProperty({ example: 'Field Type', required: false })
   type?: string;
 

@@ -30,9 +30,12 @@ jest.mock('@owox/connectors', () => {
     }
   }
 
+  class AdmicroAdsSource extends GoogleSheetsSource {}
+
   return {
     Connectors: {
       GoogleSheets: { GoogleSheetsSource },
+      AdmicroAds: { AdmicroAdsSource },
     },
     Core: { AbstractConfig, SourceConfigDto, ConnectorConfigurationException },
   };
@@ -48,6 +51,7 @@ import {
 import { AuthorizationContext } from '../../../idp';
 import { ConnectorPreviewCredentialsService } from './connector-preview-credentials.service';
 import { ConnectorFieldsPreviewService } from './connector-fields-preview.service';
+import { ConnectorService } from './connector.service';
 
 describe(ConnectorFieldsPreviewService.name, () => {
   const context: AuthorizationContext = {
@@ -65,9 +69,14 @@ describe(ConnectorFieldsPreviewService.name, () => {
         ),
     } as unknown as ConnectorPreviewCredentialsService;
 
+    const connectorService = {
+      getConnectorCapabilities: jest.fn().mockReturnValue({}),
+    } as unknown as ConnectorService;
+
     return {
-      service: new ConnectorFieldsPreviewService(previewCredentials),
+      service: new ConnectorFieldsPreviewService(previewCredentials, connectorService),
       previewCredentials,
+      connectorService,
     };
   };
 
@@ -167,6 +176,29 @@ describe(ConnectorFieldsPreviewService.name, () => {
     fetchFieldsSchemaMock.mockRejectedValue(providerError);
 
     const preview = service.run(context, 'GoogleSheets', {});
+    await expect(preview).rejects.toBeInstanceOf(BadRequestException);
+    await expect(preview).rejects.toThrow('Connector credentials are invalid or expired');
+  });
+
+  it('does not misclassify extractor HMAC failures as user credential failures', async () => {
+    const { service } = createService();
+    const extractorError = Object.assign(new Error('Invalid extractor signature'), {
+      name: 'HttpRequestException',
+      statusCode: 401,
+    });
+    fetchFieldsSchemaMock.mockRejectedValue(extractorError);
+
+    const preview = service.run(context, 'AdmicroAds', {});
+    await expect(preview).rejects.toBeInstanceOf(BadGatewayException);
+    await expect(preview).rejects.toThrow('Admicro extractor authentication failed');
+  });
+
+  it('maps rejected Admicro credentials to an actionable client error', async () => {
+    const { service } = createService();
+    const providerError = new Error('Admicro credentials were rejected.');
+    fetchFieldsSchemaMock.mockRejectedValue(providerError);
+
+    const preview = service.run(context, 'AdmicroAds', {});
     await expect(preview).rejects.toBeInstanceOf(BadRequestException);
     await expect(preview).rejects.toThrow('Connector credentials are invalid or expired');
   });

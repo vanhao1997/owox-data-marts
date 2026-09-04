@@ -124,12 +124,99 @@ const createGoogleSheetsConnectorHook = () => {
   return hook;
 };
 
+const createAdmicroConnectorHook = () => {
+  const previewFields = [
+    {
+      name: 'campaign',
+      uniqueKeys: ['day', 'platform', 'campaign_id', 'campaign_scope'],
+      defaultFields: ['day', 'platform', 'campaign_id', 'campaign_scope', 'admicro_column_9'],
+      fields: [
+        { name: 'day', type: 'DATE' },
+        { name: 'platform', type: 'STRING' },
+        { name: 'campaign_id', type: 'STRING' },
+        { name: 'campaign_scope', type: 'STRING' },
+        { name: 'admicro_column_9', type: 'NUMBER' },
+      ],
+    },
+  ];
+
+  const hook = {
+    connectors: [
+      {
+        name: 'AdmicroAds',
+        displayName: 'Admicro Ads',
+        description: '',
+        logoBase64: null,
+        docUrl: null,
+      },
+    ],
+    connectorSpecification: [
+      { name: 'Username', requiredType: 'string', required: true },
+      { name: 'Password', requiredType: 'string', required: true },
+    ],
+    connectorFields: null as typeof previewFields | null,
+    loading: false,
+    loadingSpecification: false,
+    loadingFields: false,
+    error: null,
+    fetchAvailableConnectors: vi.fn(),
+    fetchConnectorSpecification: vi.fn(),
+    fetchConnectorFields: vi.fn(),
+    previewConnectorFields: vi.fn().mockImplementation(async () => {
+      hook.connectorFields = previewFields;
+      return previewFields;
+    }),
+  };
+
+  return hook;
+};
+
 function renderForm() {
   return render(
     <ConnectorEditForm
       onSubmit={vi.fn()}
       dataStorageType={DataStorageType.GOOGLE_BIGQUERY}
       configurationOnly
+    />
+  );
+}
+
+function renderFullAdmicroForm() {
+  return render(
+    <ConnectorEditForm
+      onSubmit={vi.fn()}
+      dataStorageType={DataStorageType.GOOGLE_BIGQUERY}
+      preselectedConnector='AdmicroAds'
+      initialStep={2}
+    />
+  );
+}
+
+function renderExistingAdmicroConfigurationForm() {
+  return render(
+    <ConnectorEditForm
+      onSubmit={vi.fn()}
+      dataStorageType={DataStorageType.GOOGLE_BIGQUERY}
+      configurationOnly
+      existingConnector={{
+        source: {
+          name: 'AdmicroAds',
+          configuration: [{ Platform: 'desktop' }],
+          node: 'campaign',
+          fields: [
+            'day',
+            'platform',
+            'campaign_id',
+            'campaign_scope',
+            'admicro_column_1',
+            'admicro_column_8',
+            'admicro_column_2',
+            'admicro_column_4',
+            'admicro_column_5',
+          ],
+        },
+        storage: { fullyQualifiedName: 'project.dataset.admicro_campaign' },
+      }}
     />
   );
 }
@@ -221,5 +308,56 @@ describe('ConnectorEditForm configuration echo', () => {
     });
 
     expect(toastError).toHaveBeenCalledWith('Connector provider is temporarily unavailable');
+  });
+
+  it('loads dynamic Admicro fields before opening node selection', async () => {
+    const hook = createAdmicroConnectorHook();
+    connectorHook.current = hook;
+    renderFullAdmicroForm();
+
+    await waitFor(() => {
+      expect(recorded.length).toBeGreaterThan(0);
+    });
+
+    const configuration = {
+      Username: 'user',
+      Password: 'password',
+      Platform: 'mobile',
+    };
+    act(() => {
+      lastProps().onConfigurationChange?.(configuration);
+    });
+
+    await act(async () => {
+      recordedNavigation.at(-1)?.onNext();
+    });
+
+    expect(hook.fetchConnectorFields).not.toHaveBeenCalled();
+    expect(hook.previewConnectorFields).toHaveBeenCalledWith('AdmicroAds', configuration);
+  });
+
+  it('replaces an unavailable desktop raw field when Admicro changes to mobile', async () => {
+    const hook = createAdmicroConnectorHook();
+    connectorHook.current = hook;
+    renderExistingAdmicroConfigurationForm();
+
+    await waitFor(() => {
+      expect(recorded.length).toBeGreaterThan(0);
+    });
+
+    const mobileConfiguration = { Platform: 'mobile' };
+    act(() => {
+      lastProps().onConfigurationChange?.(mobileConfiguration);
+    });
+
+    await act(async () => {
+      recordedNavigation.at(-1)?.onNext();
+    });
+
+    await waitFor(() => {
+      expect(recordedFields.at(-1)?.selectedFields).toContain('admicro_column_9');
+    });
+    expect(recordedFields.at(-1)?.selectedFields).not.toContain('admicro_column_8');
+    expect(hook.previewConnectorFields).toHaveBeenCalledWith('AdmicroAds', mobileConfiguration);
   });
 });

@@ -27,6 +27,23 @@ Depending on the selected database type for the backend (`DB_TYPE`) and identity
 
 The complete list of all available environment variables is located in the [.env.example](https://github.com/vanhao1997/p2pdigital-data-marts/blob/main/.env.example) file in the project root directory.
 
+### Admicro Ads extractor
+
+Set `ADMICRO_EXTRACTOR_ENABLED=true` and point `ADMICRO_EXTRACTOR_URL` at the private
+`@owox/admicro-extractor` service. Configure `ADMICRO_EXTRACTOR_SHARED_SECRET` in the
+deployment secret store; it is used for timestamped HMAC requests and must not be placed in
+git, a public environment file, or a ConfigMap. The sidecar should be reachable only on the
+private application network. `ADMICRO_EXTRACTOR_MAX_CONCURRENCY` limits simultaneous browser
+jobs and defaults to `2` (maximum `100`). Disable the connector by setting
+`ADMICRO_EXTRACTOR_ENABLED=false`. Run one extractor replica in MVP because replay nonces are
+kept in process memory; horizontal scaling requires a shared replay store.
+
+For a host-based self-managed backend, start the sidecar with
+`docker compose -f docker-compose.admicro.yml --profile admicro up -d` and use
+`ADMICRO_EXTRACTOR_URL=http://127.0.0.1:8091`. The published port binds to loopback only.
+For a containerized backend on the `owox-private` network, use
+`ADMICRO_EXTRACTOR_URL=http://admicro-extractor:8091`.
+
 ## Configuration Methods
 
 You can configure environment variables using one of the following methods:
@@ -225,14 +242,14 @@ See also: mysql2 official SSL documentation — <https://sidorares.github.io/nod
 Plugins are third-party web apps embedded in a sandboxed iframe. These variables control
 who may publish them and how P2PDigital Data Marts reads their GitHub sources.
 
-| Variable                                                     | Purpose                                                                                                                                                                                                                                                                                                   |
-| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OWOX_DEPLOYMENT_PLUGIN_PUBLISHER_API_KEY_IDS`               | Comma-separated API key IDs allowed to publish, suspend and resume plugins for the whole deployment.                                                                                                                                                                                                      |
-| `GITHUB_TOKEN`                                               | Read-only, fine-grained PAT for reading private plugin repositories. Self-managed deployments.                                                                                                                                                                                                            |
+| Variable                                                     | Purpose                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OWOX_DEPLOYMENT_PLUGIN_PUBLISHER_API_KEY_IDS`               | Comma-separated API key IDs allowed to publish, suspend and resume plugins for the whole deployment.                                                                                                                                                                                                            |
+| `GITHUB_TOKEN`                                               | Read-only, fine-grained PAT for reading private plugin repositories. Self-managed deployments.                                                                                                                                                                                                                  |
 | `GITHUB_APP_ID`, `GITHUB_APP_SLUG`, `GITHUB_APP_PRIVATE_KEY` | [P2PDigital Data Marts GitHub App](https://github.com/apps/owox-data-marts) credentials, for reading private repositories in the cloud. Required together. The key takes the whole PEM with newlines as `\n`, or just its base64 body with the BEGIN/END lines stripped when a secret store mangles the armour. |
-| `GITHUB_API_BASE_URL`                                        | GitHub REST base URL. Override only for GitHub Enterprise.                                                                                                                                                                                                                                                |
-| `PLUGIN_HOST_SYNC_MIN_INTERVAL_SEC`                          | Optional minimum seconds between two synchronizations of the same plugin. Defaults to `30` with GitHub App or server-token access and `300` with anonymous access. An explicit value overrides every access mode. During the cooldown, publishing reuses the last validated version.                      |
-| `PLUGIN_HOST_REMOTE_PROBE_TIMEOUT_MS`                        | Timeout for probing a plugin's delivery URL. Default `8000`.                                                                                                                                                                                                                                              |
+| `GITHUB_API_BASE_URL`                                        | GitHub REST base URL. Override only for GitHub Enterprise.                                                                                                                                                                                                                                                      |
+| `PLUGIN_HOST_SYNC_MIN_INTERVAL_SEC`                          | Optional minimum seconds between two synchronizations of the same plugin. Defaults to `30` with GitHub App or server-token access and `300` with anonymous access. An explicit value overrides every access mode. During the cooldown, publishing reuses the last validated version.                            |
+| `PLUGIN_HOST_REMOTE_PROBE_TIMEOUT_MS`                        | Timeout for probing a plugin's delivery URL. Default `8000`.                                                                                                                                                                                                                                                    |
 
 ### Plugin collections database
 

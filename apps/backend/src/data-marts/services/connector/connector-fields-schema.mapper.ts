@@ -1,4 +1,5 @@
 interface SourceFieldDefinition {
+  label?: string;
   type?: string;
   description?: string;
 }
@@ -30,6 +31,7 @@ export function mapConnectorFieldsSchema(sourceFieldsSchema: SourceFieldsSchema)
     destinationName: sourceFieldsSchema[key].destinationName,
     fields: Object.keys(sourceFieldsSchema[key].fields ?? {}).map(fieldKey => ({
       name: fieldKey,
+      label: sourceFieldsSchema[key].fields?.[fieldKey].label,
       type: sourceFieldsSchema[key].fields?.[fieldKey].type,
       description: sourceFieldsSchema[key].fields?.[fieldKey].description,
     })),

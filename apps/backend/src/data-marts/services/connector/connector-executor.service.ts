@@ -495,7 +495,9 @@ export class ConnectorExecutorService {
           configuration,
           runConfig,
           logCaptureConfig,
-          signal
+          signal,
+          dataMart.projectId,
+          configId
         );
 
         if (success) {

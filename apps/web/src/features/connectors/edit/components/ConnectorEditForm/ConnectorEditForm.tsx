@@ -34,6 +34,14 @@ import {
   withGoogleSheetsImportAllColumns,
 } from '../../../shared/utils/google-sheets-fields.utils';
 
+const ADMICRO_ADS_CONNECTOR_NAME = 'AdmicroAds';
+
+function usesDynamicFieldPreview(connectorName?: string): boolean {
+  return (
+    connectorName === GOOGLE_SHEETS_CONNECTOR_NAME || connectorName === ADMICRO_ADS_CONNECTOR_NAME
+  );
+}
+
 interface ConnectorEditFormProps {
   onSubmit: (connector: ConnectorConfig) => void;
   dataStorageType: DataStorageType;
@@ -67,6 +75,7 @@ export function ConnectorEditForm({
   const [loadedSpecifications, setLoadedSpecifications] = useState<Set<string>>(new Set());
   const [loadedFields, setLoadedFields] = useState<Set<string>>(new Set());
   const [previewConfigurationKey, setPreviewConfigurationKey] = useState<string | null>(null);
+  const [admicroPreviewReady, setAdmicroPreviewReady] = useState(false);
   const [autoSelectPreviewDefaults, setAutoSelectPreviewDefaults] = useState(true);
   const [fieldsOnlyPreviewError, setFieldsOnlyPreviewError] = useState<string | null>(null);
   const fieldsOnlyPreviewStartedForOpenRef = useRef(false);
@@ -92,6 +101,8 @@ export function ConnectorEditForm({
     null
   );
   const isGoogleSheetsConnector = selectedConnector?.name === GOOGLE_SHEETS_CONNECTOR_NAME;
+  const isAdmicroAdsConnector = selectedConnector?.name === ADMICRO_ADS_CONNECTOR_NAME;
+  const isDynamicPreviewConnector = usesDynamicFieldPreview(selectedConnector?.name);
   const currentConfigurationKey = useMemo(
     () => getGoogleSheetsPreviewConfigurationKey(connectorConfiguration),
     [connectorConfiguration]
@@ -99,10 +110,14 @@ export function ConnectorEditForm({
 
   const steps = useMemo(() => {
     if (configurationOnly) {
-      if (isGoogleSheetsConnector) {
+      if (isDynamicPreviewConnector) {
         return [
           { id: 1, title: 'Configuration', description: 'Set up connector parameters' },
-          { id: 2, title: 'Select Columns', description: 'Pick sheet columns' },
+          {
+            id: 2,
+            title: isGoogleSheetsConnector ? 'Select Columns' : 'Select Fields',
+            description: isGoogleSheetsConnector ? 'Pick sheet columns' : 'Pick Admicro fields',
+          },
         ];
       }
       return [{ id: 1, title: 'Configuration', description: 'Set up connector parameters' }];
@@ -128,7 +143,7 @@ export function ConnectorEditForm({
       { id: 4, title: 'Select Fields', description: 'Pick specific fields' },
       { id: 5, title: 'Target Setup', description: 'Configure destination' },
     ];
-  }, [configurationOnly, isGoogleSheetsConnector, mode]);
+  }, [configurationOnly, isDynamicPreviewConnector, isGoogleSheetsConnector, mode]);
 
   const totalSteps = steps.length;
 
@@ -162,11 +177,7 @@ export function ConnectorEditForm({
       setSelectedConnector(found);
       setCurrentStep(initialStep ?? 2);
       void loadSpecificationSafely(found.name);
-      if (
-        !configurationOnly &&
-        mode !== 'fields-only' &&
-        found.name !== GOOGLE_SHEETS_CONNECTOR_NAME
-      ) {
+      if (!configurationOnly && mode !== 'fields-only' && !usesDynamicFieldPreview(found.name)) {
         void loadFieldsSafely(found.name);
       }
     }
@@ -202,7 +213,7 @@ export function ConnectorEditForm({
         setSelectedConnector(existingConnectorDef);
 
         void loadSpecificationSafely(existingConnectorDef.name);
-        if (existingConnectorDef.name !== GOOGLE_SHEETS_CONNECTOR_NAME) {
+        if (!usesDynamicFieldPreview(existingConnectorDef.name)) {
           // Fields power both the Fields step and the data-level reconciliation at save.
           void loadFieldsSafely(existingConnectorDef.name);
         }
@@ -260,6 +271,7 @@ export function ConnectorEditForm({
     setSelectedConnector(connector);
     setConnectorConfiguration({});
     setConfigurationIsValid(false);
+    setAdmicroPreviewReady(false);
     if (
       connector.name === GOOGLE_SHEETS_CONNECTOR_NAME ||
       selectedConnector?.name === GOOGLE_SHEETS_CONNECTOR_NAME
@@ -274,7 +286,7 @@ export function ConnectorEditForm({
       return newSet;
     });
     void loadSpecificationSafely(connector.name);
-    if (connector.name !== GOOGLE_SHEETS_CONNECTOR_NAME) {
+    if (!usesDynamicFieldPreview(connector.name)) {
       void loadFieldsSafely(connector.name);
     }
   };
@@ -345,9 +357,12 @@ export function ConnectorEditForm({
       if (isGoogleSheetsConnector) {
         setPreviewConfigurationKey(null);
       }
+      if (isAdmicroAdsConnector) {
+        setAdmicroPreviewReady(false);
+      }
       setIsDirty(true);
     },
-    [isGoogleSheetsConnector]
+    [isAdmicroAdsConnector, isGoogleSheetsConnector]
   );
 
   const handleConfigurationValidationChange = useCallback((isValid: boolean) => {
@@ -450,10 +465,91 @@ export function ConnectorEditForm({
     [connectorConfiguration, mode, previewConnectorFields, selectedConnector?.name, selectedFields]
   );
 
+  const loadAdmicroPreviewFields = useCallback(
+    async (options?: {
+      connectorName?: string;
+      configuration?: Record<string, unknown>;
+      selectedNode?: string;
+      selectedFields?: string[];
+    }) => {
+      const connectorName = options?.connectorName ?? selectedConnector?.name;
+      if (connectorName !== ADMICRO_ADS_CONNECTOR_NAME) {
+        return false;
+      }
+
+      const configuration = options?.configuration ?? connectorConfiguration;
+      setAdmicroPreviewReady(false);
+      setFieldsOnlyPreviewError(null);
+
+      try {
+        const previewFields = await previewConnectorFields(connectorName, configuration);
+        if (!previewFields?.length) {
+          throw new Error('No Admicro fields were returned');
+        }
+
+        let nodeToPreserve = options?.selectedNode ?? selectedNode;
+        if (!nodeToPreserve && configurationOnly) {
+          nodeToPreserve = previewFields[0].name;
+        }
+        if (nodeToPreserve) {
+          const node = previewFields.find(field => field.name === nodeToPreserve);
+          if (!node) {
+            throw new Error(`Admicro report node '${nodeToPreserve}' is no longer available`);
+          }
+          const availableFields = new Set(node.fields?.map(field => field.name) ?? []);
+          const fieldsToPreserve = options?.selectedFields ?? selectedFields;
+          const preservedFields = fieldsToPreserve.filter(field => availableFields.has(field));
+          const hasUnavailableRawFields = fieldsToPreserve.some(
+            field => field.startsWith('admicro_column_') && !availableFields.has(field)
+          );
+          if (hasUnavailableRawFields) {
+            preservedFields.push(
+              ...(node.defaultFields ?? []).filter(
+                field => field.startsWith('admicro_column_') && availableFields.has(field)
+              )
+            );
+          }
+          setSelectedNode(nodeToPreserve);
+          setSelectedFields([...new Set(preservedFields)]);
+        } else {
+          setSelectedNode('');
+          setSelectedFields([]);
+        }
+
+        setAdmicroPreviewReady(true);
+        return true;
+      } catch (error) {
+        const apiError = extractApiError(error) as { message?: string } | undefined;
+        const message =
+          apiError?.message ??
+          (error instanceof Error ? error.message : 'Failed to load Admicro fields');
+        if (mode === 'fields-only') {
+          setFieldsOnlyPreviewError(message);
+        }
+        const status = (error as { response?: { status?: number } }).response?.status;
+        const handledByGlobalInterceptor = status === 400 || status === 403 || status === 404;
+        if (mode !== 'fields-only' && !handledByGlobalInterceptor) {
+          toast.error(message);
+        }
+        return false;
+      }
+    },
+    [
+      connectorConfiguration,
+      configurationOnly,
+      mode,
+      previewConnectorFields,
+      selectedConnector?.name,
+      selectedFields,
+      selectedNode,
+    ]
+  );
+
   useEffect(() => {
     if (!isOpen) {
       fieldsOnlyPreviewStartedForOpenRef.current = false;
       setFieldsOnlyPreviewError(null);
+      setAdmicroPreviewReady(false);
       return;
     }
 
@@ -461,19 +557,36 @@ export function ConnectorEditForm({
       return;
     }
 
-    if (!existingConnector || selectedConnector?.name !== GOOGLE_SHEETS_CONNECTOR_NAME) {
+    if (!existingConnector || !usesDynamicFieldPreview(selectedConnector?.name)) {
       return;
     }
 
     if (fieldsOnlyPreviewStartedForOpenRef.current) return;
     fieldsOnlyPreviewStartedForOpenRef.current = true;
 
-    void loadGoogleSheetsPreviewFields({
+    if (selectedConnector?.name === GOOGLE_SHEETS_CONNECTOR_NAME) {
+      void loadGoogleSheetsPreviewFields({
+        connectorName: existingConnector.source.name,
+        configuration: existingConnector.source.configuration[0] || {},
+        selectedFields: existingConnector.source.fields,
+      });
+      return;
+    }
+
+    void loadAdmicroPreviewFields({
       connectorName: existingConnector.source.name,
       configuration: existingConnector.source.configuration[0] || {},
+      selectedNode: existingConnector.source.node,
       selectedFields: existingConnector.source.fields,
     });
-  }, [existingConnector, isOpen, loadGoogleSheetsPreviewFields, mode, selectedConnector?.name]);
+  }, [
+    existingConnector,
+    isOpen,
+    loadAdmicroPreviewFields,
+    loadGoogleSheetsPreviewFields,
+    mode,
+    selectedConnector?.name,
+  ]);
 
   const handleNext = async () => {
     const shouldPreviewGoogleSheetsFields =
@@ -481,6 +594,23 @@ export function ConnectorEditForm({
       ((!configurationOnly && currentStep === 2) || (configurationOnly && currentStep === 1));
     if (shouldPreviewGoogleSheetsFields) {
       const loadedPreview = await loadGoogleSheetsPreviewFields();
+      if (!loadedPreview) {
+        return;
+      }
+    }
+
+    const shouldPreviewAdmicroFields =
+      isAdmicroAdsConnector &&
+      ((!configurationOnly && currentStep === 2) || (configurationOnly && currentStep === 1));
+    if (shouldPreviewAdmicroFields) {
+      const loadedPreview = await loadAdmicroPreviewFields(
+        configurationOnly
+          ? {
+              selectedNode: existingConnector?.source.node,
+              selectedFields: existingConnector?.source.fields,
+            }
+          : { selectedNode: '', selectedFields: [] }
+      );
       if (!loadedPreview) {
         return;
       }
@@ -503,10 +633,11 @@ export function ConnectorEditForm({
         return selectedConnector !== null && configurationIsValid;
       }
       return (
-        isGoogleSheetsConnector &&
-        previewConfigurationKey === currentConfigurationKey &&
         selectedNode !== '' &&
-        selectedFields.some(fieldName => !isGoogleSheetsSystemField(fieldName))
+        (isGoogleSheetsConnector
+          ? previewConfigurationKey === currentConfigurationKey &&
+            selectedFields.some(fieldName => !isGoogleSheetsSystemField(fieldName))
+          : isAdmicroAdsConnector && admicroPreviewReady && selectedFields.length > 0)
       );
     }
 
@@ -528,7 +659,7 @@ export function ConnectorEditForm({
             );
           }
 
-          return selectedFields.length > 0;
+          return (!isAdmicroAdsConnector || admicroPreviewReady) && selectedFields.length > 0;
         default:
           return false;
       }
@@ -585,13 +716,13 @@ export function ConnectorEditForm({
           initialConfiguration={connectorConfiguration}
           loading={loadingSpecification}
           isEditingExisting={Boolean(existingConnector?.source.configuration.length)}
-          disabled={isGoogleSheetsConnector && loadingFields}
+          disabled={isDynamicPreviewConnector && loadingFields}
         />
       ) : null;
     }
 
-    if (configurationOnly && currentStep === 2 && isGoogleSheetsConnector) {
-      return selectedNode && connectorFields ? (
+    if (configurationOnly && currentStep === 2 && isDynamicPreviewConnector) {
+      return selectedConnector && selectedNode && connectorFields ? (
         <FieldsSelectionStep
           connector={selectedConnector}
           connectorFields={connectorFields}
@@ -599,9 +730,9 @@ export function ConnectorEditForm({
           selectedFields={selectedFields}
           onFieldToggle={handleFieldToggle}
           onSelectAllFields={handleSelectAllFields}
-          itemLabel='columns'
-          searchPlaceholder='Search column'
-          autoSelectDefaultFields={autoSelectPreviewDefaults}
+          itemLabel={isGoogleSheetsConnector ? 'columns' : 'fields'}
+          searchPlaceholder={isGoogleSheetsConnector ? 'Search column' : 'Search field'}
+          autoSelectDefaultFields={isGoogleSheetsConnector ? autoSelectPreviewDefaults : undefined}
         />
       ) : null;
     }
@@ -612,7 +743,8 @@ export function ConnectorEditForm({
           return selectedConnector &&
             selectedNode &&
             connectorFields &&
-            (!isGoogleSheetsConnector || previewConfigurationKey === currentConfigurationKey) ? (
+            (!isGoogleSheetsConnector || previewConfigurationKey === currentConfigurationKey) &&
+            (!isAdmicroAdsConnector || admicroPreviewReady) ? (
             <FieldsSelectionStep
               connector={selectedConnector}
               connectorFields={connectorFields}
@@ -635,9 +767,9 @@ export function ConnectorEditForm({
                   : undefined
               }
             />
-          ) : isGoogleSheetsConnector && loadingFields ? (
+          ) : isDynamicPreviewConnector && loadingFields ? (
             <AppWizardStepLoading variant='list' />
-          ) : isGoogleSheetsConnector && fieldsOnlyPreviewError ? (
+          ) : isDynamicPreviewConnector && fieldsOnlyPreviewError ? (
             <div
               role='alert'
               className='flex min-h-48 flex-col items-center justify-center gap-3 text-center'
@@ -647,14 +779,23 @@ export function ConnectorEditForm({
                 type='button'
                 size='sm'
                 variant='outline'
-                aria-label='Retry loading Google Sheets columns'
+                aria-label={`Retry loading ${isGoogleSheetsConnector ? 'Google Sheets columns' : 'Admicro fields'}`}
                 onClick={() => {
                   fieldsOnlyPreviewStartedForOpenRef.current = true;
-                  void loadGoogleSheetsPreviewFields({
-                    connectorName: existingConnector?.source.name,
-                    configuration: existingConnector?.source.configuration[0] ?? {},
-                    selectedFields: existingConnector?.source.fields,
-                  });
+                  if (isGoogleSheetsConnector) {
+                    void loadGoogleSheetsPreviewFields({
+                      connectorName: existingConnector?.source.name,
+                      configuration: existingConnector?.source.configuration[0] ?? {},
+                      selectedFields: existingConnector?.source.fields,
+                    });
+                  } else {
+                    void loadAdmicroPreviewFields({
+                      connectorName: existingConnector?.source.name,
+                      configuration: existingConnector?.source.configuration[0] ?? {},
+                      selectedNode: existingConnector?.source.node,
+                      selectedFields: existingConnector?.source.fields,
+                    });
+                  }
                 }}
               >
                 <RefreshCw className='h-4 w-4' />
@@ -691,7 +832,7 @@ export function ConnectorEditForm({
             initialConfiguration={connectorConfiguration}
             loading={loadingSpecification}
             isEditingExisting={false}
-            disabled={isGoogleSheetsConnector && loadingFields}
+            disabled={isDynamicPreviewConnector && loadingFields}
           />
         ) : null;
       case 3:
@@ -796,7 +937,10 @@ export function ConnectorEditForm({
                   name: selectedConnector.name,
                   configuration: [configuration],
                   node: existingConnector?.source.node ?? selectedNode,
-                  fields: isGoogleSheetsConnector ? activeSelectedFields : fieldsForSave,
+                  fields:
+                    isGoogleSheetsConnector || isAdmicroAdsConnector
+                      ? activeSelectedFields
+                      : fieldsForSave,
                 },
                 storage: existingConnector?.storage ?? {
                   fullyQualifiedName: existingConnector?.storage.fullyQualifiedName ?? '',

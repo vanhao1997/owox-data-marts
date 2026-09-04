@@ -28,6 +28,28 @@ const configSchema = z
     MAX_CONNECTOR_RUNS_PER_PROJECT: z.coerce.number().int().min(1).max(1000).default(3),
     MAX_REPORT_RUNS_PER_PROJECT: z.coerce.number().int().min(1).max(1000).default(1000),
 
+    ADMICRO_EXTRACTOR_ENABLED: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .default('false')
+      .transform(value => value === 'true'),
+    ADMICRO_EXTRACTOR_URL: z
+      .string()
+      .trim()
+      .default('')
+      .refine(value => {
+        if (!value) return true;
+        try {
+          const url = new URL(value);
+          return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password;
+        } catch {
+          return false;
+        }
+      }, 'ADMICRO_EXTRACTOR_URL must be an HTTP(S) URL without embedded credentials'),
+    ADMICRO_EXTRACTOR_SHARED_SECRET: z.string().default(''),
+    ADMICRO_EXTRACTOR_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(100).default(2),
+
     // Plugin host. GITHUB_* stay unvalidated pass-through strings: they are optional and
     // mode-dependent, and PluginHostConfigService already treats a blank value as absent.
     PLUGIN_HOST_SYNC_MIN_INTERVAL_SEC: z.coerce.number().int().min(0).max(86_400).optional(),
@@ -38,7 +60,24 @@ const configSchema = z
       .max(60_000)
       .default(8_000),
   })
-  .passthrough(); // Pass through all other fields as-is
+  .passthrough()
+  .superRefine((config, ctx) => {
+    if (!config.ADMICRO_EXTRACTOR_ENABLED) return;
+    if (!config.ADMICRO_EXTRACTOR_URL) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['ADMICRO_EXTRACTOR_URL'],
+        message: 'ADMICRO_EXTRACTOR_URL is required when Admicro extractor is enabled',
+      });
+    }
+    if (!config.ADMICRO_EXTRACTOR_SHARED_SECRET) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['ADMICRO_EXTRACTOR_SHARED_SECRET'],
+        message: 'ADMICRO_EXTRACTOR_SHARED_SECRET is required when Admicro extractor is enabled',
+      });
+    }
+  }); // Pass through all other fields as-is
 
 /**
  * Inferred configuration type from the validation schema.

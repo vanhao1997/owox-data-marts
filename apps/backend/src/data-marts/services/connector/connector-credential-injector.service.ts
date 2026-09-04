@@ -207,7 +207,8 @@ export class ConnectorCredentialInjectorService {
    */
   async injectSecrets(
     config: Record<string, unknown>,
-    projectId: string
+    projectId: string,
+    connectorName?: string
   ): Promise<Record<string, unknown>> {
     const secretsId = config._secrets_id as string | undefined;
 
@@ -229,6 +230,13 @@ export class ConnectorCredentialInjectorService {
       if (secretsEntity.projectId !== projectId) {
         this.logger.warn(
           `Secrets ${secretsId} belong to project ${secretsEntity.projectId}, not ${projectId}. Skipping injection.`
+        );
+        return config;
+      }
+
+      if (connectorName && secretsEntity.connectorName !== connectorName) {
+        this.logger.warn(
+          `Secrets ${secretsId} belong to connector ${secretsEntity.connectorName}, not ${connectorName}. Skipping injection.`
         );
         return config;
       }

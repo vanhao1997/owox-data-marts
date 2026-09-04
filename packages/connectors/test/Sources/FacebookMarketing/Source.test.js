@@ -1,6 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { loadGasClass } from '../../support/loadGasClass.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -26,6 +26,105 @@ const fbError = (code, extra = {}) => ({
 // _isAuthError now defers to the retry logic, so `this` must resolve the real
 // prototype methods rather than being a bare object.
 const stub = Object.assign(Object.create(proto), { config: { logMessage: () => {} } });
+
+describe('authentication configuration', () => {
+  it('offers OAuth2 and project-scoped manual credentials', () => {
+    globalThis.CONFIG_ATTRIBUTES = {
+      ADVANCED: 'ADVANCED',
+      DEPRECATED: 'DEPRECATED',
+      HIDE_IN_CONFIG_FORM: 'HIDE_IN_CONFIG_FORM',
+      MANUAL_BACKFILL: 'MANUAL_BACKFILL',
+      OAUTH_FLOW: 'OAUTH_FLOW',
+      SECRET: 'SECRET',
+    };
+    globalThis.OAUTH_CONSTANTS = {
+      UI: 'UI',
+      SECRET: 'SECRET',
+      REQUIRED: 'REQUIRED',
+    };
+    globalThis.FacebookMarketingFieldsSchema = {};
+
+    let mergedParameters = {};
+    const config = {
+      setParametersValues() {},
+      mergeParameters(parameters) {
+        mergedParameters = { ...mergedParameters, ...parameters };
+        return this;
+      },
+    };
+
+    new globalThis.FacebookMarketingSource(config);
+
+    expect(mergedParameters.AuthType.oneOf.map(option => option.value)).toEqual([
+      'accessToken',
+      'oauth2',
+    ]);
+    const manual = mergedParameters.AuthType.oneOf.find(option => option.value === 'accessToken');
+    expect(manual.items).toMatchObject({
+      AccessToken: { isRequired: true, attributes: ['SECRET'] },
+      AppId: { isRequired: true },
+      AppSecret: { isRequired: true, attributes: ['SECRET'] },
+    });
+  });
+
+  it('reads the selected manual token without exposing it through logs', () => {
+    const accessToken = 'manual-token-for-test';
+    const logMessage = vi.fn();
+    const source = Object.assign(Object.create(proto), {
+      config: {
+        AuthType: {
+          value: 'accessToken',
+          items: { AccessToken: { value: accessToken } },
+        },
+        logMessage,
+      },
+    });
+
+    expect(source._getAccessToken()).toBe(accessToken);
+    expect(logMessage).not.toHaveBeenCalled();
+  });
+
+  it('keeps OAuth and legacy access-token configurations compatible', () => {
+    expect(
+      proto._getAccessToken.call({
+        config: { AuthType: { value: 'oauth2', items: { AccessToken: { value: 'oauth-token' } } } },
+      })
+    ).toBe('oauth-token');
+    expect(
+      proto._getAccessToken.call({
+        config: { AccessToken: { value: 'legacy-token' } },
+      })
+    ).toBe('legacy-token');
+  });
+
+  it('validates and exchanges a manually configured token when refresh is requested', async () => {
+    const exchangeOauthCredentials = vi.fn().mockResolvedValue({
+      secret: { accessToken: 'refreshed-token' },
+    });
+    const source = Object.assign(Object.create(proto), { exchangeOauthCredentials });
+
+    await expect(
+      source.refreshCredentials(
+        {
+          AuthType: {
+            accessToken: {
+              AccessToken: 'manual-token',
+              AppId: 'app-id',
+              AppSecret: 'app-secret',
+            },
+          },
+        },
+        {},
+        {}
+      )
+    ).resolves.toEqual({ secret: { accessToken: 'refreshed-token' } });
+
+    expect(exchangeOauthCredentials).toHaveBeenCalledWith(
+      { accessToken: 'manual-token' },
+      { AppId: 'app-id', AppSecret: 'app-secret' }
+    );
+  });
+});
 
 describe('_isAuthError', () => {
   // Codes below are taken from real production error payloads.

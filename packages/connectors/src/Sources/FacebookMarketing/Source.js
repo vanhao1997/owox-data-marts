@@ -18,6 +18,33 @@ var FacebookMarketingSource = class FacebookMarketingSource extends AbstractSour
         isRequired: true,
         oneOf: [
           {
+            label: "Access Token",
+            value: "accessToken",
+            requiredType: "object",
+            items: {
+              AccessToken: {
+                isRequired: true,
+                requiredType: "string",
+                label: "Access Token",
+                description: "Facebook user access token",
+                attributes: [CONFIG_ATTRIBUTES.SECRET]
+              },
+              AppId: {
+                isRequired: true,
+                requiredType: "string",
+                label: "App ID",
+                description: "Facebook App ID used for token validation",
+              },
+              AppSecret: {
+                isRequired: true,
+                requiredType: "string",
+                label: "App Secret",
+                description: "Facebook App Secret used for token validation",
+                attributes: [CONFIG_ATTRIBUTES.SECRET]
+              },
+            }
+          },
+          {
             label: "OAuth2",
             value: "oauth2",
             requiredType: "object",
@@ -214,6 +241,30 @@ var FacebookMarketingSource = class FacebookMarketingSource extends AbstractSour
 
   async refreshCredentials(configuration, credentials, variables) {
     const authTypeConfig = configuration.AuthType || {};
+    const isManual =
+      authTypeConfig.value === 'accessToken' ||
+      'accessToken' in authTypeConfig ||
+      configuration.AccessToken;
+
+    if (isManual) {
+      const manual = authTypeConfig.items || authTypeConfig.accessToken || {};
+      const readValue = value => (value && typeof value === 'object' ? value.value : value);
+      const accessToken =
+        readValue(manual.AccessToken) ||
+        readValue(configuration.AccessToken);
+      const appId = readValue(manual.AppId) || readValue(configuration.AppId) || variables?.AppId;
+      const appSecret =
+        readValue(manual.AppSecret) ||
+        readValue(configuration.AppSecret) ||
+        variables?.AppSecret;
+
+      if (!accessToken || !appId || !appSecret) {
+        return null;
+      }
+
+      return this.exchangeOauthCredentials({ accessToken }, { AppId: appId, AppSecret: appSecret });
+    }
+
     const isOAuth2 = 'oauth2' in authTypeConfig;
 
     if (!isOAuth2) {
@@ -508,11 +559,11 @@ var FacebookMarketingSource = class FacebookMarketingSource extends AbstractSour
   }
 
   _getAccessToken() {
-    // if oauth2, use the entered access token
-    if (this.config.AuthType.value && this.config.AuthType.value === 'oauth2') {
-      return this.config.AuthType.items?.AccessToken?.value;
-    }
-    return this.config.AccessToken.value;
+    return (
+      this.config.AuthType?.items?.AccessToken?.value ||
+      this.config.AuthType?.accessToken?.AccessToken?.value ||
+      this.config.AccessToken?.value
+    );
   }
 
   //---- _prepareFields --------------------------------------

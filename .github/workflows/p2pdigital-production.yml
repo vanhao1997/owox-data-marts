@@ -83,9 +83,14 @@ jobs:
         run: npm run build --workspace owox --workspace @owox/ctl
 
       - name: Run non-backend unit tests
-        # The dedicated Test OWOX workflow runs the full web suite. Avoid
-        # duplicating its 260-file browser-like suite in this deploy gate.
-        run: npx turbo run test --filter='!@owox/backend' --filter='!@owox/web'
+        # The dedicated Test OWOX workflow runs the full web suite. Run the
+        # release-critical package tests directly here to avoid Turbo rebuilding
+        # the entire dependency graph a second time.
+        run: |
+          npm run test -w @owox/connectors
+          npm run test -w @owox/admicro-extractor
+          npm run test -w @owox/idp-owox-better-auth
+          npm run test -w owox
         env:
           NODE_ENV: test
 

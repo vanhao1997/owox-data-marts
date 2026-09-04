@@ -423,7 +423,7 @@ describe('OnboardingService', () => {
       const saved = jest.mocked(store.saveOnboardingAnswers).mock.calls[0]![0] as Array<{
         answerValue: string;
       }>;
-      expect(saved[0]!.answerValue).toBe('owox.com');
+      expect(saved[0]!.answerValue).toBe('p2pdigital.vn');
     });
 
     it('throws on invalid org_domain format', async () => {

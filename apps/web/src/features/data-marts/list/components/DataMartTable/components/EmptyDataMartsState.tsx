@@ -4,6 +4,7 @@ import { DataMartPlusIcon } from '../../../../../../shared';
 import { GraduationCap, SquarePlay } from 'lucide-react';
 import { dataMartPresetsList } from '../../../../shared/utils/data-mart-presets';
 import { DataMartDefinitionType } from '../../../../shared';
+import { isConnectorSelectable } from '../../../../../connectors/shared/constants/connector-visibility';
 import {
   EmptyStateCard,
   EmptyStateCardHeader,
@@ -29,7 +30,9 @@ export function EmptyDataMartsState() {
 
   // Split presets for visual grouping
   const connectorPresets = dataMartPresetsList.filter(
-    p => p.definitionType === DataMartDefinitionType.CONNECTOR
+    preset =>
+      preset.definitionType === DataMartDefinitionType.CONNECTOR &&
+      (!preset.connectorSourceTitle || isConnectorSelectable(preset.connectorSourceTitle))
   );
 
   const otherPresets = dataMartPresetsList.filter(
@@ -79,10 +82,7 @@ export function EmptyDataMartsState() {
         {/* SQL-based and Blank */}
         <EmptyStateCardSection>
           <EmptyStateCardSectionTitle>
-            {t(
-              'dataMartEmptyState.otherOptions',
-              'Use existing SQL, Table or start from scratch'
-            )}
+            {t('dataMartEmptyState.otherOptions', 'Use existing SQL, Table or start from scratch')}
           </EmptyStateCardSectionTitle>
           <EmptyStateCardSectionContent>
             {otherPresets.map(preset => (

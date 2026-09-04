@@ -27,6 +27,13 @@ vi.mock('../../model/hooks/useDataMartHealthStatusPrefetch', () => ({
 }));
 
 describe('DataMartTable', () => {
+  it('hides non-selectable connector presets from the empty state', () => {
+    renderTableData([]);
+
+    expect(screen.queryByRole('link', { name: 'Microsoft Ads' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Facebook Ads' })).toBeVisible();
+  });
+
   it('reports only the Data Marts visible on the current page', async () => {
     const onVisibleDataMartIdsChange = vi.fn();
     const dataMarts = Array.from({ length: 20 }, (_, index) =>

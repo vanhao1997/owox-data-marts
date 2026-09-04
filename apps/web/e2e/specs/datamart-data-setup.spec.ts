@@ -1,6 +1,15 @@
 import { test, expect } from '../fixtures/base';
 import { TESTIDS } from '../selectors/testids';
 
+const HIDDEN_CONNECTOR_TITLES = [
+  'Bank of Canada',
+  'Criteo Ads',
+  'Microsoft Ads',
+  'Open Exchange Rates',
+  'Open Holidays',
+  'Reddit Ads',
+];
+
 // ---------------------------------------------------------------------------
 // DSET-01, DSET-04: Storage card & Output schema sections.
 // Uses a fresh DM per test (beforeEach) for full isolation.
@@ -173,14 +182,7 @@ test.describe('Data Setup - Connector Definition', () => {
       timeout: 10000,
     });
 
-    for (const hiddenConnector of [
-      'Bank of Canada',
-      'Criteo Ads',
-      'Microsoft Ads',
-      'Open Exchange Rates',
-      'Open Holidays',
-      'Reddit Ads',
-    ]) {
+    for (const hiddenConnector of HIDDEN_CONNECTOR_TITLES) {
       await expect(page.getByText(hiddenConnector, { exact: true })).not.toBeVisible();
     }
     await expect(page.getByText('Admicro Ads', { exact: true })).toBeVisible();

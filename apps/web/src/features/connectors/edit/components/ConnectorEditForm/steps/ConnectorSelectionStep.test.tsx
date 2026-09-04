@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import { vi } from 'vitest';
 import type { ConnectorListItem } from '../../../../shared/model/types/connector';
 import { ConnectorSelectionStep } from './ConnectorSelectionStep';
@@ -21,15 +20,13 @@ function connector(name: string, displayName: string): ConnectorListItem {
 
 function renderStep(connectors: ConnectorListItem[], onConnectorSelect = vi.fn()) {
   render(
-    <MemoryRouter>
-      <ConnectorSelectionStep
-        connectors={connectors}
-        selectedConnector={null}
-        loading={false}
-        error={null}
-        onConnectorSelect={onConnectorSelect}
-      />
-    </MemoryRouter>
+    <ConnectorSelectionStep
+      connectors={connectors}
+      selectedConnector={null}
+      loading={false}
+      error={null}
+      onConnectorSelect={onConnectorSelect}
+    />
   );
 
   return onConnectorSelect;
@@ -45,7 +42,7 @@ describe('ConnectorSelectionStep connector visibility', () => {
     connector('RedditAds', 'Reddit Ads'),
   ];
 
-  it('hides deployment-disabled connectors while preserving available connectors', () => {
+  it('hides non-selectable connectors while preserving selectable connectors', () => {
     const admicro = connector('AdmicroAds', 'Admicro Ads');
     const onConnectorSelect = renderStep([...hiddenConnectors, admicro]);
 

@@ -139,12 +139,13 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
       });
 
       const error = new Error(
-        `All ${accountIds.length} accounts were skipped ${context}, so nothing was imported. `
-        + `This points to a global failure, such as an expired access token, rather than individual `
-        + `accounts being inaccessible. Errors: ${details.join('; ')}`
+        `Facebook authorization failed: all ${accountIds.length} configured account${accountIds.length === 1 ? '' : 's'} `
+        + `${accountIds.length === 1 ? 'was' : 'were'} inaccessible ${context}, so no data was imported. Reconnect Facebook and grant `
+        + `ads_read and ads_management to the authorized user. Provider details: ${details.join('; ')}`
       );
-      // Every skipped account was skipped because of a permission failure, which is something the
-      // customer can act on: keep the readable message instead of a stack.
+      error.name = 'FacebookAuthorizationError';
+      // Keep this customer-actionable failure readable in run history while preventing the
+      // connector runner from treating it as an opaque provider stack trace.
       error.isWarning = true;
       throw error;
 
@@ -268,6 +269,8 @@ var FacebookMarketingConnector = class FacebookMarketingConnector extends Abstra
 
     _safeErrorMessage(error) {
       return String(error?.message || 'unknown error')
+        .replace(/(access[_ -]?token|client[_ -]?secret|password|cookie|authorization)\s*[:=]\s*\S+/gi, '$1=[REDACTED]')
+        .replace(/\bEA[A-Za-z0-9_-]{20,}\b/g, '[REDACTED_TOKEN]')
         .replace(/\bact_[^\s;)]+\b/gi, 'the configured account')
         .replace(/\b\d{6,}\b/g, '[REDACTED_ID]');
     }

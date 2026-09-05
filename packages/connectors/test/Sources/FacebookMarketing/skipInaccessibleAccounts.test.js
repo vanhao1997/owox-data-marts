@@ -134,7 +134,7 @@ describe('time-series import: every account skipped', () => {
     });
 
     await expect(importOneDay(self, ['one', 'two'])).rejects.toThrow(
-      /All 2 accounts were skipped for 2026-08-05/
+      /Facebook authorization failed: all 2 configured accounts were inaccessible for 2026-08-05/
     );
     expect(cursorMovedTo).toEqual([]);
   });
@@ -150,8 +150,29 @@ describe('time-series import: every account skipped', () => {
 
     expect(error.message).not.toContain('one');
     expect(error.message).not.toContain('two');
-    // a permission failure is customer-actionable: the readable message is kept, not a stack
+    expect(error.message).toContain('Reconnect Facebook');
+    expect(error.message).toContain('ads_read and ads_management');
+    expect(error.name).toBe('FacebookAuthorizationError');
+    // A permission failure is customer-actionable: the readable message is kept, not a stack.
     expect(error.isWarning).toBe(true);
+  });
+
+  it('redacts provider secrets and identifiers from the customer-visible error', async () => {
+    const leakedToken = 'EA' + 'A'.repeat(40);
+    const { self } = buildConnector({
+      fetchData: async () => {
+        throw Object.assign(
+          new Error(`(#200) access_token=${leakedToken} act_225706552450149`),
+          { isWarning: true }
+        );
+      },
+    });
+
+    const error = await importOneDay(self, ['one']).catch(e => e);
+
+    expect(error.message).not.toContain(leakedToken);
+    expect(error.message).not.toContain('225706552450149');
+    expect(error.message).toContain('access_token=[REDACTED]');
   });
 
   it('keeps the days already completed when the token expires mid-run', async () => {
@@ -173,7 +194,7 @@ describe('time-series import: every account skipped', () => {
         new Date('2026-08-05T00:00:00Z'),
         2
       )
-    ).rejects.toThrow(/All 1 accounts were skipped for 2026-08-06/);
+    ).rejects.toThrow(/Facebook authorization failed: all 1 configured account was inaccessible for 2026-08-06/);
 
     expect(cursorMovedTo).toEqual(['2026-08-05']);
   });
@@ -218,7 +239,9 @@ describe('catalog import', () => {
         ['one', 'two'],
         ['id']
       )
-    ).rejects.toThrow(/All 2 accounts were skipped while importing ad-account/);
+    ).rejects.toThrow(
+      /Facebook authorization failed: all 2 configured accounts were inaccessible while importing ad-account/
+    );
   });
 
   it('fails the run when a storage write fails', async () => {

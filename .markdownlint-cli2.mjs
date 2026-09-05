@@ -32,8 +32,15 @@ if (!hasFileArguments) {
   ];
 
   if (process.env.MDLINT_CONTEXT === 'root') {
-    // Exclude workspaces and the Claude Code import file from root Markdown lint.
-    options.globs.push('!packages/**', '!apps/**', '!CLAUDE.md');
+    // Exclude generated/workspace docs and legacy planning material from the root gate.
+    // Those trees have their own documentation ownership and contain historical drafts.
+    options.globs.push(
+      '!packages/**',
+      '!apps/**',
+      '!docs/upgrade-plan/**',
+      '!docs/vi/**',
+      '!CLAUDE.md'
+    );
   }
 }
 
